@@ -1,17 +1,25 @@
+
 CREATE SCHEMA IF NOT EXISTS lbaw2421;
+
 SET search_path TO lbaw2421;
+
 -----------------------------------------
 -- User-defined Types
 -----------------------------------------
+
+DROP TYPE IF EXISTS connection_type CASCADE;
+DROP TYPE IF EXISTS noti_type CASCADE;
+DROP TYPE IF EXISTS user_type CASCADE;
+DROP TYPE IF EXISTS post_type CASCADE;
+
 CREATE TYPE connection_type AS ENUM ('BLOCK', 'FOLLOW', 'FRIEND');
-CREATE TYPE noti_type as ENUM ('LIKE','COMMENT','MESSAGE','REQUEST','INFO')
-CREATE TYPE user_type as ENUM ('INFLUENCER')
-CREATE TYPE post_type as ENUM ('MEDIA','TEXT')
+CREATE TYPE noti_type AS ENUM ('LIKE', 'COMMENT', 'MESSAGE', 'REQUEST', 'INFO');
+CREATE TYPE user_type AS ENUM ('INFLUENCER', 'NORMAL');
+CREATE TYPE post_type AS ENUM ('MEDIA', 'TEXT');
+
 -----------------------------------------
 -- Tables
 -----------------------------------------
-
-
 
 DROP TABLE IF EXISTS messageTag CASCADE;
 DROP TABLE IF EXISTS commentTag CASCADE;
@@ -32,22 +40,22 @@ DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    email TEXT NOT NULL CONSTRAINT user_email_uk UNIQUE,
-    username TEXT NOT NULL CONSTRAINT user_username_uk UNIQUE,
     name TEXT NOT NULL,
+    username TEXT NOT NULL CONSTRAINT user_username_uk UNIQUE,
+    email TEXT NOT NULL CONSTRAINT user_email_uk UNIQUE,
     password TEXT NOT NULL,
     photo_url TEXT,
-    age INTEGER NOT NULL CONSTRAINT user_age_ck CHECK (age > 13),
+    age INTEGER NOT NULL CHECK (age > 13),
     bio TEXT,
     is_public BOOLEAN NOT NULL,
-    is_influencer BOOLEAN NOT NULL DEFAULT false
+    typeU user_type NOT NULL DEFAULT 'NORMAL'
 );
 
 CREATE TABLE notification (
     id SERIAL PRIMARY KEY,
     content TEXT NOT NULL,
-    user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-    is_text BOOLEAN NOT NULL DEFAULT true
+    user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    typeN noti_type NOT NULL
 );
 
 CREATE TABLE groups (
@@ -59,8 +67,8 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE groupParticipant (
-    group_id INTEGER NOT NULL REFERENCES groups(id) ON UPDATE CASCADE,
-    user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+    group_id INTEGER NOT NULL REFERENCES groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
     date_joined TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     PRIMARY KEY (group_id, user_id)
 );
@@ -68,15 +76,15 @@ CREATE TABLE groupParticipant (
 CREATE TABLE message (
     id SERIAL PRIMARY KEY,
     content TEXT NOT NULL,
-    date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_DATE NOT NULL,
-    group_id INTEGER REFERENCES groups(id) ON UPDATE CASCADE,
+    date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    group_id INTEGER REFERENCES groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
     direct_chat BOOLEAN,
     author_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE
 );
 
 CREATE TABLE messageTag (
-    message_id INTEGER NOT NULL REFERENCES message(id) ON UPDATE CASCADE,
-    tagged_user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+    message_id INTEGER NOT NULL REFERENCES message(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    tagged_user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (message_id, tagged_user_id)
 );
 
@@ -85,7 +93,8 @@ CREATE TABLE post (
     description TEXT,
     is_edited BOOLEAN NOT NULL DEFAULT false,
     is_public BOOLEAN NOT NULL DEFAULT false,
-    owner_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE
+    owner_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    typeP post_type NOT NULL
 );
 
 CREATE TABLE category (
@@ -94,59 +103,59 @@ CREATE TABLE category (
 );
 
 CREATE TABLE postCategory (
-    post_id INTEGER NOT NULL REFERENCES post(id) ON UPDATE CASCADE,
-    category_id INTEGER NOT NULL REFERENCES category(id) ON UPDATE CASCADE,
+    post_id INTEGER NOT NULL REFERENCES post(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    category_id INTEGER NOT NULL REFERENCES category(id) ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (post_id, category_id)
 );
 
 CREATE TABLE postLikes (
-    post_id INTEGER NOT NULL REFERENCES post(id) ON UPDATE CASCADE,
+    post_id INTEGER NOT NULL REFERENCES post(id) ON UPDATE CASCADE ON DELETE CASCADE,
     user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
     PRIMARY KEY (post_id, user_id)
 );
 
 CREATE TABLE directChat (
     user1_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-    user2_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+    user2_id INTEGER NOT NULL  REFERENCES users(id) ON UPDATE CASCADE,
     dateCreation TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     PRIMARY KEY (user1_id, user2_id)
 );
 
 CREATE TABLE connection (
-    follower_user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-    followed_user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+    follower_user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    followed_user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
     createdAt TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     typeR connection_type,
     PRIMARY KEY (follower_user_id, followed_user_id)
 );
 
 CREATE TABLE comment (
-    comment_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     content TEXT NOT NULL,
     is_edited BOOLEAN NOT NULL DEFAULT false,
-    post_id INTEGER NOT NULL REFERENCES post(id) ON UPDATE CASCADE,
+    post_id INTEGER NOT NULL REFERENCES post(id) ON UPDATE CASCADE ON DELETE CASCADE,
     author_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE
 );
 
 CREATE TABLE commentTag (
-    comment_id INTEGER NOT NULL REFERENCES comment(comment_id) ON UPDATE CASCADE,
-    tagged_user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+    comment_id INTEGER NOT NULL REFERENCES comment(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    tagged_user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (comment_id, tagged_user_id)
 );
 
 CREATE TABLE media (
-    media_id SERIAL PRIMARY KEY,
-    post_id INTEGER NOT NULL REFERENCES post(id) ON UPDATE CASCADE
+    id SERIAL PRIMARY KEY,
+    post_id INTEGER NOT NULL REFERENCES post(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE report (
-    report_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     content TEXT,
     createdAt TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     solvedAt TIMESTAMP WITH TIME ZONE,
-    comment_id INTEGER REFERENCES comment(comment_id) ON UPDATE CASCADE,
-    post_id INTEGER REFERENCES post(id) ON UPDATE CASCADE,
-    target_user_id INTEGER REFERENCES users(id) ON UPDATE CASCADE,
-    author_id INTEGER REFERENCES users(id) ON UPDATE CASCADE,
-    CHECK (solvedAt > createdAt)
+    comment_id INTEGER REFERENCES comment(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    post_id INTEGER REFERENCES post(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    target_user_id INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    author_id INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CHECK (solvedAt IS NULL OR solvedAt > createdAt)
 );
