@@ -361,30 +361,39 @@ EXECUTE FUNCTION notify_user_on_comment_tag();
 
 
 CREATE VIEW follower_count AS
-SELECT target_user_id AS user_id, COUNT(*) AS followers
-FROM connection
-WHERE typeR = 'FOLLOW'
-GROUP BY target_user_id;
+SELECT 
+    target_user_id AS user_id, 
+    COUNT(*) AS followers
+FROM 
+    connection
+WHERE 
+    typeR IN ('FOLLOW', 'FRIEND')
+GROUP BY 
+    target_user_id;
 
 CREATE OR REPLACE FUNCTION update_influencer_status()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Promote user to INFLUENCER if they have 10,000 or more followers
-    IF (SELECT followers FROM follower_count WHERE user_id = NEW.target_user_id) >= 10000 
-       AND (SELECT typeU FROM users WHERE id = NEW.target_user_id) = 'NORMAL' THEN
-        UPDATE users
-        SET typeU = 'INFLUENCER'
-        WHERE id = NEW.target_user_id;
-    END IF;
-
-    RETURN NEW;
-END;
+RETURNS TRIGGER AS  $$
+DECLARE 
+follower_count INTEGER; 
+current_type user_type; 
+BEGIN 
+SELECT COUNT(*) INTO follower_count 
+FROM connection WHERE target_user_id = NEW.target_user_id 
+AND typeR IN ('FOLLOW', 'FRIEND'); 
+SELECT typeU INTO current_type 
+FROM users WHERE id = NEW.target_user_id; 
+IF follower_count > 10000 AND current_type != 'INFLUENCER' THEN 
+UPDATE users SET typeU = 'INFLUENCER' WHERE id = NEW.target_user_id; 
+END IF; 
+RETURN NEW; 
+END; 
 $$ LANGUAGE plpgsql;
+
 
 CREATE TRIGGER trigger_update_influencer_status
 AFTER INSERT ON connection
 FOR EACH ROW
-WHEN (NEW.typeR = 'FOLLOW')
+WHEN (NEW.typeR IN ('FOLLOW', 'FRIEND'))
 EXECUTE FUNCTION update_influencer_status();
 
 
