@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS groupParticipant CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS admin CASCADE;
 
 DROP TYPE IF EXISTS connection_type CASCADE;
 DROP TYPE IF EXISTS noti_type CASCADE;
@@ -42,6 +43,12 @@ CREATE TYPE post_type AS ENUM ('TEXT', 'MEDIA');
 -----------------------------------------
 -- Tables
 -----------------------------------------
+CREATE TABLE admin (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+);
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -280,24 +287,23 @@ EXECUTE FUNCTION check_and_downgrade_friend();
 
 -- Anonymize User Data
 
-CREATE OR REPLACE FUNCTION anonymize_user_data() 
-RETURNS TRIGGER AS $$
-BEGIN
-    UPDATE users
-    SET name = 'DELETED USER',
-        username = 'deleted_' || OLD.id,
-        email = '',
-        password = '',
-        photo_url = '',
-        bio = '',
-        is_banned = true
-    WHERE id = OLD.id;
-
-    RETURN OLD;
-END;
+CREATE OR REPLACE FUNCTION anonymize_user_data()
+RETURNS TRIGGER AS $$ 
+BEGIN 
+UPDATE comment 
+SET author_id = 0 
+WHERE author_id = OLD.id; 
+UPDATE postLikes 
+SET user_id = 0 
+WHERE user_id = OLD.id; 
+UPDATE message 
+SET author_id = 0 
+WHERE author_id = OLD.id; 
+RETURN OLD; 
+END; 
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER anonymize_user_data_trigger
+CREATE TRIGGER trigger_anonymize_user_data
 BEFORE DELETE ON users
 FOR EACH ROW
 EXECUTE FUNCTION anonymize_user_data();
@@ -341,32 +347,6 @@ BEFORE INSERT ON media
 FOR EACH ROW
 EXECUTE FUNCTION check_media_limit();
 
--- Notification for the tagged user
-
-CREATE OR REPLACE FUNCTION notify_user_on_comment_tag()
-RETURNS TRIGGER AS $$
-DECLARE
-    comment_author_id INTEGER;
-BEGIN
-    -- Retrieve the author_id of the comment associated with the tag
-    SELECT author_id INTO comment_author_id
-    FROM comment
-    WHERE id = NEW.comment_id;
-
-    -- Insert the notification with the comment's author as user_id_src and tagged user as user_id_dest
-    INSERT INTO notification (content, user_id_src, user_id_dest, typeN)
-    VALUES ('You were tagged in a comment.', comment_author_id, NEW.tagged_user_id, 'TAG');
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-
-
-CREATE TRIGGER comment_tag_notification_trigger
-AFTER INSERT ON commentTag
-FOR EACH ROW
-EXECUTE FUNCTION notify_user_on_comment_tag();
 
 
 CREATE VIEW follower_count AS
