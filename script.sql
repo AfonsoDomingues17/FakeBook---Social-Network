@@ -371,6 +371,8 @@ WHERE
 GROUP BY 
     target_user_id;
 
+--Update the user status to 'INFLUENCER' if follower count exceeds 10,000.
+
 CREATE OR REPLACE FUNCTION update_influencer_status()
 RETURNS TRIGGER AS  $$
 DECLARE 
@@ -396,6 +398,24 @@ FOR EACH ROW
 WHEN (NEW.typeR IN ('FOLLOW', 'FRIEND'))
 EXECUTE FUNCTION update_influencer_status();
 
+--Flag post for administrator review if it receives more than 5 reports.
+
+CREATE OR REPLACE FUNCTION flag_post_for_review()
+RETURNS TRIGGER AS $$
+BEGIN 
+IF (SELECT COUNT(*) FROM report WHERE post_id = NEW.post_id) >= 5 THEN 
+UPDATE post 
+SET flagged_for_review = true 
+WHERE id = NEW.post_id; 
+END IF; 
+RETURN NEW; 
+END; 
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_flag_post_for_review
+AFTER INSERT ON report
+FOR EACH ROW
+EXECUTE FUNCTION flag_post_for_review();
 
 -----------------------------------------
 -- Indexes for Optimizing Query Performance
