@@ -90,12 +90,19 @@ CREATE TABLE groupParticipant (
     PRIMARY KEY (group_id, user_id)
 );
 
+CREATE TABLE directChat (
+    id SERIAL PRIMARY KEY,
+    user1_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+    user2_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+    dateCreation TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 CREATE TABLE message (
     id SERIAL PRIMARY KEY,
     content TEXT NOT NULL,
     date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     group_id INTEGER REFERENCES groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    direct_chat BOOLEAN,
+    direct_chat INTEGER REFERENCES directChat(id) ON UPDATE CASCADE ON DELETE CASCADE,
     author_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE
 );
 
@@ -140,12 +147,6 @@ CREATE TABLE postLikes (
     PRIMARY KEY (post_id, user_id)
 );
 
-CREATE TABLE directChat (
-    user1_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-    user2_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-    dateCreation TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    PRIMARY KEY (user1_id, user2_id)
-);
 
 
 CREATE TABLE connection (
@@ -288,19 +289,19 @@ EXECUTE FUNCTION check_and_downgrade_friend();
 -- Anonymize User Data
 
 CREATE OR REPLACE FUNCTION anonymize_user_data()
-RETURNS TRIGGER AS $$ 
-BEGIN 
-UPDATE comment 
-SET author_id = 0 
-WHERE author_id = OLD.id; 
-UPDATE postLikes 
-SET user_id = 0 
-WHERE user_id = OLD.id; 
-UPDATE message 
-SET author_id = 0 
-WHERE author_id = OLD.id; 
-RETURN OLD; 
-END; 
+RETURNS TRIGGER AS $$
+BEGIN
+UPDATE comment
+SET author_id = 0
+WHERE author_id = OLD.id;
+UPDATE postLikes
+SET user_id = 0
+WHERE user_id = OLD.id;
+UPDATE message
+SET author_id = 0
+WHERE author_id = OLD.id;
+RETURN OLD;
+END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_anonymize_user_data
