@@ -61,8 +61,9 @@ CREATE TABLE users (
 CREATE TABLE notification (
     id SERIAL PRIMARY KEY,
     content TEXT NOT NULL,
-    user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    typeN noti_type NOT NULL
+    user_id_src INTEGER REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    user_id_dest INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    typeN noti_type NOT NULL CHECK (typeN IN ('LIKE', 'FOLLOW_REQUEST', 'GROUP_REQUEST', 'MESSAGE', 'COMMENT', 'INFO', 'TAG'))
 );
 
 
@@ -344,14 +345,22 @@ EXECUTE FUNCTION check_media_limit();
 
 CREATE OR REPLACE FUNCTION notify_user_on_comment_tag()
 RETURNS TRIGGER AS $$
+DECLARE
+    comment_author_id INTEGER;
 BEGIN
-    
-    INSERT INTO notification (content, user_id, typeN)
-    VALUES ('You were tagged in a comment.', NEW.tagged_user_id, 'TAG');
+    -- Retrieve the author_id of the comment associated with the tag
+    SELECT author_id INTO comment_author_id
+    FROM comment
+    WHERE id = NEW.comment_id;
+
+    -- Insert the notification with the comment's author as user_id_src and tagged user as user_id_dest
+    INSERT INTO notification (content, user_id_src, user_id_dest, typeN)
+    VALUES ('You were tagged in a comment.', comment_author_id, NEW.tagged_user_id, 'TAG');
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
 
 
 CREATE TRIGGER comment_tag_notification_trigger
@@ -421,8 +430,8 @@ EXECUTE FUNCTION flag_post_for_review();
 -- Indexes for Optimizing Query Performance
 -----------------------------------------
 
--- Index on the 'user_id' column in the 'notification' table
-CREATE INDEX idx_user_id ON notification USING hash (user_id);
+-- Index on the 'user_id_src' column in the 'notification' table
+CREATE INDEX idx_notification_user_id_src ON notification USING hash (user_id_src);
 
 -- Index on the 'author_id' column in the 'message' table
 CREATE INDEX idx_author_id ON message USING hash (author_id);
