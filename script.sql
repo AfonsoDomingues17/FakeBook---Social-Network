@@ -69,7 +69,7 @@ CREATE TABLE groups (
     name TEXT NOT NULL,
     description TEXT,
     photo_url TEXT,
-    owner_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE
+    owner_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
