@@ -1,4 +1,3 @@
----trocar o notification content paraa NULL
 CREATE SCHEMA IF NOT EXISTS lbaw2421;
 
 SET search_path TO lbaw2421;
@@ -396,20 +395,43 @@ EXECUTE FUNCTION update_influencer_status();
 
 CREATE OR REPLACE FUNCTION flag_post_for_review()
 RETURNS TRIGGER AS $$
-BEGIN 
-IF (SELECT COUNT(*) FROM report WHERE post_id = NEW.post_id) >= 5 THEN 
-UPDATE post 
-SET flagged_for_review = true 
-WHERE id = NEW.post_id; 
-END IF; 
-RETURN NEW; 
-END; 
+DECLARE
+    post_owner_id INTEGER;
+BEGIN
+    -- Check if the post has 5 or more reports and if it hasn't already been flagged for review
+    IF (SELECT COUNT(*) FROM report WHERE post_id = NEW.post_id) >= 5 
+       AND NOT EXISTS (
+           SELECT 1 
+           FROM notification 
+           WHERE post_id = NEW.post_id 
+           AND typeN = 'INFO'
+           AND content = 'Your post was flagged for review'
+       ) THEN
+       
+        -- Flag the post for review
+        UPDATE post
+        SET flagged_for_review = true
+        WHERE id = NEW.post_id;
+
+        -- Get the post owner's ID
+        SELECT owner_id INTO post_owner_id
+        FROM post
+        WHERE id = NEW.post_id;
+
+        -- Insert a notification for the post owner
+        INSERT INTO notification (content, user_id_dest, typeN, post_id, is_read)
+        VALUES ('Your post was flagged for review', post_owner_id, 'INFO', NEW.post_id, FALSE);
+    END IF;
+
+    RETURN NEW;
+END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_flag_post_for_review
 AFTER INSERT ON report
 FOR EACH ROW
 EXECUTE FUNCTION flag_post_for_review();
+
 
 -----------------------------------------
 -- Indexes for Optimizing Query Performance
