@@ -166,7 +166,8 @@ CREATE TABLE notification (
     post_id INTEGER REFERENCES post(id) ON UPDATE CASCADE ON DELETE CASCADE,
     message_id INTEGER REFERENCES message(id) ON UPDATE CASCADE ON DELETE CASCADE,
     comment_id INTEGER REFERENCES comment(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    group_id INTEGER REFERENCES groups(id) ON UPDATE CASCADE ON DELETE CASCADE
+    group_id INTEGER REFERENCES groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT chk_user_ids_not_equal CHECK (user_id_src != user_id_dest)
 );
 
 
