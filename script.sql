@@ -295,39 +295,39 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE OR REPLACE FUNCTION anonymize_and_delete_user_data()
 RETURNS TRIGGER AS $$
 DECLARE
-    -- Declare variables for unique email, username, and password
+    
     new_username TEXT;
     new_email TEXT;
     new_password TEXT;
 BEGIN
-    -- Loop to ensure unique username and email
+    
     LOOP
-        -- Generate random values for username, email, and password
+        
         new_username := 'anonymous_' || gen_random_uuid();
         new_email := 'anonymous_' || gen_random_uuid() || '@example.com';
-        new_password := gen_random_uuid(); -- Using UUID as a random password
+        new_password := gen_random_uuid(); 
 
-        -- Check if the username or email already exists
+        
         IF NOT EXISTS (SELECT 1 FROM users WHERE username = new_username) 
            AND NOT EXISTS (SELECT 1 FROM users WHERE email = new_email) THEN
-            -- If both are unique, exit the loop
+            
             EXIT;
         END IF;
     END LOOP;
 
-    -- Anonymize the user data with unique random values for email, username, and hashed password
+    
     UPDATE users SET
         name = 'Anonymous',
         username = new_username,
         email = new_email,
-        password = digest(new_password, 'sha256'), -- Hash the new password using SHA-256
-        photo_url = 'default_photo_url',
-        bio = 'This user has been anonymized.',
-        age = 14,
+        password = digest(new_password, 'sha256'), 
+        photo_url = null,
+        bio = null,
+        age = 99,
         is_public = FALSE
     WHERE id = OLD.id;
 
-    -- Delete entries in all dependent tables except for postLikes and comment
+    
     DELETE FROM report WHERE target_user_id = OLD.id;
     DELETE FROM report WHERE author_id = OLD.id;
     DELETE FROM groupParticipant WHERE user_id = OLD.id;
@@ -335,14 +335,12 @@ BEGIN
     DELETE FROM message WHERE author_id = OLD.id;
     DELETE FROM messageTag WHERE tagged_user_id = OLD.id;
     DELETE FROM post WHERE owner_id = OLD.id;
-    DELETE FROM postCategory WHERE post_id IN (SELECT id FROM post WHERE owner_id = OLD.id);
     DELETE FROM postTag WHERE tagged_user_id = OLD.id;
     DELETE FROM notification WHERE user_id_dest = OLD.id OR user_id_src = OLD.id;
     DELETE FROM commentTag WHERE tagged_user_id = OLD.id;
-    DELETE FROM media WHERE post_id IN (SELECT id FROM post WHERE owner_id = OLD.id);
     DELETE FROM groups WHERE owner_id = OLD.id;
 
-    -- Prevent the actual deletion of the user
+    
     RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
