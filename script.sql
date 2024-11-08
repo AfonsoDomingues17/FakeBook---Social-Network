@@ -510,6 +510,29 @@ BEFORE INSERT OR UPDATE ON post
 FOR EACH ROW
 EXECUTE FUNCTION post_search_update();
 
+
+CREATE OR REPLACE FUNCTION update_post_tsvectors() RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE post
+    SET tsvectors = (
+        setweight(to_tsvector('english', description), 'A') || 
+        setweight(
+            to_tsvector('english', 
+                COALESCE((SELECT string_agg(content, ' ') FROM comment WHERE post_id = post.id), '')
+            ), 
+            'B'
+        )
+    )
+    WHERE id = NEW.post_id;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER comment_insert_update_post_tsvectors
+AFTER INSERT OR UPDATE OR DELETE ON comment
+FOR EACH ROW
+EXECUTE FUNCTION update_post_tsvectors();
+
 CREATE INDEX post_search_idx ON post USING GIN (tsvectors);
 
 -----------------------------------------
