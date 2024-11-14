@@ -167,79 +167,517 @@ paths:
           description: 'Ok. Show view profile UI'
  
 
-  /api/works:
+
+
+  /report:
+    get: 
+      operationId: R108
+      summary: 'R108: Report Form'
+      description: 'Provide Report form. Access: USR'
+      tags:
+        - 'M08: Content Moderation and Reporting'
+      responses:
+        '200':
+          description: 'Ok. Show report UI'
+      
+    
+    post:
+      operationId: R109
+      summary: 'R109: Report Action'
+      description: 'Processes the report form submission. Access: USR'
+      tags:
+        - 'M08: Content Moderation and Reporting'
+ 
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:          
+                  type: string
+                comment_id:
+                  type: integer
+                post_id:
+                  type: integer
+                target_user_id:
+                  type: integer
+                author_id:
+                  type: integer
+              required:
+                - content
+                - author_id
+ 
+      responses:
+        '302':
+          description: 'Redirect after processing the report submission.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302SuccessComment:
+                  description: 'Successful report submission. Redirect to the reported comment.'
+                  value: '/comments/{comment_id}'
+                302SuccessPost:
+                  description: 'Successful report submission. Redirect to the reported post.'
+                  value: '/posts/{post_id}'
+                302SuccessUser:
+                  description: 'Successful report submission. Redirect to the reported user profile.'
+                  value: '/users/{target_user_id}'
+                302Error:
+                  description: 'Failed report submission. Redirect to report form.'
+                  value: '/report'
+  
+  /groups:
     get:
-      operationId: R202
-      summary: 'R202: Search Works API'
-      description: 'Searches for works and returns the results as JSON. Access: PUB.'
-
-      tags: 
-        - 'M02: Works'
-
+      operationId: R110
+      summary: 'R110: View All Groups'
+      description: 'Retrieve a list of all available groups. Access: USR'
+      tags:
+        - 'M10: Group Management and Participation'
+      responses:
+        '200':
+          description: 'Ok. Show the list of groups.'
+    
+  /groups/{id}:
+    get:
+      operationId: R111
+      summary: 'R111: View Group'
+      description: 'Show the individual group page. Access: USR for public groups, OWN and MEM for private ones'
+      tags:
+        - 'M10: Group Management and Participation'
       parameters:
-        - in: query
-          name: query
-          description: String to use for full-text search
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: item
-          description: Category of the works
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: loaned
-          description: Boolean with the loaned flag value
-          schema:
-            type: boolean
-          required: false
-        - in: query
-          name: owner
-          description: Boolean with the owner flag value
-          schema:
-            type: boolean
-          required: false
-        - in: query
-          name: classification
-          description: Integer corresponding to the work classification
+        - in: path
+          name: id
           schema:
             type: integer
-          required: false
+          required: true  
 
       responses:
         '200':
-          description: Success
+          description: 'Ok. Show  group UI'
+
+    delete:
+      operationId: R114
+      summary: 'R114: Delete Group'
+      description: 'Allows group owners to delete their group. Access: OWN'
+      tags:
+        - 'M10: Group Management and Participation'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: 'Group deleted successfully.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                204Success:
+                  description: 'Group successfully deleted. Redirect to the homepage or group list.'
+                  value: '/groups'
+
+
+  /groups/edit/{id}:
+    put:
+      operationId: R113
+      summary: 'R113: Edit Group'
+      description: 'Allows group owners and moderators to edit group details. Access: OWN'
+      tags:
+        - 'M10: Group Management and Participation'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                photo_url:
+                  type: string
+              required:
+                - name
+      responses:
+        '302':
+          description: 'Redirect after successful group update.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Group successfully updated. Redirect to the updated group page.'
+                  value: '/groups/{id}' 
+        '400':
+          description: 'Validation failed. Stay on the edit page.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400Error:
+                  description: 'Validation failed. Stay on the edit page to correct errors.'
+                  value: '/groups/edit/{id}'
+
+  /groups/create:
+    get:
+      operationId: R111
+      summary: 'R111: Create Group form'
+      description: 'Retrieve the Create Group form. Access: USR'
+      tags:
+        - 'M10: Group Management and Participation'
+      
+      responses:
+        '200':
+          description: 'Ok. Show create group UI'
+
+    post:
+      operationId: R112
+      summary: 'R112: Create Group Action'
+      description: 'Processes the create group form submission. Access: USR'
+      tags:
+        - 'M10: Group Management and Participation'
+ 
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:          
+                  type: string
+                description:
+                  type: string
+                photo_url:
+                  type: string
+                owner_id:
+                  type: integer
+              
+              required:
+                - name
+                - owner_id
+ 
+      responses:
+        '302':
+          description: 'Redirect after processing the create group submission.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Group successfully created. Redirect to the group created.'
+                  value: '/groups/{id}'
+
+        '400':
+          description: 'Creation failed. Stay on the create page.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400Error:
+                  description: 'Failed to create group. Redirect to create group form.'
+                  value: '/groups/create' 
+
+  /groups/{id}/members:
+    post:
+      operationId: R106
+      summary: 'R106: Add Member to Group'
+      description: 'Allows group owners to add members to the group. Access: OWN'
+      tags:
+        - 'M10: Group Management and Participation'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+              required:
+                - user_id
+      responses:
+        '201':
+          description: 'Member successfully added to the group.'
+        '400':
+          description: 'Bad request. Invalid user or group ID.'
+        '404':
+          description: 'Group or user not found.'
+
+  /groups/{id}/members/{user_id}:
+    delete:
+      operationId: R107
+      summary: 'R107: Remove Member from Group'
+      description: 'Allows group owners to remove members from the group. Access: OWN'
+      tags:
+        - 'M10: Group Management and Participation'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 'Member successfully removed from the group.'
+        '403':
+          description: 'Forbidden. You are not authorized to remove this member from the group.'
+        '404':
+          description: 'Group or user not found.'
+                
+
+  /analytics/engagement:
+    get:
+      operationId: R301
+      summary: 'R301: Retrieve Engagement Metrics'
+      description: 'Fetch likes, comments, and follower changes for daily, weekly, or monthly periods. Access: INF'
+      tags:
+        - 'M11: Analytics and Influencer Insights'
+      parameters:
+        - in: query
+          name: period
+          description: 'Time period for the data (daily, weekly, monthly)'
+          schema:
+            type: string
+            enum: ['daily', 'weekly', 'monthly', 'overall']
+          required: true
+      responses:
+        '200':
+          description: 'Returns engagement metrics for the selected period.'
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    title:
-                      type: string
-                    obs:
-                      type: string
-                    year:
-                      type: string
-                    owner:
-                      type: string
-                    type:
-                      type: string
+                type: object
+                properties:
+                  likes:
+                    type: integer
+                  comments:
+                    type: integer
+                  follower_changes:
+                    type: integer
                 example:
-                  - id: 1
-                    title: Rihanna - Unapologetic
-                    obs: Good pop music album.
-                    year: 2012
-                    owner: Joana Lima
-                    type: MP3
-                  - id: 15
-                    title: Mr. Bean
-                    obs: The best comedy movie.
-                    year: 1995
-                    owner: Manuel Teixeira
-                    type: DVD
+                  likes: 1200
+                  comments: 150
+                  follower_changes: 5
+
+  /analytics/engagement-rate:
+    get:
+      operationId: R302
+      summary: 'R302: Retrieve Average Engagement Rate per Post'
+      description: 'Fetch the average engagement rate for each post over a specified time range. Access: INF'
+      tags:
+        - 'M11: Analytics and Influencer Insights'
+      parameters:
+        - in: query
+          name: period
+          description: 'Time period for calculating engagement rate (daily, weekly, monthly)'
+          schema:
+            type: string
+            enum: ['daily', 'weekly', 'monthly', 'overall']
+          required: true
+      responses:
+        '200':
+          description: 'Returns the average engagement rate for posts in the selected period.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  engagement_rate:
+                    type: number
+                    format: float
+                example:
+                  engagement_rate: "45% of the followers engaged with the post"
+
+  /analytics/posts/performance:
+    get:
+      operationId: R303
+      summary: 'R303: Retrieve Top and Low-Performing Posts'
+      description: 'Fetch the top and low-performing posts based on engagement metrics. Access: INF'
+      tags:
+        - 'M11: Analytics and Influencer Insights'
+      parameters:
+        - in: query
+          name: period
+          description: 'Time period for fetching performance (daily, weekly, monthly, overall)'
+          schema:
+            type: string
+            enum: ['daily', 'weekly', 'monthly', 'overall']
+          required: true
+        - in: query
+          name: count
+          description: 'Number of posts to retrieve for both top and low-performing lists'
+          schema:
+            type: integer
+            default: 3
+        
+      responses:
+        '200':
+          description: 'Returns the top and low-performing posts for the selected period.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  top_posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        post_id:
+                          type: integer
+                        caption:
+                          type: string
+                        likes:
+                          type: integer
+                        comments:
+                          type: integer
+                        engagement_rate:
+                          type: string
+                        total_engagement:
+                          type: integer
+                          description: 'Sum of likes and comments for quick comparison'
+                  low_posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        post_id:
+                          type: integer
+                        caption:
+                          type: string
+                        likes:
+                          type: integer
+                        comments:
+                          type: integer
+                        engagement_rate:
+                          type: string
+                          
+                        total_engagement:
+                          type: integer
+                          description: 'Sum of likes and comments for quick comparison'
+                example:
+                  top_posts:
+                    - post_id: 101
+                      caption: "Check out my latest adventure!"
+                      likes: 1200
+                      comments: 300
+                      engagement_rate: "60% of the followers engaged with the post"
+                      total_engagement: 1500
+                    - post_id: 102
+                      caption: "Morning vibes with coffee ☕️"
+                      likes: 900
+                      comments: 150
+                      engagement_rate: "50% of the followers engaged with the post"
+                      total_engagement: 1050
+                  low_posts:
+                    - post_id: 203
+                      caption: "Throwback Thursday!"
+                      likes: 30
+                      comments: 5
+                      engagement_rate: "1% of the followers engaged with the post"
+                      total_engagement: 35
+                    - post_id: 204
+                      caption: "Simple joys of life"
+                      likes: 40
+                      comments: 10
+                      engagement_rate: "2% of the followers engaged with the post"
+                      total_engagement: 50
+
+  /analytics/peak-engagement:
+    get:
+      operationId: R304
+      summary: 'R304: Retrieve Peak Engagement Times'
+      description: 'Fetches peak engagement times for a specific period. Access: INF'
+      tags:
+        - 'M11: Analytics and Influencer Insights'
+      parameters:
+        - in: query
+          name: period
+          description: 'Time period for analysis (e.g., daily, weekly, monthly, or overall)'
+          schema:
+            type: string
+            enum: ['daily', 'weekly', 'monthly', 'overall']
+          required: true
+      responses:
+        '200':
+          description: 'Returns peak engagement times for the selected period.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  peak_times:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        start_date:
+                          type: string
+                          format: date
+                          description: 'Date of start of the peak time interval. Only included for weekly or monthly periods.'
+                        end_date:
+                          type: string
+                          format: date
+                          description: 'Date of end of the peak time interval. Only included for weekly or monthly periods.'
+                        start_time:
+                          type: string
+                          format: time
+                          description: 'Start of peak engagement interval'
+                        end_time:
+                          type: string
+                          format: time
+                          description: 'End of peak engagement interval'
+                        total_engagement:
+                          type: integer
+                          description: 'Sum of likes and comments for quick comparison'
+                  example:
+                    peak_times:
+                      - start_date: '2024-04-03'
+                        end_date: '2024-04-04'
+                        start_time: '18:00'
+                        end_time: '00:00'
+                        total_engagement: 3000
+                      - start_date: '2024-04-05'
+                        end_date: '2024-04-05'
+                        start_time: '09:00'
+                        end_time: '11:00'
+                        total_engagement: 1500
+                      - start_time: '15:00'
+                        end_time: '16:30'
+                        total_engagement: 200 
+
+
+
+
+
+
