@@ -2,8 +2,8 @@ openapi: 3.0.0
 
 info:
   version: '1.0'
-  title: 'LBAW MediaLibrary Web API'
-  description: 'Web Resources Specification (A7) for MediaLibrary'
+  title: 'LBAW FakeBook Web API'
+  description: 'Web Resources Specification (A7) for FakeBook'
 
 servers:
 - url: http://lbaw.fe.up.pt
@@ -29,157 +29,7 @@ tags:
 
 paths:
 
-  /login:
-    get:
-      operationId: R101
-      summary: 'R101: Login Form'
-      description: 'Provide login form. Access: PUB'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      responses:
-        '200':
-          description: 'Ok. Show log-in UI'
-    post:
-      operationId: R102
-      summary: 'R102: Login Action'
-      description: 'Processes the login form submission. Access: PUB'
-      tags:
-        - 'M01: Authentication and Individual Profile'
- 
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                email:          # <!--- form field name
-                  type: string
-                password:    # <!--- form field name
-                  type: string
-              required:
-                - email
-                - password
- 
-      responses:
-        '302':
-          description: 'Redirect after processing the login credentials.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful authentication. Redirect to user profile.'
-                  value: '/users/{id}'
-                302Error:
-                  description: 'Failed authentication. Redirect to login form.'
-                  value: '/login'
- 
-  /logout:
-
-    post:
-      operationId: R103
-      summary: 'R103: Logout Action'
-      description: 'Logout the current authenticated used. Access: USR, ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      responses:
-        '302':
-          description: 'Redirect after processing logout.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful logout. Redirect to login form.'
-                  value: '/login'
-
-  /register:
-    get:
-      operationId: R104
-      summary: 'R104: Register Form'
-      description: 'Provide new user registration form. Access: PUB'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      responses:
-        '200':
-          description: 'Ok. Show sign-up UI'
-
-    post:
-      operationId: R105
-      summary: 'R105: Register Action'
-      description: 'Processes the new user registration form submission. Access: PUB'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                picture:
-                  type: string
-                  format: binary
-              required:
-                - email
-                - password
-
-      responses:
-        '302':
-          description: 'Redirect after processing the new user information.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful authentication. Redirect to user profile.'
-                  value: '/users/{id}'
-                302Failure:
-                  description: 'Failed authentication. Redirect to login form.'
-                  value: '/login'
-
-  /users/{id}:
-    get:
-      operationId: R106
-      summary: 'R106: View user profile'
-      description: 'Show the individual user profile. Access: USR'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
-      responses:
-        '200':
-          description: 'Ok. Show view profile UI'
- 
-
-
-
   /report:
-    get: 
-      operationId: R108
-      summary: 'R108: Report Form'
-      description: 'Provide Report form. Access: USR'
-      tags:
-        - 'M08: Content Moderation and Reporting'
-      responses:
-        '200':
-          description: 'Ok. Show report UI'
-      
     
     post:
       operationId: R109
@@ -226,26 +76,132 @@ paths:
                 302SuccessUser:
                   description: 'Successful report submission. Redirect to the reported user profile.'
                   value: '/users/{target_user_id}'
-                302Error:
-                  description: 'Failed report submission. Redirect to report form.'
-                  value: '/report'
-  
+
+        '400':
+          description: 'Validation failed. Stay on the report page to correct errors.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400ErrorMissingFields:
+                  description: 'Required fields are missing. Please fill in all the necessary fields.'
+                  value: '/report?error=missing_fields'
+                400ErrorInvalidCommentId:
+                  description: 'The comment ID provided is invalid. Please check the comment and try again.'
+                  value: '/report?error=invalid_comment_id'
+                400ErrorContentTooShort:
+                  description: 'The content of your report is too short. Please provide more details (at least 10 characters).'
+                  value: '/report?error=content_too_short'
+                400ErrorInvalidPostId:
+                  description: 'The post ID provided is invalid. Please check the post and try again.'
+                  value: '/report?error=invalid_post_id'
+                400ErrorInvalidUserId:
+                  description: 'The target user ID provided is invalid. Please check the user and try again.'
+                  value: '/report?error=invalid_user_id'
+        '404':
+          description: 'Not Found. The resource (comment, post, or user) you are trying to report does not exist.'  
+        '401':
+          description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.' 
+
+  /report/{type}/{id}:
+    get:
+      operationId: R108
+      summary: 'R108: Report {type} Form'
+      description: 'Retrieve the report form for a specific {type}. The {type} ID will be pre-filled. Access: USR'
+      tags:
+        - 'M08: Content Moderation and Reporting'
+      parameters:
+        - name: type
+          in: path
+          required: true
+          description: 'The type of resource being reported (comment, post, or user).'
+          schema:
+            type: string
+            enum: [comment, post, user]
+        - name: id
+          in: path
+          required: true
+          description: 'The ID of the resource being reported.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Ok. Show report UI.'
+        '404':
+          description: 'Not Found. The specified resource (comment, post, or user) does not exist.'
+        '401':
+          description: 'Unauthorized. The user does not have permission to view the report form.'
+
   /groups:
     get:
-      operationId: R110
-      summary: 'R110: View All Groups'
-      description: 'Retrieve a list of all available groups. Access: USR'
+      operationId: R106
+      summary: 'R106: View All Groups'
+      description: 'Retrieve a paginated list of all available groups with a fixed page limit. Access: USR'
       tags:
         - 'M10: Group Management and Participation'
       responses:
         '200':
-          description: 'Ok. Show the list of groups.'
-    
+          description: 'Ok. Returns a paginated list of groups with a fixed number of items per page.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  groups:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        owner_id:
+                          type: integer
+                  pagination:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      total_pages:
+                        type: integer
+                        example: 5
+                      items_per_page:
+                        type: integer
+                        example: 10
+                      total_groups:
+                        type: integer
+                        example: 50
+              example:
+                groups:
+                  - id: 1
+                    name: 'Group 1'
+                    description: 'This is Group 1.'
+                    owner_id: 123
+                  - id: 2
+                    name: 'Group 2'
+                    description: 'This is Group 2.'
+                    owner_id: 124
+                pagination:
+                  current_page: 1
+                  total_pages: 5
+                  items_per_page: 10
+                  total_groups: 50
+        '401':
+          description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.'
+        '404':
+          description: 'Not Found. The groups or the requested page could not be found.'
+        '500':
+          description: 'Internal Server Error. An unexpected error occurred on the server.'
   /groups/{id}:
     get:
-      operationId: R111
-      summary: 'R111: View Group'
-      description: 'Show the individual group page. Access: USR for public groups, OWN and MEM for private ones'
+      operationId: R107
+      summary: 'R107: View Group'
+      description: 'Show the individual group page. Access: USR can view only public groups, OWN and MEM can also view private ones'
       tags:
         - 'M10: Group Management and Participation'
       parameters:
@@ -258,6 +214,13 @@ paths:
       responses:
         '200':
           description: 'Ok. Show  group UI'
+        '404':
+          description: 'Not Found. The specified group does not exist.'
+
+        '403':
+          description: 'Forbidden. User does not have the necessary access rights to view this private group.'
+        
+        
 
     delete:
       operationId: R114
@@ -280,8 +243,12 @@ paths:
                 type: string
               examples:
                 204Success:
-                  description: 'Group successfully deleted. Redirect to the homepage or group list.'
+                  description: 'Group successfully deleted. Redirect to the group list.'
                   value: '/groups'
+        '404':
+          description: 'Not Found. The specified group does not exist.'
+        '403':
+          description: 'Forbidden. Only the group owner can delete this group.'
 
 
   /groups/edit/{id}:
@@ -333,6 +300,15 @@ paths:
                 400Error:
                   description: 'Validation failed. Stay on the edit page to correct errors.'
                   value: '/groups/edit/{id}'
+                400ErrorInvalidPhotoURL:
+                  description: 'The photo URL provided is invalid. Redirect to edit page to correct it.'
+                  value: '/groups/edit/{id}?error=invalid_photo_url'
+
+        '404':
+          description: 'Not Found. The specified group does not exist.'
+
+        '403':
+          description: 'Forbidden. Only group owners can edit this group.'
 
   /groups/create:
     get:
@@ -374,15 +350,15 @@ paths:
                 - owner_id
  
       responses:
-        '302':
-          description: 'Redirect after processing the create group submission.'
+        '201':
+          description: 'Group successfully created.'
           headers:
             Location:
               schema:
                 type: string
               examples:
-                302Success:
-                  description: 'Group successfully created. Redirect to the group created.'
+                201Success:
+                  description: 'Group successfully created. Redirect to the newly created group page.'
                   value: '/groups/{id}'
 
         '400':
@@ -392,9 +368,15 @@ paths:
               schema:
                 type: string
               examples:
-                400Error:
-                  description: 'Failed to create group. Redirect to create group form.'
-                  value: '/groups/create' 
+                400ErrorMissingName:
+                  description: 'Failed to create group. Name is required. Stay on create page to correct errors.'
+                  value: '/groups/create?error=missing_name'
+                400ErrorInvalidOwnerId:
+                  description: 'Failed to create group. Invalid owner ID. Stay on create page to correct errors.'
+                  value: '/groups/create?error=invalid_owner_id'
+                400ErrorInvalidPhotoURL:
+                  description: 'Failed to create group. Invalid photo URL format. Stay on create page to correct errors.'
+                  value: '/groups/create?error=invalid_photo_url' 
 
   /groups/{id}/members:
     post:
@@ -418,15 +400,35 @@ paths:
               properties:
                 user_id:
                   type: integer
+                  minimum: 1
+                  description: 'ID of the user to be added. Must be a valid, positive integer.'
               required:
                 - user_id
       responses:
         '201':
-          description: 'Member successfully added to the group.'
+          description: 'Member successfully added to the group. Remain on the current page.'
         '400':
-          description: 'Bad request. Invalid user or group ID.'
+          description: 'Bad request. Invalid input provided.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400ErrorMissingUserId:
+                  description: 'Missing user_id. The user ID is required to add a member to the group.'
+                  value: '/groups/{id}/members?error=missing_user_id'
+                400ErrorInvalidUserId:
+                  description: 'Invalid user ID. Ensure the user ID is valid and try again.'
+                  value: '/groups/{id}/members?error=invalid_user_id'
+                400ErrorInvalidGroupId:
+                  description: 'Invalid group ID. Ensure the group ID is valid and try again.'
+                  value: '/groups?error=invalid_group_id'
         '404':
           description: 'Group or user not found.'
+        '409':
+          description: 'Conflict. User is already a member of the group.'
+        '403':
+          description: 'Forbidden. Only group owners can add members to the group.'
 
   /groups/{id}/members/{user_id}:
     delete:
@@ -448,11 +450,26 @@ paths:
             type: integer
       responses:
         '204':
-          description: 'Member successfully removed from the group.'
+          description: 'Member successfully removed from the group. Remain on the current page.'
+        '400':
+          description: 'Bad request. Invalid input provided, such as a missing or invalid ID.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400ErrorInvalidGroupId:
+                  description: 'Invalid group ID. Ensure the group ID is a valid integer.'
+                  value: '/groups/{id}/members/{user_id}?error=invalid_group_id'
+                400ErrorInvalidUserId:
+                  description: 'Invalid user ID. Ensure the user ID is a valid integer.'
+                  value: '/groups/{id}/members/{user_id}?error=invalid_user_id'
         '403':
           description: 'Forbidden. You are not authorized to remove this member from the group.'
         '404':
           description: 'Group or user not found.'
+        '409':
+          description: 'Conflict. The specified user is not a member of the group.'
                 
 
   /analytics/engagement:
@@ -463,13 +480,37 @@ paths:
       tags:
         - 'M11: Analytics and Influencer Insights'
       parameters:
-        - in: query
-          name: period
-          description: 'Time period for the data (daily, weekly, monthly)'
-          schema:
-            type: string
-            enum: ['daily', 'weekly', 'monthly', 'overall']
-          required: true
+      - in: query
+        name: period
+        description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
+        schema:
+          type: string
+          enum: ['daily', 'weekly', 'monthly', 'overall']
+        required: true
+      - in: query
+        name: date
+        description: 'Specific date for daily period (YYYY-MM-DD)'
+        schema:
+          type: string
+        required: false
+      - in: query
+        name: week_start_date
+        description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
+        schema:
+          type: string
+        required: false
+      - in: query
+        name: month
+        description: 'The month for the engagement data (format: YYYY-MM)'
+        schema:
+          type: string
+        required: false
+      - in: query
+        name: year
+        description: 'The year for monthly data (format: YYYY)'
+        schema:
+          type: string
+        required: false
       responses:
         '200':
           description: 'Returns engagement metrics for the selected period.'
@@ -484,39 +525,155 @@ paths:
                     type: integer
                   follower_changes:
                     type: integer
+                  time :
+                    type : string
                 example:
                   likes: 1200
                   comments: 150
                   follower_changes: 5
+                  time: "month:2024-04"
 
-  /analytics/engagement-rate:
+        '400':
+          description: 'Bad request. Invalid or missing parameters.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400ErrorMissingPeriod:
+                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
+                  value: '/analytics/engagement?error=missing_period'
+                400ErrorInvalidPeriod:
+                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
+                  value: '/analytics/engagement?error=invalid_period'
+                400ErrorInvalidDate:
+                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
+                  value: '/analytics/engagement?error=invalid_date'
+                400ErrorInvalidWeekDate:
+                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
+                  value: '/analytics/engagement?error=invalid_week_date'
+                400ErrorInvalidMonth:
+                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
+                  value: '/analytics/engagement?error=invalid_month'
+                400ErrorInvalidYear:
+                  description: 'Invalid year. Ensure the year is in YYYY format.'
+                  value: '/analytics/engagement?error=invalid_year'
+        '404':
+          description: 'Engagement data unavailable.'
+
+  /analytics/engagement-rate/{post_id}:
     get:
       operationId: R302
       summary: 'R302: Retrieve Average Engagement Rate per Post'
-      description: 'Fetch the average engagement rate for each post over a specified time range. Access: INF'
+      description: 'Fetch the average engagement rate and total engagement for each post over a specified time range. Access: INF'
       tags:
         - 'M11: Analytics and Influencer Insights'
       parameters:
+        - in: path
+          name: post_id
+          description: 'Unique identifier for the post'
+          schema:
+            type: integer
+          required: true
         - in: query
           name: period
-          description: 'Time period for calculating engagement rate (daily, weekly, monthly)'
+          description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
           schema:
             type: string
             enum: ['daily', 'weekly', 'monthly', 'overall']
           required: true
+        - in: query
+          name: date
+          description: 'Specific date for daily period (YYYY-MM-DD)'
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: week_start_date
+          description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: month
+          description: 'The month for the engagement data (format: YYYY-MM)'
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: year
+          description: 'The year for monthly data (format: YYYY)'
+          schema:
+            type: string
+          required: false
       responses:
         '200':
-          description: 'Returns the average engagement rate for posts in the selected period.'
+          description: 'Returns the average engagement rate and the total engagement data per post in the selected period.'
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  engagement_rate:
-                    type: number
-                    format: float
-                example:
-                  engagement_rate: "45% of the followers engaged with the post"
+                type: array
+                items:
+                  type: object
+                  properties:
+                    post_id:
+                      type: integer
+                      description: 'Unique identifier for the post'
+                    engagement_rate:
+                      type: string
+                      description: 'Percentage of followers who engaged with the post'
+                    total_engagement:
+                      type: integer
+                      description: 'Total engagement count (likes, comments, shares) for the post'
+                    time :
+                      type : string
+              example:
+                - post_id: 101
+                  engagement_rate: "45%"
+                  total_engagement: 3000
+                  time: "year: 2024"
+                - post_id: 102
+                  engagement_rate: "30%"
+                  total_engagement: 1500
+                  time: "Year: 2020"
+                - post_id: 103
+                  engagement_rate: "50%"
+                  total_engagement: 4000
+                  time: "month:2024-05"
+        '400':
+          description: 'Bad request. Invalid or missing parameters.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400ErrorMissingPostId:
+                  description: 'Missing post_id. The post ID is required for this request.'
+                  value: '/analytics/engagement-rate/{post_id}?error=missing_post_id'
+                400ErrorInvalidPostId:
+                  description: 'Invalid post_id. Ensure the post ID is a valid integer and exists in the system.'
+                  value: '/analytics/engagement-rate/{post_id}?error=invalid_post_id'
+                400ErrorMissingPeriod:
+                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
+                  value: '/analytics/engagement-rate/{post_id}?error=missing_period'
+                400ErrorInvalidPeriod:
+                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
+                  value: '/analytics/engagement-rate/{post_id}?error=invalid_period'
+                400ErrorInvalidDate:
+                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
+                  value: '/analytics/engagement-rate/{post_id}?error=invalid_date'
+                400ErrorInvalidWeekDate:
+                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
+                  value: '/analytics/engagement-rate/{post_id}?error=invalid_week_date'
+                400ErrorInvalidMonth:
+                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
+                  value: '/analytics/engagement-rate/{post_id}?error=invalid_month'
+                400ErrorInvalidYear:
+                  description: 'Invalid year. Ensure the year is in YYYY format.'
+                  value: '/analytics/engagement-rate/{post_id}?error=invalid_year'
+        '404':
+          description: 'Post not found or engagement data unavailable.'
+
 
   /analytics/posts/performance:
     get:
@@ -528,11 +685,35 @@ paths:
       parameters:
         - in: query
           name: period
-          description: 'Time period for fetching performance (daily, weekly, monthly, overall)'
+          description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
           schema:
             type: string
             enum: ['daily', 'weekly', 'monthly', 'overall']
           required: true
+        - in: query
+          name: date
+          description: 'Specific date for daily period (YYYY-MM-DD)'
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: week_start_date
+          description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: month
+          description: 'The month for the engagement data (format: YYYY-MM)'
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: year
+          description: 'The year for monthly data (format: YYYY)'
+          schema:
+            type: string
+          required: false
         - in: query
           name: count
           description: 'Number of posts to retrieve for both top and low-performing lists'
@@ -566,6 +747,8 @@ paths:
                         total_engagement:
                           type: integer
                           description: 'Sum of likes and comments for quick comparison'
+                        time :
+                          type : string
                   low_posts:
                     type: array
                     items:
@@ -581,7 +764,8 @@ paths:
                           type: integer
                         engagement_rate:
                           type: string
-                          
+                        time :
+                          type : string
                         total_engagement:
                           type: integer
                           description: 'Sum of likes and comments for quick comparison'
@@ -593,12 +777,14 @@ paths:
                       comments: 300
                       engagement_rate: "60% of the followers engaged with the post"
                       total_engagement: 1500
+                      time: "Month: 2023-06"
                     - post_id: 102
                       caption: "Morning vibes with coffee ☕️"
                       likes: 900
                       comments: 150
                       engagement_rate: "50% of the followers engaged with the post"
                       total_engagement: 1050
+                      time: "Month: 2023-06"
                   low_posts:
                     - post_id: 203
                       caption: "Throwback Thursday!"
@@ -606,12 +792,46 @@ paths:
                       comments: 5
                       engagement_rate: "1% of the followers engaged with the post"
                       total_engagement: 35
+                      time: "Month: 2023-06"
                     - post_id: 204
                       caption: "Simple joys of life"
                       likes: 40
                       comments: 10
                       engagement_rate: "2% of the followers engaged with the post"
                       total_engagement: 50
+                      time: "Month: 2023-06"
+
+        '400':
+          description: 'Bad request. Invalid or missing parameters.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400InvalidNumberPosts:
+                  description: 'Invalid number of Posts. The count query parameter needs to be a valid value (>0 and <=5)'
+                  value: '/analytics/posts/performance?error=number_posts'
+                400ErrorMissingPeriod:
+                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
+                  value: '/analytics/posts/performance?error=missing_period'
+                400ErrorInvalidPeriod:
+                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
+                  value: '/analytics/posts/performance?error=invalid_period'
+                400ErrorInvalidDate:
+                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
+                  value: '/analytics/posts/performance?error=invalid_date'
+                400ErrorInvalidWeekDate:
+                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
+                  value: '/analytics/posts/performance?error=invalid_week_date'
+                400ErrorInvalidMonth:
+                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
+                  value: '/analytics/posts/performance?error=invalid_month'
+                400ErrorInvalidYear:
+                  description: 'Invalid year. Ensure the year is in YYYY format.'
+                  value: '/analytics/posts/performance?error=invalid_year'
+        '404':
+          description: 'Performance Engagement data unavailable.'
+          
 
   /analytics/peak-engagement:
     get:
@@ -623,11 +843,35 @@ paths:
       parameters:
         - in: query
           name: period
-          description: 'Time period for analysis (e.g., daily, weekly, monthly, or overall)'
+          description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
           schema:
             type: string
             enum: ['daily', 'weekly', 'monthly', 'overall']
           required: true
+        - in: query
+          name: date
+          description: 'Specific date for daily period (YYYY-MM-DD)'
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: week_start_date
+          description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: month
+          description: 'The month for the engagement data (format: YYYY-MM)'
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: year
+          description: 'The year for monthly data (format: YYYY)'
+          schema:
+            type: string
+          required: false
       responses:
         '200':
           description: 'Returns peak engagement times for the selected period.'
@@ -660,21 +904,162 @@ paths:
                         total_engagement:
                           type: integer
                           description: 'Sum of likes and comments for quick comparison'
-                  example:
-                    peak_times:
+                        time :
+                          type : string
+                    example:
+                      peak_times:
                       - start_date: '2024-04-03'
                         end_date: '2024-04-04'
                         start_time: '18:00'
                         end_time: '00:00'
                         total_engagement: 3000
-                      - start_date: '2024-04-05'
-                        end_date: '2024-04-05'
+                        time: "Month: 2024-04"
+                      - start_date: '2024-05-05'
+                        end_date: '2024-05-05'
                         start_time: '09:00'
                         end_time: '11:00'
+                        time: "Month: 2024-05"
                         total_engagement: 1500
                       - start_time: '15:00'
                         end_time: '16:30'
                         total_engagement: 200 
+                        time: "Day: 2024-01-01"
+
+        '400':
+          description: 'Bad request. Invalid or missing parameters.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400ErrorMissingPeriod:
+                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
+                  value: '/analytics/peak-engagement?error=missing_period'
+                400ErrorInvalidPeriod:
+                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
+                  value: '/analytics/peak-engagement?error=invalid_period'
+                400ErrorInvalidDate:
+                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
+                  value: '/analytics/peak-engagement?error=invalid_date'
+                400ErrorInvalidWeekDate:
+                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
+                  value: '/analytics/peak-engagement?error=invalid_week_date'
+                400ErrorInvalidMonth:
+                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
+                  value: '/analytics/peak-engagement?error=invalid_month'
+                400ErrorInvalidYear:
+                  description: 'Invalid year. Ensure the year is in YYYY format.'
+                  value: '/analytics/peak-engagement?error=invalid_year'
+        '404':
+          description: 'Peak Engagement data unavailable.'
+        
+  
+  /analytics/audience-demographics:
+    get:
+      operationId: R305
+      summary: 'R305: Retrieve Audience Demographics'
+      description: 'Fetch audience demographics, including age and location insights. Access: INF'
+      tags:
+        - 'M11: Analytics and Influencer Insights'
+      parameters:
+        - in: query
+          name: age_group
+          description: 'Optional. Filter audience demographics by age group.'
+          schema:
+            type: string
+            enum: ['14-17', '18-24', '25-34', '35-44', '45-60', '61-80', '80+']
+          required: false
+        - in: query
+          name: location
+          description: 'Optional. Filter audience demographics by location.'
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: 'Returns audience demographic insights.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_followers:
+                    type: integer
+                    description: 'Total number of followers.'
+                  age_distribution:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        age_group:
+                          type: string
+                          description: 'Age group of followers'
+                        followers_count:
+                          type: integer
+                          description: 'Number of followers in this age group'
+                        percentage:
+                          type: string
+                          description: 'Percentage of followers in this age group relative to total followers'
+                  location_distribution:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        location:
+                          type: string
+                          description: 'Location of followers'
+                        followers_count:
+                          type: integer
+                          description: 'Number of followers from this location'
+                        percentage:
+                          type: string
+                          description: 'Percentage of followers from this location relative to total followers'
+                  gender_distribution:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        gender:
+                          type: string
+                          description: 'Gender of followers'
+                        followers_count:
+                          type: integer
+                          description: 'Number of followers of this gender'
+                        percentage:
+                          type: string
+                          description: 'Percentage of followers of this gender'
+              example:
+                total_followers: 10000
+                age_distribution:
+                  - age_group: '14-17'
+                    followers_count: 1500
+                    percentage: "15%"
+                  - age_group: '18-24'
+                    followers_count: 4000
+                    percentage: "40%"
+                location_distribution:
+                  - location: 'USA'
+                    followers_count: 3000
+                    percentage: "30%"
+                gender_distribution:
+                  - gender: 'Female'
+                    followers_count: 5500
+                    percentage: "55%"
+                  - gender: 'Male'
+                    followers_count: 4500
+                    percentage: "45%"
+        '400':
+          description: 'Bad request. Invalid or missing parameters.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Invalid or missing parameters. Ensure age_group, location, or time range is correct.'
+        '404':
+          description: 'Audience demographics data not found.'
 
 
 
