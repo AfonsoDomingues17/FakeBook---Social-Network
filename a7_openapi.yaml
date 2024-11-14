@@ -89,6 +89,190 @@ paths:
       parameters:
         - in: path
           name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  minimum: 1
+                  description: 'ID of the user to be added. Must be a valid, positive integer.'
+              required:
+                - user_id
+      responses:
+        '201':
+          description: 'Member successfully added to the group. Remain on the current page.'
+        '400':
+          description: 'Bad request. Invalid input provided.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400ErrorMissingUserId:
+                  description: 'Missing user_id. The user ID is required to add a member to the group.'
+                  value: '/groups/{id}/members?error=missing_user_id'
+                400ErrorInvalidUserId:
+                  description: 'Invalid user ID. Ensure the user ID is valid and try again.'
+                  value: '/groups/{id}/members?error=invalid_user_id'
+                400ErrorInvalidGroupId:
+                  description: 'Invalid group ID. Ensure the group ID is valid and try again.'
+                  value: '/groups?error=invalid_group_id'
+        '404':
+          description: 'Group or user not found.'
+        '409':
+          description: 'Conflict. User is already a member of the group.'
+        '403':
+          description: 'Forbidden. Only group owners can add members to the group.'
+
+  /groups/{id}/members/{user_id}:
+    delete:
+      operationId: R107
+      summary: 'R107: Remove Member from Group'
+      description: 'Allows group owners to remove members from the group. Access: OWN'
+      tags:
+        - 'M10: Group Management and Participation'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 'Member successfully removed from the group. Remain on the current page.'
+        '400':
+          description: 'Bad request. Invalid input provided, such as a missing or invalid ID.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400ErrorInvalidGroupId:
+                  description: 'Invalid group ID. Ensure the group ID is a valid integer.'
+                  value: '/groups/{id}/members/{user_id}?error=invalid_group_id'
+                400ErrorInvalidUserId:
+                  description: 'Invalid user ID. Ensure the user ID is a valid integer.'
+                  value: '/groups/{id}/members/{user_id}?error=invalid_user_id'
+        '403':
+          description: 'Forbidden. You are not authorized to remove this member from the group.'
+        '404':
+          description: 'Group or user not found.'
+        '409':
+          description: 'Conflict. The specified user is not a member of the group.'
+                
+
+  /analytics/engagement:
+    get:
+      operationId: R301
+      summary: 'R301: Retrieve Engagement Metrics'
+      description: 'Fetch likes, comments, and follower changes for daily, weekly, or monthly periods. Access: INF'
+      tags:
+        - 'M11: Analytics and Influencer Insights'
+      parameters:
+      - in: query
+        name: period
+        description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
+        schema:
+          type: string
+          enum: ['daily', 'weekly', 'monthly', 'overall']
+        required: true
+      - in: query
+        name: date
+        description: 'Specific date for daily period (YYYY-MM-DD)'
+        schema:
+          type: string
+        required: false
+      - in: query
+        name: week_start_date
+        description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
+        schema:
+          type: string
+        required: false
+      - in: query
+        name: month
+        description: 'The month for the engagement data (format: YYYY-MM)'
+        schema:
+          type: string
+        required: false
+      - in: query
+        name: year
+        description: 'The year for monthly data (format: YYYY)'
+        schema:
+          type: string
+        required: false
+      responses:
+        '200':
+          description: 'Returns engagement metrics for the selected period.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  likes:
+                    type: integer
+                  comments:
+                    type: integer
+                  follower_changes:
+                    type: integer
+                  time :
+                    type : string
+                example:
+                  likes: 1200
+                  comments: 150
+                  follower_changes: 5
+                  time: "month:2024-04"
+
+        '400':
+          description: 'Bad request. Invalid or missing parameters.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                400ErrorMissingPeriod:
+                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
+                  value: '/analytics/engagement?error=missing_period'
+                400ErrorInvalidPeriod:
+                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
+                  value: '/analytics/engagement?error=invalid_period'
+                400ErrorInvalidDate:
+                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
+                  value: '/analytics/engagement?error=invalid_date'
+                400ErrorInvalidWeekDate:
+                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
+                  value: '/analytics/engagement?error=invalid_week_date'
+                400ErrorInvalidMonth:
+                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
+                  value: '/analytics/engagement?error=invalid_month'
+                400ErrorInvalidYear:
+                  description: 'Invalid year. Ensure the year is in YYYY format.'
+                  value: '/analytics/engagement?error=invalid_year'
+        '404':
+          description: 'Engagement data unavailable.'
+
+  /analytics/engagement-rate/{post_id}:
+    get:
+      operationId: R302
+      summary: 'R302: Retrieve Average Engagement Rate per Post'
+      description: 'Fetch the average engagement rate and total engagement for each post over a specified time range. Access: INF'
+      tags:
+        - 'M11: Analytics and Influencer Insights'
+      parameters:
+        - in: path
+          name: post_id
+          description: 'Unique identifier for the post'
           schema:
             type: integer
           required: true
