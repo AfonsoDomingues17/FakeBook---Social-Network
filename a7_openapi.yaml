@@ -29,7 +29,1019 @@ tags:
 
 paths:
 
+  /directChats:
+    get:
+      operationId: R301
+      summary: 'R301: List Direct Chats'
+      description: 'Retrieve a list of direct chats for the authenticated user. Access: USR'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      responses:
+        '200':
+          description: 'Ok. Show list of direct chats UI'
+         
+
+    post:
+      operationId: R302
+      summary: 'R302: Create Direct Chat'
+      description: 'Create a new direct chat between two users. Access: USR'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user1_id:
+                  type: integer
+                user2_id:
+                  type: integer
+              required:
+                - user1_id
+                - user2_id
+      responses:
+        '302':
+          description: 'Redirect after creating the direct chat.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful creation. Redirect to direct chat view.'
+                  value: '/directChats/{id}'
+                302Failure:
+                  description: 'Failed creation. Redirect to direct chat creation form.'
+                  value: '/directChats'
+
+  /directChats/{id}:
+    get:
+      operationId: R303
+      summary: 'R303: View Direct Chat'
+      description: 'Retrieve details of a specific direct chat. Access: USR'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  minimum: 1
+                  description: 'ID of the user to be added. Must be a valid, positive integer.'
+              required:
+                - user_id
+      responses:
+        '201':
+          description: 'Member successfully added to the group. Remain on the current page.'
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+        '404':
+          description: 'Group or user not found.'
+        '409':
+          description: 'Conflict. User is already a member of the group.'
+        '403':
+          description: 'Forbidden. Only group owners can add members to the group.'
+
+  /directChats/{id}/messages:
+    get:
+      operationId: R304
+      summary: 'R304: List Messages in Direct Chat'
+      description: 'Retrieve a list of messages in a specific direct chat. Access: USR'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Return list of messages in JSON format'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    content:
+                      type: string
+                    date:
+                      type: string
+                      format: date-time
+                    author_id:
+                      type: integer
+                    direct_chat:
+                      type: integer
+
+
+
+    post:
+      operationId: R305
+      summary: 'R305: Send Message in Direct Chat'
+      description: 'Send a new message in a specific direct chat. Access: USR'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                author_id:
+                  type: integer
+              required:
+                - content
+                - author_id
+      responses:
+        '200':
+          description: 'Message sent successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  content:
+                    type: string
+                  date:
+                    type: string
+                    format: date-time
+                  author_id:
+                    type: integer
+                  direct_chat:
+                    type: integer
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+
+  /groups/{id}/messages:
+    get:
+      operationId: R309
+      summary: 'R309: List Messages in Group'
+      description: 'Retrieve a list of messages in a specific group. Access: USR'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Return list of messages in JSON format'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    content:
+                      type: string
+                    date:
+                      type: string
+                      format: date-time
+                    author_id:
+                      type: integer
+                    group_id:
+                      type: integer
+
+    post:
+      operationId: R310
+      summary: 'R310: Send Message in Group'
+      description: 'Send a new message in a specific group. Access: USR'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                author_id:
+                  type: integer
+              required:
+                - content
+                - author_id
+      responses:
+        '200':
+          description: 'Message sent successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  content:
+                    type: string
+                  date:
+                    type: string
+                    format: date-time
+                  author_id:
+                    type: integer
+                  group_id:
+                    type: integer
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+
+  /posts:
+    get:
+      operationId: R401
+      summary: 'R401: List Posts'
+      description: 'Retrieve a list of posts. Access: USR'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      responses:
+        '200':
+          description: 'Ok. Show list of posts UI'
+         
+    post:
+      operationId: R402
+      summary: 'R402: Create Post'
+      description: 'Create a new post. Access: USR'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                is_public:
+                  type: boolean
+                typeP:
+                  type: string
+              required:
+                - description
+                - is_public
+                - typeP
+      responses:
+        '302':
+          description: 'Redirect after creating the post.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful creation. Redirect to post view.'
+                  value: '/posts/{id}'
+                302Failure:
+                  description: 'Failed creation. Redirect to post creation form.'
+                  value: '/posts'
+
+  /posts/{id}:
+    get:
+      operationId: R403
+      summary: 'R403: View Post'
+      description: 'Retrieve details of a specific post. Access: USR'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show post details UI'
+           
+
+    put:
+      operationId: R404
+      summary: 'R404: Edit Post'
+      description: 'Edit an existing post. Access: OWN'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                is_public:
+                  type: boolean
+              required:
+                - description
+                - is_public
+      responses:
+        '302':
+          description: 'Redirect after editing the post.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful edit. Redirect to post view.'
+                  value: '/posts/{id}'
+                302Failure:
+                  description: 'Failed edit. Redirect to post edit form.'
+                  value: '/posts/{id}/edit'
+
+  /posts/{id}/media:
+    post:
+      operationId: R405
+      summary: 'R405: Add Media to Post'
+      description: 'Add media to a specific post. Access: OWN'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                media:
+                  type: string
+                  format: binary
+              required:
+                - media
+      responses:
+        '200':
+          description: 'Media added successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  photo_url:
+                    type: string
+
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+
+  /posts/{post_id}/comments:
+    get:
+      operationId: R501
+      summary: 'R501: View All Comments for a Post. Access: USR'
+      description: 'Retrieve all comments associated with a specific post.'
+      tags:
+        - 'M05: Commenting and Reactions'
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          description: 'The ID of the post to retrieve comments for.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Returns a list of all comments for the specified post.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        content:
+                          type: string
+                        author_id:
+                          type: integer
+                        created_at:
+                          type: string
+                          format: date-time
+              example:
+                comments:
+                  - id: 1
+                    content: 'This is a comment.'
+                    author_id: 101
+                    created_at: '2024-11-14T12:00:00Z'
+                  - id: 2
+                    content: 'Another comment.'
+                    author_id: 102
+                    created_at: '2024-11-14T12:05:00Z'
+        '404':
+          description: 'The specified post does not exist or has no comments.'
+  
+  /posts/{post_id}/comments/create:
+    post:
+      operationId: R502
+      summary: 'R502: Add a Comment to a Post. Access: USR'
+      description: 'Allow users to add a new comment to a specific post.'
+      tags:
+        - 'M05: Commenting and Reactions'
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          description: 'The ID of the post to add the comment to.'
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'The content of the comment.'
+                author_id:
+                  type: integer
+                  description: 'The ID of the user adding the comment.'
+              required:
+                - content
+                - author_id
+      responses:
+        '302':
+          description: 'The comment was successfully added. Redirecting to the added comment.'
+          headers:
+            Location:
+              description: 'URL of the added comment.'
+              schema:
+                type: string
+                example: '/comments/{comment_id}'
+        '400':
+          description: 'Validation failed. Required fields are missing or invalid.'
+        '404':
+          description: 'The specified post does not exist.'
+
+    
+  /comments/{comment_id}/edit:
+    put:
+      operationId: R503
+      summary: 'R503: Edit a Comment. Access: OWN'
+      description: 'Allow users to edit the content of an existing comment.'
+      tags:
+        - 'Comment Management'
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          description: 'The ID of the comment to be edited.'
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'The new content of the comment.'
+              required:
+                - content
+      responses:
+        '302':
+          description: 'The comment was successfully updated. Redirecting to the updated comment.'
+          headers:
+            Location:
+              description: 'URL of the updated comment.'
+              schema:
+                type: string
+                example: '/comments/{comment_id}'
+        '400':
+          description: 'Validation failed. Required fields are missing or invalid.'
+        '404':
+          description: 'The specified comment does not exist.'
+
+  /comments/{comment_id}:
+
+    get:
+      operationId: getComment
+      summary: 'Retrieve a Specific Comment'
+      description: 'Retrieve the details of a specific comment by its ID.'
+      tags:
+        - 'Comment Management'
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          description: 'The ID of the comment to retrieve.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Returns the details of the specified comment.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  content:
+                    type: string
+                  author_id:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                example:
+                  id: 1
+                  content: 'This is the content of the comment.'
+                  author_id: 101
+                  created_at: '2024-11-14T12:00:00Z'
+        '404':
+          description: 'The specified comment does not exist.'
+
+    
+
+  /users/{id}/connections:
+    get:
+      operationId: R601
+      summary: 'R601: List Connections'
+      description: 'Retrieve a list of connections for the specified user. Access: USR'
+      tags:
+        - 'M06: Connections'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show list of connections UI'
+          
+
+  /users/{id}/follow:
+    post:
+      operationId: R602
+      summary: 'R602: Send Follow Request'
+      description: 'Send a follow request to the specified user. Access: USR'
+      tags:
+        - 'M06: Connections'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id_src:
+                  type: integer
+              required:
+                - user_id_src
+      responses:
+        '302':
+          description: 'Redirect after sending the follow request.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful request. Redirect to user profile.'
+                  value: '/users/{id}'
+                302Failure:
+                  description: 'Failed request. Redirect to user profile.'
+                  value: '/users/{id}'
+
+  /users/{id}/follow/accept:
+    post:
+      operationId: R603
+      summary: 'R603: Accept Follow Request'
+      description: 'Accept a follow request from the specified user. Access: USR'
+      tags:
+        - 'M06: Connections'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id_src:
+                  type: integer
+              required:
+                - user_id_src
+      responses:
+        '302':
+          description: 'Redirect after accepting the follow request.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful acceptance. Redirect to user profile.'
+                  value: '/users/{id}'
+                302Failure:
+                  description: 'Failed acceptance. Redirect to user profile.'
+                  value: '/users/{id}'
+
+  /users/{id}/follow/reject:
+    post:
+      operationId: R604
+      summary: 'R604: Reject Follow Request'
+      description: 'Reject a follow request from the specified user. Access: USR'
+      tags:
+        - 'M06: Connections'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id_src:
+                  type: integer
+              required:
+                - user_id_src
+      responses:
+        '302':
+          description: 'Redirect after rejecting the follow request.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful rejection. Redirect to user profile.'
+                  value: '/users/{id}'
+                302Failure:
+                  description: 'Failed rejection. Redirect to user profile.'
+                  value: '/users/{id}'
+
+  /users/{id}/connections/removeFollower:
+    delete:
+      operationId: R605
+      summary: 'R605: Remove Follower'
+      description: 'Remove a follower from the specified user. Access: OWN'
+      tags:
+        - 'M06: Connections'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                follower_id:
+                  type: integer
+              required:
+                - follower_id
+      responses:
+        '302':
+          description: 'Redirect after removing the follower.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful removal. Redirect to connections view.'
+                  value: '/users/{id}/connections'
+                302Failure:
+                  description: 'Failed removal. Redirect to connections view.'
+                  value: '/users/{id}/connections'
+  /users/{id}/follow/delete:
+    delete:
+      operationId: R606
+      summary: 'R606: Delete Follow Request'
+      description: 'Delete a follow request from the specified user. Access: USR'
+      tags:
+        - 'M06: Connections'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id_src:
+                  type: integer
+              required:
+                - user_id_src
+      responses:
+        '302':
+          description: 'Redirect after deleting the follow request.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect to user profile.'
+                  value: '/users/{id}'
+                302Failure:
+                  description: 'Failed deletion. Redirect to user profile.'
+                  value: '/users/{id}'
+  /users/{id}/block:
+    post:
+      operationId: R607
+      summary: 'R607: Block User'
+      description: 'Block the specified user. Access: USR'
+      tags:
+        - 'M06: Connections'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id_src:
+                  type: integer
+              required:
+                - user_id_src
+      responses:
+        '302':
+          description: 'Redirect after blocking the user.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful block. Redirect to user profile.'
+                  value: '/users/{id}'
+                302Failure:
+                  description: 'Failed block. Redirect to user profile.'
+                  value: '/users/{id}'
+  /users/{id}/unblock:
+    delete:
+      operationId: R608
+      summary: 'R608: Unblock User'
+      description: 'Unblock the specified user. Access: USR'
+      tags:
+        - 'M06: Connections'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id_src:
+                  type: integer
+              required:
+                - user_id_src
+      responses:
+        '302':
+          description: 'Redirect after unblocking the user.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful unblock. Redirect to user profile.'
+                  value: '/users/{id}'
+                302Failure:
+                  description: 'Failed unblock. Redirect to user profile.'
+                  value: '/users/{id}'
+  /notifications:
+    get:
+      operationId: R701
+      summary: 'R701: List Notifications'
+      description: 'Retrieve a list of notifications for the authenticated user. Access: USR'
+      tags:
+        - 'M07: Notifications'
+      responses:
+        '200':
+          description: 'Ok. Show list of notifications UI'
+          content:
+            text/html:
+              schema:
+                type: string
+    post:
+      operationId: R702
+      summary: 'R702: Create Notification'
+      description: 'Create a new notification. Access: ADM'
+      tags:
+        - 'M07: Notifications'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                user_id_dest:
+                  type: integer
+                user_id_src:
+                  type: integer
+                typeN:
+                  type: string
+                  enum: ['LIKE', 'FOLLOW_REQUEST', 'GROUP_REQUEST', 'MESSAGE', 'COMMENT', 'INFO', 'TAG']
+                is_read:
+                  type: boolean
+                post_id:
+                  type: integer
+                message_id:
+                  type: integer
+                comment_id:
+                  type: integer
+                group_id:
+                  type: integer
+              required:
+                - content
+                - user_id_dest
+                - typeN
+      responses:
+        '200':
+          description: 'Notification created successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  content:
+                    type: string
+                  user_id_dest:
+                    type: integer
+                  user_id_src:
+                    type: integer
+                  typeN:
+                    type: string
+                  is_read:
+                    type: boolean
+                  post_id:
+                    type: integer
+                  message_id:
+                    type: integer
+                  comment_id:
+                    type: integer
+                  group_id:
+                    type: integer
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+  /notifications/{id}/read:
+    post:
+      operationId: R703
+      summary: 'R703: Mark Notification as Read'
+      description: 'Mark a specific notification as read. Access: USR'
+      tags:
+        - 'M07: Notifications'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Notification marked as read.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  is_read:
+                    type: boolean
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+  /notifications/{id}/delete:
+    delete:
+      operationId: R704
+      summary: 'R704: Delete Notification'
+      description: 'Delete a specific notification. Access: ADM'
+      tags:
+        - 'M07: Notifications'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Notification deleted successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+
   /report:
+    get: 
+      operationId: R108
+      summary: 'R108: Report Form'
+      description: 'Provide Report form. Access: USR'
+      tags:
+        - 'M08: Content Moderation and Reporting'
+      responses:
+        '200':
+          description: 'Ok. Show report UI'
+        '404':
+          description: 'Not Found. The specified resource (comment, post, or user) does not exist.'
+        '401':
+          description: 'Unauthorized. The user does not have permission to view the report form.'
+      
     
     post:
       operationId: R109
@@ -76,505 +1088,314 @@ paths:
                 302SuccessUser:
                   description: 'Successful report submission. Redirect to the reported user profile.'
                   value: '/users/{target_user_id}'
-
-        '400':
-          description: 'Validation failed. Stay on the report page to correct errors.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorMissingFields:
-                  description: 'Required fields are missing. Please fill in all the necessary fields.'
-                  value: '/report?error=missing_fields'
-                400ErrorInvalidCommentId:
-                  description: 'The comment ID provided is invalid. Please check the comment and try again.'
-                  value: '/report?error=invalid_comment_id'
-                400ErrorContentTooShort:
-                  description: 'The content of your report is too short. Please provide more details (at least 10 characters).'
-                  value: '/report?error=content_too_short'
-                400ErrorInvalidPostId:
-                  description: 'The post ID provided is invalid. Please check the post and try again.'
-                  value: '/report?error=invalid_post_id'
-                400ErrorInvalidUserId:
-                  description: 'The target user ID provided is invalid. Please check the user and try again.'
-                  value: '/report?error=invalid_user_id'
+                302Error:
+                  description: 'Failed report submission. Redirect to report form.'
+                  value: '/report'
         '404':
           description: 'Not Found. The resource (comment, post, or user) you are trying to report does not exist.'  
         '401':
           description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.' 
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
-  /report/{type}/{id}:
-    get:
-      operationId: R108
-      summary: 'R108: Report {type} Form'
-      description: 'Retrieve the report form for a specific {type}. The {type} ID will be pre-filled. Access: USR'
-      tags:
-        - 'M08: Content Moderation and Reporting'
-      parameters:
-        - name: type
-          in: path
-          required: true
-          description: 'The type of resource being reported (comment, post, or user).'
-          schema:
-            type: string
-            enum: [comment, post, user]
-        - name: id
-          in: path
-          required: true
-          description: 'The ID of the resource being reported.'
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: 'Ok. Show report UI.'
-        '404':
-          description: 'Not Found. The specified resource (comment, post, or user) does not exist.'
-        '401':
-          description: 'Unauthorized. The user does not have permission to view the report form.'
 
   /groups:
-    get:
-      operationId: R106
-      summary: 'R106: View All Groups'
-      description: 'Retrieve a paginated list of all available groups with a fixed page limit. Access: USR'
-      tags:
-        - 'M10: Group Management and Participation'
-      responses:
-        '200':
-          description: 'Ok. Returns a paginated list of groups with a fixed number of items per page.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  groups:
-                    type: array
-                    items:
+      get:
+        operationId: R1001
+        summary: 'R1001: View All Groups'
+        description: 'Retrieve a paginated list of all available groups with a fixed page limit. Access: USR'
+        tags:
+          - 'M10: Group Management and Participation'
+        responses:
+          '200':
+            description: 'Ok. Returns a paginated list of groups with a fixed number of items per page.'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    groups:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          owner_id:
+                            type: integer
+                    pagination:
                       type: object
                       properties:
-                        id:
+                        current_page:
                           type: integer
-                        name:
-                          type: string
-                        description:
-                          type: string
-                        owner_id:
+                          example: 1
+                        total_pages:
                           type: integer
+                          example: 5
+                        items_per_page:
+                          type: integer
+                          example: 10
+                        total_groups:
+                          type: integer
+                          example: 50
+                example:
+                  groups:
+                    - id: 1
+                      name: 'Group 1'
+                      description: 'This is Group 1.'
+                      owner_id: 123
+                    - id: 2
+                      name: 'Group 2'
+                      description: 'This is Group 2.'
+                      owner_id: 124
                   pagination:
-                    type: object
-                    properties:
-                      current_page:
-                        type: integer
-                        example: 1
-                      total_pages:
-                        type: integer
-                        example: 5
-                      items_per_page:
-                        type: integer
-                        example: 10
-                      total_groups:
-                        type: integer
-                        example: 50
-              example:
-                groups:
-                  - id: 1
-                    name: 'Group 1'
-                    description: 'This is Group 1.'
-                    owner_id: 123
-                  - id: 2
-                    name: 'Group 2'
-                    description: 'This is Group 2.'
-                    owner_id: 124
-                pagination:
-                  current_page: 1
-                  total_pages: 5
-                  items_per_page: 10
-                  total_groups: 50
-        '401':
-          description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.'
-        '404':
-          description: 'Not Found. The groups or the requested page could not be found.'
-        '500':
-          description: 'Internal Server Error. An unexpected error occurred on the server.'
+                    current_page: 1
+                    total_pages: 5
+                    items_per_page: 10
+                    total_groups: 50
+          '401':
+            description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.'
+          '404':
+            description: 'Not Found. The groups or the requested page could not be found.'
+          '500':
+            description: 'Internal Server Error. An unexpected error occurred on the server.'
   /groups/{id}:
-    get:
-      operationId: R107
-      summary: 'R107: View Group'
-      description: 'Show the individual group page. Access: USR can view only public groups, OWN and MEM can also view private ones'
-      tags:
-        - 'M10: Group Management and Participation'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true  
+      get:
+        operationId: R1002
+        summary: 'R1002: View Group'
+        description: 'Show the individual group page. Access: USR can view only public groups, OWN and MEM can also view private ones'
+        tags:
+          - 'M10: Group Management and Participation'
+        parameters:
+          - in: path
+            name: id
+            schema:
+              type: integer
+            required: true  
 
-      responses:
-        '200':
-          description: 'Ok. Show  group UI'
-        '404':
-          description: 'Not Found. The specified group does not exist.'
+        responses:
+          '200':
+            description: 'Ok. Show  group UI'
+          '404':
+            description: 'Not Found. The specified group does not exist.'
 
-        '403':
-          description: 'Forbidden. User does not have the necessary access rights to view this private group.'
-        
-        
+          '403':
+            description: 'Forbidden. User does not have the necessary access rights to view this private group.'
+          
+          
 
-    delete:
-      operationId: R114
-      summary: 'R114: Delete Group'
-      description: 'Allows group owners to delete their group. Access: OWN'
-      tags:
-        - 'M10: Group Management and Participation'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-      responses:
-        '204':
-          description: 'Group deleted successfully.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                204Success:
-                  description: 'Group successfully deleted. Redirect to the group list.'
-                  value: '/groups'
-        '404':
-          description: 'Not Found. The specified group does not exist.'
-        '403':
-          description: 'Forbidden. Only the group owner can delete this group.'
+      delete:
+        operationId: R1003
+        summary: 'R1003: Delete Group'
+        description: 'Allows group owners to delete their group. Access: OWN'
+        tags:
+          - 'M10: Group Management and Participation'
+        parameters:
+          - in: path
+            name: id
+            schema:
+              type: integer
+            required: true
+        responses:
+          '204':
+            description: 'Group deleted successfully.'
+            headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  204Success:
+                    description: 'Group successfully deleted. Redirect to the group list.'
+                    value: '/groups'
+          '404':
+            description: 'Not Found. The specified group does not exist.'
+          '403':
+            description: 'Forbidden. Only the group owner can delete this group.'
 
 
   /groups/edit/{id}:
-    put:
-      operationId: R113
-      summary: 'R113: Edit Group'
-      description: 'Allows group owners and moderators to edit group details. Access: OWN'
-      tags:
-        - 'M10: Group Management and Participation'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
+      put:
+        operationId: R1004
+        summary: 'R1004: Edit Group'
+        description: 'Allows group owners and moderators to edit group details. Access: OWN'
+        tags:
+          - 'M10: Group Management and Participation'
+        parameters:
+          - in: path
+            name: id
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                description:
-                  type: string
-                photo_url:
-                  type: string
-              required:
-                - name
-      responses:
-        '302':
-          description: 'Redirect after successful group update.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Group successfully updated. Redirect to the updated group page.'
-                  value: '/groups/{id}' 
-        '400':
-          description: 'Validation failed. Stay on the edit page.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400Error:
-                  description: 'Validation failed. Stay on the edit page to correct errors.'
-                  value: '/groups/edit/{id}'
-                400ErrorInvalidPhotoURL:
-                  description: 'The photo URL provided is invalid. Redirect to edit page to correct it.'
-                  value: '/groups/edit/{id}?error=invalid_photo_url'
-
-        '404':
-          description: 'Not Found. The specified group does not exist.'
-
-        '403':
-          description: 'Forbidden. Only group owners can edit this group.'
-
-  /groups/create:
-    get:
-      operationId: R111
-      summary: 'R111: Create Group form'
-      description: 'Retrieve the Create Group form. Access: USR'
-      tags:
-        - 'M10: Group Management and Participation'
-      
-      responses:
-        '200':
-          description: 'Ok. Show create group UI'
-
-    post:
-      operationId: R112
-      summary: 'R112: Create Group Action'
-      description: 'Processes the create group form submission. Access: USR'
-      tags:
-        - 'M10: Group Management and Participation'
- 
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:          
-                  type: string
-                description:
-                  type: string
-                photo_url:
-                  type: string
-                owner_id:
-                  type: integer
-              
-              required:
-                - name
-                - owner_id
- 
-      responses:
-        '201':
-          description: 'Group successfully created.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                201Success:
-                  description: 'Group successfully created. Redirect to the newly created group page.'
-                  value: '/groups/{id}'
-
-        '400':
-          description: 'Creation failed. Stay on the create page.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorMissingName:
-                  description: 'Failed to create group. Name is required. Stay on create page to correct errors.'
-                  value: '/groups/create?error=missing_name'
-                400ErrorInvalidOwnerId:
-                  description: 'Failed to create group. Invalid owner ID. Stay on create page to correct errors.'
-                  value: '/groups/create?error=invalid_owner_id'
-                400ErrorInvalidPhotoURL:
-                  description: 'Failed to create group. Invalid photo URL format. Stay on create page to correct errors.'
-                  value: '/groups/create?error=invalid_photo_url' 
-
-  /groups/{id}/members:
-    post:
-      operationId: R106
-      summary: 'R106: Add Member to Group'
-      description: 'Allows group owners to add members to the group. Access: OWN'
-      tags:
-        - 'M10: Group Management and Participation'
-      parameters:
-        - in: path
-          name: id
+              type: integer
+            required: true
+        requestBody:
           required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                user_id:
-                  type: integer
-                  minimum: 1
-                  description: 'ID of the user to be added. Must be a valid, positive integer.'
-              required:
-                - user_id
-      responses:
-        '201':
-          description: 'Member successfully added to the group. Remain on the current page.'
-        '400':
-          description: 'Bad request. Invalid input provided.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorMissingUserId:
-                  description: 'Missing user_id. The user ID is required to add a member to the group.'
-                  value: '/groups/{id}/members?error=missing_user_id'
-                400ErrorInvalidUserId:
-                  description: 'Invalid user ID. Ensure the user ID is valid and try again.'
-                  value: '/groups/{id}/members?error=invalid_user_id'
-                400ErrorInvalidGroupId:
-                  description: 'Invalid group ID. Ensure the group ID is valid and try again.'
-                  value: '/groups?error=invalid_group_id'
-        '404':
-          description: 'Group or user not found.'
-        '409':
-          description: 'Conflict. User is already a member of the group.'
-        '403':
-          description: 'Forbidden. Only group owners can add members to the group.'
-
-  /groups/{id}/members/{user_id}:
-    delete:
-      operationId: R107
-      summary: 'R107: Remove Member from Group'
-      description: 'Allows group owners to remove members from the group. Access: OWN'
-      tags:
-        - 'M10: Group Management and Participation'
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-        - in: path
-          name: user_id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: 'Member successfully removed from the group. Remain on the current page.'
-        '400':
-          description: 'Bad request. Invalid input provided, such as a missing or invalid ID.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorInvalidGroupId:
-                  description: 'Invalid group ID. Ensure the group ID is a valid integer.'
-                  value: '/groups/{id}/members/{user_id}?error=invalid_group_id'
-                400ErrorInvalidUserId:
-                  description: 'Invalid user ID. Ensure the user ID is a valid integer.'
-                  value: '/groups/{id}/members/{user_id}?error=invalid_user_id'
-        '403':
-          description: 'Forbidden. You are not authorized to remove this member from the group.'
-        '404':
-          description: 'Group or user not found.'
-        '409':
-          description: 'Conflict. The specified user is not a member of the group.'
-                
-
-  /analytics/engagement:
-    get:
-      operationId: R301
-      summary: 'R301: Retrieve Engagement Metrics'
-      description: 'Fetch likes, comments, and follower changes for daily, weekly, or monthly periods. Access: INF'
-      tags:
-        - 'M11: Analytics and Influencer Insights'
-      parameters:
-      - in: query
-        name: period
-        description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
-        schema:
-          type: string
-          enum: ['daily', 'weekly', 'monthly', 'overall']
-        required: true
-      - in: query
-        name: date
-        description: 'Specific date for daily period (YYYY-MM-DD)'
-        schema:
-          type: string
-        required: false
-      - in: query
-        name: week_start_date
-        description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
-        schema:
-          type: string
-        required: false
-      - in: query
-        name: month
-        description: 'The month for the engagement data (format: YYYY-MM)'
-        schema:
-          type: string
-        required: false
-      - in: query
-        name: year
-        description: 'The year for monthly data (format: YYYY)'
-        schema:
-          type: string
-        required: false
-      responses:
-        '200':
-          description: 'Returns engagement metrics for the selected period.'
           content:
-            application/json:
+            application/x-www-form-urlencoded:
               schema:
                 type: object
                 properties:
-                  likes:
-                    type: integer
-                  comments:
-                    type: integer
-                  follower_changes:
-                    type: integer
-                  time :
-                    type : string
-                example:
-                  likes: 1200
-                  comments: 150
-                  follower_changes: 5
-                  time: "month:2024-04"
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  photo_url:
+                    type: string
+                required:
+                  - name
+        responses:
+          '302':
+            description: 'Redirect after successful group update.'
+            headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Group successfully updated. Redirect to the updated group page.'
+                    value: '/groups/{id}' 
+          '400':
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
-        '400':
-          description: 'Bad request. Invalid or missing parameters.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorMissingPeriod:
-                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
-                  value: '/analytics/engagement?error=missing_period'
-                400ErrorInvalidPeriod:
-                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
-                  value: '/analytics/engagement?error=invalid_period'
-                400ErrorInvalidDate:
-                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
-                  value: '/analytics/engagement?error=invalid_date'
-                400ErrorInvalidWeekDate:
-                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
-                  value: '/analytics/engagement?error=invalid_week_date'
-                400ErrorInvalidMonth:
-                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
-                  value: '/analytics/engagement?error=invalid_month'
-                400ErrorInvalidYear:
-                  description: 'Invalid year. Ensure the year is in YYYY format.'
-                  value: '/analytics/engagement?error=invalid_year'
-        '404':
-          description: 'Engagement data unavailable.'
+          '404':
+            description: 'Not Found. The specified group does not exist.'
 
-  /analytics/engagement-rate/{post_id}:
-    get:
-      operationId: R302
-      summary: 'R302: Retrieve Average Engagement Rate per Post'
-      description: 'Fetch the average engagement rate and total engagement for each post over a specified time range. Access: INF'
-      tags:
-        - 'M11: Analytics and Influencer Insights'
-      parameters:
-        - in: path
-          name: post_id
-          description: 'Unique identifier for the post'
-          schema:
-            type: integer
+          '403':
+            description: 'Forbidden. Only group owners can edit this group.'
+
+  /groups/create:
+      get:
+        operationId: R1005
+        summary: 'R1005: Create Group form'
+        description: 'Retrieve the Create Group form. Access: USR'
+        tags:
+          - 'M10: Group Management and Participation'
+        
+        responses:
+          '200':
+            description: 'Ok. Show create group UI'
+
+      post:
+        operationId: R1006
+        summary: 'R1006: Create Group Action'
+        description: 'Processes the create group form submission. Access: USR'
+        tags:
+          - 'M10: Group Management and Participation'
+  
+        requestBody:
           required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  name:          
+                    type: string
+                  description:
+                    type: string
+                  photo_url:
+                    type: string
+                  owner_id:
+                    type: integer
+                
+                required:
+                  - name
+                  - owner_id
+  
+        responses:
+          '201':
+            description: 'Group successfully created.'
+            headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  201Success:
+                    description: 'Group successfully created. Redirect to the newly created group page.'
+                    value: '/groups/{id}'
+
+          '400':
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
+
+  /groups/{id}/members:
+      post:
+        operationId: R1007
+        summary: 'R1007: Add Member to Group'
+        description: 'Allows group owners to add members to the group. Access: OWN'
+        tags:
+          - 'M10: Group Management and Participation'
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    minimum: 1
+                    description: 'ID of the user to be added. Must be a valid, positive integer.'
+                required:
+                  - user_id
+        responses:
+          '201':
+            description: 'Member successfully added to the group. Remain on the current page.'
+          '400':
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          '404':
+            description: 'Group or user not found.'
+          '409':
+            description: 'Conflict. User is already a member of the group.'
+          '403':
+            description: 'Forbidden. Only group owners can add members to the group.'
+
+  /groups/{id}/members/{user_id}:
+      delete:
+        operationId: R1008
+        summary: 'R1008: Remove Member from Group'
+        description: 'Allows group owners to remove members from the group. Access: OWN'
+        tags:
+          - 'M10: Group Management and Participation'
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+          - in: path
+            name: user_id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '204':
+            description: 'Member successfully removed from the group. Remain on the current page.'
+          '400':
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          '403':
+            description: 'Forbidden. You are not authorized to remove this member from the group.'
+          '404':
+            description: 'Group or user not found.'
+          '409':
+            description: 'Conflict. The specified user is not a member of the group.'
+                  
+
+  /analytics/engagement:
+      get:
+        operationId: R1101
+        summary: 'R1101: Retrieve Engagement Metrics'
+        description: 'Fetch likes, comments, and follower changes for daily, weekly, or monthly periods. Access: INF'
+        tags:
+          - 'M11: Analytics and Influencer Insights'
+        parameters:
         - in: query
           name: period
           description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
@@ -606,463 +1427,443 @@ paths:
           schema:
             type: string
           required: false
-      responses:
-        '200':
-          description: 'Returns the average engagement rate and the total engagement data per post in the selected period.'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
+        responses:
+          '200':
+            description: 'Returns engagement metrics for the selected period.'
+            content:
+              application/json:
+                schema:
                   type: object
                   properties:
-                    post_id:
+                    likes:
                       type: integer
-                      description: 'Unique identifier for the post'
-                    engagement_rate:
-                      type: string
-                      description: 'Percentage of followers who engaged with the post'
-                    total_engagement:
+                    comments:
                       type: integer
-                      description: 'Total engagement count (likes, comments, shares) for the post'
+                    follower_changes:
+                      type: integer
                     time :
                       type : string
-              example:
-                - post_id: 101
-                  engagement_rate: "45%"
-                  total_engagement: 3000
-                  time: "year: 2024"
-                - post_id: 102
-                  engagement_rate: "30%"
-                  total_engagement: 1500
-                  time: "Year: 2020"
-                - post_id: 103
-                  engagement_rate: "50%"
-                  total_engagement: 4000
-                  time: "month:2024-05"
-        '400':
-          description: 'Bad request. Invalid or missing parameters.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorMissingPostId:
-                  description: 'Missing post_id. The post ID is required for this request.'
-                  value: '/analytics/engagement-rate/{post_id}?error=missing_post_id'
-                400ErrorInvalidPostId:
-                  description: 'Invalid post_id. Ensure the post ID is a valid integer and exists in the system.'
-                  value: '/analytics/engagement-rate/{post_id}?error=invalid_post_id'
-                400ErrorMissingPeriod:
-                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
-                  value: '/analytics/engagement-rate/{post_id}?error=missing_period'
-                400ErrorInvalidPeriod:
-                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
-                  value: '/analytics/engagement-rate/{post_id}?error=invalid_period'
-                400ErrorInvalidDate:
-                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
-                  value: '/analytics/engagement-rate/{post_id}?error=invalid_date'
-                400ErrorInvalidWeekDate:
-                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
-                  value: '/analytics/engagement-rate/{post_id}?error=invalid_week_date'
-                400ErrorInvalidMonth:
-                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
-                  value: '/analytics/engagement-rate/{post_id}?error=invalid_month'
-                400ErrorInvalidYear:
-                  description: 'Invalid year. Ensure the year is in YYYY format.'
-                  value: '/analytics/engagement-rate/{post_id}?error=invalid_year'
-        '404':
-          description: 'Post not found or engagement data unavailable.'
+                  example:
+                    likes: 1200
+                    comments: 150
+                    follower_changes: 5
+                    time: "month:2024-04"
+
+          '400':
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          '404':
+            description: 'Engagement data unavailable.'
+
+  /analytics/engagement-rate/{post_id}:
+      get:
+        operationId: R1102
+        summary: 'R1102: Retrieve Average Engagement Rate per Post'
+        description: 'Fetch the average engagement rate and total engagement for each post over a specified time range. Access: INF'
+        tags:
+          - 'M11: Analytics and Influencer Insights'
+        parameters:
+          - in: path
+            name: post_id
+            description: 'Unique identifier for the post'
+            schema:
+              type: integer
+            required: true
+          - in: query
+            name: period
+            description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
+            schema:
+              type: string
+              enum: ['daily', 'weekly', 'monthly', 'overall']
+            required: true
+          - in: query
+            name: date
+            description: 'Specific date for daily period (YYYY-MM-DD)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: week_start_date
+            description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: month
+            description: 'The month for the engagement data (format: YYYY-MM)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: year
+            description: 'The year for monthly data (format: YYYY)'
+            schema:
+              type: string
+            required: false
+        responses:
+          '200':
+            description: 'Returns the average engagement rate and the total engagement data per post in the selected period.'
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      post_id:
+                        type: integer
+                        description: 'Unique identifier for the post'
+                      engagement_rate:
+                        type: string
+                        description: 'Percentage of followers who engaged with the post'
+                      total_engagement:
+                        type: integer
+                        description: 'Total engagement count (likes, comments, shares) for the post'
+                      time :
+                        type : string
+                example:
+                  - post_id: 101
+                    engagement_rate: "45%"
+                    total_engagement: 3000
+                    time: "year: 2024"
+                  - post_id: 102
+                    engagement_rate: "30%"
+                    total_engagement: 1500
+                    time: "Year: 2020"
+                  - post_id: 103
+                    engagement_rate: "50%"
+                    total_engagement: 4000
+                    time: "month:2024-05"
+          '400':
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          '404':
+            description: 'Post not found or engagement data unavailable.'
 
 
   /analytics/posts/performance:
-    get:
-      operationId: R303
-      summary: 'R303: Retrieve Top and Low-Performing Posts'
-      description: 'Fetch the top and low-performing posts based on engagement metrics. Access: INF'
-      tags:
-        - 'M11: Analytics and Influencer Insights'
-      parameters:
-        - in: query
-          name: period
-          description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
-          schema:
-            type: string
-            enum: ['daily', 'weekly', 'monthly', 'overall']
-          required: true
-        - in: query
-          name: date
-          description: 'Specific date for daily period (YYYY-MM-DD)'
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: week_start_date
-          description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: month
-          description: 'The month for the engagement data (format: YYYY-MM)'
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: year
-          description: 'The year for monthly data (format: YYYY)'
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: count
-          description: 'Number of posts to retrieve for both top and low-performing lists'
-          schema:
-            type: integer
-            default: 3
-        
-      responses:
-        '200':
-          description: 'Returns the top and low-performing posts for the selected period.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  top_posts:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        post_id:
-                          type: integer
-                        caption:
-                          type: string
-                        likes:
-                          type: integer
-                        comments:
-                          type: integer
-                        engagement_rate:
-                          type: string
-                        total_engagement:
-                          type: integer
-                          description: 'Sum of likes and comments for quick comparison'
-                        time :
-                          type : string
-                  low_posts:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        post_id:
-                          type: integer
-                        caption:
-                          type: string
-                        likes:
-                          type: integer
-                        comments:
-                          type: integer
-                        engagement_rate:
-                          type: string
-                        time :
-                          type : string
-                        total_engagement:
-                          type: integer
-                          description: 'Sum of likes and comments for quick comparison'
-                example:
-                  top_posts:
-                    - post_id: 101
-                      caption: "Check out my latest adventure!"
-                      likes: 1200
-                      comments: 300
-                      engagement_rate: "60% of the followers engaged with the post"
-                      total_engagement: 1500
-                      time: "Month: 2023-06"
-                    - post_id: 102
-                      caption: "Morning vibes with coffee ☕️"
-                      likes: 900
-                      comments: 150
-                      engagement_rate: "50% of the followers engaged with the post"
-                      total_engagement: 1050
-                      time: "Month: 2023-06"
-                  low_posts:
-                    - post_id: 203
-                      caption: "Throwback Thursday!"
-                      likes: 30
-                      comments: 5
-                      engagement_rate: "1% of the followers engaged with the post"
-                      total_engagement: 35
-                      time: "Month: 2023-06"
-                    - post_id: 204
-                      caption: "Simple joys of life"
-                      likes: 40
-                      comments: 10
-                      engagement_rate: "2% of the followers engaged with the post"
-                      total_engagement: 50
-                      time: "Month: 2023-06"
-
-        '400':
-          description: 'Bad request. Invalid or missing parameters.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400InvalidNumberPosts:
-                  description: 'Invalid number of Posts. The count query parameter needs to be a valid value (>0 and <=5)'
-                  value: '/analytics/posts/performance?error=number_posts'
-                400ErrorMissingPeriod:
-                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
-                  value: '/analytics/posts/performance?error=missing_period'
-                400ErrorInvalidPeriod:
-                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
-                  value: '/analytics/posts/performance?error=invalid_period'
-                400ErrorInvalidDate:
-                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
-                  value: '/analytics/posts/performance?error=invalid_date'
-                400ErrorInvalidWeekDate:
-                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
-                  value: '/analytics/posts/performance?error=invalid_week_date'
-                400ErrorInvalidMonth:
-                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
-                  value: '/analytics/posts/performance?error=invalid_month'
-                400ErrorInvalidYear:
-                  description: 'Invalid year. Ensure the year is in YYYY format.'
-                  value: '/analytics/posts/performance?error=invalid_year'
-        '404':
-          description: 'Performance Engagement data unavailable.'
+      get:
+        operationId: R1103
+        summary: 'R1103: Retrieve Top and Low-Performing Posts'
+        description: 'Fetch the top and low-performing posts based on engagement metrics. Access: INF'
+        tags:
+          - 'M11: Analytics and Influencer Insights'
+        parameters:
+          - in: query
+            name: period
+            description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
+            schema:
+              type: string
+              enum: ['daily', 'weekly', 'monthly', 'overall']
+            required: true
+          - in: query
+            name: date
+            description: 'Specific date for daily period (YYYY-MM-DD)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: week_start_date
+            description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: month
+            description: 'The month for the engagement data (format: YYYY-MM)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: year
+            description: 'The year for monthly data (format: YYYY)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: count
+            description: 'Number of posts to retrieve for both top and low-performing lists'
+            schema:
+              type: integer
+              default: 3
           
+        responses:
+          '200':
+            description: 'Returns the top and low-performing posts for the selected period.'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    top_posts:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          post_id:
+                            type: integer
+                          caption:
+                            type: string
+                          likes:
+                            type: integer
+                          comments:
+                            type: integer
+                          engagement_rate:
+                            type: string
+                          total_engagement:
+                            type: integer
+                            description: 'Sum of likes and comments for quick comparison'
+                          time :
+                            type : string
+                    low_posts:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          post_id:
+                            type: integer
+                          caption:
+                            type: string
+                          likes:
+                            type: integer
+                          comments:
+                            type: integer
+                          engagement_rate:
+                            type: string
+                          time :
+                            type : string
+                          total_engagement:
+                            type: integer
+                            description: 'Sum of likes and comments for quick comparison'
+                  example:
+                    top_posts:
+                      - post_id: 101
+                        caption: "Check out my latest adventure!"
+                        likes: 1200
+                        comments: 300
+                        engagement_rate: "60% of the followers engaged with the post"
+                        total_engagement: 1500
+                        time: "Month: 2023-06"
+                      - post_id: 102
+                        caption: "Morning vibes with coffee ☕️"
+                        likes: 900
+                        comments: 150
+                        engagement_rate: "50% of the followers engaged with the post"
+                        total_engagement: 1050
+                        time: "Month: 2023-06"
+                    low_posts:
+                      - post_id: 203
+                        caption: "Throwback Thursday!"
+                        likes: 30
+                        comments: 5
+                        engagement_rate: "1% of the followers engaged with the post"
+                        total_engagement: 35
+                        time: "Month: 2023-06"
+                      - post_id: 204
+                        caption: "Simple joys of life"
+                        likes: 40
+                        comments: 10
+                        engagement_rate: "2% of the followers engaged with the post"
+                        total_engagement: 50
+                        time: "Month: 2023-06"
+
+          '400':
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          '404':
+            description: 'Performance Engagement data unavailable.'
+            
 
   /analytics/peak-engagement:
-    get:
-      operationId: R304
-      summary: 'R304: Retrieve Peak Engagement Times'
-      description: 'Fetches peak engagement times for a specific period. Access: INF'
-      tags:
-        - 'M11: Analytics and Influencer Insights'
-      parameters:
-        - in: query
-          name: period
-          description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
-          schema:
-            type: string
-            enum: ['daily', 'weekly', 'monthly', 'overall']
-          required: true
-        - in: query
-          name: date
-          description: 'Specific date for daily period (YYYY-MM-DD)'
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: week_start_date
-          description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: month
-          description: 'The month for the engagement data (format: YYYY-MM)'
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: year
-          description: 'The year for monthly data (format: YYYY)'
-          schema:
-            type: string
-          required: false
-      responses:
-        '200':
-          description: 'Returns peak engagement times for the selected period.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  peak_times:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        start_date:
-                          type: string
-                          format: date
-                          description: 'Date of start of the peak time interval. Only included for weekly or monthly periods.'
-                        end_date:
-                          type: string
-                          format: date
-                          description: 'Date of end of the peak time interval. Only included for weekly or monthly periods.'
-                        start_time:
-                          type: string
-                          format: time
-                          description: 'Start of peak engagement interval'
-                        end_time:
-                          type: string
-                          format: time
-                          description: 'End of peak engagement interval'
-                        total_engagement:
-                          type: integer
-                          description: 'Sum of likes and comments for quick comparison'
-                        time :
-                          type : string
-                    example:
-                      peak_times:
-                      - start_date: '2024-04-03'
-                        end_date: '2024-04-04'
-                        start_time: '18:00'
-                        end_time: '00:00'
-                        total_engagement: 3000
-                        time: "Month: 2024-04"
-                      - start_date: '2024-05-05'
-                        end_date: '2024-05-05'
-                        start_time: '09:00'
-                        end_time: '11:00'
-                        time: "Month: 2024-05"
-                        total_engagement: 1500
-                      - start_time: '15:00'
-                        end_time: '16:30'
-                        total_engagement: 200 
-                        time: "Day: 2024-01-01"
+      get:
+        operationId: R1104
+        summary: 'R1104: Retrieve Peak Engagement Times'
+        description: 'Fetches peak engagement times for a specific period. Access: INF'
+        tags:
+          - 'M11: Analytics and Influencer Insights'
+        parameters:
+          - in: query
+            name: period
+            description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
+            schema:
+              type: string
+              enum: ['daily', 'weekly', 'monthly', 'overall']
+            required: true
+          - in: query
+            name: date
+            description: 'Specific date for daily period (YYYY-MM-DD)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: week_start_date
+            description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: month
+            description: 'The month for the engagement data (format: YYYY-MM)'
+            schema:
+              type: string
+            required: false
+          - in: query
+            name: year
+            description: 'The year for monthly data (format: YYYY)'
+            schema:
+              type: string
+            required: false
+        responses:
+          '200':
+            description: 'Returns peak engagement times for the selected period.'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    peak_times:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          start_date:
+                            type: string
+                            format: date
+                            description: 'Date of start of the peak time interval. Only included for weekly or monthly periods.'
+                          end_date:
+                            type: string
+                            format: date
+                            description: 'Date of end of the peak time interval. Only included for weekly or monthly periods.'
+                          start_time:
+                            type: string
+                            format: time
+                            description: 'Start of peak engagement interval'
+                          end_time:
+                            type: string
+                            format: time
+                            description: 'End of peak engagement interval'
+                          total_engagement:
+                            type: integer
+                            description: 'Sum of likes and comments for quick comparison'
+                          time :
+                            type : string
+                      example:
+                        peak_times:
+                        - start_date: '2024-04-03'
+                          end_date: '2024-04-04'
+                          start_time: '18:00'
+                          end_time: '00:00'
+                          total_engagement: 3000
+                          time: "Month: 2024-04"
+                        - start_date: '2024-05-05'
+                          end_date: '2024-05-05'
+                          start_time: '09:00'
+                          end_time: '11:00'
+                          time: "Month: 2024-05"
+                          total_engagement: 1500
+                        - start_time: '15:00'
+                          end_time: '16:30'
+                          total_engagement: 200 
+                          time: "Day: 2024-01-01"
 
-        '400':
-          description: 'Bad request. Invalid or missing parameters.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorMissingPeriod:
-                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
-                  value: '/analytics/peak-engagement?error=missing_period'
-                400ErrorInvalidPeriod:
-                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
-                  value: '/analytics/peak-engagement?error=invalid_period'
-                400ErrorInvalidDate:
-                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
-                  value: '/analytics/peak-engagement?error=invalid_date'
-                400ErrorInvalidWeekDate:
-                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
-                  value: '/analytics/peak-engagement?error=invalid_week_date'
-                400ErrorInvalidMonth:
-                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
-                  value: '/analytics/peak-engagement?error=invalid_month'
-                400ErrorInvalidYear:
-                  description: 'Invalid year. Ensure the year is in YYYY format.'
-                  value: '/analytics/peak-engagement?error=invalid_year'
-        '404':
-          description: 'Peak Engagement data unavailable.'
-        
-  
+          '400':
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          '404':
+            description: 'Peak Engagement data unavailable.'
+          
+    
   /analytics/audience-demographics:
-    get:
-      operationId: R305
-      summary: 'R305: Retrieve Audience Demographics'
-      description: 'Fetch audience demographics, including age and location insights. Access: INF'
-      tags:
-        - 'M11: Analytics and Influencer Insights'
-      parameters:
-        - in: query
-          name: age_group
-          description: 'Optional. Filter audience demographics by age group.'
-          schema:
-            type: string
-            enum: ['14-17', '18-24', '25-34', '35-44', '45-60', '61-80', '80+']
-          required: false
-        - in: query
-          name: location
-          description: 'Optional. Filter audience demographics by location.'
-          schema:
-            type: string
-          required: false
-      responses:
-        '200':
-          description: 'Returns audience demographic insights.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  total_followers:
-                    type: integer
-                    description: 'Total number of followers.'
+      get:
+        operationId: R1105
+        summary: 'R1105: Retrieve Audience Demographics'
+        description: 'Fetch audience demographics, including age and location insights. Access: INF'
+        tags:
+          - 'M11: Analytics and Influencer Insights'
+        parameters:
+          - in: query
+            name: age_group
+            description: 'Optional. Filter audience demographics by age group.'
+            schema:
+              type: string
+              enum: ['14-17', '18-24', '25-34', '35-44', '45-60', '61-80', '80+']
+            required: false
+          - in: query
+            name: location
+            description: 'Optional. Filter audience demographics by location.'
+            schema:
+              type: string
+            required: false
+        responses:
+          '200':
+            description: 'Returns audience demographic insights.'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    total_followers:
+                      type: integer
+                      description: 'Total number of followers.'
+                    age_distribution:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          age_group:
+                            type: string
+                            description: 'Age group of followers'
+                          followers_count:
+                            type: integer
+                            description: 'Number of followers in this age group'
+                          percentage:
+                            type: string
+                            description: 'Percentage of followers in this age group relative to total followers'
+                    location_distribution:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          location:
+                            type: string
+                            description: 'Location of followers'
+                          followers_count:
+                            type: integer
+                            description: 'Number of followers from this location'
+                          percentage:
+                            type: string
+                            description: 'Percentage of followers from this location relative to total followers'
+                    gender_distribution:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          gender:
+                            type: string
+                            description: 'Gender of followers'
+                          followers_count:
+                            type: integer
+                            description: 'Number of followers of this gender'
+                          percentage:
+                            type: string
+                            description: 'Percentage of followers of this gender'
+                example:
+                  total_followers: 10000
                   age_distribution:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        age_group:
-                          type: string
-                          description: 'Age group of followers'
-                        followers_count:
-                          type: integer
-                          description: 'Number of followers in this age group'
-                        percentage:
-                          type: string
-                          description: 'Percentage of followers in this age group relative to total followers'
+                    - age_group: '14-17'
+                      followers_count: 1500
+                      percentage: "15%"
+                    - age_group: '18-24'
+                      followers_count: 4000
+                      percentage: "40%"
                   location_distribution:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        location:
-                          type: string
-                          description: 'Location of followers'
-                        followers_count:
-                          type: integer
-                          description: 'Number of followers from this location'
-                        percentage:
-                          type: string
-                          description: 'Percentage of followers from this location relative to total followers'
+                    - location: 'USA'
+                      followers_count: 3000
+                      percentage: "30%"
                   gender_distribution:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        gender:
-                          type: string
-                          description: 'Gender of followers'
-                        followers_count:
-                          type: integer
-                          description: 'Number of followers of this gender'
-                        percentage:
-                          type: string
-                          description: 'Percentage of followers of this gender'
-              example:
-                total_followers: 10000
-                age_distribution:
-                  - age_group: '14-17'
-                    followers_count: 1500
-                    percentage: "15%"
-                  - age_group: '18-24'
-                    followers_count: 4000
-                    percentage: "40%"
-                location_distribution:
-                  - location: 'USA'
-                    followers_count: 3000
-                    percentage: "30%"
-                gender_distribution:
-                  - gender: 'Female'
-                    followers_count: 5500
-                    percentage: "55%"
-                  - gender: 'Male'
-                    followers_count: 4500
-                    percentage: "45%"
-        '400':
-          description: 'Bad request. Invalid or missing parameters.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: 'Invalid or missing parameters. Ensure age_group, location, or time range is correct.'
-        '404':
-          description: 'Audience demographics data not found.'
-
-
-
-
-
-
+                    - gender: 'Female'
+                      followers_count: 5500
+                      percentage: "55%"
+                    - gender: 'Male'
+                      followers_count: 4500
+                      percentage: "45%"
+          '400':
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          '404':
+            description: 'Audience demographics data not found.'
