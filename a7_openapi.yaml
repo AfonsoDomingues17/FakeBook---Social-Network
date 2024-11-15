@@ -39,10 +39,7 @@ paths:
       responses:
         '200':
           description: 'Ok. Show list of direct chats UI'
-          content:
-            text/html:
-              schema:
-                type: string
+         
 
     post:
       operationId: R302
@@ -109,180 +106,13 @@ paths:
         '201':
           description: 'Member successfully added to the group. Remain on the current page.'
         '400':
-          description: 'Bad request. Invalid input provided.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorMissingUserId:
-                  description: 'Missing user_id. The user ID is required to add a member to the group.'
-                  value: '/groups/{id}/members?error=missing_user_id'
-                400ErrorInvalidUserId:
-                  description: 'Invalid user ID. Ensure the user ID is valid and try again.'
-                  value: '/groups/{id}/members?error=invalid_user_id'
-                400ErrorInvalidGroupId:
-                  description: 'Invalid group ID. Ensure the group ID is valid and try again.'
-                  value: '/groups?error=invalid_group_id'
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
         '404':
           description: 'Group or user not found.'
         '409':
           description: 'Conflict. User is already a member of the group.'
         '403':
           description: 'Forbidden. Only group owners can add members to the group.'
-
-  /groups/{id}/members/{user_id}:
-    delete:
-      operationId: R107
-      summary: 'R107: Remove Member from Group'
-      description: 'Allows group owners to remove members from the group. Access: OWN'
-      tags:
-        - 'M10: Group Management and Participation'
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-        - in: path
-          name: user_id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: 'Member successfully removed from the group. Remain on the current page.'
-        '400':
-          description: 'Bad request. Invalid input provided, such as a missing or invalid ID.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorInvalidGroupId:
-                  description: 'Invalid group ID. Ensure the group ID is a valid integer.'
-                  value: '/groups/{id}/members/{user_id}?error=invalid_group_id'
-                400ErrorInvalidUserId:
-                  description: 'Invalid user ID. Ensure the user ID is a valid integer.'
-                  value: '/groups/{id}/members/{user_id}?error=invalid_user_id'
-        '403':
-          description: 'Forbidden. You are not authorized to remove this member from the group.'
-        '404':
-          description: 'Group or user not found.'
-        '409':
-          description: 'Conflict. The specified user is not a member of the group.'
-                
-
-  /analytics/engagement:
-    get:
-      operationId: R301
-      summary: 'R301: Retrieve Engagement Metrics'
-      description: 'Fetch likes, comments, and follower changes for daily, weekly, or monthly periods. Access: INF'
-      tags:
-        - 'M11: Analytics and Influencer Insights'
-      parameters:
-      - in: query
-        name: period
-        description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
-        schema:
-          type: string
-          enum: ['daily', 'weekly', 'monthly', 'overall']
-        required: true
-      - in: query
-        name: date
-        description: 'Specific date for daily period (YYYY-MM-DD)'
-        schema:
-          type: string
-        required: false
-      - in: query
-        name: week_start_date
-        description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
-        schema:
-          type: string
-        required: false
-      - in: query
-        name: month
-        description: 'The month for the engagement data (format: YYYY-MM)'
-        schema:
-          type: string
-        required: false
-      - in: query
-        name: year
-        description: 'The year for monthly data (format: YYYY)'
-        schema:
-          type: string
-        required: false
-      responses:
-        '200':
-          description: 'Returns engagement metrics for the selected period.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  likes:
-                    type: integer
-                  comments:
-                    type: integer
-                  follower_changes:
-                    type: integer
-                  time :
-                    type : string
-                example:
-                  likes: 1200
-                  comments: 150
-                  follower_changes: 5
-                  time: "month:2024-04"
-
-        '400':
-          description: 'Bad request. Invalid or missing parameters.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                400ErrorMissingPeriod:
-                  description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
-                  value: '/analytics/engagement?error=missing_period'
-                400ErrorInvalidPeriod:
-                  description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
-                  value: '/analytics/engagement?error=invalid_period'
-                400ErrorInvalidDate:
-                  description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
-                  value: '/analytics/engagement?error=invalid_date'
-                400ErrorInvalidWeekDate:
-                  description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
-                  value: '/analytics/engagement?error=invalid_week_date'
-                400ErrorInvalidMonth:
-                  description: 'Invalid month. Ensure the month is in YYYY-MM format.'
-                  value: '/analytics/engagement?error=invalid_month'
-                400ErrorInvalidYear:
-                  description: 'Invalid year. Ensure the year is in YYYY format.'
-                  value: '/analytics/engagement?error=invalid_year'
-        '404':
-          description: 'Engagement data unavailable.'
-
-  /analytics/engagement-rate/{post_id}:
-    get:
-      operationId: R302
-      summary: 'R302: Retrieve Average Engagement Rate per Post'
-      description: 'Fetch the average engagement rate and total engagement for each post over a specified time range. Access: INF'
-      tags:
-        - 'M11: Analytics and Influencer Insights'
-      parameters:
-        - in: path
-          name: post_id
-          description: 'Unique identifier for the post'
-          schema:
-            type: integer
-          required: true
-      responses:
-        '200':
-          description: 'Ok. Show direct chat details UI'
-          content:
-            text/html:
-              schema:
-                type: string
 
   /directChats/{id}/messages:
     get:
@@ -318,6 +148,8 @@ paths:
                       type: integer
                     direct_chat:
                       type: integer
+
+
 
     post:
       operationId: R305
@@ -365,14 +197,7 @@ paths:
                   direct_chat:
                     type: integer
         '400':
-          description: 'Invalid input.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
   /groups/{id}/messages:
     get:
@@ -455,14 +280,7 @@ paths:
                   group_id:
                     type: integer
         '400':
-          description: 'Invalid input.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
   /posts:
     get:
@@ -474,10 +292,7 @@ paths:
       responses:
         '200':
           description: 'Ok. Show list of posts UI'
-          content:
-            text/html:
-              schema:
-                type: string
+         
     post:
       operationId: R402
       summary: 'R402: Create Post'
@@ -532,10 +347,7 @@ paths:
       responses:
         '200':
           description: 'Ok. Show post details UI'
-          content:
-            text/html:
-              schema:
-                type: string  
+           
 
     put:
       operationId: R404
@@ -615,15 +427,186 @@ paths:
                     type: integer
                   photo_url:
                     type: string
+
         '400':
-          description: 'Invalid input.'
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+
+  /posts/{post_id}/comments:
+    get:
+      operationId: R501
+      summary: 'R501: View All Comments for a Post. Access: USR'
+      description: 'Retrieve all comments associated with a specific post.'
+      tags:
+        - 'M05: Commenting and Reactions'
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          description: 'The ID of the post to retrieve comments for.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Returns a list of all comments for the specified post.'
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  error:
+                  comments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        content:
+                          type: string
+                        author_id:
+                          type: integer
+                        created_at:
+                          type: string
+                          format: date-time
+              example:
+                comments:
+                  - id: 1
+                    content: 'This is a comment.'
+                    author_id: 101
+                    created_at: '2024-11-14T12:00:00Z'
+                  - id: 2
+                    content: 'Another comment.'
+                    author_id: 102
+                    created_at: '2024-11-14T12:05:00Z'
+        '404':
+          description: 'The specified post does not exist or has no comments.'
+  
+  /posts/{post_id}/comments/create:
+    post:
+      operationId: R502
+      summary: 'R502: Add a Comment to a Post. Access: USR'
+      description: 'Allow users to add a new comment to a specific post.'
+      tags:
+        - 'M05: Commenting and Reactions'
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          description: 'The ID of the post to add the comment to.'
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'The content of the comment.'
+                author_id:
+                  type: integer
+                  description: 'The ID of the user adding the comment.'
+              required:
+                - content
+                - author_id
+      responses:
+        '302':
+          description: 'The comment was successfully added. Redirecting to the added comment.'
+          headers:
+            Location:
+              description: 'URL of the added comment.'
+              schema:
+                type: string
+                example: '/comments/{comment_id}'
+        '400':
+          description: 'Validation failed. Required fields are missing or invalid.'
+        '404':
+          description: 'The specified post does not exist.'
+
+    
+  /comments/{comment_id}/edit:
+    put:
+      operationId: R503
+      summary: 'R503: Edit a Comment. Access: OWN'
+      description: 'Allow users to edit the content of an existing comment.'
+      tags:
+        - 'Comment Management'
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          description: 'The ID of the comment to be edited.'
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'The new content of the comment.'
+              required:
+                - content
+      responses:
+        '302':
+          description: 'The comment was successfully updated. Redirecting to the updated comment.'
+          headers:
+            Location:
+              description: 'URL of the updated comment.'
+              schema:
+                type: string
+                example: '/comments/{comment_id}'
+        '400':
+          description: 'Validation failed. Required fields are missing or invalid.'
+        '404':
+          description: 'The specified comment does not exist.'
+
+  /comments/{comment_id}:
+
+    get:
+      operationId: getComment
+      summary: 'Retrieve a Specific Comment'
+      description: 'Retrieve the details of a specific comment by its ID.'
+      tags:
+        - 'Comment Management'
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          description: 'The ID of the comment to retrieve.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Returns the details of the specified comment.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  content:
                     type: string
+                  author_id:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                example:
+                  id: 1
+                  content: 'This is the content of the comment.'
+                  author_id: 101
+                  created_at: '2024-11-14T12:00:00Z'
+        '404':
+          description: 'The specified comment does not exist.'
+
+    
+
   /users/{id}/connections:
     get:
       operationId: R601
@@ -640,10 +623,7 @@ paths:
       responses:
         '200':
           description: 'Ok. Show list of connections UI'
-          content:
-            text/html:
-              schema:
-                type: string
+          
 
   /users/{id}/follow:
     post:
@@ -993,14 +973,7 @@ paths:
                   group_id:
                     type: integer
         '400':
-          description: 'Invalid input.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
   /notifications/{id}/read:
     post:
       operationId: R703
@@ -1027,14 +1000,7 @@ paths:
                   is_read:
                     type: boolean
         '400':
-          description: 'Invalid input.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
   /notifications/{id}/delete:
     delete:
       operationId: R704
@@ -1059,118 +1025,79 @@ paths:
                   id:
                     type: integer
         '400':
-          description: 'Invalid input.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
   /report:
+    get: 
+      operationId: R108
+      summary: 'R108: Report Form'
+      description: 'Provide Report form. Access: USR'
+      tags:
+        - 'M08: Content Moderation and Reporting'
+      responses:
+        '200':
+          description: 'Ok. Show report UI'
+        '404':
+          description: 'Not Found. The specified resource (comment, post, or user) does not exist.'
+        '401':
+          description: 'Unauthorized. The user does not have permission to view the report form.'
       
-      post:
-        operationId: R801
-        summary: 'R801: Report Action'
-        description: 'Processes the report form submission. Access: USR'
-        tags:
-          - 'M08: Content Moderation and Reporting'
-  
-        requestBody:
-          required: true
-          content:
-            application/x-www-form-urlencoded:
+    
+    post:
+      operationId: R109
+      summary: 'R109: Report Action'
+      description: 'Processes the report form submission. Access: USR'
+      tags:
+        - 'M08: Content Moderation and Reporting'
+ 
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:          
+                  type: string
+                comment_id:
+                  type: integer
+                post_id:
+                  type: integer
+                target_user_id:
+                  type: integer
+                author_id:
+                  type: integer
+              required:
+                - content
+                - author_id
+ 
+      responses:
+        '302':
+          description: 'Redirect after processing the report submission.'
+          headers:
+            Location:
               schema:
-                type: object
-                properties:
-                  content:          
-                    type: string
-                  comment_id:
-                    type: integer
-                  post_id:
-                    type: integer
-                  target_user_id:
-                    type: integer
-                  author_id:
-                    type: integer
-                required:
-                  - content
-                  - author_id
-  
-        responses:
-          '302':
-            description: 'Redirect after processing the report submission.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  302SuccessComment:
-                    description: 'Successful report submission. Redirect to the reported comment.'
-                    value: '/comments/{comment_id}'
-                  302SuccessPost:
-                    description: 'Successful report submission. Redirect to the reported post.'
-                    value: '/posts/{post_id}'
-                  302SuccessUser:
-                    description: 'Successful report submission. Redirect to the reported user profile.'
-                    value: '/users/{target_user_id}'
+                type: string
+              examples:
+                302SuccessComment:
+                  description: 'Successful report submission. Redirect to the reported comment.'
+                  value: '/comments/{comment_id}'
+                302SuccessPost:
+                  description: 'Successful report submission. Redirect to the reported post.'
+                  value: '/posts/{post_id}'
+                302SuccessUser:
+                  description: 'Successful report submission. Redirect to the reported user profile.'
+                  value: '/users/{target_user_id}'
+                302Error:
+                  description: 'Failed report submission. Redirect to report form.'
+                  value: '/report'
+        '404':
+          description: 'Not Found. The resource (comment, post, or user) you are trying to report does not exist.'  
+        '401':
+          description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.' 
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
-          '400':
-            description: 'Validation failed. Stay on the report page to correct errors.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  400ErrorMissingFields:
-                    description: 'Required fields are missing. Please fill in all the necessary fields.'
-                    value: '/report?error=missing_fields'
-                  400ErrorInvalidCommentId:
-                    description: 'The comment ID provided is invalid. Please check the comment and try again.'
-                    value: '/report?error=invalid_comment_id'
-                  400ErrorContentTooShort:
-                    description: 'The content of your report is too short. Please provide more details (at least 10 characters).'
-                    value: '/report?error=content_too_short'
-                  400ErrorInvalidPostId:
-                    description: 'The post ID provided is invalid. Please check the post and try again.'
-                    value: '/report?error=invalid_post_id'
-                  400ErrorInvalidUserId:
-                    description: 'The target user ID provided is invalid. Please check the user and try again.'
-                    value: '/report?error=invalid_user_id'
-          '404':
-            description: 'Not Found. The resource (comment, post, or user) you are trying to report does not exist.'  
-          '401':
-            description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.' 
-
-  /report/{type}/{id}:
-      get:
-        operationId: R802
-        summary: 'R802: Report {type} Form'
-        description: 'Retrieve the report form for a specific {type}. The {type} ID will be pre-filled. Access: USR'
-        tags:
-          - 'M08: Content Moderation and Reporting'
-        parameters:
-          - name: type
-            in: path
-            required: true
-            description: 'The type of resource being reported (comment, post, or user).'
-            schema:
-              type: string
-              enum: [comment, post, user]
-          - name: id
-            in: path
-            required: true
-            description: 'The ID of the resource being reported.'
-            schema:
-              type: integer
-        responses:
-          '200':
-            description: 'Ok. Show report UI.'
-          '404':
-            description: 'Not Found. The specified resource (comment, post, or user) does not exist.'
-          '401':
-            description: 'Unauthorized. The user does not have permission to view the report form.'
 
   /groups:
       get:
@@ -1330,18 +1257,7 @@ paths:
                     description: 'Group successfully updated. Redirect to the updated group page.'
                     value: '/groups/{id}' 
           '400':
-            description: 'Validation failed. Stay on the edit page.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  400Error:
-                    description: 'Validation failed. Stay on the edit page to correct errors.'
-                    value: '/groups/edit/{id}'
-                  400ErrorInvalidPhotoURL:
-                    description: 'The photo URL provided is invalid. Redirect to edit page to correct it.'
-                    value: '/groups/edit/{id}?error=invalid_photo_url'
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
           '404':
             description: 'Not Found. The specified group does not exist.'
@@ -1401,21 +1317,7 @@ paths:
                     value: '/groups/{id}'
 
           '400':
-            description: 'Creation failed. Stay on the create page.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  400ErrorMissingName:
-                    description: 'Failed to create group. Name is required. Stay on create page to correct errors.'
-                    value: '/groups/create?error=missing_name'
-                  400ErrorInvalidOwnerId:
-                    description: 'Failed to create group. Invalid owner ID. Stay on create page to correct errors.'
-                    value: '/groups/create?error=invalid_owner_id'
-                  400ErrorInvalidPhotoURL:
-                    description: 'Failed to create group. Invalid photo URL format. Stay on create page to correct errors.'
-                    value: '/groups/create?error=invalid_photo_url' 
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
   /groups/{id}/members:
       post:
@@ -1447,21 +1349,7 @@ paths:
           '201':
             description: 'Member successfully added to the group. Remain on the current page.'
           '400':
-            description: 'Bad request. Invalid input provided.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  400ErrorMissingUserId:
-                    description: 'Missing user_id. The user ID is required to add a member to the group.'
-                    value: '/groups/{id}/members?error=missing_user_id'
-                  400ErrorInvalidUserId:
-                    description: 'Invalid user ID. Ensure the user ID is valid and try again.'
-                    value: '/groups/{id}/members?error=invalid_user_id'
-                  400ErrorInvalidGroupId:
-                    description: 'Invalid group ID. Ensure the group ID is valid and try again.'
-                    value: '/groups?error=invalid_group_id'
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
           '404':
             description: 'Group or user not found.'
           '409':
@@ -1491,18 +1379,7 @@ paths:
           '204':
             description: 'Member successfully removed from the group. Remain on the current page.'
           '400':
-            description: 'Bad request. Invalid input provided, such as a missing or invalid ID.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  400ErrorInvalidGroupId:
-                    description: 'Invalid group ID. Ensure the group ID is a valid integer.'
-                    value: '/groups/{id}/members/{user_id}?error=invalid_group_id'
-                  400ErrorInvalidUserId:
-                    description: 'Invalid user ID. Ensure the user ID is a valid integer.'
-                    value: '/groups/{id}/members/{user_id}?error=invalid_user_id'
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
           '403':
             description: 'Forbidden. You are not authorized to remove this member from the group.'
           '404':
@@ -1573,30 +1450,7 @@ paths:
                     time: "month:2024-04"
 
           '400':
-            description: 'Bad request. Invalid or missing parameters.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  400ErrorMissingPeriod:
-                    description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
-                    value: '/analytics/engagement?error=missing_period'
-                  400ErrorInvalidPeriod:
-                    description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
-                    value: '/analytics/engagement?error=invalid_period'
-                  400ErrorInvalidDate:
-                    description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
-                    value: '/analytics/engagement?error=invalid_date'
-                  400ErrorInvalidWeekDate:
-                    description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
-                    value: '/analytics/engagement?error=invalid_week_date'
-                  400ErrorInvalidMonth:
-                    description: 'Invalid month. Ensure the month is in YYYY-MM format.'
-                    value: '/analytics/engagement?error=invalid_month'
-                  400ErrorInvalidYear:
-                    description: 'Invalid year. Ensure the year is in YYYY format.'
-                    value: '/analytics/engagement?error=invalid_year'
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
           '404':
             description: 'Engagement data unavailable.'
 
@@ -1680,36 +1534,7 @@ paths:
                     total_engagement: 4000
                     time: "month:2024-05"
           '400':
-            description: 'Bad request. Invalid or missing parameters.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  400ErrorMissingPostId:
-                    description: 'Missing post_id. The post ID is required for this request.'
-                    value: '/analytics/engagement-rate/{post_id}?error=missing_post_id'
-                  400ErrorInvalidPostId:
-                    description: 'Invalid post_id. Ensure the post ID is a valid integer and exists in the system.'
-                    value: '/analytics/engagement-rate/{post_id}?error=invalid_post_id'
-                  400ErrorMissingPeriod:
-                    description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
-                    value: '/analytics/engagement-rate/{post_id}?error=missing_period'
-                  400ErrorInvalidPeriod:
-                    description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
-                    value: '/analytics/engagement-rate/{post_id}?error=invalid_period'
-                  400ErrorInvalidDate:
-                    description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
-                    value: '/analytics/engagement-rate/{post_id}?error=invalid_date'
-                  400ErrorInvalidWeekDate:
-                    description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
-                    value: '/analytics/engagement-rate/{post_id}?error=invalid_week_date'
-                  400ErrorInvalidMonth:
-                    description: 'Invalid month. Ensure the month is in YYYY-MM format.'
-                    value: '/analytics/engagement-rate/{post_id}?error=invalid_month'
-                  400ErrorInvalidYear:
-                    description: 'Invalid year. Ensure the year is in YYYY format.'
-                    value: '/analytics/engagement-rate/{post_id}?error=invalid_year'
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
           '404':
             description: 'Post not found or engagement data unavailable.'
 
@@ -1841,33 +1666,7 @@ paths:
                         time: "Month: 2023-06"
 
           '400':
-            description: 'Bad request. Invalid or missing parameters.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  400InvalidNumberPosts:
-                    description: 'Invalid number of Posts. The count query parameter needs to be a valid value (>0 and <=5)'
-                    value: '/analytics/posts/performance?error=number_posts'
-                  400ErrorMissingPeriod:
-                    description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
-                    value: '/analytics/posts/performance?error=missing_period'
-                  400ErrorInvalidPeriod:
-                    description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
-                    value: '/analytics/posts/performance?error=invalid_period'
-                  400ErrorInvalidDate:
-                    description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
-                    value: '/analytics/posts/performance?error=invalid_date'
-                  400ErrorInvalidWeekDate:
-                    description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
-                    value: '/analytics/posts/performance?error=invalid_week_date'
-                  400ErrorInvalidMonth:
-                    description: 'Invalid month. Ensure the month is in YYYY-MM format.'
-                    value: '/analytics/posts/performance?error=invalid_month'
-                  400ErrorInvalidYear:
-                    description: 'Invalid year. Ensure the year is in YYYY format.'
-                    value: '/analytics/posts/performance?error=invalid_year'
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
           '404':
             description: 'Performance Engagement data unavailable.'
             
@@ -1965,30 +1764,7 @@ paths:
                           time: "Day: 2024-01-01"
 
           '400':
-            description: 'Bad request. Invalid or missing parameters.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  400ErrorMissingPeriod:
-                    description: 'Missing period. The period query parameter is required (daily, weekly, monthly, overall).'
-                    value: '/analytics/peak-engagement?error=missing_period'
-                  400ErrorInvalidPeriod:
-                    description: 'Invalid period. The period must be one of the following: daily, weekly, monthly, overall.'
-                    value: '/analytics/peak-engagement?error=invalid_period'
-                  400ErrorInvalidDate:
-                    description: 'Invalid date format. Ensure the date is in YYYY-MM-DD format when period is daily.'
-                    value: '/analytics/peak-engagement?error=invalid_date'
-                  400ErrorInvalidWeekDate:
-                    description: 'Invalid week start date. Ensure the start date of the week is valid (YYYY-MM-DD).'
-                    value: '/analytics/peak-engagement?error=invalid_week_date'
-                  400ErrorInvalidMonth:
-                    description: 'Invalid month. Ensure the month is in YYYY-MM format.'
-                    value: '/analytics/peak-engagement?error=invalid_month'
-                  400ErrorInvalidYear:
-                    description: 'Invalid year. Ensure the year is in YYYY format.'
-                    value: '/analytics/peak-engagement?error=invalid_year'
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
           '404':
             description: 'Peak Engagement data unavailable.'
           
@@ -2088,14 +1864,6 @@ paths:
                       followers_count: 4500
                       percentage: "45%"
           '400':
-            description: 'Bad request. Invalid or missing parameters.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
-                      example: 'Invalid or missing parameters. Ensure age_group, location, or time range is correct.'
+            description: 'Bad Request. The request could not be understood or was missing required parameters.'
           '404':
             description: 'Audience demographics data not found.'
