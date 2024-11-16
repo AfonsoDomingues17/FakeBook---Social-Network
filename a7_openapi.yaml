@@ -523,15 +523,14 @@ paths:
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
           description: 'The specified post does not exist.'
-
-    
+   
   /comments/{comment_id}/edit:
     put:
       operationId: R503
       summary: 'R503: Edit a Comment. Access: OWN'
       description: 'Allow users to edit the content of an existing comment.'
       tags:
-        - 'Comment Management'
+        - 'M05: Commenting and Reactions'
       parameters:
         - name: comment_id
           in: path
@@ -568,11 +567,11 @@ paths:
   /comments/{comment_id}:
 
     get:
-      operationId: getComment
+      operationId: R504
       summary: 'Retrieve a Specific Comment'
       description: 'Retrieve the details of a specific comment by its ID.'
       tags:
-        - 'Comment Management'
+        - 'M05: Commenting and Reactions'
       parameters:
         - name: comment_id
           in: path
@@ -602,10 +601,38 @@ paths:
                   content: 'This is the content of the comment.'
                   author_id: 101
                   created_at: '2024-11-14T12:00:00Z'
+        '400':
+          description: 'Validation failed. Required fields are missing or invalid.'
+        '404':
+          description: 'The specified comment does not exist.'    
+
+  /posts/{post_id}/comments/{comment_id}/delete:
+    delete:
+      operationId: R505
+      summary: 'R505: Delete a Comment. Access: OWN'
+      description: 'Allow users to delete an existing comment.'
+      tags:
+        - 'M05: Commenting and Reactions'
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          description: 'The ID of the comment to be deleted.'
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: 'The comment was successfully deleted. Redirecting to the post containing the comment.'
+          headers:
+            Location:
+              description: 'URL of the post containing the deleted comment.'
+              schema:
+                type: string
+                example: '/posts/{post_id}/comments'
+        '400':
+          description: 'Validation failed. Required fields are missing or invalid.'
         '404':
           description: 'The specified comment does not exist.'
-
-    
 
   /users/{id}/connections:
     get:
@@ -624,7 +651,6 @@ paths:
         '200':
           description: 'Ok. Show list of connections UI'
           
-
   /users/{id}/follow:
     post:
       operationId: R602
@@ -780,6 +806,7 @@ paths:
                 302Failure:
                   description: 'Failed removal. Redirect to connections view.'
                   value: '/users/{id}/connections'
+  
   /users/{id}/follow/delete:
     delete:
       operationId: R606
@@ -818,6 +845,7 @@ paths:
                 302Failure:
                   description: 'Failed deletion. Redirect to user profile.'
                   value: '/users/{id}'
+  
   /users/{id}/block:
     post:
       operationId: R607
@@ -856,6 +884,7 @@ paths:
                 302Failure:
                   description: 'Failed block. Redirect to user profile.'
                   value: '/users/{id}'
+  
   /users/{id}/unblock:
     delete:
       operationId: R608
@@ -894,6 +923,7 @@ paths:
                 302Failure:
                   description: 'Failed unblock. Redirect to user profile.'
                   value: '/users/{id}'
+  
   /notifications:
     get:
       operationId: R701
@@ -974,6 +1004,7 @@ paths:
                     type: integer
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
+  
   /notifications/{id}/read:
     post:
       operationId: R703
@@ -1001,6 +1032,7 @@ paths:
                     type: boolean
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
+  
   /notifications/{id}/delete:
     delete:
       operationId: R704
@@ -1098,6 +1130,184 @@ paths:
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
+  /search:
+    get:
+      operationId: R901
+      summary: 'R901: Search Form'
+      description: 'Provide search form. Access: USR'
+      tags:
+        - 'M09: Search and Results'
+      responses:
+        '200':
+          description: 'Ok. Show search UI'
+        '404':
+          description: 'Not Found. The specified resource does not exist.'      
+    
+    post:
+      operationId: R902
+      summary: 'R902: Search Action'
+      description: 'Processes the search form submission. Access: USR'
+      tags:
+        - 'M09: Search and Results'
+ 
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                query:          
+                  type: string
+              required:
+                - query
+ 
+      responses:
+        '302':
+          description: 'Redirect after processing the search submission.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful search submission. Redirect to search results.'
+                  value: '/search/results'
+                302Error:
+                  description: 'Failed search submission. Redirect to search form.'
+                  value: '/search'
+        '404':
+          description: 'Not Found. The resource you are trying to search does not exist.'  
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+
+  /search/{filter}:
+    get:
+      operationId: R903
+      summary: 'R903: Search Results'
+      description: 'Retrieve search results based on the specified filter. Access: USR'
+      tags:
+        - 'M09: Search and Results'
+      parameters:
+        - in: path
+          name: filter
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show search results UI'
+        '404':
+          description: 'Not Found. The specified resource does not exist.'
+    
+  /search/users:
+    get:
+      operationId: R904
+      summary: 'R904: Search Users'
+      description: 'Search for users based on query parameters. Access: USR'
+      tags:
+        - 'M09: Search and Results'
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          required: false
+          description: 'Username to search for.'
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: false
+          description: 'Email to search for.'
+      responses:
+        '200':
+          description: 'Ok. Show search results UI'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    username:
+                      type: string
+                    email:
+                      type: string
+                    profile_picture:
+                      type: string
+              example:
+                - id: 1
+                  username: 'john_doe'
+                  email: 'john@example.com'
+                  profile_picture: 'http://example.com/images/john.jpg'
+                - id: 2
+                  username: 'jane_doe'
+                  email: 'jane@example.com'
+                  profile_picture: 'http://example.com/images/jane.jpg'
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+        '404':
+          description: 'Not Found. No users matched the search criteria.'
+
+  /search/posts:
+    get:
+      operationId: R905
+      summary: 'R905: Search Posts'
+      description: 'Search for posts based on query parameters. Access: USR'
+      tags:
+        - 'M09: Search and Results'
+      parameters:
+        - in: query
+          name: description
+          schema:
+            type: string
+          required: false
+          description: 'Description to search for.'
+        - in: query
+          name: is_public
+          schema:
+            type: boolean
+          required: false
+          description: 'Public status to search for.'
+      responses:
+        '200':
+          description: 'Ok. Show search results UI'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    description:
+                      type: string
+                    is_public:
+                      type: boolean
+                    author_id:
+                      type: integer
+                    created_at:
+                      type: string
+                      format: date-time
+              example:
+                - id: 1
+                  description: 'This is a post.'
+                  is_public: true
+                  author_id: 101
+                  created_at: '2024-11-14T12:00:00Z'
+                - id: 2
+                  description: 'Another post.'
+                  is_public: false
+                  author_id: 102
+                  created_at: '2024-11-14T12:05:00Z'
+        '400':
+          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+        '404':
+          description: 'Not Found. No posts matched the search criteria.'
 
   /groups:
       get:
@@ -1163,6 +1373,7 @@ paths:
             description: 'Not Found. The groups or the requested page could not be found.'
           '500':
             description: 'Internal Server Error. An unexpected error occurred on the server.'
+  
   /groups/{id}:
       get:
         operationId: R1002
@@ -1215,7 +1426,6 @@ paths:
             description: 'Not Found. The specified group does not exist.'
           '403':
             description: 'Forbidden. Only the group owner can delete this group.'
-
 
   /groups/edit/{id}:
       put:
@@ -1387,7 +1597,6 @@ paths:
           '409':
             description: 'Conflict. The specified user is not a member of the group.'
                   
-
   /analytics/engagement:
       get:
         operationId: R1101
@@ -1538,7 +1747,6 @@ paths:
           '404':
             description: 'Post not found or engagement data unavailable.'
 
-
   /analytics/posts/performance:
       get:
         operationId: R1103
@@ -1669,8 +1877,7 @@ paths:
             description: 'Bad Request. The request could not be understood or was missing required parameters.'
           '404':
             description: 'Performance Engagement data unavailable.'
-            
-
+      
   /analytics/peak-engagement:
       get:
         operationId: R1104
@@ -1766,9 +1973,8 @@ paths:
           '400':
             description: 'Bad Request. The request could not be understood or was missing required parameters.'
           '404':
-            description: 'Peak Engagement data unavailable.'
-          
-    
+            description: 'Peak Engagement data unavailable.'        
+   
   /analytics/audience-demographics:
       get:
         operationId: R1105
