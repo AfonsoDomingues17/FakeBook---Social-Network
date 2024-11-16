@@ -367,13 +367,13 @@ paths:
     post:
       operationId: R203
       summary: 'R203: Ban a User'
-      description: 'Ban a user, taking away his ability to log in the account. Access: ADM'
+      description: 'Ban a user, taking away their ability to log in to the account. Access: ADM'
       tags:
         - 'M02: Admin and Static Pages'
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -388,22 +388,26 @@ paths:
       responses:
         '204':
           description: 'User banned successfully.'
+        '400':
+          description: 'Bad Request. Invalid request body.'
         '403':
           description: 'Denied - Not an admin.'
         '404':
           description: 'User not found.'
+        '500':
+          description: 'Internal Server Error. An unexpected error occurred on the server.'
 
   /admin/users/unban:
     post:
       operationId: R204
       summary: 'R204: Unban a User'
-      description: 'Unbans a user, allowing them to access the plaftorm again. Access: ADM'
+      description: 'Unbans a user, allowing them to access the platform again. Access: ADM'
       tags:
         - 'M02: Admin and Static Pages'
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -418,10 +422,14 @@ paths:
       responses:
         '204':
           description: 'User unbanned successfully.'
+        '400':
+          description: 'Bad Request. Invalid request body.'
         '403':
           description: 'Denied - Not an admin.'
         '404':
           description: 'User not found.'
+        '500':
+          description: 'Internal Server Error. An unexpected error occurred on the server.'
 
   /admin/flagged/comments:
     get:
