@@ -39,6 +39,12 @@ paths:
       responses:
         '200':
           description: 'Ok. Show list of direct chats UI'
+        '400':
+          description: 'Bad Request. Invalid query parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The direct chats could not be found.'
          
 
     post:
@@ -71,12 +77,18 @@ paths:
               examples:
                 302Success:
                   description: 'Successful creation. Redirect to direct chat view.'
-                  value: '/directChats/{id}'
+                  value: '/directChats/{direct_chat_id}'
                 302Failure:
                   description: 'Failed creation. Redirect to direct chat creation form.'
                   value: '/directChats'
+        '400':
+          description: 'Bad Request. The request body parameters are invalid or missing.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user does not exist.'
 
-  /directChats/{id}:
+  /directChats/{direct_chat_id}/add/{user_id}:
     get:
       operationId: R303
       summary: 'R303: View Direct Chat'
@@ -85,36 +97,27 @@ paths:
         - 'M03: Direct Messaging and Group Chat'
       parameters:
         - in: path
-          name: id
+          name: direct_chat_id
           required: true
           schema:
             type: integer
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                user_id:
-                  type: integer
-                  minimum: 1
-                  description: 'ID of the user to be added. Must be a valid, positive integer.'
-              required:
-                - user_id
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
       responses:
-        '201':
-          description: 'Member successfully added to the group. Remain on the current page.'
+        '200':
+          description: 'Ok. Show direct chat details UI'
         '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          description: 'Bad Request. The direct_chat_id or user_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
         '404':
-          description: 'Group or user not found.'
-        '409':
-          description: 'Conflict. User is already a member of the group.'
-        '403':
-          description: 'Forbidden. Only group owners can add members to the group.'
+          description: 'Not Found. The specified direct chat or user does not exist.'
+     
 
-  /directChats/{id}/messages:
+  /directChats/{direct_chat_id}/messages:
     get:
       operationId: R304
       summary: 'R304: List Messages in Direct Chat'
@@ -123,7 +126,7 @@ paths:
         - 'M03: Direct Messaging and Group Chat'
       parameters:
         - in: path
-          name: id
+          name: direct_chat_id
           schema:
             type: integer
           required: true
@@ -148,7 +151,12 @@ paths:
                       type: integer
                     direct_chat:
                       type: integer
-
+        '400':
+          description: 'Bad Request. The direct_chat_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified direct chat does not exist.'
 
 
     post:
@@ -157,12 +165,6 @@ paths:
       description: 'Send a new message in a specific direct chat. Access: USR'
       tags:
         - 'M03: Direct Messaging and Group Chat'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
@@ -170,11 +172,14 @@ paths:
             schema:
               type: object
               properties:
+                direct_chat_id:
+                  type: integer
                 content:
                   type: string
                 author_id:
                   type: integer
               required:
+                - direct_chat_id
                 - content
                 - author_id
       responses:
@@ -197,9 +202,13 @@ paths:
                   direct_chat:
                     type: integer
         '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          description: 'Bad Request. The direct_chat_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified direct chat does not exist.'
 
-  /groups/{id}/messages:
+  /groups/{group_id}/messages:
     get:
       operationId: R309
       summary: 'R309: List Messages in Group'
@@ -208,7 +217,7 @@ paths:
         - 'M03: Direct Messaging and Group Chat'
       parameters:
         - in: path
-          name: id
+          name: group_id
           schema:
             type: integer
           required: true
@@ -233,6 +242,12 @@ paths:
                       type: integer
                     group_id:
                       type: integer
+        '400':
+          description: 'Bad Request. The group_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified group does not exist.'              
 
     post:
       operationId: R310
@@ -240,12 +255,6 @@ paths:
       description: 'Send a new message in a specific group. Access: USR'
       tags:
         - 'M03: Direct Messaging and Group Chat'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
@@ -253,11 +262,14 @@ paths:
             schema:
               type: object
               properties:
+                group_id:
+                  type: integer
                 content:
                   type: string
                 author_id:
                   type: integer
               required:
+                - group_id
                 - content
                 - author_id
       responses:
@@ -280,7 +292,11 @@ paths:
                   group_id:
                     type: integer
         '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          description: 'Bad Request. The group_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified group does not exist.' 
 
   /posts:
     get:
@@ -292,6 +308,12 @@ paths:
       responses:
         '200':
           description: 'Ok. Show list of posts UI'
+        '400':
+          description: 'Bad Request. Invalid query parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The posts could not be found.'
          
     post:
       operationId: R402
@@ -326,12 +348,18 @@ paths:
               examples:
                 302Success:
                   description: 'Successful creation. Redirect to post view.'
-                  value: '/posts/{id}'
+                  value: '/posts/{post_id}'
                 302Failure:
                   description: 'Failed creation. Redirect to post creation form.'
                   value: '/posts'
+        '400':
+          description: 'Bad Request. The request body parameters are invalid or missing.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified resource does not exist.'
 
-  /posts/{id}:
+  /posts/{post_id}:
     get:
       operationId: R403
       summary: 'R403: View Post'
@@ -340,13 +368,19 @@ paths:
         - 'M04: Post Management and Post Media Handling'
       parameters:
         - in: path
-          name: id
+          name: post_id
           schema:
             type: integer
           required: true
       responses:
         '200':
           description: 'Ok. Show post details UI'
+        '400':
+          description: 'Bad Request. The post_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified post does not exist.'
            
 
     put:
@@ -355,12 +389,6 @@ paths:
       description: 'Edit an existing post. Access: OWN'
       tags:
         - 'M04: Post Management and Post Media Handling'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
@@ -368,11 +396,14 @@ paths:
             schema:
               type: object
               properties:
+                post_id:
+                  type: integer
                 description:
                   type: string
                 is_public:
                   type: boolean
               required:
+                - post_id
                 - description
                 - is_public
       responses:
@@ -385,24 +416,24 @@ paths:
               examples:
                 302Success:
                   description: 'Successful edit. Redirect to post view.'
-                  value: '/posts/{id}'
+                  value: '/posts/{post_id}'
                 302Failure:
                   description: 'Failed edit. Redirect to post edit form.'
-                  value: '/posts/{id}/edit'
+                  value: '/posts/{post_id}/edit'
+        '400':
+          description: 'Bad Request. The request body parameters are invalid or missing.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified post does not exist.'
 
-  /posts/{id}/media:
+  /posts/{post_id}/media:
     post:
       operationId: R405
       summary: 'R405: Add Media to Post'
       description: 'Add media to a specific post. Access: OWN'
       tags:
         - 'M04: Post Management and Post Media Handling'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
@@ -410,26 +441,24 @@ paths:
             schema:
               type: object
               properties:
+                post_id:
+                  type: integer
                 media:
                   type: string
                   format: binary
               required:
+                - post_id
                 - media
       responses:
         '200':
           description: 'Media added successfully.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  photo_url:
-                    type: string
-
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified post does not exist.'
+
 
   /posts/{post_id}/comments:
     get:
@@ -487,13 +516,6 @@ paths:
       description: 'Allow users to add a new comment to a specific post.'
       tags:
         - 'M05: Commenting and Reactions'
-      parameters:
-        - name: post_id
-          in: path
-          required: true
-          description: 'The ID of the post to add the comment to.'
-          schema:
-            type: integer
       requestBody:
         required: true
         content:
@@ -501,6 +523,8 @@ paths:
             schema:
               type: object
               properties:
+                post_id:
+                  type: integer
                 content:
                   type: string
                   description: 'The content of the comment.'
@@ -508,6 +532,7 @@ paths:
                   type: integer
                   description: 'The ID of the user adding the comment.'
               required:
+                - post_id
                 - content
                 - author_id
       responses:
@@ -531,13 +556,6 @@ paths:
       description: 'Allow users to edit the content of an existing comment.'
       tags:
         - 'M05: Commenting and Reactions'
-      parameters:
-        - name: comment_id
-          in: path
-          required: true
-          description: 'The ID of the comment to be edited.'
-          schema:
-            type: integer
       requestBody:
         required: true
         content:
@@ -545,10 +563,13 @@ paths:
             schema:
               type: object
               properties:
+                comment_id:
+                  type: integer
                 content:
                   type: string
                   description: 'The new content of the comment.'
               required:
+                - comment_id
                 - content
       responses:
         '302':
@@ -614,6 +635,12 @@ paths:
       tags:
         - 'M05: Commenting and Reactions'
       parameters:
+        - name: post_id
+          in: path
+          required: true
+          description: 'The ID of the post containing the comment to be deleted.'
+          schema:
+            type: integer
         - name: comment_id
           in: path
           required: true
@@ -634,7 +661,91 @@ paths:
         '404':
           description: 'The specified comment does not exist.'
 
-  /users/{id}/connections:
+  /posts/{post_id}/like:
+    post:
+      operationId: R506
+      summary: 'R506: Like a Post. Access: USR'
+      description: 'Allow users to like a specific post.'
+      tags:
+        - 'M05: Commenting and Reactions'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                post_id:
+                  type: integer
+                user_id:
+                  type: integer
+                  description: 'The ID of the user liking the post.'
+              required:
+                - post_id
+                - user_id
+      responses:
+        '200':
+          description: 'The post was successfully liked.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  post_id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  liked_at:
+                    type: string
+                    format: date-time
+        '400':
+          description: 'Validation failed. Required fields are missing or invalid.'
+        '404':
+          description: 'The specified post does not exist.'
+  
+  /comments/{comment_id}/like:
+    post:
+      operationId: R507
+      summary: 'R507: Like a Comment. Access: USR'
+      description: 'Allow users to like a specific comment.'
+      tags:
+        - 'M05: Commenting and Reactions'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                comment_id:
+                  type: integer
+                user_id:
+                  type: integer
+                  description: 'The ID of the user liking the comment.'
+              required:
+                - comment_id
+                - user_id
+      responses:
+        '200':
+          description: 'The comment was successfully liked.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  comment_id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  liked_at:
+                    type: string
+                    format: date-time
+        '400':
+          description: 'Validation failed. Required fields are missing or invalid.'
+        '404':
+          description: 'The specified comment does not exist.'
+
+  /users/{user_id}/connections:
     get:
       operationId: R601
       summary: 'R601: List Connections'
@@ -643,27 +754,28 @@ paths:
         - 'M06: Connections'
       parameters:
         - in: path
-          name: id
+          name: user_id
           schema:
             type: integer
           required: true
       responses:
         '200':
           description: 'Ok. Show list of connections UI'
+        '400':
+          description: 'Bad Request. The user_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user does not exist.'
+        
           
-  /users/{id}/follow:
+  /users/{user_id}/follow:
     post:
       operationId: R602
       summary: 'R602: Send Follow Request'
       description: 'Send a follow request to the specified user. Access: USR'
       tags:
         - 'M06: Connections'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
@@ -671,9 +783,12 @@ paths:
             schema:
               type: object
               properties:
+                user_id_dest:
+                  type: integer
                 user_id_src:
                   type: integer
               required:
+                - user_id_dest
                 - user_id_src
       responses:
         '302':
@@ -685,24 +800,26 @@ paths:
               examples:
                 302Success:
                   description: 'Successful request. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
                 302Failure:
                   description: 'Failed request. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
+        '400':
+          description: 'Bad Request. The request body parameters are invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user does not exist.'
+        '409':
+          description: 'Conflict. The user is already following the specified user.'
 
-  /users/{id}/follow/accept:
+  /users/{user_id}/follow/accept:
     post:
       operationId: R603
       summary: 'R603: Accept Follow Request'
       description: 'Accept a follow request from the specified user. Access: USR'
       tags:
         - 'M06: Connections'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
@@ -710,9 +827,12 @@ paths:
             schema:
               type: object
               properties:
+                user_id_dest:
+                  type: integer
                 user_id_src:
                   type: integer
               required:
+                - user_id_dest
                 - user_id_src
       responses:
         '302':
@@ -724,24 +844,28 @@ paths:
               examples:
                 302Success:
                   description: 'Successful acceptance. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
                 302Failure:
                   description: 'Failed acceptance. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
+        
+        '400':
+          description: 'Bad Request. The request body parameters are invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user or follow request does not exist.'
+        '409':
+          description: 'Conflict. The follow request has already been accepted or rejected.'
+      
 
-  /users/{id}/follow/reject:
+  /users/{user_id}/follow/reject:
     post:
       operationId: R604
       summary: 'R604: Reject Follow Request'
       description: 'Reject a follow request from the specified user. Access: USR'
       tags:
         - 'M06: Connections'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
@@ -749,9 +873,12 @@ paths:
             schema:
               type: object
               properties:
+                user_id_dest:
+                  type: integer
                 user_id_src:
                   type: integer
               required:
+                - user_id_dest
                 - user_id_src
       responses:
         '302':
@@ -763,12 +890,22 @@ paths:
               examples:
                 302Success:
                   description: 'Successful rejection. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
                 302Failure:
                   description: 'Failed rejection. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
 
-  /users/{id}/connections/removeFollower:
+        '400':
+          description: 'Bad Request. The request body parameters are invalid.'
+        '401':
+         description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user or follow request does not exist.'
+        '409':
+          description: 'Conflict. The follow request has already been accepted or rejected.'
+    
+
+  /users/{user_id}/connections/removeFollower:
     delete:
       operationId: R605
       summary: 'R605: Remove Follower'
@@ -777,21 +914,10 @@ paths:
         - 'M06: Connections'
       parameters:
         - in: path
-          name: id
+          name: user_id
           schema:
             type: integer
           required: true
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                follower_id:
-                  type: integer
-              required:
-                - follower_id
       responses:
         '302':
           description: 'Redirect after removing the follower.'
@@ -802,12 +928,18 @@ paths:
               examples:
                 302Success:
                   description: 'Successful removal. Redirect to connections view.'
-                  value: '/users/{id}/connections'
+                  value: '/users/{user_id}/connections'
                 302Failure:
                   description: 'Failed removal. Redirect to connections view.'
-                  value: '/users/{id}/connections'
-  
-  /users/{id}/follow/delete:
+                  value: '/users/{user_id}/connections'
+        '400':
+          description: 'Bad Request. The user_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user or follower does not exist.'
+        
+  /users/{user_id}/follow/delete:
     delete:
       operationId: R606
       summary: 'R606: Delete Follow Request'
@@ -816,21 +948,10 @@ paths:
         - 'M06: Connections'
       parameters:
         - in: path
-          name: id
+          name: user_id
           schema:
             type: integer
           required: true
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                user_id_src:
-                  type: integer
-              required:
-                - user_id_src
       responses:
         '302':
           description: 'Redirect after deleting the follow request.'
@@ -841,24 +962,25 @@ paths:
               examples:
                 302Success:
                   description: 'Successful deletion. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
                 302Failure:
                   description: 'Failed deletion. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
+
+        '400':
+          description: 'Bad Request. The user_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user or follow request does not exist.'
   
-  /users/{id}/block:
+  /users/{user_id}/block:
     post:
       operationId: R607
       summary: 'R607: Block User'
       description: 'Block the specified user. Access: USR'
       tags:
         - 'M06: Connections'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
       requestBody:
         required: true
         content:
@@ -866,9 +988,12 @@ paths:
             schema:
               type: object
               properties:
+                user_id_dest:
+                  type: integer
                 user_id_src:
                   type: integer
               required:
+                - user_id_dest
                 - user_id_src
       responses:
         '302':
@@ -880,12 +1005,12 @@ paths:
               examples:
                 302Success:
                   description: 'Successful block. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
                 302Failure:
                   description: 'Failed block. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
   
-  /users/{id}/unblock:
+  /users/{user_id}/unblock:
     delete:
       operationId: R608
       summary: 'R608: Unblock User'
@@ -894,21 +1019,10 @@ paths:
         - 'M06: Connections'
       parameters:
         - in: path
-          name: id
+          name: user_id
           schema:
             type: integer
           required: true
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                user_id_src:
-                  type: integer
-              required:
-                - user_id_src
       responses:
         '302':
           description: 'Redirect after unblocking the user.'
@@ -919,10 +1033,18 @@ paths:
               examples:
                 302Success:
                   description: 'Successful unblock. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
                 302Failure:
                   description: 'Failed unblock. Redirect to user profile.'
-                  value: '/users/{id}'
+                  value: '/users/{user_id}'
+        '400':
+          description: 'Bad Request. The request body parameters are invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user does not exist.'
+        '409':
+          description: 'Conflict. The user is already blocked.'
   
   /notifications:
     get:
@@ -934,10 +1056,13 @@ paths:
       responses:
         '200':
           description: 'Ok. Show list of notifications UI'
-          content:
-            text/html:
-              schema:
-                type: string
+        '400':
+          description: 'Bad Request. Invalid query parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The notifications could not be found.'
+         
     post:
       operationId: R702
       summary: 'R702: Create Notification'
@@ -971,7 +1096,7 @@ paths:
                 group_id:
                   type: integer
               required:
-                - content
+                - is_read
                 - user_id_dest
                 - typeN
       responses:
@@ -1004,20 +1129,18 @@ paths:
                     type: integer
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified resource does not exist.'
   
-  /notifications/{id}/read:
+  /notifications/{notification_id}/read:
     post:
       operationId: R703
       summary: 'R703: Mark Notification as Read'
       description: 'Mark a specific notification as read. Access: USR'
       tags:
         - 'M07: Notifications'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
       responses:
         '200':
           description: 'Notification marked as read.'
@@ -1026,14 +1149,21 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
+                  notification_id:
                     type: integer
                   is_read:
                     type: boolean
+                required:
+                  - notification_id
+                  - is_read
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified notification does not exist.'
   
-  /notifications/{id}/delete:
+  /notifications/{notification_id}/delete:
     delete:
       operationId: R704
       summary: 'R704: Delete Notification'
@@ -1042,22 +1172,19 @@ paths:
         - 'M07: Notifications'
       parameters:
         - in: path
-          name: id
+          name: notification_id
           schema:
             type: integer
           required: true
       responses:
         '200':
           description: 'Notification deleted successfully.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified notification does not exist.'
 
   /report:
     get: 
@@ -1070,7 +1197,7 @@ paths:
         '200':
           description: 'Ok. Show report UI'
         '404':
-          description: 'Not Found. The specified resource (comment, post, or user) does not exist.'
+          description: 'Not Found. The specified resource does not exist.'
         '401':
           description: 'Unauthorized. The user does not have permission to view the report form.'
       
@@ -1081,7 +1208,6 @@ paths:
       description: 'Processes the report form submission. Access: USR'
       tags:
         - 'M08: Content Moderation and Reporting'
- 
       requestBody:
         required: true
         content:
@@ -1141,45 +1267,94 @@ paths:
         '200':
           description: 'Ok. Show search UI'
         '404':
-          description: 'Not Found. The specified resource does not exist.'      
-    
-    post:
-      operationId: R902
-      summary: 'R902: Search Action'
-      description: 'Processes the search form submission. Access: USR'
+          description: 'Not Found. The specified resource does not exist.'
+
+  /search/groups:
+    get:
+      operationId: R903
+      summary: 'R903: Search Groups'
+      description: 'Search for groups based on query parameters. Access: USR'
       tags:
         - 'M09: Search and Results'
- 
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                query:          
-                  type: string
-              required:
-                - query
- 
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: false
+          description: 'Name of the group to search for.'
+        - in: query
+          name: description
+          schema:
+            type: string
+          required: false
+          description: 'Description of the group to search for.'
       responses:
-        '302':
-          description: 'Redirect after processing the search submission.'
-          headers:
-            Location:
+        '200':
+          description: 'Ok. Show search results UI'
+          content:
+            application/json:
               schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful search submission. Redirect to search results.'
-                  value: '/search/results'
-                302Error:
-                  description: 'Failed search submission. Redirect to search form.'
-                  value: '/search'
-        '404':
-          description: 'Not Found. The resource you are trying to search does not exist.'  
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    owner_id:
+                      type: integer
         '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          description: 'Bad Request. Invalid query parameters.'
+        '404':
+          description: 'Not Found. No groups matched the search criteria.'
+
+  /search/posts/{post_id}/comments:
+    get:
+      operationId: R904
+      summary: 'R904: Search Comments of a Post'
+      description: 'Search for comments of a specific post based on query parameters. Access: USR'
+      tags:
+        - 'M09: Search and Results'
+      parameters:
+        - in: path
+          name: post_id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the post to search comments for.'
+        - in: query
+          name: content
+          schema:
+            type: string
+          required: false
+          description: 'Content of the comment to search for.'
+      responses:
+        '200':
+          description: 'Ok. Show search results UI'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    content:
+                      type: string
+                    author_id:
+                      type: integer
+                    created_at:
+                      type: string
+                      format: date-time
+        '400':
+          description: 'Bad Request. Invalid query parameters.'
+        '404':
+          description: 'Not Found. No comments matched the search criteria.'
 
   /search/{filter}:
     get:
@@ -1215,11 +1390,11 @@ paths:
           required: false
           description: 'Username to search for.'
         - in: query
-          name: email
+          name: name
           schema:
             type: string
           required: false
-          description: 'Email to search for.'
+          description: name to search for.'
       responses:
         '200':
           description: 'Ok. Show search results UI'
@@ -1234,18 +1409,18 @@ paths:
                       type: integer
                     username:
                       type: string
-                    email:
+                    name:
                       type: string
                     profile_picture:
                       type: string
               example:
                 - id: 1
                   username: 'john_doe'
-                  email: 'john@example.com'
+                  name: 'John Doe'
                   profile_picture: 'http://example.com/images/john.jpg'
                 - id: 2
                   username: 'jane_doe'
-                  email: 'jane@example.com'
+                  name: 'Jane Doe'
                   profile_picture: 'http://example.com/images/jane.jpg'
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
@@ -1374,7 +1549,7 @@ paths:
           '500':
             description: 'Internal Server Error. An unexpected error occurred on the server.'
   
-  /groups/{id}:
+  /groups/{group_id}:
       get:
         operationId: R1002
         summary: 'R1002: View Group'
@@ -1383,7 +1558,7 @@ paths:
           - 'M10: Group Management and Participation'
         parameters:
           - in: path
-            name: id
+            name: group_id
             schema:
               type: integer
             required: true  
@@ -1407,19 +1582,19 @@ paths:
           - 'M10: Group Management and Participation'
         parameters:
           - in: path
-            name: id
+            name: group_id
             schema:
               type: integer
             required: true
         responses:
-          '204':
-            description: 'Group deleted successfully.'
+          '302':
+            description: 'Group deleted successfully. Redirecting to the group list.'
             headers:
               Location:
                 schema:
                   type: string
                 examples:
-                  204Success:
+                  302Success:
                     description: 'Group successfully deleted. Redirect to the group list.'
                     value: '/groups'
           '404':
@@ -1427,19 +1602,13 @@ paths:
           '403':
             description: 'Forbidden. Only the group owner can delete this group.'
 
-  /groups/edit/{id}:
+  /groups/edit/{group_id}:
       put:
         operationId: R1004
         summary: 'R1004: Edit Group'
         description: 'Allows group owners and moderators to edit group details. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
-        parameters:
-          - in: path
-            name: id
-            schema:
-              type: integer
-            required: true
         requestBody:
           required: true
           content:
@@ -1447,6 +1616,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  group_id:
+                    type: integer
                   name:
                     type: string
                   description:
@@ -1454,6 +1625,7 @@ paths:
                   photo_url:
                     type: string
                 required:
+                  - group_id
                   - name
         responses:
           '302':
@@ -1465,7 +1637,7 @@ paths:
                 examples:
                   302Success:
                     description: 'Group successfully updated. Redirect to the updated group page.'
-                    value: '/groups/{id}' 
+                    value: '/groups/{group_id}' 
           '400':
             description: 'Bad Request. The request could not be understood or was missing required parameters.'
 
@@ -1486,6 +1658,10 @@ paths:
         responses:
           '200':
             description: 'Ok. Show create group UI'
+          '401':
+            description: 'Unauthorized. The user is not authenticated.'
+          '404':
+            description: 'Not Found. The specified resource does not exist.'
 
       post:
         operationId: R1006
@@ -1493,7 +1669,6 @@ paths:
         description: 'Processes the create group form submission. Access: USR'
         tags:
           - 'M10: Group Management and Participation'
-  
         requestBody:
           required: true
           content:
@@ -1515,33 +1690,31 @@ paths:
                   - owner_id
   
         responses:
-          '201':
-            description: 'Group successfully created.'
+          '302':
+            description: 'Group successfully created. Redirect to the newly created group page.'
             headers:
               Location:
                 schema:
                   type: string
                 examples:
-                  201Success:
+                  302Success:
                     description: 'Group successfully created. Redirect to the newly created group page.'
-                    value: '/groups/{id}'
+                    value: '/groups/{group_id}'
 
           '400':
             description: 'Bad Request. The request could not be understood or was missing required parameters.'
+          '401':
+            description: 'Unauthorized. The user is not authenticated.'
+          '404':
+            description: 'Not Found. The specified resource does not exist.'
 
-  /groups/{id}/members:
+  /groups/{group_id}/members:
       post:
         operationId: R1007
         summary: 'R1007: Add Member to Group'
         description: 'Allows group owners to add members to the group. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
-        parameters:
-          - in: path
-            name: id
-            required: true
-            schema:
-              type: integer
         requestBody:
           required: true
           content:
@@ -1549,11 +1722,14 @@ paths:
               schema:
                 type: object
                 properties:
+                  group_id:
+                    type: integer
                   user_id:
                     type: integer
                     minimum: 1
                     description: 'ID of the user to be added. Must be a valid, positive integer.'
                 required:
+                  - group_id
                   - user_id
         responses:
           '201':
@@ -1567,7 +1743,7 @@ paths:
           '403':
             description: 'Forbidden. Only group owners can add members to the group.'
 
-  /groups/{id}/members/{user_id}:
+  /groups/{group_id}/members/{user_id}:
       delete:
         operationId: R1008
         summary: 'R1008: Remove Member from Group'
@@ -1576,7 +1752,7 @@ paths:
           - 'M10: Group Management and Participation'
         parameters:
           - in: path
-            name: id
+            name: group_id
             required: true
             schema:
               type: integer
