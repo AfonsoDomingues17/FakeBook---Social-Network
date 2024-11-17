@@ -276,8 +276,8 @@ paths:
 
   /recover-password:
     get:
-      operationId: getRecoverPasswordForm
-      summary: 'R109: Get Recover Password Form'
+      operationId: R110
+      summary: 'R110: Get Recover Password Form'
       description: 'Provides the password recovery form. Access: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -292,8 +292,8 @@ paths:
           description: 'Not Found. The password recovery form could not be found.'
 
     post:
-      operationId: R110
-      summary: 'R110: Recover Password'
+      operationId: R111
+      summary: 'R111: Recover Password'
       description: 'Sends a password recovery email to the user. Access: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -365,8 +365,8 @@ paths:
   
   /admin/users/ban:
     post:
-      operationId: R203
-      summary: 'R203: Ban a User'
+      operationId: R202
+      summary: 'R202: Ban a User'
       description: 'Ban a user, taking away their ability to log in to the account. Access: ADM'
       tags:
         - 'M02: Admin and Static Pages'
@@ -399,8 +399,8 @@ paths:
 
   /admin/users/unban:
     post:
-      operationId: R204
-      summary: 'R204: Unban a User'
+      operationId: R203
+      summary: 'R203: Unban a User'
       description: 'Unbans a user, allowing them to access the platform again. Access: ADM'
       tags:
         - 'M02: Admin and Static Pages'
@@ -433,8 +433,8 @@ paths:
 
   /admin/flagged/comments:
     get:
-      operationId: R205
-      summary: 'R205: Retrieve Flagged Comments'
+      operationId: R204
+      summary: 'R204: Retrieve Flagged Comments'
       description: 'Retrieve all flagged comments. Access: ADM'
       tags:
         - 'M02: Admin and Static Pages'
@@ -463,8 +463,8 @@ paths:
   
   /admin/flagged/posts:
     get:
-      operationId: R206
-      summary: 'R206: Retrieve Flagged Posts'
+      operationId: R205
+      summary: 'R205: Retrieve Flagged Posts'
       description: 'Retrieve all flagged posts. Access: ADM'
       tags:
         - 'M02: Admin and Static Pages'
@@ -490,8 +490,8 @@ paths:
 
   /admin/flagged/users:
     get:
-      operationId: R207
-      summary: 'R207: Retrieve Flagged Users'
+      operationId: R206
+      summary: 'R206: Retrieve Flagged Users'
       description: 'Retrieve all flagged users. Access: ADM'
       tags:
         - 'M02: Admin and Static Pages'
@@ -521,8 +521,8 @@ paths:
     
   /admin/flagged/{type}/{id}/reports:
     get:
-      operationId: R208
-      summary: 'R208: Retrieve Reports for Flagged Content'
+      operationId: R207
+      summary: 'R207: Retrieve Reports for Flagged Content'
       description: 'Retrieve all reports for a specific flagged comment, post, or user. Access: ADM'
       tags:
         - 'M02: Admin and Static Pages'
@@ -561,8 +561,8 @@ paths:
         
   
     post:
-      operationId: R209
-      summary: 'R209: Resolve Reports for Flagged Content'
+      operationId: R208
+      summary: 'R208: Resolve Reports for Flagged Content'
       description: 'Mark all reports for a specific flagged comment, post, or user as resolved. Access: ADM'
       tags:
         - 'M02: Admin and Static Pages'
@@ -603,8 +603,8 @@ paths:
       
   /static/about-contacts:
     get:
-      operationId: R210
-      summary: 'R210: Get About/Contacts Page'
+      operationId: R209
+      summary: 'R209: Get About/Contacts Page'
       description: 'Retrieves the static content of the "About/Contacts" page. Access: PUB'
       tags:
         - 'M02: Admin and Static Pages'
@@ -621,8 +621,8 @@ paths:
 
   /static/help-FAQ:
     get:
-      operationId: R211
-      summary: 'R211: Get Help/FAQ Page'
+      operationId: R210
+      summary: 'R210: Get Help/FAQ Page'
       description: 'Retrieves the static content of the "Help/FAQ" page. Access: PUB'
       tags:
         - 'M02: Admin and Static Pages'
@@ -638,8 +638,8 @@ paths:
 
   /static/settings:
     get:
-      operationId: R212
-      summary: 'R212: Get Settings Page'
+      operationId: R211
+      summary: 'R211: Get Settings Page'
       description: 'Retrieves the static content of the "Settings" page. Access: PUB'
       tags:
         - 'M02: Admin and Static Pages'
@@ -922,7 +922,61 @@ paths:
         '401':
           description: 'Unauthorized. The user is not authenticated.'
         '404':
-          description: 'Not Found. The specified group does not exist.' 
+          description: 'Not Found. The specified group does not exist.'
+  /directChats/{direct_chat_id}/messages/{message_id}:
+    delete:
+      operationId: R308
+      summary: 'R308: Delete Message in Direct Chat'
+      description: 'Delete a specific message in a direct chat. Access: OWN'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      parameters:
+        - in: path
+          name: direct_chat_id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: message_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: 'Message deleted successfully.'
+        '400':
+          description: 'Bad Request. The direct_chat_id or message_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified direct chat or message does not exist.' 
+  /groups/{group_id}/messages/{message_id}:
+    delete:
+      operationId: R309
+      summary: 'R309: Delete Message in Group'
+      description: 'Delete a specific message in a group. Access: OWN'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      parameters:
+        - in: path
+          name: group_id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: message_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: 'Message deleted successfully.'
+        '400':
+          description: 'Bad Request. The group_id or message_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified group or message does not exist.'
 
   #M04: Post Management and Post Media Handling
 
@@ -1054,11 +1108,43 @@ paths:
           description: 'Unauthorized. The user is not authenticated.'
         '404':
           description: 'Not Found. The specified post does not exist.'
+    delete:
+      operationId: R405
+      summary: 'R405: Delete Post'
+      description: 'Delete a specific post. Access: OWN'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      parameters:
+        - in: path
+          name: post_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after deleting the post.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect to posts list.'
+                  value: '/posts'
+                302Failure:
+                  description: 'Failed deletion. Redirect to post view.'
+                  value: '/posts/{post_id}'
+        '400':
+          description: 'Bad Request. The post_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified post does not exist.'
 
   /posts/{post_id}/media:
     post:
-      operationId: R405
-      summary: 'R405: Add Media to Post'
+      operationId: R406
+      summary: 'R406: Add Media to Post'
       description: 'Add media to a specific post. Access: OWN'
       tags:
         - 'M04: Post Management and Post Media Handling'
@@ -1086,6 +1172,32 @@ paths:
           description: 'Unauthorized. The user is not authenticated.'
         '404':
           description: 'Not Found. The specified post does not exist.'
+  /users/{user_id}/posts:
+    get:
+      operationId: R407
+      summary: 'R407: List Posts by User'
+      description: 'Retrieve a list of posts created by a specific user. Access: USR'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show list of posts UI'
+          content:
+            text/html:
+              schema:
+                type: string
+        '400':
+          description: 'Bad Request. The user_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user does not exist or has no posts.'
 
   #M05: Commenting and Reactions
 
@@ -1696,6 +1808,7 @@ paths:
         '404':
           description: 'Not Found. The notifications could not be found.'
          
+  /admin/notifications:
     post:
       operationId: R702
       summary: 'R702: Create Notification'
@@ -2070,8 +2183,8 @@ paths:
   
   /search/groups/{group_id}/members:
     get:
-      operationId: searchGroupMembers
-      summary: 'Search for members of a group'
+      operationId: R906
+      summary: 'R906: Search for members of a group'
       description: 'Perform a full search for members of a specific group based on the query string. Access: USR.'
       tags:
         - 'M09: Search and Results'
@@ -2113,8 +2226,8 @@ paths:
 
   /search/communications:
     get:
-        operationId: R904
-        summary: 'R904: Search for groups/messages'
+        operationId: R907
+        summary: 'R907: Search for groups/messages'
         description: 'Perform a full search for groups/messages based on the query string. Access: USR.'
         tags:
           - 'M09: Search and Results'
@@ -2276,8 +2389,8 @@ paths:
 
   /groups/edit/{group_id}:
       get:
-        operationId: getEditGroupForm
-        summary: 'R1003: Get Edit Group Form'
+        operationId: R1004
+        summary: 'R1004: Get Edit Group Form'
         description: 'Retrieve the edit form for a specific group. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
@@ -2299,8 +2412,8 @@ paths:
             description: 'Not Found. The specified group does not exist.'
  
       put:
-        operationId: R1004
-        summary: 'R1004: Edit Group'
+        operationId: R1005
+        summary: 'R1005: Edit Group'
         description: 'Allows group owners and moderators to edit group details. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
@@ -2344,8 +2457,8 @@ paths:
 
   /groups/create:
       get:
-        operationId: R1005
-        summary: 'R1005: Create Group form'
+        operationId: R1006
+        summary: 'R1006: Create Group form'
         description: 'Retrieve the Create Group form. Access: USR'
         tags:
           - 'M10: Group Management and Participation'
@@ -2359,8 +2472,8 @@ paths:
             description: 'Not Found. The specified resource does not exist.'
 
       post:
-        operationId: R1006
-        summary: 'R1006: Create Group Action'
+        operationId: R1007
+        summary: 'R1007: Create Group Action'
         description: 'Processes the create group form submission. Access: USR'
         tags:
           - 'M10: Group Management and Participation'
@@ -2405,8 +2518,8 @@ paths:
 
   /groups/{group_id}/members:
       post:
-        operationId: R1007
-        summary: 'R1007: Add Member to Group'
+        operationId: R1008
+        summary: 'R1008: Add Member to Group'
         description: 'Allows group owners to add members to the group. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
@@ -2440,8 +2553,8 @@ paths:
 
   /groups/{group_id}/members/{user_id}:
       delete:
-        operationId: R1008
-        summary: 'R1008: Remove Member from Group'
+        operationId: R1009
+        summary: 'R1009: Remove Member from Group'
         description: 'Allows group owners to remove members from the group. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
