@@ -314,7 +314,55 @@ paths:
               example: '/login'
         '404':
           description: 'No account related to provided email found.'
+
+  /recover-password/users/{user_id}:
+    put:
+      operationId: updatePassword
+      summary: 'R111: Update Password'
+      description: 'Update the password for a specific user. Access: OWN'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: 'The ID of the user whose password is being updated.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: 'The new password for the user.'
+                confirm_password:
+                  type: string
+                  description: 'Confirmation of the new password.'
+              required:
+                - password
+                - confirm_password
+      responses:
+        '302':
+          description: 'Password updated successfully. Redirecting to the login page.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example: '/login'
+        '400':
+          description: 'Bad Request. The request body parameters are invalid or missing.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '403':
+          description: 'Forbidden. The user does not have permission to update this password.'
+        '404':
+          description: 'Not Found. The specified user does not exist.'
   
+    
   #M02: Admin and Static Pages
 
   /admin/users:
@@ -330,7 +378,6 @@ paths:
         '403':
           description: 'Denied - Not an admin.'
 
-  
   
   /admin/users/ban:
     post:
@@ -519,7 +566,7 @@ paths:
                 - id
                 - resolved_at
       responses:
-        '200':
+        '204':
           description: 'Reports for the flagged content marked as resolved successfully.'
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
@@ -608,7 +655,6 @@ paths:
         '404':
           description: 'Not Found. The direct chats could not be found.'
   
-  
          
   /directChats/create:
     post:
@@ -690,8 +736,16 @@ paths:
             type: integer
           description: 'The ID of the direct chat to delete.'
       responses:
-        '204':
-          description: 'Direct chat deleted successfully.'
+        '302':
+          description: 'Redirect after deleting the direct chat.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect to page of direct chats.'
+                  value: '/directChats'
         '400':
           description: 'Bad Request. The direct_chat_id parameter is invalid.'
         '401':
@@ -766,24 +820,8 @@ paths:
                 - content
                 - author_id
       responses:
-        '200':
+        '204':
           description: 'Message sent successfully.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  content:
-                    type: string
-                  date:
-                    type: string
-                    format: date-time
-                  author_id:
-                    type: integer
-                  direct_chat:
-                    type: integer
         '400':
           description: 'Bad Request. The direct_chat_id parameter is invalid.'
         '401':
@@ -806,7 +844,7 @@ paths:
           required: true
       responses:
         '200':
-          description: 'Ok. Return list of messages in JSON format'
+          description: 'Ok. Return list of messages'
           content:
             application/json:
               schema:
@@ -856,7 +894,7 @@ paths:
                 - content
                 - author_id
       responses:
-        '200':
+        '204':
           description: 'Message sent successfully.'
           content:
             application/json:
@@ -1129,7 +1167,7 @@ paths:
               examples:
                 302Success:
                   description: 'Successful deletion. Redirect to posts list.'
-                  value: '/posts'
+                  value: '/posts/users/{user_id}'
                 302Failure:
                   description: 'Failed deletion. Redirect to post view.'
                   value: '/posts/{post_id}'
@@ -1163,7 +1201,7 @@ paths:
                 - post_id
                 - media
       responses:
-        '200':
+        '201':
           description: 'Media added successfully.'
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
@@ -1187,10 +1225,6 @@ paths:
       responses:
         '200':
           description: 'Ok. Show list of posts UI'
-          content:
-            text/html:
-              schema:
-                type: string
         '400':
           description: 'Bad Request. The user_id parameter is invalid.'
         '401':
@@ -1276,14 +1310,8 @@ paths:
                 - content
                 - author_id
       responses:
-        '302':
-          description: 'The comment was successfully added. Redirecting to the added comment.'
-          headers:
-            Location:
-              description: 'URL of the added comment.'
-              schema:
-                type: string
-                example: '/comments/{comment_id}'
+        '201': 
+          description: Comment added succssefully.
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1312,14 +1340,8 @@ paths:
                 - comment_id
                 - content
       responses:
-        '302':
-          description: 'The comment was successfully updated. Redirecting to the updated comment.'
-          headers:
-            Location:
-              description: 'URL of the updated comment.'
-              schema:
-                type: string
-                example: '/comments/{comment_id}'
+        '204': 
+          description: 'Comment succssefuly edited'
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1381,14 +1403,8 @@ paths:
           schema:
             type: integer
       responses:
-        '302':
-          description: 'The comment was successfully deleted. Redirecting to the post containing the comment.'
-          headers:
-            Location:
-              description: 'URL of the post containing the deleted comment.'
-              schema:
-                type: string
-                example: '/posts/{post_id}/comments'
+        '204': 
+          description: 'Comment successfully deleted'
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1417,20 +1433,8 @@ paths:
                 - post_id
                 - user_id
       responses:
-        '200':
+        '204':
           description: 'The post was successfully liked.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  post_id:
-                    type: integer
-                  user_id:
-                    type: integer
-                  liked_at:
-                    type: string
-                    format: date-time
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1459,20 +1463,8 @@ paths:
                 - comment_id
                 - user_id
       responses:
-        '200':
+        '204':
           description: 'The comment was successfully liked.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  comment_id:
-                    type: integer
-                  user_id:
-                    type: integer
-                  liked_at:
-                    type: string
-                    format: date-time
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1528,17 +1520,6 @@ paths:
       responses:
         '302':
           description: 'Redirect after sending the follow request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful request. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed request. Redirect to user profile.'
-                  value: '/users/{user_id}'
         '400':
           description: 'Bad Request. The request body parameters are invalid.'
         '401':
@@ -1570,20 +1551,8 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '302':
-          description: 'Redirect after accepting the follow request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful acceptance. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed acceptance. Redirect to user profile.'
-                  value: '/users/{user_id}'
-        
+        '200': 
+          description: 'Follow request accepted'
         '400':
           description: 'Bad Request. The request body parameters are invalid.'
         '401':
@@ -1616,20 +1585,8 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '302':
-          description: 'Redirect after rejecting the follow request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful rejection. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed rejection. Redirect to user profile.'
-                  value: '/users/{user_id}'
-
+        '200': 
+          description: 'Follow request rejected'
         '400':
           description: 'Bad Request. The request body parameters are invalid.'
         '401':
@@ -1654,19 +1611,8 @@ paths:
             type: integer
           required: true
       responses:
-        '302':
-          description: 'Redirect after removing the follower.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful removal. Redirect to connections view.'
-                  value: '/users/{user_id}/connections'
-                302Failure:
-                  description: 'Failed removal. Redirect to connections view.'
-                  value: '/users/{user_id}/connections'
+        '204':
+          description: 'Follower removed'
         '400':
           description: 'Bad Request. The user_id parameter is invalid.'
         '401':
@@ -1688,19 +1634,8 @@ paths:
             type: integer
           required: true
       responses:
-        '302':
-          description: 'Redirect after deleting the follow request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful deletion. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed deletion. Redirect to user profile.'
-                  value: '/users/{user_id}'
+        '204':
+          description: 'Follow request deleted.'
 
         '400':
           description: 'Bad Request. The user_id parameter is invalid.'
@@ -1731,19 +1666,9 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '302':
-          description: 'Redirect after blocking the user.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful block. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed block. Redirect to user profile.'
-                  value: '/users/{user_id}'
+        '204':
+          description: 'User has been blocked.'
+          
   
   /users/{user_id}/unblock:
     delete:
@@ -1759,19 +1684,8 @@ paths:
             type: integer
           required: true
       responses:
-        '302':
-          description: 'Redirect after unblocking the user.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful unblock. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed unblock. Redirect to user profile.'
-                  value: '/users/{user_id}'
+        '204':
+          description: 'User has been unblocked'
         '400':
           description: 'Bad Request. The request body parameters are invalid.'
         '401':
@@ -1845,7 +1759,7 @@ paths:
                 - user_id_dest
                 - typeN
       responses:
-        '200':
+        '201':
           description: 'Notification created successfully.'       
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
@@ -1862,9 +1776,8 @@ paths:
       tags:
         - 'M07: Notifications'
       responses:
-        '200':
-          description: 'Notification marked as read.'
-          
+        '204':
+          description: 'Notification marked as read.'       
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
         '401':
@@ -1901,7 +1814,7 @@ paths:
     delete:
       operationId: R705
       summary: 'R705: Delete Notification'
-      description: 'Delete a specific notification. Access: ADM'
+      description: 'Delete a specific notification. Access: USR, ADM'
       tags:
         - 'M07: Notifications'
       parameters:
@@ -1911,7 +1824,7 @@ paths:
             type: integer
           required: true
       responses:
-        '200':
+        '204':
           description: 'Notification deleted successfully.'
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
