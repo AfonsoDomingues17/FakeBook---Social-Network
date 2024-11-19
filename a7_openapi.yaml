@@ -178,7 +178,7 @@ paths:
     get:
       operationId: R106
       summary: 'R106: View User Profile'
-      description: 'Retrieves the profile information for a specified user. Access: PUB, USR'
+      description: 'Retrieves the profile information for a specified user. Access: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
       parameters:
@@ -212,8 +212,13 @@ paths:
             type: integer
             description: 'The ID of the user whose account is being deleted.'
       responses:
-        '204':
-          description: 'User account deleted successfully.'
+        '302':
+          description: 'User account deleted successfully. Redirecting to the home page.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example: '/'
         '403':
           description: 'Current user is not allowed to delete the account.'
         '404':
@@ -250,7 +255,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -267,40 +272,30 @@ paths:
                 is_public:
                   type: boolean
       responses:
-        '200':
-          description: 'Profile details updated successfully.'
+        '302':
+          description: 'Profile details updated successfully. Redirecting to the user profile page.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example: '/users/{user_id}'
         '403':
           description: 'Error - Not the account owner.'
         '404':
           description: 'User not found.'
 
   /recover-password:
-    get:
-      operationId: R110
-      summary: 'R110: Get Recover Password Form'
-      description: 'Provides the password recovery form. Access: PUB'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      responses:
-        '200':
-          description: 'Password recovery form UI displayed.'
-        '400':
-          description: 'Bad Request. Invalid request parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The password recovery form could not be found.'
-
+    
     post:
-      operationId: R111
-      summary: 'R111: Recover Password'
-      description: 'Sends a password recovery email to the user. Access: PUB'
+      operationId: R110
+      summary: 'R110: Recover Password'
+      description: 'Sends a password recovery email to the user. Access: USR'
       tags:
         - 'M01: Authentication and Individual Profile'
       requestBody:
         required: true
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -310,14 +305,67 @@ paths:
               required:
                 - email
       responses:
-        '200':
-          description: 'Password recovery email sent successfully.'
+        '302':
+          description: 'Password recovery email sent successfully. Redirecting to the login page.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example: '/login'
         '404':
           description: 'No account related to provided email found.'
+
+  /recover-password/users/{user_id}:
+    put:
+      operationId: updatePassword
+      summary: 'R111: Update Password'
+      description: 'Update the password for a specific user. Access: OWN'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: 'The ID of the user whose password is being updated.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: 'The new password for the user.'
+                confirm_password:
+                  type: string
+                  description: 'Confirmation of the new password.'
+              required:
+                - password
+                - confirm_password
+      responses:
+        '302':
+          description: 'Password updated successfully. Redirecting to the login page.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example: '/login'
+        '400':
+          description: 'Bad Request. The request body parameters are invalid or missing.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '403':
+          description: 'Forbidden. The user does not have permission to update this password.'
+        '404':
+          description: 'Not Found. The specified user does not exist.'
   
+    
   #M02: Admin and Static Pages
 
-  /users:
+  /admin/users:
     get:
       operationId: R201
       summary: 'R201: View All Users (Admin Access)'
@@ -326,42 +374,10 @@ paths:
         - 'M02: Admin and Static Pages'
       responses:
         '200':
-          description: 'List of users retrieved successfully.'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    user_id:
-                      type: integer
-                    username:
-                      type: string
-                    email:
-                      type: string
-                    photo_url:
-                      type: string
-                      format: binary
-                    is_banned;:
-                      type: boolean
-                example:
-                  - user_id: 1
-                    username: 'johndoe'
-                    email: 'johndoe@example.com'
-                    bio: 'Nature lover'
-                    is_public: true
-                    status: 'active'
-                  - user_id: 2
-                    username: 'janedoe'
-                    email: 'janedoe@example.com'
-                    bio: 'Photographer'
-                    is_public: false
-                    status: 'banned'
+          description: 'List of users retrieved successfully.'     
         '403':
           description: 'Denied - Not an admin.'
 
-  
   
   /admin/users/ban:
     post:
@@ -441,17 +457,7 @@ paths:
       responses:
         '200':
           description: 'List of all flagged comments retrieved successfully.'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    comment_id:
-                      type: integer
-                    
-                    
+                  
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
         '401':
@@ -471,15 +477,6 @@ paths:
       responses:
         '200':
           description: 'List of all flagged posts retrieved successfully.'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    post_id:
-                      type: integer
                    
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
@@ -497,19 +494,7 @@ paths:
         - 'M02: Admin and Static Pages'
       responses:
         '200':
-          description: 'List of all flagged users retrieved successfully.'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    user_id:
-                      type: integer
-                    username:
-                      type: string
-                             
+          description: 'List of all flagged users retrieved successfully.'                     
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
         '401':
@@ -543,15 +528,6 @@ paths:
       responses:
         '200':
           description: 'List of reports for the flagged content retrieved successfully.'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    report_id:
-                      type: integer
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
         '401':
@@ -590,7 +566,7 @@ paths:
                 - id
                 - resolved_at
       responses:
-        '200':
+        '204':
           description: 'Reports for the flagged content marked as resolved successfully.'
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
@@ -655,13 +631,20 @@ paths:
 
   #M03: Direct Messaging and Group Chat
 
-  /directChats:
+  /directChats/users/{user_id}:
     get:
       operationId: R301
-      summary: 'R301: List Direct Chats'
-      description: 'Retrieve a list of direct chats for the authenticated user. Access: USR'
+      summary: 'R301: List Direct Chats for a Specific User'
+      description: 'Retrieve a list of direct chats for a specific user. Access: USR'
       tags:
         - 'M03: Direct Messaging and Group Chat'
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: 'The ID of the user to retrieve direct chats for.'
       responses:
         '200':
           description: 'Ok. Show list of direct chats UI'
@@ -671,8 +654,9 @@ paths:
           description: 'Unauthorized. The user is not authenticated.'
         '404':
           description: 'Not Found. The direct chats could not be found.'
+  
          
-
+  /directChats/create:
     post:
       operationId: R302
       summary: 'R302: Create Direct Chat'
@@ -714,7 +698,7 @@ paths:
         '404':
           description: 'Not Found. The specified user does not exist.'
 
-  /directChats/{direct_chat_id}/add/{user_id}:
+  /directChats/{direct_chat_id}:
     get:
       operationId: R303
       summary: 'R303: View Direct Chat'
@@ -727,26 +711,53 @@ paths:
           required: true
           schema:
             type: integer
-        - in: path
-          name: user_id
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: 'Ok. Show direct chat details UI'
         '400':
-          description: 'Bad Request. The direct_chat_id or user_id parameter is invalid.'
+          description: 'Bad Request. The direct_chat_id parameter is invalid.'
         '401':
           description: 'Unauthorized. The user is not authenticated.'
         '404':
-          description: 'Not Found. The specified direct chat or user does not exist.'
-     
+          description: 'Not Found. The specified direct chat does not exist.'
+    
+    
+    delete:
+      operationId: R304
+      summary: 'R304: Delete Direct Chat'
+      description: 'Delete a specific direct chat. Access: USR'
+      tags:
+        - 'M03: Direct Messaging and Group Chat'
+      parameters:
+        - in: path
+          name: direct_chat_id
+          required: true
+          schema:
+            type: integer
+          description: 'The ID of the direct chat to delete.'
+      responses:
+        '302':
+          description: 'Redirect after deleting the direct chat.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect to page of direct chats.'
+                  value: '/directChats'
+        '400':
+          description: 'Bad Request. The direct_chat_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified direct chat does not exist.'
+      
 
   /directChats/{direct_chat_id}/messages:
     get:
-      operationId: R304
-      summary: 'R304: List Messages in Direct Chat'
+      operationId: R305
+      summary: 'R305: List Messages in Direct Chat'
       description: 'Retrieve a list of messages in a specific direct chat. Access: USR'
       tags:
         - 'M03: Direct Messaging and Group Chat'
@@ -786,8 +797,8 @@ paths:
 
 
     post:
-      operationId: R305
-      summary: 'R305: Send Message in Direct Chat'
+      operationId: R306
+      summary: 'R306: Send Message in Direct Chat'
       description: 'Send a new message in a specific direct chat. Access: USR'
       tags:
         - 'M03: Direct Messaging and Group Chat'
@@ -809,24 +820,8 @@ paths:
                 - content
                 - author_id
       responses:
-        '200':
+        '204':
           description: 'Message sent successfully.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  content:
-                    type: string
-                  date:
-                    type: string
-                    format: date-time
-                  author_id:
-                    type: integer
-                  direct_chat:
-                    type: integer
         '400':
           description: 'Bad Request. The direct_chat_id parameter is invalid.'
         '401':
@@ -836,8 +831,8 @@ paths:
 
   /groups/{group_id}/messages:
     get:
-      operationId: R306
-      summary: 'R306: List Messages in Group'
+      operationId: R307
+      summary: 'R307: List Messages in Group'
       description: 'Retrieve a list of messages in a specific group. Access: USR'
       tags:
         - 'M03: Direct Messaging and Group Chat'
@@ -849,7 +844,7 @@ paths:
           required: true
       responses:
         '200':
-          description: 'Ok. Return list of messages in JSON format'
+          description: 'Ok. Return list of messages'
           content:
             application/json:
               schema:
@@ -876,8 +871,8 @@ paths:
           description: 'Not Found. The specified group does not exist.'              
 
     post:
-      operationId: R307
-      summary: 'R307: Send Message in Group'
+      operationId: R308
+      summary: 'R308: Send Message in Group'
       description: 'Send a new message in a specific group. Access: USR'
       tags:
         - 'M03: Direct Messaging and Group Chat'
@@ -899,7 +894,7 @@ paths:
                 - content
                 - author_id
       responses:
-        '200':
+        '204':
           description: 'Message sent successfully.'
           content:
             application/json:
@@ -923,10 +918,11 @@ paths:
           description: 'Unauthorized. The user is not authenticated.'
         '404':
           description: 'Not Found. The specified group does not exist.'
+
   /directChats/{direct_chat_id}/messages/{message_id}:
     delete:
-      operationId: R308
-      summary: 'R308: Delete Message in Direct Chat'
+      operationId: R309
+      summary: 'R309: Delete Message in Direct Chat'
       description: 'Delete a specific message in a direct chat. Access: OWN'
       tags:
         - 'M03: Direct Messaging and Group Chat'
@@ -952,8 +948,8 @@ paths:
           description: 'Not Found. The specified direct chat or message does not exist.' 
   /groups/{group_id}/messages/{message_id}:
     delete:
-      operationId: R309
-      summary: 'R309: Delete Message in Group'
+      operationId: R310
+      summary: 'R310: Delete Message in Group'
       description: 'Delete a specific message in a group. Access: OWN'
       tags:
         - 'M03: Direct Messaging and Group Chat'
@@ -981,10 +977,11 @@ paths:
   #M04: Post Management and Post Media Handling
 
   /posts:
+
     get:
       operationId: R401
       summary: 'R401: List Posts'
-      description: 'Retrieve a list of posts. Access: USR'
+      description: 'Retrieve a list of posts. Access: PUB'
       tags:
         - 'M04: Post Management and Post Media Handling'
       responses:
@@ -996,10 +993,27 @@ paths:
           description: 'Unauthorized. The user is not authenticated.'
         '404':
           description: 'Not Found. The posts could not be found.'
-         
-    post:
+    
+  /posts/create:
+    get:
       operationId: R402
-      summary: 'R402: Create Post'
+      summary: 'R402: Post Creation Form'
+      description: 'Retrieve the form for creating a new post. Access: USR'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      responses:
+        '200':
+          description: 'Post creation form UI displayed.'
+        '400':
+          description: 'Bad Request. Invalid request parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The post creation form could not be found.'
+
+    post:
+      operationId: R403
+      summary: 'R403: Create Post'
       description: 'Create a new post. Access: USR'
       tags:
         - 'M04: Post Management and Post Media Handling'
@@ -1043,9 +1057,9 @@ paths:
 
   /posts/{post_id}:
     get:
-      operationId: R403
-      summary: 'R403: View Post'
-      description: 'Retrieve details of a specific post. Access: USR'
+      operationId: R404
+      summary: 'R404: View Post'
+      description: 'Retrieve details of a specific post. Access: PUB'
       tags:
         - 'M04: Post Management and Post Media Handling'
       parameters:
@@ -1064,10 +1078,33 @@ paths:
         '404':
           description: 'Not Found. The specified post does not exist.'
            
-
+  /posts/{post_id}/edit:
+    get:
+      operationId: R405
+      summary: 'R405: Edit Post Form'
+      description: 'Retrieve the edit form for a specific post. Access: OWN'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      parameters:
+        - in: path
+          name: post_id
+          required: true
+          schema:
+            type: integer
+          description: 'The ID of the post to retrieve the edit form for.'
+      responses:
+        '200':
+          description: 'Show Edit form UI.'
+             
+        '400':
+          description: 'Bad Request. Invalid request parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified post does not exist.'
     put:
-      operationId: R404
-      summary: 'R404: Edit Post'
+      operationId: R406
+      summary: 'R406: Edit Post'
       description: 'Edit an existing post. Access: OWN'
       tags:
         - 'M04: Post Management and Post Media Handling'
@@ -1109,9 +1146,9 @@ paths:
         '404':
           description: 'Not Found. The specified post does not exist.'
     delete:
-      operationId: R405
-      summary: 'R405: Delete Post'
-      description: 'Delete a specific post. Access: OWN'
+      operationId: R407
+      summary: 'R407: Delete Post'
+      description: 'Delete a specific post. Access: OWN, ADM'
       tags:
         - 'M04: Post Management and Post Media Handling'
       parameters:
@@ -1130,7 +1167,7 @@ paths:
               examples:
                 302Success:
                   description: 'Successful deletion. Redirect to posts list.'
-                  value: '/posts'
+                  value: '/posts/users/{user_id}'
                 302Failure:
                   description: 'Failed deletion. Redirect to post view.'
                   value: '/posts/{post_id}'
@@ -1143,8 +1180,8 @@ paths:
 
   /posts/{post_id}/media:
     post:
-      operationId: R406
-      summary: 'R406: Add Media to Post'
+      operationId: R408
+      summary: 'R408: Add Media to Post'
       description: 'Add media to a specific post. Access: OWN'
       tags:
         - 'M04: Post Management and Post Media Handling'
@@ -1164,7 +1201,7 @@ paths:
                 - post_id
                 - media
       responses:
-        '200':
+        '201':
           description: 'Media added successfully.'
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
@@ -1172,11 +1209,11 @@ paths:
           description: 'Unauthorized. The user is not authenticated.'
         '404':
           description: 'Not Found. The specified post does not exist.'
-  /users/{user_id}/posts:
+  /posts/users/{user_id}:
     get:
-      operationId: R407
-      summary: 'R407: List Posts by User'
-      description: 'Retrieve a list of posts created by a specific user. Access: USR'
+      operationId: R409
+      summary: 'R409: List Posts by User'
+      description: 'Retrieve a list of posts created by a specific user. Access: PUB'
       tags:
         - 'M04: Post Management and Post Media Handling'
       parameters:
@@ -1188,10 +1225,6 @@ paths:
       responses:
         '200':
           description: 'Ok. Show list of posts UI'
-          content:
-            text/html:
-              schema:
-                type: string
         '400':
           description: 'Bad Request. The user_id parameter is invalid.'
         '401':
@@ -1204,8 +1237,8 @@ paths:
   /posts/{post_id}/comments:
     get:
       operationId: R501
-      summary: 'R501: View All Comments for a Post. Access: USR'
-      description: 'Retrieve all comments associated with a specific post.'
+      summary: 'R501: View All Comments for a Post.'
+      description: 'Retrieve all comments associated with a specific post. Access: PUB'
       tags:
         - 'M05: Commenting and Reactions'
       parameters:
@@ -1253,8 +1286,8 @@ paths:
   /posts/{post_id}/comments/create:
     post:
       operationId: R502
-      summary: 'R502: Add a Comment to a Post. Access: USR'
-      description: 'Allow users to add a new comment to a specific post.'
+      summary: 'R502: Add a Comment to a Post.'
+      description: 'Allow users to add a new comment to a specific post. Access: USR'
       tags:
         - 'M05: Commenting and Reactions'
       requestBody:
@@ -1277,14 +1310,8 @@ paths:
                 - content
                 - author_id
       responses:
-        '302':
-          description: 'The comment was successfully added. Redirecting to the added comment.'
-          headers:
-            Location:
-              description: 'URL of the added comment.'
-              schema:
-                type: string
-                example: '/comments/{comment_id}'
+        '201': 
+          description: Comment added succssefully.
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1293,8 +1320,8 @@ paths:
   /comments/{comment_id}/edit:
     put:
       operationId: R503
-      summary: 'R503: Edit a Comment. Access: OWN'
-      description: 'Allow users to edit the content of an existing comment.'
+      summary: 'R503: Edit a Comment.'
+      description: 'Allow users to edit the content of an existing comment. Access: OWN'
       tags:
         - 'M05: Commenting and Reactions'
       requestBody:
@@ -1313,14 +1340,8 @@ paths:
                 - comment_id
                 - content
       responses:
-        '302':
-          description: 'The comment was successfully updated. Redirecting to the updated comment.'
-          headers:
-            Location:
-              description: 'URL of the updated comment.'
-              schema:
-                type: string
-                example: '/comments/{comment_id}'
+        '204': 
+          description: 'Comment succssefuly edited'
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1331,7 +1352,7 @@ paths:
     get:
       operationId: R504
       summary: 'R504: Retrieve a Specific Comment'
-      description: 'Retrieve the details of a specific comment by its ID.'
+      description: 'Retrieve the details of a specific comment by its ID. Access: PUB'
       tags:
         - 'M05: Commenting and Reactions'
       parameters:
@@ -1368,20 +1389,13 @@ paths:
         '404':
           description: 'The specified comment does not exist.'    
 
-  /posts/{post_id}/comments/{comment_id}/delete:
     delete:
       operationId: R505
-      summary: 'R505: Delete a Comment. Access: OWN'
-      description: 'Allow users to delete an existing comment.'
+      summary: 'R505: Delete a Comment.'
+      description: 'Allow users to delete an existing comment. Access: OWN, ADM'
       tags:
         - 'M05: Commenting and Reactions'
       parameters:
-        - name: post_id
-          in: path
-          required: true
-          description: 'The ID of the post containing the comment to be deleted.'
-          schema:
-            type: integer
         - name: comment_id
           in: path
           required: true
@@ -1389,14 +1403,8 @@ paths:
           schema:
             type: integer
       responses:
-        '302':
-          description: 'The comment was successfully deleted. Redirecting to the post containing the comment.'
-          headers:
-            Location:
-              description: 'URL of the post containing the deleted comment.'
-              schema:
-                type: string
-                example: '/posts/{post_id}/comments'
+        '204': 
+          description: 'Comment successfully deleted'
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1405,8 +1413,8 @@ paths:
   /posts/{post_id}/like:
     post:
       operationId: R506
-      summary: 'R506: Like a Post. Access: USR'
-      description: 'Allow users to like a specific post.'
+      summary: 'R506: Like a Post.'
+      description: 'Allow users to like a specific post. Access: USR'
       tags:
         - 'M05: Commenting and Reactions'
       requestBody:
@@ -1425,20 +1433,8 @@ paths:
                 - post_id
                 - user_id
       responses:
-        '200':
+        '204':
           description: 'The post was successfully liked.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  post_id:
-                    type: integer
-                  user_id:
-                    type: integer
-                  liked_at:
-                    type: string
-                    format: date-time
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1447,8 +1443,8 @@ paths:
   /comments/{comment_id}/like:
     post:
       operationId: R507
-      summary: 'R507: Like a Comment. Access: USR'
-      description: 'Allow users to like a specific comment.'
+      summary: 'R507: Like a Comment.'
+      description: 'Allow users to like a specific comment. Access: USR'
       tags:
         - 'M05: Commenting and Reactions'
       requestBody:
@@ -1467,20 +1463,8 @@ paths:
                 - comment_id
                 - user_id
       responses:
-        '200':
+        '204':
           description: 'The comment was successfully liked.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  comment_id:
-                    type: integer
-                  user_id:
-                    type: integer
-                  liked_at:
-                    type: string
-                    format: date-time
         '400':
           description: 'Validation failed. Required fields are missing or invalid.'
         '404':
@@ -1536,17 +1520,6 @@ paths:
       responses:
         '302':
           description: 'Redirect after sending the follow request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful request. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed request. Redirect to user profile.'
-                  value: '/users/{user_id}'
         '400':
           description: 'Bad Request. The request body parameters are invalid.'
         '401':
@@ -1578,20 +1551,8 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '302':
-          description: 'Redirect after accepting the follow request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful acceptance. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed acceptance. Redirect to user profile.'
-                  value: '/users/{user_id}'
-        
+        '200': 
+          description: 'Follow request accepted'
         '400':
           description: 'Bad Request. The request body parameters are invalid.'
         '401':
@@ -1624,20 +1585,8 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '302':
-          description: 'Redirect after rejecting the follow request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful rejection. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed rejection. Redirect to user profile.'
-                  value: '/users/{user_id}'
-
+        '200': 
+          description: 'Follow request rejected'
         '400':
           description: 'Bad Request. The request body parameters are invalid.'
         '401':
@@ -1652,7 +1601,7 @@ paths:
     delete:
       operationId: R605
       summary: 'R605: Remove Follower'
-      description: 'Remove a follower from the specified user. Access: OWN'
+      description: 'Remove a follower from the specified user. Access: USR'
       tags:
         - 'M06: Connections'
       parameters:
@@ -1662,19 +1611,8 @@ paths:
             type: integer
           required: true
       responses:
-        '302':
-          description: 'Redirect after removing the follower.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful removal. Redirect to connections view.'
-                  value: '/users/{user_id}/connections'
-                302Failure:
-                  description: 'Failed removal. Redirect to connections view.'
-                  value: '/users/{user_id}/connections'
+        '204':
+          description: 'Follower removed'
         '400':
           description: 'Bad Request. The user_id parameter is invalid.'
         '401':
@@ -1696,19 +1634,8 @@ paths:
             type: integer
           required: true
       responses:
-        '302':
-          description: 'Redirect after deleting the follow request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful deletion. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed deletion. Redirect to user profile.'
-                  value: '/users/{user_id}'
+        '204':
+          description: 'Follow request deleted.'
 
         '400':
           description: 'Bad Request. The user_id parameter is invalid.'
@@ -1739,19 +1666,9 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '302':
-          description: 'Redirect after blocking the user.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful block. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed block. Redirect to user profile.'
-                  value: '/users/{user_id}'
+        '204':
+          description: 'User has been blocked.'
+          
   
   /users/{user_id}/unblock:
     delete:
@@ -1767,19 +1684,8 @@ paths:
             type: integer
           required: true
       responses:
-        '302':
-          description: 'Redirect after unblocking the user.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful unblock. Redirect to user profile.'
-                  value: '/users/{user_id}'
-                302Failure:
-                  description: 'Failed unblock. Redirect to user profile.'
-                  value: '/users/{user_id}'
+        '204':
+          description: 'User has been unblocked'
         '400':
           description: 'Bad Request. The request body parameters are invalid.'
         '401':
@@ -1791,13 +1697,20 @@ paths:
   
   #M07: Notifications
 
-  /notifications:
+  /notifications/users/{user_id}:
     get:
       operationId: R701
-      summary: 'R701: List Notifications'
+      summary: 'R701: List Notifications for a specific user'
       description: 'Retrieve a list of notifications for the authenticated user. Access: USR'
       tags:
         - 'M07: Notifications'
+      parameters:
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: integer
+        description: 'The ID of the user to retrieve notifications for.'
       responses:
         '200':
           description: 'Ok. Show list of notifications UI'
@@ -1808,7 +1721,7 @@ paths:
         '404':
           description: 'Not Found. The notifications could not be found.'
          
-  /admin/notifications:
+  /notifications/create:
     post:
       operationId: R702
       summary: 'R702: Create Notification'
@@ -1846,33 +1759,8 @@ paths:
                 - user_id_dest
                 - typeN
       responses:
-        '200':
-          description: 'Notification created successfully.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  content:
-                    type: string
-                  user_id_dest:
-                    type: integer
-                  user_id_src:
-                    type: integer
-                  typeN:
-                    type: string
-                  is_read:
-                    type: boolean
-                  post_id:
-                    type: integer
-                  message_id:
-                    type: integer
-                  comment_id:
-                    type: integer
-                  group_id:
-                    type: integer
+        '201':
+          description: 'Notification created successfully.'       
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
         '401':
@@ -1888,20 +1776,8 @@ paths:
       tags:
         - 'M07: Notifications'
       responses:
-        '200':
-          description: 'Notification marked as read.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notification_id:
-                    type: integer
-                  is_read:
-                    type: boolean
-                required:
-                  - notification_id
-                  - is_read
+        '204':
+          description: 'Notification marked as read.'       
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
         '401':
@@ -1909,11 +1785,36 @@ paths:
         '404':
           description: 'Not Found. The specified notification does not exist.'
   
-  /notifications/{notification_id}/delete:
-    delete:
+  /notifications/{notification_id}:
+    get:
       operationId: R704
-      summary: 'R704: Delete Notification'
-      description: 'Delete a specific notification. Access: ADM'
+      summary: 'R704: Retrieve Notification'
+      description: 'Retrieve details of a specific notification. Access: USR'
+      tags:
+        - 'M07: Notifications'
+      parameters:
+        - in: path
+          name: notification_id
+          required: true
+          schema:
+            type: integer
+          description: 'The ID of the notification to retrieve.'
+      responses:
+        '200':
+          description: 'Notification details retrieved successfully.'
+        '400':
+          description: 'Bad Request. The notification_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '403':
+          description: 'Forbidden. The user does not have permission to view this notification.'
+        '404':
+          description: 'Not Found. The specified notification does not exist.'
+      
+    delete:
+      operationId: R705
+      summary: 'R705: Delete Notification'
+      description: 'Delete a specific notification. Access: USR, ADM'
       tags:
         - 'M07: Notifications'
       parameters:
@@ -1923,7 +1824,7 @@ paths:
             type: integer
           required: true
       responses:
-        '200':
+        '204':
           description: 'Notification deleted successfully.'
         '400':
           description: 'Bad Request. The request could not be understood or was missing required parameters.'
@@ -2279,54 +2180,6 @@ paths:
         responses:
           '200':
             description: 'Ok. Returns a paginated list of groups with a fixed number of items per page.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    groups:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          name:
-                            type: string
-                          description:
-                            type: string
-                          owner_id:
-                            type: integer
-                    pagination:
-                      type: object
-                      properties:
-                        current_page:
-                          type: integer
-                          example: 1
-                        total_pages:
-                          type: integer
-                          example: 5
-                        items_per_page:
-                          type: integer
-                          example: 10
-                        total_groups:
-                          type: integer
-                          example: 50
-                example:
-                  groups:
-                    - id: 1
-                      name: 'Group 1'
-                      description: 'This is Group 1.'
-                      owner_id: 123
-                    - id: 2
-                      name: 'Group 2'
-                      description: 'This is Group 2.'
-                      owner_id: 124
-                  pagination:
-                    current_page: 1
-                    total_pages: 5
-                    items_per_page: 10
-                    total_groups: 50
           '401':
             description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.'
           '404':
@@ -2334,10 +2187,35 @@ paths:
           '500':
             description: 'Internal Server Error. An unexpected error occurred on the server.'
   
+  /groups/users/{user_id}:
+    get:
+      operationId: R1002
+      summary: 'R1002: View All Groups for a Specific User'
+      description: 'Retrieve a list of all groups that a specific user is a member of. Access: USR'
+      tags:
+        - 'M10: Group Management and Participation'
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: 'The ID of the user to retrieve groups for.'
+      responses:
+        '200':
+          description: 'Ok. Returns a list of groups for the specified user.'        
+        '400':
+          description: 'Bad Request. Invalid query parameters.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user or groups could not be found.'
+
+  
   /groups/{group_id}:
       get:
-        operationId: R1002
-        summary: 'R1002: View Group'
+        operationId: R1003
+        summary: 'R1003: View Group'
         description: 'Show the individual group page. Access: USR can view only public groups, OWN and MEM can also view private ones'
         tags:
           - 'M10: Group Management and Participation'
@@ -2360,8 +2238,8 @@ paths:
           
 
       delete:
-        operationId: R1003
-        summary: 'R1003: Delete Group'
+        operationId: R1004
+        summary: 'R1004: Delete Group'
         description: 'Allows group owners to delete their group. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
@@ -2387,10 +2265,10 @@ paths:
           '403':
             description: 'Forbidden. Only the group owner can delete this group.'
 
-  /groups/edit/{group_id}:
+  /groups/{group_id}/edit:
       get:
-        operationId: R1004
-        summary: 'R1004: Get Edit Group Form'
+        operationId: R1005
+        summary: 'R1005: Edit Group Form'
         description: 'Retrieve the edit form for a specific group. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
@@ -2412,8 +2290,8 @@ paths:
             description: 'Not Found. The specified group does not exist.'
  
       put:
-        operationId: R1005
-        summary: 'R1005: Edit Group'
+        operationId: R1006
+        summary: 'R1006: Edit Group'
         description: 'Allows group owners and moderators to edit group details. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
@@ -2457,8 +2335,8 @@ paths:
 
   /groups/create:
       get:
-        operationId: R1006
-        summary: 'R1006: Create Group form'
+        operationId: R1007
+        summary: 'R1007: Create Group form'
         description: 'Retrieve the Create Group form. Access: USR'
         tags:
           - 'M10: Group Management and Participation'
@@ -2472,8 +2350,8 @@ paths:
             description: 'Not Found. The specified resource does not exist.'
 
       post:
-        operationId: R1007
-        summary: 'R1007: Create Group Action'
+        operationId: R1008
+        summary: 'R1008: Create Group Action'
         description: 'Processes the create group form submission. Access: USR'
         tags:
           - 'M10: Group Management and Participation'
@@ -2518,8 +2396,8 @@ paths:
 
   /groups/{group_id}/members:
       post:
-        operationId: R1008
-        summary: 'R1008: Add Member to Group'
+        operationId: R1009
+        summary: 'R1009: Add Member to Group'
         description: 'Allows group owners to add members to the group. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
@@ -2553,8 +2431,8 @@ paths:
 
   /groups/{group_id}/members/{user_id}:
       delete:
-        operationId: R1009
-        summary: 'R1009: Remove Member from Group'
+        operationId: R1010
+        summary: 'R1010: Remove Member from Group'
         description: 'Allows group owners to remove members from the group. Access: OWN'
         tags:
           - 'M10: Group Management and Participation'
