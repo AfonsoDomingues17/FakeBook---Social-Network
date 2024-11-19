@@ -12,6 +12,14 @@
       </span>
     @endif
 
+    <label for="username">Username</label>
+    <input id="username" type="text" name="username" value="{{ old('username') }}" required>
+    @if ($errors->has('username'))
+      <span class="error">
+          {{ $errors->first('username') }}
+      </span>
+    @endif
+
     <label for="email">E-Mail Address</label>
     <input id="email" type="email" name="email" value="{{ old('email') }}" required>
     @if ($errors->has('email'))
@@ -30,6 +38,14 @@
 
     <label for="password-confirm">Confirm Password</label>
     <input id="password-confirm" type="password" name="password_confirmation" required>
+
+    <div class="radio-group">
+      <label for="is_public">Visibility</label>
+      <label for="public">Public</label>
+      <input type="radio" id="public" name="is_public" value="public" required>
+      <label for="private">Private</label>
+      <input type="radio" id="private" name="is_public" value="private" required>
+    </div>
 
     <button type="submit">
       Register
