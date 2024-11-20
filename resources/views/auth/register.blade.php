@@ -4,6 +4,8 @@
 <form method="POST" action="{{ route('register') }}">
     {{ csrf_field() }}
 
+  
+    <img src="https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg" alt="">
     <label for="name">Name</label>
     <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
     @if ($errors->has('name'))
@@ -11,7 +13,7 @@
           {{ $errors->first('name') }}
       </span>
     @endif
-
+    
     <label for="username">Username</label>
     <input id="username" type="text" name="username" value="{{ old('username') }}" required>
     @if ($errors->has('username'))
@@ -38,6 +40,22 @@
 
     <label for="password-confirm">Confirm Password</label>
     <input id="password-confirm" type="password" name="password_confirmation" required>
+
+    <label for="bio">Bio</label>
+    <input id="bio" type="text" name="bio" required>
+    @if ($errors->has('bio'))
+    <span class="error">
+        {{ $errors->first('bio') }}
+    </span>
+    @endif
+
+    <label for="age">Age</label>
+    <input id="age" type="number" name="age" value="{{ old('age') }}" required>
+    @if ($errors->has('age'))
+      <span class="error">
+          {{ $errors->first('age') }}
+      </span>
+    @endif
 
     <div class="radio-group">
       <label for="is_public">Visibility</label>

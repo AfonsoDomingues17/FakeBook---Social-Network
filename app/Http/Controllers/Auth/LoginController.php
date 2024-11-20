@@ -19,11 +19,12 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect('/cards');
+            return redirect()->route('profile', ['user_id' => Auth::id()]);
         } else {
             return view('auth.login');
         }
     }
+
 
     /**
      * Handle an authentication attempt.
@@ -38,7 +39,8 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
  
-            return redirect()->intended('/cards');
+            return redirect()->route('homepage')
+                ->withSuccess('You have logged in successfully!');
         }
  
         return back()->withErrors([
