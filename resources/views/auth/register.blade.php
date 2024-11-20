@@ -5,7 +5,9 @@
     {{ csrf_field() }}
 
   
-    <img src="https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg" alt="">
+    <img id ="p_picture_review" src="https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg" alt="preview of profile picture" >
+  
+
     <label for="name">Name</label>
     <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
     @if ($errors->has('name'))
@@ -70,4 +72,5 @@
     </button>
     <a class="button button-outline" href="{{ route('login') }}">Login</a>
 </form>
+
 @endsection

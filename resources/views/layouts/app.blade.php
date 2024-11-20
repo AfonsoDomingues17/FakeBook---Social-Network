@@ -23,7 +23,7 @@
     <body>
         <main>
             <header>
-                <h1><a href="{{ url('/homepage') }}">FakeBook!</a></h1>
+                <h1><a href="{{ url('/') }}">FakeBook!</a></h1>
                 @if (Auth::check())
                     <a class="button" href="{{ url('/logout') }}"> Logout </a> <a href="{{url('/users/' . Auth::user()->id)}}"><span>{{ Auth::user()->name }}</span></a>
                 @endif

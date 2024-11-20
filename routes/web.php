@@ -22,7 +22,7 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 // Home
-Route::get('/homepage', [UserController::class, 'getUsers'])->name('homepage');
+Route::get('/', [UserController::class, 'getUsers'])->name('homepage');
 
 // User
 Route::get('/users/{user_id}/edit', [UserController::class, 'showEditProfileForm'])->name('editprofile');
