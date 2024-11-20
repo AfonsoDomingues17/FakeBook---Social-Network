@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ItemController;
@@ -20,13 +22,14 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 // Home
-Route::redirect('/', '/login');
+Route::get('/', [UserController::class, 'getUsers'])->name('homepage');
 
-// Cards
-Route::controller(CardController::class)->group(function () {
-    Route::get('/cards', 'list')->name('cards');
-    Route::get('/cards/{id}', 'show');
-});
+// User
+Route::get('/users/{user_id}/edit', [UserController::class, 'showEditProfileForm'])->name('editprofile');
+Route::put('/users/edit', [UserController::class, 'updateProfile'])->name('updateprofile');
+Route::get('/users/{user_id}', [UserController::class, 'showProfile'])->name('profile');    
+
+
 
 
 // API
@@ -51,5 +54,5 @@ Route::controller(LoginController::class)->group(function () {
 
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
-    Route::post('/register', 'register');
+    Route::post('/register', [RegisterController::class, 'register']);
 });

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log; // Import the Log facade
+
 
 use Illuminate\View\View;
 
@@ -27,28 +29,38 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $request->validate([
+        Log::info('Incoming request data', $request->all());
+
+        $request->merge([
+            'is_public' => $request->is_public === 'public' ? true : false,
+        ]);
+        
+        $validatedData = $request->validate([
             'name' => 'required|string|max:250',
             'username' => 'required|string|max:250|unique:users',
             'email' => 'required|email|max:250|unique:users',
             'password' => 'required|min:8|confirmed',
             'age' => 'required|integer|min:13',
+            'bio' => 'string|max:250',
             'is_public' => 'required|boolean'
         ]);
+        Log::info('Validation successful', $validatedData);
 
-        User::create([
+
+        $user = User::create([
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'age' => $request->age,
+            'bio' => $request->bio,
             'is_public' => $request->is_public
         ]);
 
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();
-        return redirect()->route('cards')
+        return redirect()->route('profile', ['user_id' => $user->id])
             ->withSuccess('You have successfully registered & logged in!');
     }
 }

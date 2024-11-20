@@ -3,13 +3,41 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\Console\Descriptor\ReStructuredTextDescriptor;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory;
-    public $timestamps  = false;   
+    use HasFactory, Notifiable;
+    public $timestamps  = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'username', 'email', 'password', 'age', 'bio', 'is_public',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
     
     public function notifications(){
         return $this->hasMany(Notification::class,'user_id_dest');
@@ -25,7 +53,7 @@ class User extends Model
         return $this->belongsToMany(Post::class, 'postLikes', 'user_id', 'post_id');
     }
     
-    public function initiatedConnections(){
+    public function following(){
         return $this->belongsToMany(
             User::class,
             'connection',
@@ -34,7 +62,7 @@ class User extends Model
         )->withPivot('createdAt', 'typeR');
     }
 
-    public function receivedConnections(){
+    public function followers(){
         return $this->belongsToMany(
             User::class,
             'connection',
