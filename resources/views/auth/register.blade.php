@@ -1,12 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{ route('register') }}">
+<form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
 
   
     <img id ="p_picture_review" src="https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg" alt="preview of profile picture" >
-  
+    <label for="photo_url">Profile Picture</label>
+    <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewProfilePicture(event)">
+
+    
 
     <label for="name">Name</label>
     <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
@@ -44,7 +47,7 @@
     <input id="password-confirm" type="password" name="password_confirmation" required>
 
     <label for="bio">Bio</label>
-    <input id="bio" type="text" name="bio">
+    <input id="bio" type="text" name="bio" value="{{old('bio')}}">
     @if ($errors->has('bio'))
     <span class="error">
         {{ $errors->first('bio') }}
@@ -73,4 +76,14 @@
     <a class="button button-outline" href="{{ route('login') }}">Login</a>
 </form>
 
+<script>
+function previewProfilePicture(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+        var output = document.getElementById('p_picture_review');
+        output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
 @endsection

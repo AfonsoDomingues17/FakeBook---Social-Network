@@ -4,7 +4,8 @@
 
 <section id="profile">
    
-        <img src="https://salaovirtual.org/wp-content/uploads/2022/01/Brasileiros-carecas-2.jpg" alt=""><br>
+        <img src="{{ Storage::url($user->photo_url) }}" alt="profile picture" width="200" height="200"><br>
+
         
         <span id="username">{{$user->username}}</span> <br>
         <a href="{{route('editprofile',['user_id' => $user->id])}}">Edit Profile</a> <br>

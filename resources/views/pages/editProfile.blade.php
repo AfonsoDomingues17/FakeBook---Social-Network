@@ -3,12 +3,14 @@
 @section('content')
 
 <section id="editprofile">
-    <form method="POST" action="{{ route('updateprofile') }}">
+    <form method="POST" action="{{ route('updateprofile') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     {{ method_field('PUT') }}
 
         <input type="hidden" name="id" value="{{ $user->id }}">
-        <img src="https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg" alt="">
+        <img id="p_picture_review" src="{{Storage::url($user->photo_url)}}" alt="profile picture" width="200" height="200">
+        <label for="photo_url">Profile Picture</label>
+        <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewProfilePicture(event)">
 
         <label for="username">username</label>
         <input id="username" type="text" name="username" value="{{ old('username', $user->username)}}" required>
@@ -67,5 +69,15 @@
     
     
 </section>
+<script>
+function previewProfilePicture(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+        var output = document.getElementById('p_picture_review');
+        output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
 
 @endsection
