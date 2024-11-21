@@ -14,12 +14,6 @@
             Following Posts
         @endif
     </h2>
-    <a href="{{ route('home', ['type' => 'public']) }}">
-        <button id="public-posts-btn">Public Posts</button>
-    </a>
-    <a href="{{ route('home', ['type' => 'following']) }}">
-        <button id="following-posts-btn">Following Posts</button>
-    </a>
     <section id="posts-container">
         @if($type === 'following' && !auth()->check())
             <h3>Login to see posts from accounts you follow</h3>
