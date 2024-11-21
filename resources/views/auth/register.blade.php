@@ -47,7 +47,7 @@
     <input id="password-confirm" type="password" name="password_confirmation" required>
 
     <label for="bio">Bio</label>
-    <input id="bio" type="text" name="bio" value="{{old('bio')}}" required>
+    <input id="bio" type="text" name="bio" value="{{old('bio')}}">
     @if ($errors->has('bio'))
     <span class="error">
         {{ $errors->first('bio') }}

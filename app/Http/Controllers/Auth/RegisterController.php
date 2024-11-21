@@ -41,7 +41,7 @@ class RegisterController extends Controller
             'email' => 'required|email|max:250|unique:users',
             'password' => 'required|min:8|confirmed',
             'age' => 'required|integer|min:13',
-            'bio' => 'string|max:250',
+            'bio' => 'nullable|string|max:250',
             'is_public' => 'required|boolean',
             'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
