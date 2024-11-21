@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -17,9 +18,35 @@ class PostController extends Controller
         return view('posts.index', compact('posts'));
     }
 
-    public function getPublicPosts()
+    public function getPublicPosts(Request $request = null)
     {
-        return Post::where('is_public', true)->get();
+        if ($request === null) {
+            $type = 'public';
+        }
+        else{
+            $type = $request->input('type');
+        }
+        if ($type === 'public') {
+            if (auth()->check()) {
+                $posts = Post::where('is_public', true)
+                    ->where('owner_id', '!=', auth()->id())
+                    ->get();
+            } else {
+                $posts = Post::where('is_public', true)->get();
+            }
+        } elseif ($type === 'following') {
+            if (auth()->check()) {
+                $posts = Post::where('is_public', true)
+                    ->whereIn('owner_id', auth()->user()->following()->pluck('id'))
+                    ->get();
+            } else {
+                $posts = collect();
+            }
+        } else {
+            $posts = collect();
+        }
+
+        return $posts;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 
 
@@ -23,10 +24,15 @@ use App\Http\Controllers\PostController;
 */
 
 // Home
-Route::get('/', function (UserController $userController, PostController $postController) {
+Route::get('/', function (Request $request, UserController $userController, PostController $postController) {
+    $type = $request->input('type', 'public');
+    $request->merge(['type' => $type]);
+
+
+
     $users = $userController->getSuggestedUsers();
-    $posts = $postController->getPublicPosts();
-    return view('pages.homepage', ['users' => $users, 'posts' => $posts]);
+    $posts = $postController->getPublicPosts($request);
+    return view('pages.homepage', ['users' => $users, 'posts' => $posts, 'type' => $type]);
 })->name('home');
 
 // User
@@ -66,4 +72,6 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
+
+Route::get('/posts', [PostController::class, 'getPublicPosts']);
 
