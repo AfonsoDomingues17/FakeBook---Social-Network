@@ -42,11 +42,20 @@ class RegisterController extends Controller
             'password' => 'required|min:8|confirmed',
             'age' => 'required|integer|min:13',
             'bio' => 'string|max:250',
-            'is_public' => 'required|boolean'
+            'is_public' => 'required|boolean',
+            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
         Log::info('Validation successful', $validatedData);
 
-
+        
+        $photoUrl = null;
+        if ($request->hasFile('photo_url')) {
+            
+            $file = $request->file('photo_url');
+            
+            $photoUrl = $file->store('profile_pictures', 'public'); // Stores in storage/app/public/profile_pictures
+        }
+        
         $user = User::create([
             'name' => $request->name,
             'username' => $request->username,
@@ -54,7 +63,8 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
             'age' => $request->age,
             'bio' => $request->bio,
-            'is_public' => $request->is_public
+            'is_public' => $request->is_public,
+            'photo_url' => $photoUrl
         ]);
 
         $credentials = $request->only('email', 'password');

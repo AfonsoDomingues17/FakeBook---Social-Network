@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -51,16 +53,24 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {   
+        Log::info('Incoming request data', $request->all());
         $request->merge([
             'is_public' => $request->is_public === 'public' ? true : false,
         ]);
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:250',
-            'username' => 'required|string|max:250|unique:users',
+            'username' => [
+                'required',
+                'string',
+                'max:250',
+                Rule::unique('users')->ignore($request->id),
+            ],
             'age' => 'required|integer|min:13',
-            'bio' => 'string|max:250',
-            'is_public' => 'required|boolean'
+            'bio' => 'nullable|string|max:250',
+            'is_public' => 'required|boolean',
+            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+        Log::info('Validation successful', $validatedData);
 
         $user = User::findOrFail($request->id);
         $user->name = $request->name;
@@ -68,6 +78,18 @@ class UserController extends Controller
         $user->age = $request->age;
         $user->bio = $request->bio;
         $user->is_public = $request->is_public;
+
+        if ($request->hasFile('photo_url')) {
+            if ($user->photo_url) {
+                $oldPhotoPath = str_replace('/storage/', 'public/', $user->photo_url);
+                Storage::delete($oldPhotoPath);
+            }
+    
+            $path = $request->file('photo_url')->store('public/profile_pictures');
+            $user->photo_url = $path;
+        }
+        Log::info('Consegui trocar');
+
         $user->save();
         return redirect()->route('profile', ['user_id' => $user->id]);
     }
