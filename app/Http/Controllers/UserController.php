@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB; 
 
 
 class UserController extends Controller
@@ -98,7 +100,7 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'age' => 'required|integer|gt:13',
+            'age' => 'required|integer|min:13',
             'bio' => 'nullable|string',
             'photo_url' => 'nullable|string',
             'is_public' => 'required|boolean',
@@ -136,6 +138,31 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        // Extract the type and query from the query string
+        $type = $request->input('type');
+        $query = $request->input('query');
+
+        // Initialize an empty collection for results
+        $results = collect();
+
+        // Perform the search based on the type
+        if ($type === 'users') {
+            $results = User::where('name', 'ILIKE', '%' . $query . '%')
+                        ->orWhere('email', 'ILIKE', '%' . $query . '%')
+                        ->orWhere('username', 'ILIKE', '%' . $query . '%')
+                        ->get();
+        } else if($type === 'posts') {
+            $results = DB::table('post')
+            ->whereRaw("tsvectors @@ to_tsquery('english', ?)", [$query])
+            ->get();
+        }
+
+        // Return the results to a view, you can adjust the view name as needed
+        return view('pages.searchpage', compact('results', 'type', 'query'));
     }
 
     /**

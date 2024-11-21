@@ -4,6 +4,7 @@
 
 <section>
     <h1>Welcome to FakeBook</h1>
+    @include('partials.search')
     <p>Posts to be added here later</p>
 </section>
 <section id="users">
