@@ -1,8 +1,8 @@
 <article class="post">
     <h2>{{ $post->owner->name }}</h2>
     <p>{{ $post->description }}</p>
-    <p>Type: {{ $post->typeP }}</p>
-    <p>Created at: {{ $post->dateCreation }}</p>
+    <p>Type: {{ $post->typep }}</p>
+    <p>Created at: {{ $post->datecreation }}</p>
     <p>Public: {{ $post->is_public ? 'Yes' : 'No' }}</p>
     @if ($post->media->count() > 0)
         <div class="media">
@@ -11,9 +11,12 @@
             @endforeach
         </div>
     @endif
-    <form action="{{ route('posts.destroy', $post) }}" method="POST">
-        @csrf
-        @method('DELETE')
-        <button type="submit">Delete</button>
-    </form>
+    @if (Auth::check() && Auth::user()->id == $post->owner_id)
+        <a href="{{ route('posts.edit', $post) }}">Edit</a>
+        <form action="{{ route('posts.destroy', $post) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="submit">Delete</button>
+        </form>
+    @endif
 </article>

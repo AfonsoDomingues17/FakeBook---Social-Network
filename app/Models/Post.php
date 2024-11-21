@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'post';
-    protected $fillable = ['description', 'owner_id', 'post_type'];
+    protected $fillable = ['description', 'is_public', 'typep', 'owner_id', 'is_edited'];
     
     public function comments()
     {

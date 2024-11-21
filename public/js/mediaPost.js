@@ -1,5 +1,5 @@
 function toggleMediaUpload() {
-    var postType = document.getElementById('typeP').value;
+    var postType = document.getElementById('typep').value;
     var mediaUpload = document.getElementById('media-upload');
     if (postType === 'MEDIA') {
         mediaUpload.style.display = 'block';

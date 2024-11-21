@@ -15,10 +15,20 @@ class PostController extends Controller
      */
     public function index()
     {
-        /*
-        $posts = Post::all();
-        return view('posts.index', compact('posts'));
-        */
+        if (Auth::check()) {
+            // User is logged in, show posts from followed users
+            $user = Auth::user();
+            $posts = Post::whereIn('owner_id', $user->following()->pluck('target_user_id'))
+                         ->orderBy('datecreation', 'desc')
+                         ->get();
+        } else {
+            // User is not logged in, show public posts
+            $posts = Post::where('is_public', true)
+                         ->orderBy('datecreation', 'desc')
+                         ->get();
+        }
+
+        return view('pages.homepage', compact('posts'));
     }
 
     /**
@@ -34,19 +44,28 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // Log the incoming request data
+        \Log::info('Incoming request data', $request->all());
+
         $validatedData = $request->validate([
             'description' => 'string|max:1000',
             'is_public' => 'boolean',
-            'typeP' => ['required', Rule::in(['TEXT', 'MEDIA'])],
+            'typep' => ['required', Rule::in(['TEXT', 'MEDIA'])],
             'media' => 'array|max:5',
             'media.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+        // Log the validated data
+        \Log::info('Validated data', $validatedData);
 
         // Add the owner_id to the validated data
         $validatedData['owner_id'] = Auth::id();
 
         // Create a new post with the validated data
         $post = Post::create($validatedData);
+
+        // Log the created post
+        \Log::info('Created post', $post->toArray());
 
         // Handle media uploads
         if ($request->hasFile('media')) {
@@ -60,9 +79,8 @@ class PostController extends Controller
         }
 
         // Redirect to the newly created post's page or another appropriate page
-        return redirect()->route('posts.show', $post);
+        return redirect()->route('profile', ['user_id' => Auth::id()]);
     }
-
     /**
      * Display the specified resource.
      */
@@ -84,30 +102,22 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        // Log the incoming request data
+        \Log::info('Incoming request data', $request->all());
+
         $validatedData = $request->validate([
             'description' => 'string|max:1000',
-            'is_public' => 'boolean',
-            'typeP' => ['required', Rule::in(['TEXT', 'MEDIA'])],
-            'media' => 'array|max:5',
-            'media.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'is_public' => 'boolean'
         ]);
         $validatedData['is_edited'] = true;
+        // Log the validated data
+        \Log::info('Validated data', $validatedData);
+
         // Update the post with the validated data
         $post->update($validatedData);
 
-        // Handle media uploads
-        if ($request->hasFile('media')) {
-            foreach ($request->file('media') as $file) {
-                $filePath = $file->store('media', 'public');
-                Media::create([
-                    'photo_url' => $filePath,
-                    'post_id' => $post->id
-                ]);
-            }
-        }
-
-        // Redirect to the updated post's page or another appropriate page
-        return redirect()->route('posts.show', $post);
+        // Redirect to the user's profile page
+        return redirect()->route('profile', ['user_id' => Auth::id()]);
     }
 
     /**
@@ -116,8 +126,8 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-
+        
         // Redirect to the posts list or another appropriate page
-        return redirect()->route('posts.index');
+        return redirect()->route('profile', ['user_id' => Auth::id()]);
     }
 }
