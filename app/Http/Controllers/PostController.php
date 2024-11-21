@@ -7,7 +7,7 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
     /**
@@ -70,15 +70,15 @@ class PostController extends Controller
         // Handle media uploads
         if ($request->hasFile('media')) {
             foreach ($request->file('media') as $file) {
-                $filePath = $file->store('media', 'public');
+                $filePath = $file->store('public/post_pictures');
                 Media::create([
-                    'photo_url' => $filePath,
+                    'photo_url' => $filePath, // Store the relative path
                     'post_id' => $post->id
                 ]);
             }
         }
 
-        // Redirect to the newly created post's page or another appropriate page
+        // Redirect to the user's profile page
         return redirect()->route('profile', ['user_id' => Auth::id()]);
     }
     /**
@@ -110,8 +110,6 @@ class PostController extends Controller
             'is_public' => 'boolean'
         ]);
         $validatedData['is_edited'] = true;
-        // Log the validated data
-        \Log::info('Validated data', $validatedData);
 
         // Update the post with the validated data
         $post->update($validatedData);
@@ -125,9 +123,17 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        // Delete associated media files from storage
+        foreach ($post->media as $media) {
+            $filePath = str_replace('/storage/', 'public/', $media->photo_url);
+            Storage::delete($filePath);
+            $media->delete();
+        }
+
+        // Delete the post
         $post->delete();
         
-        // Redirect to the posts list or another appropriate page
+        // Redirect to the user's profile page
         return redirect()->route('profile', ['user_id' => Auth::id()]);
     }
 }
