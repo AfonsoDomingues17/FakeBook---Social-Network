@@ -17,6 +17,11 @@ class PostController extends Controller
         return view('posts.index', compact('posts'));
     }
 
+    public function getPublicPosts()
+    {
+        return Post::where('is_public', true)->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      */

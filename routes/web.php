@@ -9,6 +9,7 @@ use App\Http\Controllers\ItemController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,11 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 // Home
-Route::get('/', [UserController::class, 'getUsers'])->name('homepage');
+Route::get('/', function (UserController $userController, PostController $postController) {
+    $users = $userController->getSuggestedUsers();
+    $posts = $postController->getPublicPosts();
+    return view('pages.homepage', ['users' => $users, 'posts' => $posts]);
+})->name('home');
 
 // User
 Route::get('/users/{user_id}/edit', [UserController::class, 'showEditProfileForm'])->name('editprofile');
@@ -61,3 +66,4 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
+
