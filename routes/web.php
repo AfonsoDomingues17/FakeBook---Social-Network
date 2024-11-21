@@ -72,6 +72,3 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
-
-Route::get('/posts', [PostController::class, 'getPublicPosts']);
-
