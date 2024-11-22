@@ -20,9 +20,9 @@
         <button>Follow</button>
         <button>Send Message</button>
         <button>Block</button>
-        @endif
-        
+    @endif
 </section>
+<<<<<<< resources/views/pages/user.blade.php
 @if (Auth::check() && $user->id == Auth::user()->id)
     <section id="posts">
         @if ($n_posts > 0)
@@ -37,15 +37,21 @@
     
 @else
     @if ($user->is_public)
-        <section id="posts">
-            @if ($n_posts > 0)
-                <p>Post to be printed here later</p>
-            
-            @else 
-                <p>This user dont have any post!</p>
+    <section id="posts">
+        @if ($n_posts > 0)
+            @foreach ($posts as $post)
+                @include('partials.post', ['post' => $post])
+            @endforeach
+        @else 
+            @if ($user->id != Auth::user()->id)
+                <p>This user has no posts!</p>
+            @else
+                <p>You don't have any posts! Post something!</p>
                 
             @endif
-        </section>
+        @endif
+    <a href="{{ route('posts.create') }}">Add post</a>
+    </section>
     @else
         <section id="posts">
             <p>This user profile is private!</p>
@@ -59,7 +65,4 @@
         </section>
     @endif  
 @endif
-
-
-
 @endsection

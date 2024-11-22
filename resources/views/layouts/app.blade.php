@@ -39,7 +39,7 @@
             </section>
         </main>
         <footer>
-            <p>&copy; 2024 FakeBook</p>
+            <p>&copy; FakeBook 2024</p>
         </footer>
     </body>
 </html>

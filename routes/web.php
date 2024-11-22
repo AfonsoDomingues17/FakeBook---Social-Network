@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\PostController;
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ItemController;
@@ -22,14 +22,27 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 // Home
-Route::get('/', [UserController::class, 'getUsers'])->name('homepage');
+Route::get('/', function () {
+    $postController = app(PostController::class);
+    $userController = app(UserController::class);
+    $posts = $postController->index()->getData()['posts'];
+    $users = $userController->getUsers()->getData()['users'];
+    return view('pages.homepage', compact('posts', 'users'));
+})->name('homepage');
 
 // User
 Route::get('/users/{user_id}/edit', [UserController::class, 'showEditProfileForm'])->name('editprofile');
 Route::put('/users/edit', [UserController::class, 'updateProfile'])->name('updateprofile');
 Route::get('/users/{user_id}', [UserController::class, 'showProfile'])->name('profile');    
 
-
+// Posts
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
 
 // API

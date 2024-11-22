@@ -51,7 +51,8 @@ class UserController extends Controller
         $n_posts = $this->getNumberPosts($user_id);
         $n_followers = $this->getNumberFollowers($user_id);
         $n_following = $this->getNumberFollowing($user_id);
-        return view('pages.user', ['user'=> $user, 'n_posts' => $n_posts, 'n_followers' => $n_followers, 'n_following' => $n_following]);
+        $posts = $user->posts()->orderBy('datecreation', 'desc')->get();
+        return view('pages.user', ['user'=> $user, 'n_posts' => $n_posts, 'n_followers' => $n_followers, 'n_following' => $n_following, 'posts' => $posts]);
     }
 
     public function updateProfile(Request $request)
