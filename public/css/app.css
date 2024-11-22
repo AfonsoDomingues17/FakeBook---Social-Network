@@ -177,6 +177,10 @@ body {
   height: 100%;
 }
 
+.suggested-users img {
+  width: 100px;
+}
+
 #posts, #search-results {
   display: flex;
   flex-direction: column;
