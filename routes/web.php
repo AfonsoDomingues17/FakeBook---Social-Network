@@ -10,7 +10,7 @@ use App\Http\Controllers\ItemController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\PostController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ use App\Http\Controllers\PostController;
 */
 
 // Home
-<<<<<<< routes/web.php
+
 Route::get('/', function (Request $request, UserController $userController, PostController $postController) {
     $type = $request->input('type', 'public');
     $request->merge(['type' => $type]);

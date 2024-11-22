@@ -22,17 +22,16 @@
         <button>Block</button>
     @endif
 </section>
-<<<<<<< resources/views/pages/user.blade.php
-@if (Auth::check() && $user->id == Auth::user()->id)
+@if (Auth::check() && $user->id == Auth::user()->id) <!-- If the user is logged in and is the owner of the profile -->
     <section id="posts">
         @if ($n_posts > 0)
-            <p>Post to be printed here later</p>
-        
+            @foreach ($posts as $post)
+                @include('partials.post', ['post' => $post])
+            @endforeach
         @else 
             <p>You dont have any post! Post something!</p>
-            <a href="">Add post</a>
-           
         @endif
+        <a href="{{ route('posts.create') }}">Add post</a>
     </section>
     
 @else
@@ -43,14 +42,9 @@
                 @include('partials.post', ['post' => $post])
             @endforeach
         @else 
-            @if ($user->id != Auth::user()->id)
-                <p>This user has no posts!</p>
-            @else
-                <p>You don't have any posts! Post something!</p>
-                
-            @endif
+            <p>This user has no posts!</p>
         @endif
-    <a href="{{ route('posts.create') }}">Add post</a>
+    
     </section>
     @else
         <section id="posts">
