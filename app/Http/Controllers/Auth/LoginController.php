@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Hash;
+use App\Models\Admin;
 use Illuminate\View\View;
 
 class LoginController extends Controller
@@ -35,6 +36,15 @@ class LoginController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
+
+        $admin = Admin::firstWhere('email', $credentials['email']);
+        
+    if ($admin && Hash::check($credentials['password'], $admin->password)) {
+        Auth::guard('admin')->login($admin);
+        $request->session()->regenerate();
+        return redirect()->route('homepage')
+            ->withSuccess('You have logged in successfully as an admin!');
+    }
  
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();

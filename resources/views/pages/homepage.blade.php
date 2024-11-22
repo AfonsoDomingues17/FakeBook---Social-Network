@@ -15,7 +15,7 @@
             @endif
         </h2>
         <section id="posts-container">
-            @if($type === 'following' && !auth()->check())
+            @if($type === 'following' && Auth::check())
                 <h3>Login to see posts from accounts you follow</h3>
                 <a href="{{ route('login') }}">
                     <button id="follow-redirect-login">Login</button>

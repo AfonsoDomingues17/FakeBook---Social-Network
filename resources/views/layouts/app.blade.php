@@ -36,11 +36,17 @@
                 @endif
 
                 <section id="account-options">
-                    @if (Auth::check())
+                    @if (Auth::check() || Auth::guard('admin')->check())
                         <a class="button" href="{{ url('/logout') }}"> Logout </a>
+                        @if (Auth::guard('admin')->check())
+                            <a href="">
+                                <span id="admin_page">Admin Page</span>
+                            </a> 
+                        @else
                         <a href="{{url('/users/' . Auth::user()->id)}}">
                             <span>{{ Auth::user()->name }}</span>
                         </a>
+                        @endif
                     @else
                         <a class="button" href="{{ url('/login') }}"> Login </a>
                         <a class="button" href="{{ url('/register') }}"> Register </a>
