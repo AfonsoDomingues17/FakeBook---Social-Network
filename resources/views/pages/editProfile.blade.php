@@ -8,7 +8,7 @@
     {{ method_field('PUT') }}
 
         <input type="hidden" name="id" value="{{ $user->id }}">
-        <img id="p_picture_review" src="{{Storage::url($user->photo_url)}}" alt="profile picture" width="200" height="200">
+        <img id="p_picture_review" src="{{route('userphoto', ['user_id' => $user->id])}}" alt="profile picture" width="200" height="200">
         <label for="photo_url">Profile Picture</label>
         <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewProfilePicture(event)">
 

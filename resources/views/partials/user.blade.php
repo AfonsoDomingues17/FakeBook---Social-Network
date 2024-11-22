@@ -1,7 +1,7 @@
 <article class="user" data-id="{{ $user->id }}">
     <a href="{{route('profile',['user_id' => $user->id])}}">
     <section id="info">
-        <img src="{{ $user->photo_url ? Storage::url($user->photo_url) : Storage::url('profile_pictures/default-profile.png') }}" alt="">
+        <img src="{{ route('userphoto', ['user_id' => $user->id]) }}" alt="">
         <span id="user"><p>{{$user->username}}</p></span>
         <span id="nome"><p>{{$user->name}}</p></span>
     </section>

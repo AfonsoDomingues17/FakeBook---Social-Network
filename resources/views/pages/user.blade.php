@@ -4,7 +4,7 @@
 
 <section id="profile">
 
-<img src="{{ $user->photo_url ? Storage::url($user->photo_url) : Storage::url('profile_pictures/default-profile.png') }}" alt="profile picture" width="200" height="200"><br>
+<img src="{{ route('userphoto', ['user_id' => $user->id]) }}" alt="profile picture" width="200" height="200"><br>
 
         
         <span id="username">{{$user->username}}</span> <br>
