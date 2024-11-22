@@ -28,6 +28,9 @@
                     <a class="button" href="{{ url('/logout') }}"> Logout </a> 
                     <a href="{{url('/users/' . Auth::user()->id)}}">
                         <span>{{ Auth::user()->name }}</span>
+                @else
+                    <a class="button" href="{{ url('/login') }}">Login</a>
+                    <a class="button" href="{{ url('/register') }}">Register
                     </a>
                 @endif
             </header>
