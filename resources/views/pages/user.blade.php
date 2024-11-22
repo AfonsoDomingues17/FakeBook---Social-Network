@@ -4,11 +4,11 @@
 
 <section id="profile">
 
-<img src="{{ $user->photo_url ? Storage::url($user->photo_url) : Storage::url('DEFAULT-PROFILE.png') }}" alt="profile picture" width="200" height="200"><br>
+<img src="{{ route('userphoto', ['user_id' => $user->id]) }}" alt="profile picture" width="200" height="200"><br>
 
         
         <span id="username">{{$user->username}}</span> <br>
-        @if (Auth::check() && $user->id == Auth::user()->id)
+        @if (Auth::guard('admin')->check() || (Auth::check() && $user->id == Auth::user()->id))
         <a href="{{route('editprofile',['user_id' => $user->id])}}">Edit Profile</a> <br>
         @endif
         <h2>{{$user->name}}</h2> <br>
@@ -35,17 +35,17 @@
     </section>
     
 @else
-    @if ($user->is_public)
-    <section id="posts">
-        @if ($n_posts > 0)
-            @foreach ($posts as $post)
-                @include('partials.post', ['post' => $post])
-            @endforeach
-        @else 
-            <p>This user has no posts!</p>
-        @endif
-    
-    </section>
+    @if (Auth::guard('admin')->check() || $user->is_public)
+        <section id="posts">
+            @if ($n_posts > 0)
+                @foreach ($posts as $post)
+                    @include('partials.post', ['post' => $post])
+                @endforeach
+            @else 
+                <p>This user has no posts!</p>
+            @endif
+        
+        </section>
     @else
         <section id="posts">
             <p>This user profile is private!</p>

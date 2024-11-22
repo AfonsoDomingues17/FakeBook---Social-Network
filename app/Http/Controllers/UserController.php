@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,37 @@ class UserController extends Controller
             return view('pages.editProfile', ['user'=> $user]);
         }
     }
+    public function getPhoto($user_id)
+{   
+    Log::info(message: 'Entrou no getPhoto');
+    $user = User::findOrFail($user_id);
+    Log::info($user->photo_url);
+    if ($user->photo_url) {
+        Log::info(message: 'phto_url exists');
+
+        $path = storage_path('app/private/' . $user->photo_url);
+        Log::info($path);
+
+        if (!Storage::disk('private')->exists($user->photo_url)) {
+            abort(404);
+        }
+
+        $file = Storage::disk('private')->get($user->photo_url);
+        $type = Storage::disk('private')->mimeType($user->photo_url);
+
+        return Response::make($file, 200)->header("Content-Type", $type);
+    } else {
+        $defaultPath = storage_path('app/private/profile_pictures/default-profile.png');
+        Log::info($defaultPath);
+        if (!file_exists($defaultPath)) {
+            abort(404);
+        }
+
+        $file = file_get_contents($defaultPath);
+        $type = mime_content_type($defaultPath);
+        return response($file, 200)->header("Content-Type", $type);
+    }
+}
     public function getUsers(){
         $users = User::take(10)->get();
         return view('pages.homepage', ['users' => $users]);
@@ -97,14 +129,16 @@ class UserController extends Controller
 
         if ($request->hasFile('photo_url')) {
             if ($user->photo_url) {
-                $oldPhotoPath = str_replace('/storage/', 'public/', $user->photo_url);
-                Storage::delete($oldPhotoPath);
+                $oldPhotoPath = str_replace('private/','', $user->photo_url);
+                Log::info('Old photo path: ' . $oldPhotoPath);
+                Storage::disk('private')->delete($oldPhotoPath);
             }
     
-            $path = $request->file('photo_url')->store('public/profile_pictures');
+            $path = $request->file('photo_url')->store('profile_pictures','private');
+            Log::info('Path: ' . $path);
             $user->photo_url = $path;
         }
-        Log::info('Consegui trocar');
+        Log::info('user: ' . $user->photo_url);
 
         $user->save();
         return redirect()->route('profile', ['user_id' => $user->id]);

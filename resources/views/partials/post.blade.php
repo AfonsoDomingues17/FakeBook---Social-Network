@@ -22,7 +22,7 @@
         initMediaCarousel({{ $post->id }}, mediaUrls{{ $post->id }});
     </script>
     @endif
-    @if (Auth::check() && Auth::user()->id == $post->owner_id)
+    @if (Auth::guard('admin')->check() || (Auth::check() && Auth::user()->id == $post->owner_id))
         <a href="{{ route('posts.edit', $post) }}">Edit</a>
         <form action="{{ route('posts.destroy', $post) }}" method="POST">
             @csrf

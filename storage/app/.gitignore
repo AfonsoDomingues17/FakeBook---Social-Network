@@ -1,3 +1,6 @@
-*
 !public/
+!public/post_pictures/
+!private/
+!private/profile_pictures/
 !.gitignore
+
