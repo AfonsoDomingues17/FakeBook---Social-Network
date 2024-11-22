@@ -159,4 +159,35 @@ body {
   input[type=password]:focus {
     border-color: #9b4dca;
   }
-  
+
+  .homepage-layout {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    align-items: start;
+    padding: 1em;
+    margin: 1em;
+  }
+
+.left-sidebar, .suggested-users {
+  background-color: #f4f4f4;
+  padding: 1em;
+  height: 100%;
+}
+
+#posts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d2afe7;
+  padding: 1em;
+}
+
+footer > p{
+  margin-bottom: 0;
+}
