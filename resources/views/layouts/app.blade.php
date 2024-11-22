@@ -24,22 +24,27 @@
         <main>
             <header>
                 <h1><a href="{{ url('/') }}">FakeBook!</a></h1>
-                <section id="timeline_options">
-                    <a href="{{ route('home', ['type' => 'public']) }}">
-                        <button id="public-posts-btn">Public Posts</button>
-                    </a>
-                    <a href="{{ route('home', ['type' => 'following']) }}">
-                        <button id="following-posts-btn">Following Posts</button>
-                    </a>
-                @if (Auth::check())
-                    <a class="button" href="{{ url('/logout') }}"> Logout </a> 
-                    <a href="{{url('/users/' . Auth::user()->id)}}">
-                        <span>{{ Auth::user()->name }}</span>
-                    </a>
-                @else
-                    <a class="button" href="{{ url('/login') }}"> Login </a>
-                    <a class="button" href="{{ url('/register') }}"> Register </a>
+                @if(Route::currentRouteName() === 'home')
+                    <section id="timeline_options">
+                        <a href="{{ route('home', ['type' => 'public']) }}">
+                            <button id="public-posts-btn">Public Posts</button>
+                        </a>
+                        <a href="{{ route('home', ['type' => 'following']) }}" >
+                            <button id="following-posts-btn">Following Posts</button>
+                        </a>
+                    </section>
                 @endif
+                <section id="account-options">
+                    @if (Auth::check())
+                        <a class="button" href="{{ url('/logout') }}"> Logout </a>
+                        <a href="{{url('/users/' . Auth::user()->id)}}">
+                            <span>{{ Auth::user()->name }}</span>
+                        </a>
+                    @else
+                        <a class="button" href="{{ url('/login') }}"> Login </a>
+                        <a class="button" href="{{ url('/register') }}"> Register </a>
+                    @endif
+                </section>
             </header>
             <section id="content">
                 @yield('content')

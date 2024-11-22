@@ -18,7 +18,7 @@ class PostController extends Controller
         return view('posts.index', compact('posts'));
     }
 
-    public function getPublicPosts(Request $request = null)
+    public function getPosts(Request $request = null)
     {
         if ($request === null) {
             $type = 'public';
@@ -29,10 +29,17 @@ class PostController extends Controller
         if ($type === 'public') {
             if (auth()->check()) {
                 $posts = Post::where('is_public', true)
+                    ->whereHas('owner', function ($query) {
+                        $query->where('is_public', true);
+                    })
                     ->where('owner_id', '!=', auth()->id())
                     ->get();
             } else {
-                $posts = Post::where('is_public', true)->get();
+                $posts = Post::where('is_public', true)
+                    ->whereHas('owner', function ($query) {
+                        $query->where('is_public', true);
+                    })
+                    ->get();
             }
         } elseif ($type === 'following') {
             if (auth()->check()) {

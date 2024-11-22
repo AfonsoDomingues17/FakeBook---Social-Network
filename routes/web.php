@@ -27,11 +27,8 @@ use App\Http\Controllers\PostController;
 Route::get('/', function (Request $request, UserController $userController, PostController $postController) {
     $type = $request->input('type', 'public');
     $request->merge(['type' => $type]);
-
-
-
     $users = $userController->getSuggestedUsers();
-    $posts = $postController->getPublicPosts($request);
+    $posts = $postController->getPosts($request);
     return view('pages.homepage', ['users' => $users, 'posts' => $posts, 'type' => $type]);
 })->name('home');
 
