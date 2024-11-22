@@ -26,14 +26,15 @@
                 <h1><a href="{{ url('/') }}">FakeBook!</a></h1>
                 @if(Route::currentRouteName() === 'home' && Auth::check())
                     <section id="timeline_options">
-                        <a href="{{ route('home', ['type' => 'public']) }}">
+                        <a href="{{ route('homepage', ['type' => 'public']) }}">
                             <button id="public-posts-btn">Public Posts</button>
                         </a>
-                        <a href="{{ route('home', ['type' => 'following']) }}" >
+                        <a href="{{ route('homepage', ['type' => 'following']) }}" >
                             <button id="following-posts-btn">Following Posts</button>
                         </a>
                     </section>
                 @endif
+
                 <section id="account-options">
                     @if (Auth::check())
                         <a class="button" href="{{ url('/logout') }}"> Logout </a>
@@ -51,7 +52,7 @@
             </section>
         </main>
         <footer>
-            <p>&copy; 2024 FakeBook</p>
+            <p>&copy; FakeBook 2024</p>
         </footer>
     </body>
 </html>

@@ -30,4 +30,5 @@
         @each('partials.user', $users, 'user')
     </section>
 </section>
+
 @endsection
