@@ -18,29 +18,29 @@
         <button>Follow</button>
         <button>Send Message</button>
         <button>Block</button>
-        @endif
-        
+    @endif
 </section>
+
 @if (!$user->is_public)
     <p>This profile is private</p>
     <p>Follow to see all the posts of this user!</p>
     <button>Follow</button>
-
 @else
 <section id="posts">
     @if ($n_posts > 0)
-        <p>Post to be printed here later</p>
-    
+        @foreach ($posts as $post)
+            @include('partials.post', ['post' => $post])
+        @endforeach
     @else 
         @if ($user->id != Auth::user()->id)
-        <p>This user has no posts!</p>
+            <p>This user has no posts!</p>
         @else
-        <p>You dont have any post! Post something!</p>
-        <a href="">Add post</a>
+            <p>You don't have any posts! Post something!</p>
+            
         @endif
     @endif
+    <a href="{{ route('posts.create') }}">Add post</a>
 </section>
 @endif
-
 
 @endsection
