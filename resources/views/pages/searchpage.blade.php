@@ -2,18 +2,21 @@
 
 @section('content')
 
-<section>
-    <h1>Welcome to FakeBook</h1>
-    @include('partials.search')
-    <p>Results of <?=$type?> search for "<?=$query?>"</p>
+<section class="homepage-layout">
+    <section class="left-sidebar">
+        <h1>Welcome to FakeBook</h1>
+        @include('partials.search')
+    </section>
+    <section id="search-results">
+        <h2>
+            Search results for "{{ $query }}"
+        </h2>
+        @if($type === 'users')
+            @each('partials.user', $users, 'user')
+        @elseif($type === 'posts')
+            @each('partials.post', $posts, 'post')
+        @endif
+    </section>
 </section>
-<section id="results">
 
-@if ($type === 'users')
-    @each('partials.user', $results, 'user')
-@elseif ($type === 'posts')
-    @each('partials.post', $results, 'post')
-@endif
-
-</section>
 @endsection

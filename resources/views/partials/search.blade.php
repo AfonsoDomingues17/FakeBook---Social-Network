@@ -4,5 +4,4 @@
         <option value="posts">Posts</option>
     </select>
     <input type="text" name="query" placeholder="Search..." required>
-    <button type="submit">Search</button>
 </form>

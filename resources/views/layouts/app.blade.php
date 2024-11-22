@@ -23,7 +23,10 @@
     <body>
         <main>
             <header>
-                <h1><a href="{{ url('/') }}">FakeBook!</a></h1>
+                <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('LOGO.png') }}" alt="FakeBook Logo"></a>
+                <h1>
+                    <a href="{{ url('/') }}">FakeBook!</a>
+                </h1>
                 @if(Route::currentRouteName() === 'home' && Auth::check())
                     <section id="timeline_options">
                         <a href="{{ route('homepage', ['type' => 'public']) }}">
