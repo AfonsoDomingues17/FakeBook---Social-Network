@@ -37,7 +37,8 @@ Route::get('/', function (Request $request, UserController $userController, Post
 // User
 Route::get('/users/{user_id}/edit', [UserController::class, 'showEditProfileForm'])->name('editprofile');
 Route::put('/users/edit', [UserController::class, 'updateProfile'])->name('updateprofile');
-Route::get('/users/{user_id}', [UserController::class, 'showProfile'])->name('profile');    
+Route::get('/users/{user_id}', [UserController::class, 'showProfile'])->name('profile');
+Route::get('/user/photo/{user_id}', [UserController::class, 'getPhoto'])->name('userphoto');
 
 // Posts
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
