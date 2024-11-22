@@ -24,7 +24,7 @@
         <main>
             <header>
                 <h1><a href="{{ url('/') }}">FakeBook!</a></h1>
-                @if(Route::currentRouteName() === 'home')
+                @if(Route::currentRouteName() === 'home' && Auth::check())
                     <section id="timeline_options">
                         <a href="{{ route('home', ['type' => 'public']) }}">
                             <button id="public-posts-btn">Public Posts</button>
