@@ -25,7 +25,10 @@
             <header>
                 <h1><a href="{{ url('/') }}">FakeBook!</a></h1>
                 @if (Auth::check())
-                    <a class="button" href="{{ url('/logout') }}"> Logout </a> <a href="{{url('/users/' . Auth::user()->id)}}"><span>{{ Auth::user()->name }}</span></a>
+                    <a class="button" href="{{ url('/logout') }}"> Logout </a> 
+                    <a href="{{url('/users/' . Auth::user()->id)}}">
+                        <span>{{ Auth::user()->name }}</span>
+                    </a>
                 @endif
             </header>
             <section id="content">

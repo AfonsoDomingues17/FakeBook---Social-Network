@@ -57,6 +57,11 @@ Route::controller(ItemController::class)->group(function () {
     Route::delete('/api/item/{id}', 'delete');
 });
 
+// Search
+
+Route::controller(UserController::class)->group(function () {
+    Route::get('/search', 'search')->name('search');
+});
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
