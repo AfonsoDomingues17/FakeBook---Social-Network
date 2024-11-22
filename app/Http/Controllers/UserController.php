@@ -27,6 +27,19 @@ class UserController extends Controller
         $users = User::take(10)->get();
         return view('pages.homepage', ['users' => $users]);
     }
+
+    public function getSuggestedUsers(){
+        if(Auth::check()){
+            $user = Auth::user();
+            return User::where('id', '!=', $user->id)
+                ->whereNotIn('id', $user->following()->pluck('id'))
+                ->inRandomOrder()
+                ->take(5)->get();
+        }
+        else {
+            return User::inRandomOrder()->take(5)->get();
+        }
+    }
         
     
     public function getNumberPosts($user_id){

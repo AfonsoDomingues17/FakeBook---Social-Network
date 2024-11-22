@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 
@@ -9,6 +10,7 @@ use App\Http\Controllers\ItemController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,13 +24,15 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 // Home
-Route::get('/', function () {
-    $postController = app(PostController::class);
-    $userController = app(UserController::class);
-    $posts = $postController->index()->getData()['posts'];
-    $users = $userController->getUsers()->getData()['users'];
-    return view('pages.homepage', compact('posts', 'users'));
+<<<<<<< routes/web.php
+Route::get('/', function (Request $request, UserController $userController, PostController $postController) {
+    $type = $request->input('type', 'public');
+    $request->merge(['type' => $type]);
+    $users = $userController->getSuggestedUsers();
+    $posts = $postController->getPosts($request);
+    return view('pages.homepage', ['users' => $users, 'posts' => $posts, 'type' => $type]);
 })->name('homepage');
+
 
 // User
 Route::get('/users/{user_id}/edit', [UserController::class, 'showEditProfileForm'])->name('editprofile');

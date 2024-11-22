@@ -1,6 +1,7 @@
 <?php
 // FILE: app/Http/Controllers/PostController.php
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Post;
 use App\Models\Media;
@@ -29,6 +30,44 @@ class PostController extends Controller
         }
 
         return view('pages.homepage', compact('posts'));
+    }
+
+    public function getPosts(Request $request = null)
+    {
+        if ($request === null) {
+            $type = 'public';
+        }
+        else{
+            $type = $request->input('type');
+        }
+        if ($type === 'public') {
+            if (auth()->check()) {
+                $posts = Post::where('is_public', true)
+                    ->whereHas('owner', function ($query) {
+                        $query->where('is_public', true);
+                    })
+                    ->where('owner_id', '!=', auth()->id())
+                    ->get();
+            } else {
+                $posts = Post::where('is_public', true)
+                    ->whereHas('owner', function ($query) {
+                        $query->where('is_public', true);
+                    })
+                    ->get();
+            }
+        } elseif ($type === 'following') {
+            if (auth()->check()) {
+                $posts = Post::where('is_public', true)
+                    ->whereIn('owner_id', auth()->user()->following()->pluck('id'))
+                    ->get();
+            } else {
+                $posts = collect();
+            }
+        } else {
+            $posts = collect();
+        }
+
+        return $posts;
     }
 
     /**

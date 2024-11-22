@@ -24,15 +24,28 @@
         <main>
             <header>
                 <h1><a href="{{ url('/') }}">FakeBook!</a></h1>
-                @if (Auth::check())
-                    <a class="button" href="{{ url('/logout') }}"> Logout </a> 
-                    <a href="{{url('/users/' . Auth::user()->id)}}">
-                        <span>{{ Auth::user()->name }}</span>
-                @else
-                    <a class="button" href="{{ url('/login') }}">Login</a>
-                    <a class="button" href="{{ url('/register') }}">Register
-                    </a>
+                @if(Route::currentRouteName() === 'home' && Auth::check())
+                    <section id="timeline_options">
+                        <a href="{{ route('homepage', ['type' => 'public']) }}">
+                            <button id="public-posts-btn">Public Posts</button>
+                        </a>
+                        <a href="{{ route('homepage', ['type' => 'following']) }}" >
+                            <button id="following-posts-btn">Following Posts</button>
+                        </a>
+                    </section>
                 @endif
+
+                <section id="account-options">
+                    @if (Auth::check())
+                        <a class="button" href="{{ url('/logout') }}"> Logout </a>
+                        <a href="{{url('/users/' . Auth::user()->id)}}">
+                            <span>{{ Auth::user()->name }}</span>
+                        </a>
+                    @else
+                        <a class="button" href="{{ url('/login') }}"> Login </a>
+                        <a class="button" href="{{ url('/register') }}"> Register </a>
+                    @endif
+                </section>
             </header>
             <section id="content">
                 @yield('content')
