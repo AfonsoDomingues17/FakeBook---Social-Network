@@ -6,7 +6,7 @@
         <span id="nome"><p>{{$user->name}}</p></span>
     </section>
     </a>
-    @if (Auth::check())
+    @if (Auth::check() && !Auth::user()->isAdmin())
     <button>Follow</button>
     @endif
 </article>
