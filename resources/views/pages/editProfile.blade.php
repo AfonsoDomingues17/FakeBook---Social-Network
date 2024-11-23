@@ -3,11 +3,10 @@
 @section('content')
 
 <section id="editprofile">
-    <form method="POST" action="{{ route('updateprofile') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('updateprofile', ['user_id' => $user->id]) }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     {{ method_field('PUT') }}
 
-        <input type="hidden" name="id" value="{{ $user->id }}">
         <img id="p_picture_review" src="{{route('userphoto', ['user_id' => $user->id])}}" alt="profile picture" width="200" height="200">
         <label for="photo_url">Profile Picture</label>
         <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewProfilePicture(event)">
