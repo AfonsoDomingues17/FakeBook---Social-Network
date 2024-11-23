@@ -4,7 +4,7 @@ body {
   }
   main > header {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: auto 1fr auto auto;
     align-items: center;
     background-color: #d2afe7;
     padding: 1em;
@@ -16,6 +16,9 @@ body {
   main > header a.button {
     margin: 1em;
     justify-self: center;
+  }
+  main > header #logo {
+    width: 60px;
   }
   main > header span {
     margin: 1em;
@@ -174,7 +177,11 @@ body {
   height: 100%;
 }
 
-#posts {
+.suggested-users img {
+  width: 100px;
+}
+
+#posts, #search-results {
   display: flex;
   flex-direction: column;
   align-items: center;

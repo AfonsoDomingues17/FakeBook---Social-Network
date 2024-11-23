@@ -23,8 +23,11 @@
     <body>
         <main>
             <header>
-                <h1><a href="{{ url('/') }}">FakeBook!</a></h1>
-                @if(Route::currentRouteName() === 'homepage' && Auth::check() && !Auth::user()->isAdmin())
+                <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('LOGO.png') }}" alt="FakeBook Logo"></a>
+                <h1>
+                    <a href="{{ url('/') }}">FakeBook!</a>
+                </h1>
+                @if(Route::currentRouteName() === 'home' && Auth::check() && !Auth::user()->isAdmin())
                     <section id="timeline_options">
                         <a href="{{ route('homepage', ['type' => 'public']) }}">
                             <button id="public-posts-btn">Public Posts</button>
