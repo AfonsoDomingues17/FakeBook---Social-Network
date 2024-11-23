@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -208,30 +207,6 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         //
-    }
-
-    public function search(Request $request)
-    {
-        // Extract the type and query from the query string
-        $query = $request->input('query');
-        $type = $request->input('type');
-
-        // Initialize an empty collection for results
-        $users = collect();
-        $posts = collect();
-
-        
-        $users = User::where('name', 'ILIKE', '%' . $query . '%')
-                    ->orWhere('email', 'ILIKE', '%' . $query . '%')
-                    ->orWhere('username', 'ILIKE', '%' . $query . '%')
-                    ->get();
-        $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
-        $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-        $posts = Post::whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                    ->get();
-
-        // Return the results to a view, you can adjust the view name as needed
-        return view('pages.searchpage', compact('users', 'posts', 'type', 'query'));
     }
 
     /**
