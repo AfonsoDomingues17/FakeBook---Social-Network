@@ -100,7 +100,7 @@ class UserController extends Controller
         return view('pages.user', ['user'=> $user, 'n_posts' => $n_posts, 'n_followers' => $n_followers, 'n_following' => $n_following, 'posts' => $posts]);
     }
 
-    public function updateProfile(Request $request)
+    public function updateProfile(Request $request, $user_id)
     {   
         Log::info('Incoming request data', $request->all());
         $request->merge([
@@ -112,7 +112,7 @@ class UserController extends Controller
                 'required',
                 'string',
                 'max:250',
-                Rule::unique('users')->ignore($request->id),
+                Rule::unique('users')->ignore($user_id),
             ],
             'age' => 'required|integer|min:13',
             'bio' => 'nullable|string|max:250',
@@ -121,7 +121,7 @@ class UserController extends Controller
         ]);
         Log::info('Validation successful', $validatedData);
 
-        $user = User::findOrFail($request->id);
+        $user = User::findOrFail($user_id);
         $user->name = $request->name;
         $user->username = $request->username;
         $user->age = $request->age;
@@ -142,7 +142,7 @@ class UserController extends Controller
         Log::info('user: ' . $user->photo_url);
 
         $user->save();
-        return redirect()->route('profile', ['user_id' => $user->id]);
+        return redirect()->route('profile', ['user_id' => $user_id]);
     }
     /**
      * Display a listing of the resource.

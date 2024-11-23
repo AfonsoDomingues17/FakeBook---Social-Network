@@ -1145,6 +1145,8 @@ paths:
           description: 'Unauthorized. The user is not authenticated.'
         '404':
           description: 'Not Found. The specified post does not exist.'
+
+  /posts/{post_id}/delete:        
     delete:
       operationId: R407
       summary: 'R407: Delete Post'
@@ -1209,6 +1211,7 @@ paths:
           description: 'Unauthorized. The user is not authenticated.'
         '404':
           description: 'Not Found. The specified post does not exist.'
+          
   /posts/users/{user_id}:
     get:
       operationId: R409
