@@ -125,6 +125,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $this->authorize('view', $post);
         return view('partials.post', compact('post'));
     }
 
@@ -133,6 +134,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('update', $post);
         return view('partials.edit_post', compact('post'));
     }
 
@@ -143,6 +145,7 @@ class PostController extends Controller
     {
         // Log the incoming request data
         \Log::info('Incoming request data', $request->all());
+        $this->authorize('update', $post);
 
         $validatedData = $request->validate([
             'description' => 'string|max:1000',
@@ -162,6 +165,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('delete', $post);
         // Delete associated media files from storage
         foreach ($post->media as $media) {
             $filePath = str_replace('/storage/', 'public/', $media->photo_url);

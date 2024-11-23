@@ -37,14 +37,6 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        $admin = Admin::firstWhere('email', $credentials['email']);
-        
-    if ($admin && Hash::check($credentials['password'], $admin->password)) {
-        Auth::guard('admin')->login($admin);
-        $request->session()->regenerate();
-        return redirect()->route('homepage')
-            ->withSuccess('You have logged in successfully as an admin!');
-    }
  
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();

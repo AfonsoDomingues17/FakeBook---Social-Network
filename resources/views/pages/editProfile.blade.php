@@ -28,7 +28,7 @@
         @endif
 
         <label for="bio">Bio</label>
-        <input id="bio" type="text" name="bio" value="{{ old('bio', $user->bio)}}" required>
+        <input id="bio" type="text" name="bio" value="{{ old('bio', $user->bio)}}">
         @if ($errors->has('bio'))
         <span class="error">
             {{ $errors->first('bio') }}
