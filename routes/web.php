@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SearchController;
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ItemController;
@@ -64,7 +65,7 @@ Route::controller(ItemController::class)->group(function () {
 
 // Search
 
-Route::controller(UserController::class)->group(function () {
+Route::controller(SearchController::class)->group(function () {
     Route::get('/search', 'search')->name('search');
 });
 
