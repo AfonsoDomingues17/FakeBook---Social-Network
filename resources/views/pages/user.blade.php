@@ -8,19 +8,24 @@
 
         
         <span id="username">{{$user->username}}</span> <br>
-        @if (Auth::guard('admin')->check() || (Auth::check() && $user->id == Auth::user()->id))
-        <a href="{{route('editprofile',['user_id' => $user->id])}}">Edit Profile</a> <br>
-        @endif
         <h2>{{$user->name}}</h2> <br>
         <span id="bio"><p>{{$user->bio}}</p></span><br>
         <span><p>Publicações:{{$n_posts}}</p></span>
         <span><p>Followers:{{$n_followers}}</p></span>
         <span><p>Following:{{$n_following}}</p></span>
-        @if (Auth::check() && $user->id != Auth::user()->id)
-        <button>Follow</button>
-        <button>Send Message</button>
-        <button>Block</button>
-    @endif
+        @if(Auth::check())
+            @if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
+            <a href="{{route('editprofile',['user_id' => $user->id])}}">Edit Profile</a> <br>
+            <button>Delete account</button>
+                @if(Auth::user()->isAdmin())
+                <button>Ban</button>
+                @endif
+            @else
+            <button>Follow</button>
+            <button>Send Message</button>
+            <button>Block</button>
+            @endif
+        @endif
 </section>
 @if (Auth::check() && $user->id == Auth::user()->id) <!-- If the user is logged in and is the owner of the profile -->
     <section id="posts">
@@ -35,7 +40,7 @@
     </section>
     
 @else
-    @if (Auth::guard('admin')->check() || $user->is_public)
+    @if ($user->is_public || (Auth::check() && Auth::user()->isAdmin()))
         <section id="posts">
             @if ($n_posts > 0)
                 @foreach ($posts as $post)

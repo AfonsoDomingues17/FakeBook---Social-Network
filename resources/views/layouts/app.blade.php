@@ -27,7 +27,7 @@
                 <h1>
                     <a href="{{ url('/') }}">FakeBook!</a>
                 </h1>
-                @if(Route::currentRouteName() === 'home' && Auth::check())
+                @if(Route::currentRouteName() === 'home' && Auth::check() && !Auth::user()->isAdmin())
                     <section id="timeline_options">
                         <a href="{{ route('homepage', ['type' => 'public']) }}">
                             <button id="public-posts-btn">Public Posts</button>
@@ -39,9 +39,9 @@
                 @endif
 
                 <section id="account-options">
-                    @if (Auth::check() || Auth::guard('admin')->check())
+                    @if (Auth::check())
                         <a class="button" href="{{ url('/logout') }}"> Logout </a>
-                        @if (Auth::guard('admin')->check())
+                        @if (Auth::user()->isAdmin())
                             <a href="">
                                 <span id="admin_page">Admin Page</span>
                             </a> 

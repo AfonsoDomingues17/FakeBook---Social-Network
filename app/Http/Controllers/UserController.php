@@ -15,12 +15,11 @@ class UserController extends Controller
 {
     public function showEditProfileForm($user_id)
     {
-        if (!Auth::check()) {
-            return redirect('/login');
-        } else {
+        
             $user = User::findOrFail($user_id);
+            $this->authorize('update', $user);
             return view('pages.editProfile', ['user'=> $user]);
-        }
+        
     }
     public function getPhoto($user_id)
 {   
@@ -63,11 +62,14 @@ class UserController extends Controller
             $user = Auth::user();
             return User::where('id', '!=', $user->id)
                 ->whereNotIn('id', $user->following()->pluck('id'))
+                ->where('typeu', '!=', 'ADMIN') 
                 ->inRandomOrder()
                 ->take(5)->get();
         }
         else {
-            return User::inRandomOrder()->take(5)->get();
+            return User::where('typeu', '!=', 'ADMIN') 
+                ->inRandomOrder()
+                ->take(5)->get();
         }
     }
         
@@ -100,6 +102,10 @@ class UserController extends Controller
 
     public function updateProfile(Request $request, $user_id)
     {   
+        $user = User::findOrFail($user_id);
+
+        $this->authorize('update', $user);
+
         Log::info('Incoming request data', $request->all());
         $request->merge([
             'is_public' => $request->is_public === 'public' ? true : false,
@@ -119,7 +125,7 @@ class UserController extends Controller
         ]);
         Log::info('Validation successful', $validatedData);
 
-        $user = User::findOrFail($user_id);
+        
         $user->name = $request->name;
         $user->username = $request->username;
         $user->age = $request->age;

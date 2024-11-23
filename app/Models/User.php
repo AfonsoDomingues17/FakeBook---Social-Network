@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'age', 'bio', 'is_public', 'photo_url'
+        'name', 'username', 'email', 'password', 'age', 'bio', 'is_public', 'photo_url', 'typeU'
     ];
 
     /**
@@ -29,6 +29,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function isAdmin()
+    {
+        return $this->typeu === 'ADMIN';
+    }
+
+    public function isNormalUser()
+    {
+        return $this->typeu === 'normal';
+    }
 
     /**
      * The attributes that should be cast to native types.
