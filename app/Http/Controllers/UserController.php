@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Watchlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,21 +58,37 @@ class UserController extends Controller
         return view('pages.homepage', ['users' => $users]);
     }
 
-    public function getSuggestedUsers(){
-        if(Auth::check()){
-            $user = Auth::user();
-            return User::where('id', '!=', $user->id)
-                ->whereNotIn('id', $user->following()->pluck('id'))
-                ->where('typeu', '!=', 'ADMIN') 
-                ->inRandomOrder()
-                ->take(5)->get();
+    public function getSuggestedUsers()
+{
+    $suggestedUsers = [];
+    if (Auth::check()) {
+        $user = Auth::user();
+        $users = User::where('id', '!=', $user->id)
+            ->whereNotIn('id', $user->following()->pluck('id'))
+            ->where('typeu', '!=', 'ADMIN')
+            ->inRandomOrder()
+            ->take(5)
+            ->get();
+
+        foreach ($users as $suggestedUser) {
+            $isInWatchlist = Watchlist::where('admin_id', $user->id)->where('user_id', $suggestedUser->id)->exists();
+            $suggestedUser->isInWatchlist = $isInWatchlist;
+            $suggestedUsers[] = $suggestedUser;
         }
-        else {
-            return User::where('typeu', '!=', 'ADMIN') 
-                ->inRandomOrder()
-                ->take(5)->get();
+    } else {
+        $users = User::where('typeu', '!=', 'ADMIN')
+            ->inRandomOrder()
+            ->take(5)
+            ->get();
+
+        foreach ($users as $suggestedUser) {
+            $suggestedUser->isInWatchlist = false;
+            $suggestedUsers[] = $suggestedUser;
         }
     }
+
+    return $suggestedUsers;
+}
         
     
     public function getNumberPosts($user_id){
@@ -91,14 +108,27 @@ class UserController extends Controller
         return $n_following;
     }
     public function showProfile($user_id)
-    {
-        $user = User::findOrFail($user_id);
-        $n_posts = $this->getNumberPosts($user_id);
-        $n_followers = $this->getNumberFollowers($user_id);
-        $n_following = $this->getNumberFollowing($user_id);
-        $posts = $user->posts()->orderBy('datecreation', 'desc')->get();
-        return view('pages.user', ['user'=> $user, 'n_posts' => $n_posts, 'n_followers' => $n_followers, 'n_following' => $n_following, 'posts' => $posts]);
+{
+    $user = User::findOrFail($user_id);
+    $n_posts = $this->getNumberPosts($user_id);
+    $n_followers = $this->getNumberFollowers($user_id);
+    $n_following = $this->getNumberFollowing($user_id);
+    $posts = $user->posts()->orderBy('datecreation', 'desc')->get();
+
+    $isInWatchlist = false;
+    if (Auth::check() && Auth::user()->isAdmin()) {
+        $isInWatchlist = Auth::user()->watchlistedUsers()->where('user_id', $user_id)->exists();
     }
+
+    return view('pages.user', [
+        'user' => $user,
+        'n_posts' => $n_posts,
+        'n_followers' => $n_followers,
+        'n_following' => $n_following,
+        'posts' => $posts,
+        'isInWatchlist' => $isInWatchlist
+    ]);
+}
 
     public function updateProfile(Request $request, $user_id)
     {   
@@ -218,9 +248,72 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($user_id)
     {
-        //
+        $user = User::findOrFail($user_id);
+        $this->authorize('delete', $user);
+
+        // Delete associated posts and their media files
+        foreach ($user->posts as $post) {
+            foreach ($post->media as $media) {
+                Storage::delete($media->photo_url); // Delete the file from storage
+                $media->delete(); // Delete the media record
+            }
+            $post->delete();
+        }
+
+        // Delete profile picture
+        if ($user->photo_url) {
+            $photoPath = str_replace('private/', '', $user->photo_url);
+            Storage::disk('private')->delete($photoPath);
+        }
+        
+        // Remove user from all watchlists
+        $user->watchlist()->delete(); // As admin
+        $user->watchedBy()->detach(); // As watched user
+        // Delete the user
+        $user->delete();
+
+        return redirect()->route('homepage')->with('success', 'Account deleted successfully.');
+    }
+    public function adminPage()
+    {
+        if (Auth::check() && Auth::user()->isAdmin()) {
+            $admin = Auth::user();
+            $users = $admin->watchlistedUsers()->get()->map(function ($user) {
+                $user->isInWatchlist = true; // Since these users are in the watchlist
+                return $user;
+            });
+            return view('pages.admin', ['users' => $users]);
+        }
+        return redirect('/')->with('error', 'You do not have admin access.');
     }
 
+    public function addToWatchlist(Request $request)
+    {
+        if (Auth::check() && Auth::user()->isAdmin()) {
+            $user_id = $request->input('user_id');
+            $admin = Auth::user();
+
+            if (!$admin->watchlistedUsers()->where('user_id', $user_id)->exists()) {
+                $admin->watchlistedUsers()->attach($user_id);
+            }
+
+            return redirect()->back()->with('success', 'User added to watchlist.');
+        }
+        return redirect('/')->with('error', 'You do not have admin access.');
+    }
+
+    public function removeFromWatchlist(Request $request)
+    {
+        if (Auth::check() && Auth::user()->isAdmin()) {
+            $user_id = $request->input('user_id');
+            $admin = Auth::user();
+
+            $admin->watchlistedUsers()->detach($user_id);
+
+            return redirect()->back()->with('success', 'User removed from watchlist.');
+        }
+        return redirect('/')->with('error', 'You do not have admin access.');
+    }
 }

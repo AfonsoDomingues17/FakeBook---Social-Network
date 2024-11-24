@@ -121,5 +121,18 @@ class User extends Authenticatable
                 ->orWhere('user2_id', $this->id);
     }
     
+    public function watchlist()
+{
+    return $this->hasMany(Watchlist::class, 'admin_id');
+}
 
+public function watchlistedUsers()
+{
+    return $this->belongsToMany(User::class, 'watchlists', 'admin_id', 'user_id');
+}
+
+public function watchedBy()
+{
+    return $this->belongsToMany(User::class, 'watchlists', 'user_id', 'admin_id');
+}
 }

@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
-
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ItemController;
 
@@ -29,9 +29,9 @@ use App\Http\Controllers\Auth\RegisterController;
 Route::get('/', function (Request $request, UserController $userController, PostController $postController) {
     $type = $request->input('type', 'public');
     $request->merge(['type' => $type]);
-    $users = $userController->getSuggestedUsers();
+    $suggestedUsers = $userController->getSuggestedUsers();
     $posts = $postController->getPosts($request);
-    return view('pages.homepage', ['users' => $users, 'posts' => $posts, 'type' => $type]);
+    return view('pages.homepage', ['suggestedUsers' => $suggestedUsers, 'posts' => $posts, 'type' => $type]);
 })->name('homepage');
 
 
@@ -40,16 +40,25 @@ Route::get('/users/{user_id}/edit', [UserController::class, 'showEditProfileForm
 Route::put('/users/{user_id}/edit', [UserController::class, 'updateProfile'])->name('updateprofile');
 Route::get('/users/{user_id}', [UserController::class, 'showProfile'])->name('profile');
 Route::get('/users/{user_id}/photo', [UserController::class, 'getPhoto'])->name('userphoto');
-
+Route::delete('/users/{user_id}', [UserController::class, 'destroy'])->name('deleteuser');
 // Posts
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
 Route::post('/posts/create', [PostController::class, 'store'])->name('posts.store'); 
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-Route::put('/posts/{post}/edit', [PostController::class, 'update'])->name('posts.update');
-Route::delete('/posts/{post}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
+Route::get('/posts/{post_id}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/posts/{post_id}/edit', [PostController::class, 'edit'])->name('posts.edit');
+Route::put('/posts/{post_id}/edit', [PostController::class, 'update'])->name('posts.update');
+Route::delete('/posts/{post_id}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
 
+
+// Admin
+
+Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
+Route::post('/admin/watchlist/add', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
+Route::post('/admin/watchlist/remove', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
+
+// Media
+Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');
 
 
 // Search

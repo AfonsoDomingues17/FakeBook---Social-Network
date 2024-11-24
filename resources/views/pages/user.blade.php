@@ -16,11 +16,28 @@
         @if(Auth::check())
             @if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
             <a href="{{route('editprofile',['user_id' => $user->id])}}">Edit Profile</a> <br>
-            <button>Delete account</button>
-                @if(Auth::user()->isAdmin())
-                <button>Ban</button>
-                @endif
+            @endif
+            @if (Auth::user()->isAdmin())
+            <form action="{{ route('deleteuser', ['user_id' => $user->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this account? This action cannot be undone.');">
+                @csrf
+                @method('DELETE')
+                <button type="submit">Delete account</button>
+            </form>
+            @if ($isInWatchlist)
+            <form action="{{ route('admin.watchlist.remove') }}" method="POST">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                <button type="submit">Remove from Watchlist</button>
+            </form>
             @else
+            <form action="{{ route('admin.watchlist.add') }}" method="POST">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                <button type="submit">Add to Watchlist</button>
+            </form>
+            @endif
+            @endif
+            @if (!Auth::user()->isAdmin() && Auth::user()->id != $user->id)
             <button>Follow</button>
             <button>Send Message</button>
             <button>Block</button>

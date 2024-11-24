@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Group;
+use App\Models\Watchlist;
+use Illuminate\Support\Facades\Auth;
 
 class SearchController extends Controller
 {
@@ -22,10 +24,21 @@ class SearchController extends Controller
         $groups = collect();
 
         if ($type === 'users') {
-            $users = User::where('name', 'ILIKE', '%' . $query . '%')
+            $usersQuery = User::where('name', 'ILIKE', '%' . $query . '%')
                         ->orWhere('email', 'ILIKE', '%' . $query . '%')
                         ->orWhere('username', 'ILIKE', '%' . $query . '%')
                         ->paginate(10, ['*'], 'page', $page);
+
+            $users = $usersQuery->map(function ($user) {
+                $isInWatchlist = false;
+                if (Auth::check() && Auth::user()->isAdmin()) {
+                    $isInWatchlist = Watchlist::where('admin_id', Auth::id())->where('user_id', $user->id)->exists();
+                }
+                return [
+                    'user' => $user,
+                    'isInWatchlist' => $isInWatchlist
+                ];
+            });
         } elseif ($type === 'posts') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
@@ -44,10 +57,9 @@ class SearchController extends Controller
             } elseif ($type === 'posts') {
                 return view('partials.post', compact('posts'))->render();
             } elseif ($type === 'groups') {
-                return view('partials.group', compact('posts'))->render();
+                return view('partials.group', compact('groups'))->render();
             }
-        }
-        else {
+        } else {
             return view('pages.searchpage', compact('users', 'posts', 'groups', 'type', 'query'));
         }
     }
