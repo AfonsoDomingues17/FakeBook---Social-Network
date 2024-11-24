@@ -23,6 +23,19 @@
                 @method('DELETE')
                 <button type="submit">Delete account</button>
             </form>
+            @if ($isInWatchlist)
+            <form action="{{ route('admin.watchlist.remove') }}" method="POST">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                <button type="submit">Remove from Watchlist</button>
+            </form>
+            @else
+            <form action="{{ route('admin.watchlist.add') }}" method="POST">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                <button type="submit">Add to Watchlist</button>
+            </form>
+            @endif
             @endif
             @if (!Auth::user()->isAdmin() && Auth::user()->id != $user->id)
             <button>Follow</button>

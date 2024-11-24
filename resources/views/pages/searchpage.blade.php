@@ -12,11 +12,13 @@
     </section>
     <section id="search-results">
         <h2>
-            Search results (<?=$type?>) for "{{ $query }}"
+            Search results ({{$type}}) for "{{ $query }}"
         </h2>
         <section id="search-results-container">
             @if($type === 'users')
-                @each('partials.user', $users, 'user')
+                @foreach($users as $userData)
+                    @include('partials.user', ['user' => $userData['user'], 'isInWatchlist' => $userData['isInWatchlist']])
+                @endforeach
             @elseif($type === 'posts')
                 @each('partials.post', $posts, 'post')
             @elseif($type === 'groups')

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <section class="homepage-layout">
     <section class="left-sidebar">
         <h1>Welcome to FakeBook</h1>
@@ -15,7 +16,7 @@
             @endif
         </h2>
         <section id="posts-container">
-            @if($type === 'following' && Auth::check())
+            @if($type === 'following' && !Auth::check())
                 <h3>Login to see posts from accounts you follow</h3>
                 <a href="{{ route('login') }}">
                     <button id="follow-redirect-login">Login</button>
@@ -27,7 +28,9 @@
     </section>
     <section class="suggested-users">
         <h2>Users that you may know!</h2>
-        @each('partials.user', $users, 'user')
+        @foreach($suggestedUsers as $suggestedUser)
+            @include('partials.user', ['user' => $suggestedUser, 'isInWatchlist' => $suggestedUser->isInWatchlist])
+        @endforeach
     </section>
 </section>
 

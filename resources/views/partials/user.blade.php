@@ -9,4 +9,19 @@
     @if (Auth::check() && !Auth::user()->isAdmin())
     <button>Follow</button>
     @endif
+    @if (Auth::check() && Auth::user()->isAdmin())
+        @if ($isInWatchlist)
+        <form action="{{ route('admin.watchlist.remove') }}" method="POST">
+            @csrf
+            <input type="hidden" name="user_id" value="{{ $user->id }}">
+            <button type="submit">Remove from Watchlist</button>
+        </form>
+        @else
+        <form action="{{ route('admin.watchlist.add') }}" method="POST">
+            @csrf
+            <input type="hidden" name="user_id" value="{{ $user->id }}">
+            <button type="submit">Add to Watchlist</button>
+        </form>
+        @endif
+    @endif
 </article>

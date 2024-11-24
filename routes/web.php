@@ -29,9 +29,9 @@ use App\Http\Controllers\Auth\RegisterController;
 Route::get('/', function (Request $request, UserController $userController, PostController $postController) {
     $type = $request->input('type', 'public');
     $request->merge(['type' => $type]);
-    $users = $userController->getSuggestedUsers();
+    $suggestedUsers = $userController->getSuggestedUsers();
     $posts = $postController->getPosts($request);
-    return view('pages.homepage', ['users' => $users, 'posts' => $posts, 'type' => $type]);
+    return view('pages.homepage', ['suggestedUsers' => $suggestedUsers, 'posts' => $posts, 'type' => $type]);
 })->name('homepage');
 
 
@@ -49,6 +49,13 @@ Route::get('/posts/{post_id}', [PostController::class, 'show'])->name('posts.sho
 Route::get('/posts/{post_id}/edit', [PostController::class, 'edit'])->name('posts.edit');
 Route::put('/posts/{post_id}/edit', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{post_id}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
+
+
+// Admin
+
+Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
+Route::post('/admin/watchlist/add', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
+Route::post('/admin/watchlist/remove', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
 
 // Media
 Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');

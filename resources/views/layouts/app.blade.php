@@ -42,7 +42,7 @@
                     @if (Auth::check())
                         <a class="button" href="{{ url('/logout') }}"> Logout </a>
                         @if (Auth::user()->isAdmin())
-                            <a href="">
+                        <a href="{{ route('admin.page') }}">
                                 <span id="admin_page">Admin Page</span>
                             </a> 
                         @else
