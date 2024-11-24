@@ -91,7 +91,7 @@ class PostController extends Controller
             'is_public' => 'boolean',
             'typep' => ['required', Rule::in(['TEXT', 'MEDIA'])],
             'media' => 'array|max:5',
-            'media.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'media.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024'
         ]);
 
         // Log the validated data
@@ -109,10 +109,13 @@ class PostController extends Controller
         // Handle media uploads
         if ($request->hasFile('media')) {
             foreach ($request->file('media') as $file) {
-                $filePath = $file->store('public/post_pictures');
+                // Store file in private/post_pictures
+                $filePath = $file->store('private/post_pictures');
+                
+                // Save the file path to the database
                 Media::create([
                     'photo_url' => $filePath, // Store the relative path
-                    'post_id' => $post->id
+                    'post_id' => $post->id,
                 ]);
             }
         }
@@ -123,60 +126,56 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
-    {
-        $this->authorize('view', $post);
-        return view('partials.post', compact('post'));
+    public function show($post_id)
+{
+    $post = Post::findOrFail($post_id);
+    $this->authorize('view', $post);
+    return view('partials.post', compact('post'));
+}
+
+public function edit($post_id)
+{
+    $post = Post::findOrFail($post_id);
+    $this->authorize('update', $post);
+    return view('partials.edit_post', compact('post'));
+}
+
+public function update(Request $request, $post_id)
+{
+    // Log the incoming request data
+    \Log::info('Incoming request data', $request->all());
+
+    $post = Post::findOrFail($post_id);
+    $this->authorize('update', $post);
+
+    $validatedData = $request->validate([
+        'description' => 'string|max:1000',
+        'is_public' => 'boolean'
+    ]);
+    $validatedData['is_edited'] = true;
+
+    // Update the post with the validated data
+    $post->update($validatedData);
+
+    // Redirect to the previous page
+    return redirect($request->input('previous_url'));
+}
+
+public function destroy($post_id)
+{
+    $post = Post::findOrFail($post_id);
+    $this->authorize('delete', $post);
+
+    // Delete associated media files from storage
+    foreach ($post->media as $media) {
+        Storage::delete($media->photo_url); // Delete the file from storage
+        $media->delete(); // Delete the media record
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Post $post)
-    {
-        $this->authorize('update', $post);
-        return view('partials.edit_post', compact('post'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Post $post)
-    {
-        // Log the incoming request data
-        \Log::info('Incoming request data', $request->all());
-        $this->authorize('update', $post);
-
-        $validatedData = $request->validate([
-            'description' => 'string|max:1000',
-            'is_public' => 'boolean'
-        ]);
-        $validatedData['is_edited'] = true;
-
-        // Update the post with the validated data
-        $post->update($validatedData);
-
-        // Redirect to the user's profile page
-        return redirect()->route('profile', ['user_id' => Auth::id()]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Post $post)
-    {
-        $this->authorize('delete', $post);
-        // Delete associated media files from storage
-        foreach ($post->media as $media) {
-            $filePath = str_replace('/storage/', 'public/', $media->photo_url);
-            Storage::delete($filePath);
-            $media->delete();
-        }
-
-        // Delete the post
-        $post->delete();
-        
-        // Redirect to the user's profile page
-        return redirect()->route('profile', ['user_id' => Auth::id()]);
-    }
+    // Delete the post
+    $post->delete();
+    
+    // Redirect to +revious page
+    return redirect()->back();
+}
 }

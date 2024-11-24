@@ -218,9 +218,30 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($user_id)
     {
-        //
+        $user = User::findOrFail($user_id);
+        $this->authorize('delete', $user);
+
+        // Delete associated posts and their media files
+        foreach ($user->posts as $post) {
+            foreach ($post->media as $media) {
+                Storage::delete($media->photo_url); // Delete the file from storage
+                $media->delete(); // Delete the media record
+            }
+            $post->delete();
+        }
+
+        // Delete profile picture
+        if ($user->photo_url) {
+            $photoPath = str_replace('private/', '', $user->photo_url);
+            Storage::disk('private')->delete($photoPath);
+        }
+
+        // Delete the user
+        $user->delete();
+
+        return redirect()->route('homepage')->with('success', 'Account deleted successfully.');
     }
 
 }

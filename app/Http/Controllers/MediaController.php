@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
@@ -36,7 +38,22 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        //
+        // Ensure the user has permission to view the media
+        $this->authorize('view', $media->post);
+
+        // Get the file path
+        $filePath = $media->photo_url;
+
+        // Check if the file exists in storage
+        if (!Storage::exists($filePath)) {
+            abort(404, 'File not found.');
+        }
+
+        // Serve the file as a response
+        $fileContent = Storage::get($filePath);
+        $mimeType = Storage::mimeType($filePath);
+
+        return Response::make($fileContent, 200, ['Content-Type' => $mimeType]);
     }
 
     /**

@@ -1,6 +1,7 @@
-<form action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
+    <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
     <div>
         <label for="description">Description:</label>
         <input type="text" id="description" name="description" value="{{ $post->description }}">
@@ -20,4 +21,3 @@
 </form>
 
 <script src="{{ asset('js/mediaPost.js') }}"></script>
-
