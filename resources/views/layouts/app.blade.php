@@ -27,7 +27,7 @@
                 <h1>
                     <a href="{{ url('/') }}">FakeBook!</a>
                 </h1>
-                @if(Route::currentRouteName() === 'home' && Auth::check() && !Auth::user()->isAdmin())
+                @if(Route::currentRouteName() === 'homepage' && Auth::check() && !Auth::user()->isAdmin())
                     <section id="timeline_options">
                         <a href="{{ route('homepage', ['type' => 'public']) }}">
                             <button id="public-posts-btn">Public Posts</button>
