@@ -289,6 +289,8 @@ class UserController extends Controller
         return redirect('/')->with('error', 'You do not have admin access.');
     }
 
+    
+
     public function addToWatchlist(Request $request)
     {
         if (Auth::check() && Auth::user()->isAdmin()) {
