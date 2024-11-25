@@ -10,7 +10,7 @@
     <div class="media">
     @if ($post->typep === 'MEDIA')
             <img id="media-image-{{ $post->id }}" 
-                 src="{{ $post->media->isNotEmpty() ? route('media.show', $post->media->first()->id) : Storage::url('DEFAULT-POST.jpg') }}" 
+                 src="{{ $post->media->isNotEmpty() ? route('media.show', ['media_id' => $post->media->first()->id]) : Storage::url('DEFAULT-POST.jpg') }}" 
                  alt="Media">
             @if ($post->media->count() > 1)
                 <button id="media-prev-{{ $post->id }}">Previous</button>
@@ -22,7 +22,7 @@
 <script>
     const mediaUrls{{ $post->id }} = [
         @foreach ($post->media as $media)
-            "{{ route('media.show', $media->id) }}",
+            "{{ route('media.show', ['media_id' => $media->id]) }}",
         @endforeach
     ];
     initMediaCarousel({{ $post->id }}, mediaUrls{{ $post->id }});

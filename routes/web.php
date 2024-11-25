@@ -54,11 +54,11 @@ Route::delete('/posts/{post_id}/delete', [PostController::class, 'destroy'])->na
 // Admin
 
 Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
-Route::post('/admin/watchlist/add', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
-Route::post('/admin/watchlist/remove', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
+Route::post('/admin/watchlist/add/{user_id}', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
+Route::post('/admin/watchlist/remove/{user_id}', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
 
 // Media
-Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');
+Route::get('/media/{media_id}', [MediaController::class, 'show'])->name('media.show');
 
 
 // Search

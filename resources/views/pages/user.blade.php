@@ -23,19 +23,19 @@
                 @method('DELETE')
                 <button type="submit">Delete account</button>
             </form>
+            <div id="watchlist-actions-{{ $user->id }}" data-user-id="{{ $user->id }}">
             @if ($isInWatchlist)
-            <form action="{{ route('admin.watchlist.remove') }}" method="POST">
-                @csrf
-                <input type="hidden" name="user_id" value="{{ $user->id }}">
-                <button type="submit">Remove from Watchlist</button>
-            </form>
+                <form id="remove-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.remove', ['user_id' => $user->id]) }}" method="POST">
+                    @csrf
+                    <button type="submit">Remove from Watchlist</button>
+                </form>
             @else
-            <form action="{{ route('admin.watchlist.add') }}" method="POST">
-                @csrf
-                <input type="hidden" name="user_id" value="{{ $user->id }}">
-                <button type="submit">Add to Watchlist</button>
-            </form>
+                <form id="add-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.add', ['user_id' => $user->id]) }}" method="POST">
+                    @csrf
+                    <button type="submit">Add to Watchlist</button>
+                </form>
             @endif
+        </div>
             @endif
             @if (!Auth::user()->isAdmin() && Auth::user()->id != $user->id)
             <button>Follow</button>
@@ -81,4 +81,6 @@
         </section>
     @endif  
 @endif
+
+<script src="{{ asset('js/watchlist.js') }}"></script>
 @endsection
