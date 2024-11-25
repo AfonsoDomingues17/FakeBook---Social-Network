@@ -36,25 +36,27 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Media $media)
-    {
-        // Ensure the user has permission to view the media
-        $this->authorize('view', $media->post);
+    public function show($media_id)
+{
+    $media = Media::findOrFail($media_id);
 
-        // Get the file path
-        $filePath = $media->photo_url;
+    // Ensure the user has permission to view the media
+    $this->authorize('view', $media->post);
 
-        // Check if the file exists in storage
-        if (!Storage::exists($filePath)) {
-            abort(404, 'File not found.');
-        }
+    // Get the file path
+    $filePath = $media->photo_url;
 
-        // Serve the file as a response
-        $fileContent = Storage::get($filePath);
-        $mimeType = Storage::mimeType($filePath);
-
-        return Response::make($fileContent, 200, ['Content-Type' => $mimeType]);
+    // Check if the file exists in storage
+    if (!Storage::exists($filePath)) {
+        abort(404, 'File not found.');
     }
+
+    // Serve the file as a response
+    $fileContent = Storage::get($filePath);
+    $mimeType = Storage::mimeType($filePath);
+
+    return Response::make($fileContent, 200, ['Content-Type' => $mimeType]);
+}
 
     /**
      * Show the form for editing the specified resource.

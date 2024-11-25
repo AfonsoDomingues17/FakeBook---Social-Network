@@ -224,8 +224,8 @@ paths:
   /users/{user_id}/edit:
     get:
       operationId: R108
-      summary: "R108: Edit Profile Form"
-      description: "Provides de Edit Profile Form (name, username, photo, is_public). Access: OWN"
+      summary: 'R108: Edit Profile Form'
+      description: 'Provides The Edit Profile Form (name, username, photo, is_public). Access: OWN'
       tags:
         - "M01: Authentication and Individual Profile"
       parameters:
@@ -359,12 +359,159 @@ paths:
           description: "Not Found. The specified user does not exist."
 
   #M02: Admin and Static Pages
-
-  /admin/users:
+  /admin:
     get:
       operationId: R201
-      summary: "R201: View All Users (Admin Access)"
-      description: "Lists all Users. This reuses the functionality of the users module for admin purposes. Access: ADM"
+      summary: 'R201: Admin Page'
+      description: 'Access the admin page. Access: ADM'
+      tags:
+        - 'M02: Admin and Static Pages'
+      responses:
+        '200':
+          description: 'Admin page accessed successfully, showing admin page UI.'
+        '403':
+          description: 'Denied - Not an admin.'
+
+  /admin/watchlist/add/{user_id}:
+    post:
+      operationId: R202
+      summary: 'R202: Add User to Watchlist'
+      description: 'Add a user to the admin watchlist. Access: ADM'
+      tags:
+        - 'M02: Admin and Static Pages'
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          description: 'The ID of the user to add to the watchlist.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'User added to watchlist successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'User added to watchlist.'
+        '403':
+          description: 'Denied - Not an admin.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'You do not have admin access.'
+        '404':
+          description: 'User not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'User not found.'
+        '500':
+          description: 'Internal Server Error. An unexpected error occurred on the server.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error.'
+
+  /admin/watchlist/remove/{user_id}:
+    post:
+      operationId: R203
+      summary: 'R203: Remove User from Watchlist'
+      description: 'Remove a user from the admin watchlist. Access: ADM'
+      tags:
+        - 'M02: Admin and Static Pages'
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          description: 'The ID of the user to remove from the watchlist.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'User removed from watchlist successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'User removed from watchlist.'
+        '403':
+          description: 'Denied - Not an admin.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'You do not have admin access.'
+        '404':
+          description: 'User not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'User not found.'
+        '500':
+          description: 'Internal Server Error. An unexpected error occurred on the server.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error.'
+  /admin/users:
+    get:
+      operationId: R204
+      summary: 'R204: View All Users (Admin Access)'
+      description: 'Lists all Users. This reuses the functionality of the users module for admin purposes. Access: ADM'
       tags:
         - "M02: Admin and Static Pages"
       responses:
@@ -375,9 +522,9 @@ paths:
 
   /admin/users/ban:
     post:
-      operationId: R202
-      summary: "R202: Ban a User"
-      description: "Ban a user, taking away their ability to log in to the account. Access: ADM"
+      operationId: R205
+      summary: 'R205: Ban a User'
+      description: 'Ban a user, taking away their ability to log in to the account. Access: ADM'
       tags:
         - "M02: Admin and Static Pages"
       requestBody:
@@ -409,9 +556,9 @@ paths:
 
   /admin/users/unban:
     post:
-      operationId: R203
-      summary: "R203: Unban a User"
-      description: "Unbans a user, allowing them to access the platform again. Access: ADM"
+      operationId: R206
+      summary: 'R206: Unban a User'
+      description: 'Unbans a user, allowing them to access the platform again. Access: ADM'
       tags:
         - "M02: Admin and Static Pages"
       requestBody:
@@ -443,9 +590,9 @@ paths:
 
   /admin/flagged/comments:
     get:
-      operationId: R204
-      summary: "R204: Retrieve Flagged Comments"
-      description: "Retrieve all flagged comments. Access: ADM"
+      operationId: R207
+      summary: 'R207: Retrieve Flagged Comments'
+      description: 'Retrieve all flagged comments. Access: ADM'
       tags:
         - "M02: Admin and Static Pages"
       responses:
@@ -463,9 +610,9 @@ paths:
 
   /admin/flagged/posts:
     get:
-      operationId: R205
-      summary: "R205: Retrieve Flagged Posts"
-      description: "Retrieve all flagged posts. Access: ADM"
+      operationId: R208
+      summary: 'R208: Retrieve Flagged Posts'
+      description: 'Retrieve all flagged posts. Access: ADM'
       tags:
         - "M02: Admin and Static Pages"
       responses:
@@ -481,9 +628,9 @@ paths:
 
   /admin/flagged/users:
     get:
-      operationId: R206
-      summary: "R206: Retrieve Flagged Users"
-      description: "Retrieve all flagged users. Access: ADM"
+      operationId: R209
+      summary: 'R209: Retrieve Flagged Users'
+      description: 'Retrieve all flagged users. Access: ADM'
       tags:
         - "M02: Admin and Static Pages"
       responses:
@@ -498,9 +645,9 @@ paths:
 
   /admin/flagged/{type}/{id}/reports:
     get:
-      operationId: R207
-      summary: "R207: Retrieve Reports for Flagged Content"
-      description: "Retrieve all reports for a specific flagged comment, post, or user. Access: ADM"
+      operationId: R210
+      summary: 'R210: Retrieve Reports for Flagged Content'
+      description: 'Retrieve all reports for a specific flagged comment, post, or user. Access: ADM'
       tags:
         - "M02: Admin and Static Pages"
       parameters:
@@ -528,9 +675,9 @@ paths:
           description: "Not Found. The specified content does not exist."
 
     post:
-      operationId: R208
-      summary: "R208: Resolve Reports for Flagged Content"
-      description: "Mark all reports for a specific flagged comment, post, or user as resolved. Access: ADM"
+      operationId: R211
+      summary: 'R211: Resolve Reports for Flagged Content'
+      description: 'Mark all reports for a specific flagged comment, post, or user as resolved. Access: ADM'
       tags:
         - "M02: Admin and Static Pages"
       requestBody:
@@ -570,8 +717,8 @@ paths:
 
   /static/about-contacts:
     get:
-      operationId: R209
-      summary: "R209: Get About/Contacts Page"
+      operationId: R212
+      summary: 'R212: Get About/Contacts Page'
       description: 'Retrieves the static content of the "About/Contacts" page. Access: PUB'
       tags:
         - "M02: Admin and Static Pages"
@@ -587,8 +734,8 @@ paths:
 
   /static/help-FAQ:
     get:
-      operationId: R210
-      summary: "R210: Get Help/FAQ Page"
+      operationId: R213
+      summary: 'R213: Get Help/FAQ Page'
       description: 'Retrieves the static content of the "Help/FAQ" page. Access: PUB'
       tags:
         - "M02: Admin and Static Pages"
@@ -604,8 +751,8 @@ paths:
 
   /static/settings:
     get:
-      operationId: R211
-      summary: "R211: Get Settings Page"
+      operationId: R214
+      summary: 'R214: Get Settings Page'
       description: 'Retrieves the static content of the "Settings" page. Access: PUB'
       tags:
         - "M02: Admin and Static Pages"
@@ -1067,8 +1214,8 @@ paths:
   /posts/{post_id}/edit:
     get:
       operationId: R405
-      summary: "R405: Edit Post Form"
-      description: "Retrieve the edit form for a specific post. Access: OWN"
+      summary: 'R405: Edit Post Form'
+      description: 'Retrieve the edit form for a specific post. Access: OWN,ADM'
       tags:
         - "M04: Post Management and Post Media Handling"
       parameters:
@@ -1090,8 +1237,8 @@ paths:
           description: "Not Found. The specified post does not exist."
     put:
       operationId: R406
-      summary: "R406: Edit Post"
-      description: "Edit an existing post. Access: OWN"
+      summary: 'R406: Edit Post'
+      description: 'Edit an existing post. Access: OWN,ADM'
       tags:
         - "M04: Post Management and Post Media Handling"
       requestBody:
@@ -1212,15 +1359,75 @@ paths:
             type: integer
           required: true
       responses:
-        "200":
-          description: "Ok. Show list of posts UI"
-        "400":
-          description: "Bad Request. The user_id parameter is invalid."
-        "401":
-          description: "Unauthorized. The user is not authenticated."
-        "404":
-          description: "Not Found. The specified user does not exist or has no posts."
-
+        '200':
+          description: 'Ok. Show list of posts UI'
+        '400':
+          description: 'Bad Request. The user_id parameter is invalid.'
+        '401':
+          description: 'Unauthorized. The user is not authenticated.'
+        '404':
+          description: 'Not Found. The specified user does not exist or has no posts.'
+  /media/{media_id}:
+    get:
+      operationId: R410
+      summary: 'R410: View Media'
+      description: 'Retrieve and display a specific media file. Access: USR'
+      tags:
+        - 'M04: Post Management and Post Media Handling'
+      parameters:
+        - in: path
+          name: media_id
+          required: true
+          description: 'The ID of the media to retrieve.'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Media file retrieved and displayed successfully.'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '403':
+          description: 'Denied - Not authorized to view this media.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'You do not have access to view this media.'
+        '404':
+          description: 'Media not found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Media not found.'
+        '500':
+          description: 'Internal Server Error. An unexpected error occurred on the server.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Internal Server Error.'
   #M05: Commenting and Reactions
 
   /posts/{post_id}/comments:
