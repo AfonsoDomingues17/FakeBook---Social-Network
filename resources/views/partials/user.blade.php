@@ -1,11 +1,13 @@
 <article class="user" data-id="{{ $user->id }}">
     <a href="{{route('profile',['user_id' => $user->id])}}">
     <section id="info">
-        <img src="{{ route('userphoto', ['user_id' => $user->id]) }}" width="100" alt="user profile picture">
-        <span id="user"><p>{{$user->username}}</p></span>
-        <span id="nome"><p>{{$user->name}}</p></span>
-    </section>
-    </a>
+        <img src="{{ route('userphoto', ['user_id' => $user->id]) }}" width="100"  height="100" alt="user profile picture">
+        <div class="user-info">
+            <span id="user"><p>{{$user->username}}</p></span>
+            <span id="nome"><p>{{$user->name}}</p></span>
+        </div>
+    
+    
     @if (Auth::check() && !Auth::user()->isAdmin())
     <button>Follow</button>
     @endif
@@ -24,4 +26,6 @@
         </form>
         @endif
     @endif
+    </section>
+    </a>
 </article>

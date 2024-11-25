@@ -3,6 +3,7 @@
 @section('content')
 
 <section id="editprofile">
+    <div class="form">
     <form method="POST" action="{{ route('updateprofile', ['user_id' => $user->id]) }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     {{ method_field('PUT') }}
@@ -64,7 +65,7 @@
         </button>
 
     </form>
-    
+    </div>
     
     
 </section>
