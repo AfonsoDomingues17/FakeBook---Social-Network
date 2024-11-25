@@ -40,7 +40,7 @@ Route::get('/users/{user_id}/edit', [UserController::class, 'showEditProfileForm
 Route::put('/users/{user_id}/edit', [UserController::class, 'updateProfile'])->name('updateprofile');
 Route::get('/users/{user_id}', [UserController::class, 'showProfile'])->name('profile');
 Route::get('/users/{user_id}/photo', [UserController::class, 'getPhoto'])->name('userphoto');
-Route::delete('/users/{user_id}', [UserController::class, 'destroy'])->name('deleteuser');
+Route::delete('/users/{user_id}/delete', [UserController::class, 'destroy'])->name('deleteuser');
 // Posts
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');

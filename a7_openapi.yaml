@@ -1,58 +1,56 @@
 openapi: 3.0.0
 
 info:
-  version: '1.0'
-  title: 'LBAW FakeBook Web API'
-  description: 'Web Resources Specification (A7) for FakeBook'
+  version: "1.0"
+  title: "LBAW FakeBook Web API"
+  description: "Web Resources Specification (A7) for FakeBook"
 
 servers:
-- url: http://lbaw.fe.up.pt
-  description: Production server
+  - url: http://lbaw.fe.up.pt
+    description: Production server
 
 externalDocs:
   description: Find more info here.
   url: https://web.fe.up.pt/~ssn/wiki/teach/lbaw/medialib/a07
 
 tags:
-  - name: 'M01: Authentication and Individual Profile'
-  - name: 'M02: Admin and Static Pages'
-  - name: 'M03: Direct Messaging and Group Chat'
-  - name: 'M04: Post Management and Post Media Handling'
-  - name: 'M05: Commenting and Reactions'
-  - name: 'M06: Connections'
-  - name: 'M07: Notifications'
-  - name: 'M08: Content Moderation and Reporting'
-  - name: 'M09: Search and Results'
-  - name: 'M10: Group Management and Participation'
-  - name: 'M11: Analytics and Influencer Insights'
-
+  - name: "M01: Authentication and Individual Profile"
+  - name: "M02: Admin and Static Pages"
+  - name: "M03: Direct Messaging and Group Chat"
+  - name: "M04: Post Management and Post Media Handling"
+  - name: "M05: Commenting and Reactions"
+  - name: "M06: Connections"
+  - name: "M07: Notifications"
+  - name: "M08: Content Moderation and Reporting"
+  - name: "M09: Search and Results"
+  - name: "M10: Group Management and Participation"
+  - name: "M11: Analytics and Influencer Insights"
 
 paths:
   #M01: Authentication and Individual Profile
   /login:
     get:
       operationId: R101
-      summary: 'R101: Login Form'
-      description: 'Provides the login form. Access: PUB'
+      summary: "R101: Login Form"
+      description: "Provides the login form. Access: PUB"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       responses:
-        '200':
-          description: 'Login form UI displayed.'
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The login form could not be found.'
-
+        "200":
+          description: "Login form UI displayed."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The login form could not be found."
 
     post:
       operationId: R102
-      summary: 'R102: Login Action'
-      description: 'Processes the login form submission. Access: PUB'
+      summary: "R102: Login Action"
+      description: "Processes the login form submission. Access: PUB"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       requestBody:
         required: true
         content:
@@ -68,62 +66,62 @@ paths:
                 - email
                 - password
       responses:
-        '302':
-          description: 'Redirect after processing login credentials.'
+        "302":
+          description: "Redirect after processing login credentials."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful authentication - Redirect to home page.'
-                  value: '/'
+                  description: "Successful authentication - Redirect to home page."
+                  value: "/"
                 302Failure:
-                  description: 'Failed authentication - Redirect to login form.'
-                  value: '/login'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid or missing.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified resource does not exist.'
+                  description: "Failed authentication - Redirect to login form."
+                  value: "/login"
+        "400":
+          description: "Bad Request. The request body parameters are invalid or missing."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified resource does not exist."
 
   /logout:
     post:
       operationId: R103
-      summary: 'R103: Logout Action'
-      description: 'Logs out the currently authenticated user. Access: USR, ADM'
+      summary: "R103: Logout Action"
+      description: "Logs out the currently authenticated user. Access: USR, ADM"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       responses:
-        '302':
-          description: 'Redirect after logout action.'
+        "302":
+          description: "Redirect after logout action."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful logout - Redirect to login form.'
-                  value: '/login'
+                  description: "Successful logout - Redirect to login form."
+                  value: "/login"
 
   /register:
     get:
       operationId: R104
-      summary: 'R104: Registration Form'
-      description: 'Provides the registration form  UI for new users. Access: PUB'
+      summary: "R104: Registration Form"
+      description: "Provides the registration form  UI for new users. Access: PUB"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       responses:
-        '200':
-          description: 'Registration form UI displayed.'
+        "200":
+          description: "Registration form UI displayed."
 
     post:
       operationId: R105
-      summary: 'R105: Register Action'
-      description: 'Processes the new user registration form. Access: PUB'
+      summary: "R105: Register Action"
+      description: "Processes the new user registration form. Access: PUB"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       requestBody:
         required: true
         content:
@@ -153,76 +151,75 @@ paths:
                 - age
                 - is_public
       responses:
-        '302':
-          description: 'Redirect after processing registration form.'
+        "302":
+          description: "Redirect after processing registration form."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful authentication - Redirect to user profile.'
-                  value: '/'
+                  description: "Successful authentication - Redirect to user profile."
+                  value: "/"
                 302Failure:
-                  description: 'Failed authentication - Redirect to register form.'
-                  value: '/register'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid or missing.'
-        '404':
-          description: 'Not Found. The specified resource does not exist.'
-        '409':
-          description: 'Conflict. The email/username is already in use.'
+                  description: "Failed authentication - Redirect to register form."
+                  value: "/register"
+        "400":
+          description: "Bad Request. The request body parameters are invalid or missing."
+        "404":
+          description: "Not Found. The specified resource does not exist."
+        "409":
+          description: "Conflict. The email/username is already in use."
 
-  
   /users/{user_id}:
     get:
       operationId: R106
-      summary: 'R106: View User Profile'
-      description: 'Retrieves the profile information for a specified user. Access: PUB'
+      summary: "R106: View User Profile"
+      description: "Retrieves the profile information for a specified user. Access: PUB"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       parameters:
         - in: path
           name: user_id
           required: true
           schema:
             type: integer
-            description: 'The ID of the requested user.'
+            description: "The ID of the requested user."
       responses:
-        '200':
-          description: 'User profile UI displayed.'
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The user_id could not be found.'
-    
+        "200":
+          description: "User profile UI displayed."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The user_id could not be found."
+
     delete:
       operationId: R107
-      summary: 'R107: Delete User Account'
-      description: 'Deletes the user account and all associated data Access: OWN'
+      summary: "R107: Delete User Account"
+      description: "Deletes the user account and all associated data Access: OWN"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       parameters:
         - in: path
           name: user_id
           required: true
           schema:
             type: integer
-            description: 'The ID of the user whose account is being deleted.'
+            description: "The ID of the user whose account is being deleted."
       responses:
-        '302':
-          description: 'User account deleted successfully. Redirecting to the home page.'
+        "302":
+          description: "User account deleted successfully. Redirecting to the home page."
           headers:
             Location:
               schema:
                 type: string
-              example: '/'
-        '403':
-          description: 'Current user is not allowed to delete the account.'
-        '404':
-          description: 'User not found.'
+              example: "/"
+        "403":
+          description: "Current user is not allowed to delete the account."
+        "404":
+          description: "User not found."
 
   /users/{user_id}/edit:
     get:
@@ -230,28 +227,28 @@ paths:
       summary: 'R108: Edit Profile Form'
       description: 'Provides The Edit Profile Form (name, username, photo, is_public). Access: OWN'
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       parameters:
         - in: path
           name: user_id
           required: true
           schema:
             type: integer
-            description: 'The ID of the user whose profile details are being edited.'
+            description: "The ID of the user whose profile details are being edited."
       responses:
-        '200':
-          description: 'User profile edit UI displayed.'
-        '403':
-          description: 'Forbidden. Only the account owner can access the edit profile form.'
-        '404':
-          description: 'User not found.'
+        "200":
+          description: "User profile edit UI displayed."
+        "403":
+          description: "Forbidden. Only the account owner can access the edit profile form."
+        "404":
+          description: "User not found."
 
     put:
       operationId: R109
-      summary: 'R109: Update Profile Details'
-      description: 'Updates multiple profile details, including name, username, photo, and visibility. Access: OWN'
+      summary: "R109: Update Profile Details"
+      description: "Updates multiple profile details, including name, username, photo, and visibility. Access: OWN"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       requestBody:
         required: true
         content:
@@ -261,7 +258,7 @@ paths:
               properties:
                 user_id:
                   type: integer
-                  description: 'The ID of the user whose profile details are being updated.'
+                  description: "The ID of the user whose profile details are being updated."
                 name:
                   type: string
                 username:
@@ -272,26 +269,25 @@ paths:
                 is_public:
                   type: boolean
       responses:
-        '302':
-          description: 'Profile details updated successfully. Redirecting to the user profile page.'
+        "302":
+          description: "Profile details updated successfully. Redirecting to the user profile page."
           headers:
             Location:
               schema:
                 type: string
-              example: '/users/{user_id}'
-        '403':
-          description: 'Error - Not the account owner.'
-        '404':
-          description: 'User not found.'
+              example: "/users/{user_id}"
+        "403":
+          description: "Error - Not the account owner."
+        "404":
+          description: "User not found."
 
   /recover-password:
-    
     post:
       operationId: R110
-      summary: 'R110: Recover Password'
-      description: 'Sends a password recovery email to the user. Access: USR'
+      summary: "R110: Recover Password"
+      description: "Sends a password recovery email to the user. Access: USR"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       requestBody:
         required: true
         content:
@@ -301,34 +297,34 @@ paths:
               properties:
                 email:
                   type: string
-                  description: 'The email address associated with the user account.'
+                  description: "The email address associated with the user account."
               required:
                 - email
       responses:
-        '302':
-          description: 'Password recovery email sent successfully. Redirecting to the login page.'
+        "302":
+          description: "Password recovery email sent successfully. Redirecting to the login page."
           headers:
             Location:
               schema:
                 type: string
-              example: '/login'
-        '404':
-          description: 'No account related to provided email found.'
+              example: "/login"
+        "404":
+          description: "No account related to provided email found."
 
   /recover-password/users/{user_id}:
     put:
       operationId: updatePassword
-      summary: 'R111: Update Password'
-      description: 'Update the password for a specific user. Access: OWN'
+      summary: "R111: Update Password"
+      description: "Update the password for a specific user. Access: OWN"
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - "M01: Authentication and Individual Profile"
       parameters:
         - in: path
           name: user_id
           required: true
           schema:
             type: integer
-          description: 'The ID of the user whose password is being updated.'
+          description: "The ID of the user whose password is being updated."
       requestBody:
         required: true
         content:
@@ -338,31 +334,30 @@ paths:
               properties:
                 password:
                   type: string
-                  description: 'The new password for the user.'
+                  description: "The new password for the user."
                 confirm_password:
                   type: string
-                  description: 'Confirmation of the new password.'
+                  description: "Confirmation of the new password."
               required:
                 - password
                 - confirm_password
       responses:
-        '302':
-          description: 'Password updated successfully. Redirecting to the login page.'
+        "302":
+          description: "Password updated successfully. Redirecting to the login page."
           headers:
             Location:
               schema:
                 type: string
-              example: '/login'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid or missing.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '403':
-          description: 'Forbidden. The user does not have permission to update this password.'
-        '404':
-          description: 'Not Found. The specified user does not exist.'
-  
-    
+              example: "/login"
+        "400":
+          description: "Bad Request. The request body parameters are invalid or missing."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "403":
+          description: "Forbidden. The user does not have permission to update this password."
+        "404":
+          description: "Not Found. The specified user does not exist."
+
   #M02: Admin and Static Pages
   /admin:
     get:
@@ -518,21 +513,20 @@ paths:
       summary: 'R204: View All Users (Admin Access)'
       description: 'Lists all Users. This reuses the functionality of the users module for admin purposes. Access: ADM'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       responses:
-        '200':
-          description: 'List of users retrieved successfully.'     
-        '403':
-          description: 'Denied - Not an admin.'
+        "200":
+          description: "List of users retrieved successfully."
+        "403":
+          description: "Denied - Not an admin."
 
-  
   /admin/users/ban:
     post:
       operationId: R205
       summary: 'R205: Ban a User'
       description: 'Ban a user, taking away their ability to log in to the account. Access: ADM'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       requestBody:
         required: true
         content:
@@ -542,23 +536,23 @@ paths:
               properties:
                 user_id:
                   type: integer
-                  description: 'The ID of the user to ban.'
+                  description: "The ID of the user to ban."
                 reason:
                   type: string
-                  description: 'Optional. Reason for banning the user.'
+                  description: "Optional. Reason for banning the user."
               required:
                 - user_id
       responses:
-        '204':
-          description: 'User banned successfully.'
-        '400':
-          description: 'Bad Request. Invalid request body.'
-        '403':
-          description: 'Denied - Not an admin.'
-        '404':
-          description: 'User not found.'
-        '500':
-          description: 'Internal Server Error. An unexpected error occurred on the server.'
+        "204":
+          description: "User banned successfully."
+        "400":
+          description: "Bad Request. Invalid request body."
+        "403":
+          description: "Denied - Not an admin."
+        "404":
+          description: "User not found."
+        "500":
+          description: "Internal Server Error. An unexpected error occurred on the server."
 
   /admin/users/unban:
     post:
@@ -566,7 +560,7 @@ paths:
       summary: 'R206: Unban a User'
       description: 'Unbans a user, allowing them to access the platform again. Access: ADM'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       requestBody:
         required: true
         content:
@@ -576,23 +570,23 @@ paths:
               properties:
                 user_id:
                   type: integer
-                  description: 'The ID of the user to unban.'
+                  description: "The ID of the user to unban."
                 reason:
                   type: string
-                  description: 'Optional. Reason for unbanning the user.'
+                  description: "Optional. Reason for unbanning the user."
               required:
                 - user_id
       responses:
-        '204':
-          description: 'User unbanned successfully.'
-        '400':
-          description: 'Bad Request. Invalid request body.'
-        '403':
-          description: 'Denied - Not an admin.'
-        '404':
-          description: 'User not found.'
-        '500':
-          description: 'Internal Server Error. An unexpected error occurred on the server.'
+        "204":
+          description: "User unbanned successfully."
+        "400":
+          description: "Bad Request. Invalid request body."
+        "403":
+          description: "Denied - Not an admin."
+        "404":
+          description: "User not found."
+        "500":
+          description: "Internal Server Error. An unexpected error occurred on the server."
 
   /admin/flagged/comments:
     get:
@@ -600,37 +594,37 @@ paths:
       summary: 'R207: Retrieve Flagged Comments'
       description: 'Retrieve all flagged comments. Access: ADM'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       responses:
-        '200':
-          description: 'List of all flagged comments retrieved successfully.'
-                  
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '403':
-          description: 'Forbidden. The user does not have permission to access this resource.'
-        '500':
-          description: 'Internal Server Error. An unexpected error occurred on the server.'
-  
+        "200":
+          description: "List of all flagged comments retrieved successfully."
+
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "403":
+          description: "Forbidden. The user does not have permission to access this resource."
+        "500":
+          description: "Internal Server Error. An unexpected error occurred on the server."
+
   /admin/flagged/posts:
     get:
       operationId: R208
       summary: 'R208: Retrieve Flagged Posts'
       description: 'Retrieve all flagged posts. Access: ADM'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       responses:
-        '200':
-          description: 'List of all flagged posts retrieved successfully.'
-                   
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '403':
-          description: 'Forbidden. The user does not have permission to access this resource.'
+        "200":
+          description: "List of all flagged posts retrieved successfully."
+
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "403":
+          description: "Forbidden. The user does not have permission to access this resource."
 
   /admin/flagged/users:
     get:
@@ -638,57 +632,54 @@ paths:
       summary: 'R209: Retrieve Flagged Users'
       description: 'Retrieve all flagged users. Access: ADM'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       responses:
-        '200':
-          description: 'List of all flagged users retrieved successfully.'                     
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '403':
-          description: 'Forbidden. The user does not have permission to access this resource.'
+        "200":
+          description: "List of all flagged users retrieved successfully."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "403":
+          description: "Forbidden. The user does not have permission to access this resource."
 
-
-    
   /admin/flagged/{type}/{id}/reports:
     get:
       operationId: R210
       summary: 'R210: Retrieve Reports for Flagged Content'
       description: 'Retrieve all reports for a specific flagged comment, post, or user. Access: ADM'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       parameters:
         - in: query
           name: type
-          description: 'The type of flagged content (comment, post, user).'
+          description: "The type of flagged content (comment, post, user)."
           schema:
             type: string
             enum: [comments, posts, users]
           required: true
         - in: query
           name: id
-          description: 'The ID of the flagged content to retrieve reports for.'
+          description: "The ID of the flagged content to retrieve reports for."
           schema:
             type: integer
           required: true
       responses:
-        '200':
-          description: 'List of reports for the flagged content retrieved successfully.'
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified content does not exist.'
-        
-  
+        "200":
+          description: "List of reports for the flagged content retrieved successfully."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified content does not exist."
+
     post:
       operationId: R211
       summary: 'R211: Resolve Reports for Flagged Content'
       description: 'Mark all reports for a specific flagged comment, post, or user as resolved. Access: ADM'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       requestBody:
         required: true
         content:
@@ -699,48 +690,47 @@ paths:
                 type:
                   type: string
                   enum: [comments, posts, users]
-                  description: 'The type of flagged content (comment, post, user).'
+                  description: "The type of flagged content (comment, post, user)."
                 id:
                   type: integer
-                  description: 'The ID of the flagged content to mark as resolved.'
+                  description: "The ID of the flagged content to mark as resolved."
                 resolved_at:
                   type: string
                   format: date-time
-                  description: 'The timestamp when the reports were marked as resolved.'
-          
+                  description: "The timestamp when the reports were marked as resolved."
+
               required:
                 - type
                 - id
                 - resolved_at
       responses:
-        '204':
-          description: 'Reports for the flagged content marked as resolved successfully.'
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '403':
-          description: 'Forbidden. The user does not have permission to access this resource.'
-        '404':
-          description: 'Not Found. The specified content does not exist.'
-      
+        "204":
+          description: "Reports for the flagged content marked as resolved successfully."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "403":
+          description: "Forbidden. The user does not have permission to access this resource."
+        "404":
+          description: "Not Found. The specified content does not exist."
+
   /static/about-contacts:
     get:
       operationId: R212
       summary: 'R212: Get About/Contacts Page'
       description: 'Retrieves the static content of the "About/Contacts" page. Access: PUB'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       responses:
-        '200':
-          description: 'Ok. Show About/Contacts page UI'
-        '400':
-          description: 'Bad Request. Invalid query parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The About/Contacts page could not be found.'
-        
+        "200":
+          description: "Ok. Show About/Contacts page UI"
+        "400":
+          description: "Bad Request. Invalid query parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The About/Contacts page could not be found."
 
   /static/help-FAQ:
     get:
@@ -748,16 +738,16 @@ paths:
       summary: 'R213: Get Help/FAQ Page'
       description: 'Retrieves the static content of the "Help/FAQ" page. Access: PUB'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       responses:
-        '200':
-          description: 'Ok. Show Help/FAQ page UI'
-        '400':
-          description: 'Bad Request. Invalid query parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The Help/FAQ page could not be found.'
+        "200":
+          description: "Ok. Show Help/FAQ page UI"
+        "400":
+          description: "Bad Request. Invalid query parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The Help/FAQ page could not be found."
 
   /static/settings:
     get:
@@ -765,51 +755,50 @@ paths:
       summary: 'R214: Get Settings Page'
       description: 'Retrieves the static content of the "Settings" page. Access: PUB'
       tags:
-        - 'M02: Admin and Static Pages'
+        - "M02: Admin and Static Pages"
       responses:
-        '200':
-          description: 'Ok. Show Settings page UI'
-        '400':
-          description: 'Bad Request. Invalid query parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The Settings page could not be found.'
+        "200":
+          description: "Ok. Show Settings page UI"
+        "400":
+          description: "Bad Request. Invalid query parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The Settings page could not be found."
 
   #M03: Direct Messaging and Group Chat
 
   /directChats/users/{user_id}:
     get:
       operationId: R301
-      summary: 'R301: List Direct Chats for a Specific User'
-      description: 'Retrieve a list of direct chats for a specific user. Access: USR'
+      summary: "R301: List Direct Chats for a Specific User"
+      description: "Retrieve a list of direct chats for a specific user. Access: USR"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       parameters:
         - in: path
           name: user_id
           required: true
           schema:
             type: integer
-          description: 'The ID of the user to retrieve direct chats for.'
+          description: "The ID of the user to retrieve direct chats for."
       responses:
-        '200':
-          description: 'Ok. Show list of direct chats UI'
-        '400':
-          description: 'Bad Request. Invalid query parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The direct chats could not be found.'
-  
-         
+        "200":
+          description: "Ok. Show list of direct chats UI"
+        "400":
+          description: "Bad Request. Invalid query parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The direct chats could not be found."
+
   /directChats/create:
     post:
       operationId: R302
-      summary: 'R302: Create Direct Chat'
-      description: 'Create a new direct chat between two users. Access: USR'
+      summary: "R302: Create Direct Chat"
+      description: "Create a new direct chat between two users. Access: USR"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       requestBody:
         required: true
         content:
@@ -825,33 +814,33 @@ paths:
                 - user1_id
                 - user2_id
       responses:
-        '302':
-          description: 'Redirect after creating the direct chat.'
+        "302":
+          description: "Redirect after creating the direct chat."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful creation. Redirect to direct chat view.'
-                  value: '/directChats/{direct_chat_id}'
+                  description: "Successful creation. Redirect to direct chat view."
+                  value: "/directChats/{direct_chat_id}"
                 302Failure:
-                  description: 'Failed creation. Redirect to direct chat creation form.'
-                  value: '/directChats'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid or missing.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified user does not exist.'
+                  description: "Failed creation. Redirect to direct chat creation form."
+                  value: "/directChats"
+        "400":
+          description: "Bad Request. The request body parameters are invalid or missing."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified user does not exist."
 
   /directChats/{direct_chat_id}:
     get:
       operationId: R303
-      summary: 'R303: View Direct Chat'
-      description: 'Retrieve details of a specific direct chat. Access: USR'
+      summary: "R303: View Direct Chat"
+      description: "Retrieve details of a specific direct chat. Access: USR"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       parameters:
         - in: path
           name: direct_chat_id
@@ -859,55 +848,53 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
-          description: 'Ok. Show direct chat details UI'
-        '400':
-          description: 'Bad Request. The direct_chat_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified direct chat does not exist.'
-    
-    
+        "200":
+          description: "Ok. Show direct chat details UI"
+        "400":
+          description: "Bad Request. The direct_chat_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified direct chat does not exist."
+
     delete:
       operationId: R304
-      summary: 'R304: Delete Direct Chat'
-      description: 'Delete a specific direct chat. Access: USR'
+      summary: "R304: Delete Direct Chat"
+      description: "Delete a specific direct chat. Access: USR"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       parameters:
         - in: path
           name: direct_chat_id
           required: true
           schema:
             type: integer
-          description: 'The ID of the direct chat to delete.'
+          description: "The ID of the direct chat to delete."
       responses:
-        '302':
-          description: 'Redirect after deleting the direct chat.'
+        "302":
+          description: "Redirect after deleting the direct chat."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful deletion. Redirect to page of direct chats.'
-                  value: '/directChats'
-        '400':
-          description: 'Bad Request. The direct_chat_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified direct chat does not exist.'
-      
+                  description: "Successful deletion. Redirect to page of direct chats."
+                  value: "/directChats"
+        "400":
+          description: "Bad Request. The direct_chat_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified direct chat does not exist."
 
   /directChats/{direct_chat_id}/messages:
     get:
       operationId: R305
-      summary: 'R305: List Messages in Direct Chat'
-      description: 'Retrieve a list of messages in a specific direct chat. Access: USR'
+      summary: "R305: List Messages in Direct Chat"
+      description: "Retrieve a list of messages in a specific direct chat. Access: USR"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       parameters:
         - in: path
           name: direct_chat_id
@@ -915,8 +902,8 @@ paths:
             type: integer
           required: true
       responses:
-        '200':
-          description: 'Ok. Return list of messages in JSON format'
+        "200":
+          description: "Ok. Return list of messages in JSON format"
           content:
             application/json:
               schema:
@@ -935,20 +922,19 @@ paths:
                       type: integer
                     direct_chat:
                       type: integer
-        '400':
-          description: 'Bad Request. The direct_chat_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified direct chat does not exist.'
-
+        "400":
+          description: "Bad Request. The direct_chat_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified direct chat does not exist."
 
     post:
       operationId: R306
-      summary: 'R306: Send Message in Direct Chat'
-      description: 'Send a new message in a specific direct chat. Access: USR'
+      summary: "R306: Send Message in Direct Chat"
+      description: "Send a new message in a specific direct chat. Access: USR"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       requestBody:
         required: true
         content:
@@ -967,22 +953,22 @@ paths:
                 - content
                 - author_id
       responses:
-        '204':
-          description: 'Message sent successfully.'
-        '400':
-          description: 'Bad Request. The direct_chat_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified direct chat does not exist.'
+        "204":
+          description: "Message sent successfully."
+        "400":
+          description: "Bad Request. The direct_chat_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified direct chat does not exist."
 
   /groups/{group_id}/messages:
     get:
       operationId: R307
-      summary: 'R307: List Messages in Group'
-      description: 'Retrieve a list of messages in a specific group. Access: USR'
+      summary: "R307: List Messages in Group"
+      description: "Retrieve a list of messages in a specific group. Access: USR"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       parameters:
         - in: path
           name: group_id
@@ -990,8 +976,8 @@ paths:
             type: integer
           required: true
       responses:
-        '200':
-          description: 'Ok. Return list of messages'
+        "200":
+          description: "Ok. Return list of messages"
           content:
             application/json:
               schema:
@@ -1010,19 +996,19 @@ paths:
                       type: integer
                     group_id:
                       type: integer
-        '400':
-          description: 'Bad Request. The group_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified group does not exist.'              
+        "400":
+          description: "Bad Request. The group_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified group does not exist."
 
     post:
       operationId: R308
-      summary: 'R308: Send Message in Group'
-      description: 'Send a new message in a specific group. Access: USR'
+      summary: "R308: Send Message in Group"
+      description: "Send a new message in a specific group. Access: USR"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       requestBody:
         required: true
         content:
@@ -1041,8 +1027,8 @@ paths:
                 - content
                 - author_id
       responses:
-        '204':
-          description: 'Message sent successfully.'
+        "204":
+          description: "Message sent successfully."
           content:
             application/json:
               schema:
@@ -1059,20 +1045,20 @@ paths:
                     type: integer
                   group_id:
                     type: integer
-        '400':
-          description: 'Bad Request. The group_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified group does not exist.'
+        "400":
+          description: "Bad Request. The group_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified group does not exist."
 
   /directChats/{direct_chat_id}/messages/{message_id}:
     delete:
       operationId: R309
-      summary: 'R309: Delete Message in Direct Chat'
-      description: 'Delete a specific message in a direct chat. Access: OWN'
+      summary: "R309: Delete Message in Direct Chat"
+      description: "Delete a specific message in a direct chat. Access: OWN"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       parameters:
         - in: path
           name: direct_chat_id
@@ -1085,21 +1071,22 @@ paths:
             type: integer
           required: true
       responses:
-        '204':
-          description: 'Message deleted successfully.'
-        '400':
-          description: 'Bad Request. The direct_chat_id or message_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified direct chat or message does not exist.' 
+        "204":
+          description: "Message deleted successfully."
+        "400":
+          description: "Bad Request. The direct_chat_id or message_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified direct chat or message does not exist."
+
   /groups/{group_id}/messages/{message_id}:
     delete:
       operationId: R310
-      summary: 'R310: Delete Message in Group'
-      description: 'Delete a specific message in a group. Access: OWN'
+      summary: "R310: Delete Message in Group"
+      description: "Delete a specific message in a group. Access: OWN"
       tags:
-        - 'M03: Direct Messaging and Group Chat'
+        - "M03: Direct Messaging and Group Chat"
       parameters:
         - in: path
           name: group_id
@@ -1112,58 +1099,57 @@ paths:
             type: integer
           required: true
       responses:
-        '204':
-          description: 'Message deleted successfully.'
-        '400':
-          description: 'Bad Request. The group_id or message_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified group or message does not exist.'
+        "204":
+          description: "Message deleted successfully."
+        "400":
+          description: "Bad Request. The group_id or message_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified group or message does not exist."
 
   #M04: Post Management and Post Media Handling
 
   /posts:
-
     get:
       operationId: R401
-      summary: 'R401: List Posts'
-      description: 'Retrieve a list of posts. Access: PUB'
+      summary: "R401: List Posts"
+      description: "Retrieve a list of posts. Access: PUB"
       tags:
-        - 'M04: Post Management and Post Media Handling'
+        - "M04: Post Management and Post Media Handling"
       responses:
-        '200':
-          description: 'Ok. Show list of posts UI'
-        '400':
-          description: 'Bad Request. Invalid query parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The posts could not be found.'
-    
+        "200":
+          description: "Ok. Show list of posts UI"
+        "400":
+          description: "Bad Request. Invalid query parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The posts could not be found."
+
   /posts/create:
     get:
       operationId: R402
-      summary: 'R402: Post Creation Form'
-      description: 'Retrieve the form for creating a new post. Access: USR'
+      summary: "R402: Post Creation Form"
+      description: "Retrieve the form for creating a new post. Access: USR"
       tags:
-        - 'M04: Post Management and Post Media Handling'
+        - "M04: Post Management and Post Media Handling"
       responses:
-        '200':
-          description: 'Post creation form UI displayed.'
-        '400':
-          description: 'Bad Request. Invalid request parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The post creation form could not be found.'
+        "200":
+          description: "Post creation form UI displayed."
+        "400":
+          description: "Bad Request. Invalid request parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The post creation form could not be found."
 
     post:
       operationId: R403
-      summary: 'R403: Create Post'
-      description: 'Create a new post. Access: USR'
+      summary: "R403: Create Post"
+      description: "Create a new post. Access: USR"
       tags:
-        - 'M04: Post Management and Post Media Handling'
+        - "M04: Post Management and Post Media Handling"
       requestBody:
         required: true
         content:
@@ -1182,33 +1168,33 @@ paths:
                 - is_public
                 - typeP
       responses:
-        '302':
-          description: 'Redirect after creating the post.'
+        "302":
+          description: "Redirect after creating the post."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful creation. Redirect to post view.'
-                  value: '/posts/{post_id}'
+                  description: "Successful creation. Redirect to post view."
+                  value: "/posts/{post_id}"
                 302Failure:
-                  description: 'Failed creation. Redirect to post creation form.'
-                  value: '/posts'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid or missing.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified resource does not exist.'
+                  description: "Failed creation. Redirect to post creation form."
+                  value: "/posts"
+        "400":
+          description: "Bad Request. The request body parameters are invalid or missing."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified resource does not exist."
 
   /posts/{post_id}:
     get:
       operationId: R404
-      summary: 'R404: View Post'
-      description: 'Retrieve details of a specific post. Access: PUB'
+      summary: "R404: View Post"
+      description: "Retrieve details of a specific post. Access: PUB"
       tags:
-        - 'M04: Post Management and Post Media Handling'
+        - "M04: Post Management and Post Media Handling"
       parameters:
         - in: path
           name: post_id
@@ -1216,45 +1202,45 @@ paths:
             type: integer
           required: true
       responses:
-        '200':
-          description: 'Ok. Show post details UI'
-        '400':
-          description: 'Bad Request. The post_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified post does not exist.'
-           
+        "200":
+          description: "Ok. Show post details UI"
+        "400":
+          description: "Bad Request. The post_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified post does not exist."
+
   /posts/{post_id}/edit:
     get:
       operationId: R405
       summary: 'R405: Edit Post Form'
       description: 'Retrieve the edit form for a specific post. Access: OWN,ADM'
       tags:
-        - 'M04: Post Management and Post Media Handling'
+        - "M04: Post Management and Post Media Handling"
       parameters:
         - in: path
           name: post_id
           required: true
           schema:
             type: integer
-          description: 'The ID of the post to retrieve the edit form for.'
+          description: "The ID of the post to retrieve the edit form for."
       responses:
-        '200':
-          description: 'Show Edit form UI.'
-             
-        '400':
-          description: 'Bad Request. Invalid request parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified post does not exist.'
+        "200":
+          description: "Show Edit form UI."
+
+        "400":
+          description: "Bad Request. Invalid request parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified post does not exist."
     put:
       operationId: R406
       summary: 'R406: Edit Post'
       description: 'Edit an existing post. Access: OWN,ADM'
       tags:
-        - 'M04: Post Management and Post Media Handling'
+        - "M04: Post Management and Post Media Handling"
       requestBody:
         required: true
         content:
@@ -1273,33 +1259,33 @@ paths:
                 - description
                 - is_public
       responses:
-        '302':
-          description: 'Redirect after editing the post.'
+        "302":
+          description: "Redirect after editing the post."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful edit. Redirect to post view.'
-                  value: '/posts/{post_id}'
+                  description: "Successful edit. Redirect to post view."
+                  value: "/posts/{post_id}"
                 302Failure:
-                  description: 'Failed edit. Redirect to post edit form.'
-                  value: '/posts/{post_id}/edit'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid or missing.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified post does not exist.'
+                  description: "Failed edit. Redirect to post edit form."
+                  value: "/posts/{post_id}/edit"
+        "400":
+          description: "Bad Request. The request body parameters are invalid or missing."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified post does not exist."
 
-  /posts/{post_id}/delete:        
+  /posts/{post_id}/delete:
     delete:
       operationId: R407
-      summary: 'R407: Delete Post'
-      description: 'Delete a specific post. Access: OWN, ADM'
+      summary: "R407: Delete Post"
+      description: "Delete a specific post. Access: OWN, ADM"
       tags:
-        - 'M04: Post Management and Post Media Handling'
+        - "M04: Post Management and Post Media Handling"
       parameters:
         - in: path
           name: post_id
@@ -1307,33 +1293,33 @@ paths:
             type: integer
           required: true
       responses:
-        '302':
-          description: 'Redirect after deleting the post.'
+        "302":
+          description: "Redirect after deleting the post."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful deletion. Redirect to posts list.'
-                  value: '/posts/users/{user_id}'
+                  description: "Successful deletion. Redirect to posts list."
+                  value: "/posts/users/{user_id}"
                 302Failure:
-                  description: 'Failed deletion. Redirect to post view.'
-                  value: '/posts/{post_id}'
-        '400':
-          description: 'Bad Request. The post_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified post does not exist.'
+                  description: "Failed deletion. Redirect to post view."
+                  value: "/posts/{post_id}"
+        "400":
+          description: "Bad Request. The post_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified post does not exist."
 
   /posts/{post_id}/media:
     post:
       operationId: R408
-      summary: 'R408: Add Media to Post'
-      description: 'Add media to a specific post. Access: OWN'
+      summary: "R408: Add Media to Post"
+      description: "Add media to a specific post. Access: OWN"
       tags:
-        - 'M04: Post Management and Post Media Handling'
+        - "M04: Post Management and Post Media Handling"
       requestBody:
         required: true
         content:
@@ -1350,22 +1336,22 @@ paths:
                 - post_id
                 - media
       responses:
-        '201':
-          description: 'Media added successfully.'
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified post does not exist.'
-          
+        "201":
+          description: "Media added successfully."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified post does not exist."
+
   /posts/users/{user_id}:
     get:
       operationId: R409
-      summary: 'R409: List Posts by User'
-      description: 'Retrieve a list of posts created by a specific user. Access: PUB'
+      summary: "R409: List Posts by User"
+      description: "Retrieve a list of posts created by a specific user. Access: PUB"
       tags:
-        - 'M04: Post Management and Post Media Handling'
+        - "M04: Post Management and Post Media Handling"
       parameters:
         - in: path
           name: user_id
@@ -1447,20 +1433,20 @@ paths:
   /posts/{post_id}/comments:
     get:
       operationId: R501
-      summary: 'R501: View All Comments for a Post.'
-      description: 'Retrieve all comments associated with a specific post. Access: PUB'
+      summary: "R501: View All Comments for a Post."
+      description: "Retrieve all comments associated with a specific post. Access: PUB"
       tags:
-        - 'M05: Commenting and Reactions'
+        - "M05: Commenting and Reactions"
       parameters:
         - name: post_id
           in: path
           required: true
-          description: 'The ID of the post to retrieve comments for.'
+          description: "The ID of the post to retrieve comments for."
           schema:
             type: integer
       responses:
-        '200':
-          description: 'Returns a list of all comments for the specified post.'
+        "200":
+          description: "Returns a list of all comments for the specified post."
           content:
             application/json:
               schema:
@@ -1483,23 +1469,23 @@ paths:
               example:
                 comments:
                   - id: 1
-                    content: 'This is a comment.'
+                    content: "This is a comment."
                     author_id: 101
-                    created_at: '2024-11-14T12:00:00Z'
+                    created_at: "2024-11-14T12:00:00Z"
                   - id: 2
-                    content: 'Another comment.'
+                    content: "Another comment."
                     author_id: 102
-                    created_at: '2024-11-14T12:05:00Z'
-        '404':
-          description: 'The specified post does not exist or has no comments.'
-  
+                    created_at: "2024-11-14T12:05:00Z"
+        "404":
+          description: "The specified post does not exist or has no comments."
+
   /posts/{post_id}/comments/create:
     post:
       operationId: R502
-      summary: 'R502: Add a Comment to a Post.'
-      description: 'Allow users to add a new comment to a specific post. Access: USR'
+      summary: "R502: Add a Comment to a Post."
+      description: "Allow users to add a new comment to a specific post. Access: USR"
       tags:
-        - 'M05: Commenting and Reactions'
+        - "M05: Commenting and Reactions"
       requestBody:
         required: true
         content:
@@ -1511,29 +1497,29 @@ paths:
                   type: integer
                 content:
                   type: string
-                  description: 'The content of the comment.'
+                  description: "The content of the comment."
                 author_id:
                   type: integer
-                  description: 'The ID of the user adding the comment.'
+                  description: "The ID of the user adding the comment."
               required:
                 - post_id
                 - content
                 - author_id
       responses:
-        '201': 
+        "201":
           description: Comment added succssefully.
-        '400':
-          description: 'Validation failed. Required fields are missing or invalid.'
-        '404':
-          description: 'The specified post does not exist.'
-   
+        "400":
+          description: "Validation failed. Required fields are missing or invalid."
+        "404":
+          description: "The specified post does not exist."
+
   /comments/{comment_id}/edit:
     put:
       operationId: R503
-      summary: 'R503: Edit a Comment.'
-      description: 'Allow users to edit the content of an existing comment. Access: OWN'
+      summary: "R503: Edit a Comment."
+      description: "Allow users to edit the content of an existing comment. Access: OWN"
       tags:
-        - 'M05: Commenting and Reactions'
+        - "M05: Commenting and Reactions"
       requestBody:
         required: true
         content:
@@ -1545,36 +1531,35 @@ paths:
                   type: integer
                 content:
                   type: string
-                  description: 'The new content of the comment.'
+                  description: "The new content of the comment."
               required:
                 - comment_id
                 - content
       responses:
-        '204': 
-          description: 'Comment succssefuly edited'
-        '400':
-          description: 'Validation failed. Required fields are missing or invalid.'
-        '404':
-          description: 'The specified comment does not exist.'
+        "204":
+          description: "Comment succssefuly edited"
+        "400":
+          description: "Validation failed. Required fields are missing or invalid."
+        "404":
+          description: "The specified comment does not exist."
 
   /comments/{comment_id}:
-
     get:
       operationId: R504
-      summary: 'R504: Retrieve a Specific Comment'
-      description: 'Retrieve the details of a specific comment by its ID. Access: PUB'
+      summary: "R504: Retrieve a Specific Comment"
+      description: "Retrieve the details of a specific comment by its ID. Access: PUB"
       tags:
-        - 'M05: Commenting and Reactions'
+        - "M05: Commenting and Reactions"
       parameters:
         - name: comment_id
           in: path
           required: true
-          description: 'The ID of the comment to retrieve.'
+          description: "The ID of the comment to retrieve."
           schema:
             type: integer
       responses:
-        '200':
-          description: 'Returns the details of the specified comment.'
+        "200":
+          description: "Returns the details of the specified comment."
           content:
             application/json:
               schema:
@@ -1591,42 +1576,42 @@ paths:
                     format: date-time
                 example:
                   id: 1
-                  content: 'This is the content of the comment.'
+                  content: "This is the content of the comment."
                   author_id: 101
-                  created_at: '2024-11-14T12:00:00Z'
-        '400':
-          description: 'Validation failed. Required fields are missing or invalid.'
-        '404':
-          description: 'The specified comment does not exist.'    
+                  created_at: "2024-11-14T12:00:00Z"
+        "400":
+          description: "Validation failed. Required fields are missing or invalid."
+        "404":
+          description: "The specified comment does not exist."
 
     delete:
       operationId: R505
-      summary: 'R505: Delete a Comment.'
-      description: 'Allow users to delete an existing comment. Access: OWN, ADM'
+      summary: "R505: Delete a Comment."
+      description: "Allow users to delete an existing comment. Access: OWN, ADM"
       tags:
-        - 'M05: Commenting and Reactions'
+        - "M05: Commenting and Reactions"
       parameters:
         - name: comment_id
           in: path
           required: true
-          description: 'The ID of the comment to be deleted.'
+          description: "The ID of the comment to be deleted."
           schema:
             type: integer
       responses:
-        '204': 
-          description: 'Comment successfully deleted'
-        '400':
-          description: 'Validation failed. Required fields are missing or invalid.'
-        '404':
-          description: 'The specified comment does not exist.'
+        "204":
+          description: "Comment successfully deleted"
+        "400":
+          description: "Validation failed. Required fields are missing or invalid."
+        "404":
+          description: "The specified comment does not exist."
 
   /posts/{post_id}/like:
     post:
       operationId: R506
-      summary: 'R506: Like a Post.'
-      description: 'Allow users to like a specific post. Access: USR'
+      summary: "R506: Like a Post."
+      description: "Allow users to like a specific post. Access: USR"
       tags:
-        - 'M05: Commenting and Reactions'
+        - "M05: Commenting and Reactions"
       requestBody:
         required: true
         content:
@@ -1638,25 +1623,25 @@ paths:
                   type: integer
                 user_id:
                   type: integer
-                  description: 'The ID of the user liking the post.'
+                  description: "The ID of the user liking the post."
               required:
                 - post_id
                 - user_id
       responses:
-        '204':
-          description: 'The post was successfully liked.'
-        '400':
-          description: 'Validation failed. Required fields are missing or invalid.'
-        '404':
-          description: 'The specified post does not exist.'
-  
+        "204":
+          description: "The post was successfully liked."
+        "400":
+          description: "Validation failed. Required fields are missing or invalid."
+        "404":
+          description: "The specified post does not exist."
+
   /comments/{comment_id}/like:
     post:
       operationId: R507
-      summary: 'R507: Like a Comment.'
-      description: 'Allow users to like a specific comment. Access: USR'
+      summary: "R507: Like a Comment."
+      description: "Allow users to like a specific comment. Access: USR"
       tags:
-        - 'M05: Commenting and Reactions'
+        - "M05: Commenting and Reactions"
       requestBody:
         required: true
         content:
@@ -1668,27 +1653,27 @@ paths:
                   type: integer
                 user_id:
                   type: integer
-                  description: 'The ID of the user liking the comment.'
+                  description: "The ID of the user liking the comment."
               required:
                 - comment_id
                 - user_id
       responses:
-        '204':
-          description: 'The comment was successfully liked.'
-        '400':
-          description: 'Validation failed. Required fields are missing or invalid.'
-        '404':
-          description: 'The specified comment does not exist.'
+        "204":
+          description: "The comment was successfully liked."
+        "400":
+          description: "Validation failed. Required fields are missing or invalid."
+        "404":
+          description: "The specified comment does not exist."
 
   #M06: Connections
 
   /users/{user_id}/connections:
     get:
       operationId: R601
-      summary: 'R601: List Connections'
-      description: 'Retrieve a list of connections for the specified user. Access: USR'
+      summary: "R601: List Connections"
+      description: "Retrieve a list of connections for the specified user. Access: USR"
       tags:
-        - 'M06: Connections'
+        - "M06: Connections"
       parameters:
         - in: path
           name: user_id
@@ -1696,23 +1681,22 @@ paths:
             type: integer
           required: true
       responses:
-        '200':
-          description: 'Ok. Show list of connections UI'
-        '400':
-          description: 'Bad Request. The user_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified user does not exist.'
-        
-          
+        "200":
+          description: "Ok. Show list of connections UI"
+        "400":
+          description: "Bad Request. The user_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified user does not exist."
+
   /users/{user_id}/follow:
     post:
       operationId: R602
-      summary: 'R602: Send Follow Request'
-      description: 'Send a follow request to the specified user. Access: USR'
+      summary: "R602: Send Follow Request"
+      description: "Send a follow request to the specified user. Access: USR"
       tags:
-        - 'M06: Connections'
+        - "M06: Connections"
       requestBody:
         required: true
         content:
@@ -1728,24 +1712,24 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '302':
-          description: 'Redirect after sending the follow request.'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified user does not exist.'
-        '409':
-          description: 'Conflict. The user is already following the specified user.'
+        "302":
+          description: "Redirect after sending the follow request."
+        "400":
+          description: "Bad Request. The request body parameters are invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified user does not exist."
+        "409":
+          description: "Conflict. The user is already following the specified user."
 
   /users/{user_id}/follow/accept:
     post:
       operationId: R603
-      summary: 'R603: Accept Follow Request'
-      description: 'Accept a follow request from the specified user. Access: USR'
+      summary: "R603: Accept Follow Request"
+      description: "Accept a follow request from the specified user. Access: USR"
       tags:
-        - 'M06: Connections'
+        - "M06: Connections"
       requestBody:
         required: true
         content:
@@ -1761,25 +1745,24 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '200': 
-          description: 'Follow request accepted'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified user or follow request does not exist.'
-        '409':
-          description: 'Conflict. The follow request has already been accepted or rejected.'
-      
+        "200":
+          description: "Follow request accepted"
+        "400":
+          description: "Bad Request. The request body parameters are invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified user or follow request does not exist."
+        "409":
+          description: "Conflict. The follow request has already been accepted or rejected."
 
   /users/{user_id}/follow/reject:
     post:
       operationId: R604
-      summary: 'R604: Reject Follow Request'
-      description: 'Reject a follow request from the specified user. Access: USR'
+      summary: "R604: Reject Follow Request"
+      description: "Reject a follow request from the specified user. Access: USR"
       tags:
-        - 'M06: Connections'
+        - "M06: Connections"
       requestBody:
         required: true
         content:
@@ -1795,25 +1778,24 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '200': 
-          description: 'Follow request rejected'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid.'
-        '401':
-         description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified user or follow request does not exist.'
-        '409':
-          description: 'Conflict. The follow request has already been accepted or rejected.'
-    
+        "200":
+          description: "Follow request rejected"
+        "400":
+          description: "Bad Request. The request body parameters are invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified user or follow request does not exist."
+        "409":
+          description: "Conflict. The follow request has already been accepted or rejected."
 
   /users/{user_id}/connections/removeFollower:
     delete:
       operationId: R605
-      summary: 'R605: Remove Follower'
-      description: 'Remove a follower from the specified user. Access: USR'
+      summary: "R605: Remove Follower"
+      description: "Remove a follower from the specified user. Access: USR"
       tags:
-        - 'M06: Connections'
+        - "M06: Connections"
       parameters:
         - in: path
           name: user_id
@@ -1821,22 +1803,22 @@ paths:
             type: integer
           required: true
       responses:
-        '204':
-          description: 'Follower removed'
-        '400':
-          description: 'Bad Request. The user_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified user or follower does not exist.'
-        
+        "204":
+          description: "Follower removed"
+        "400":
+          description: "Bad Request. The user_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified user or follower does not exist."
+
   /users/{user_id}/follow/delete:
     delete:
       operationId: R606
-      summary: 'R606: Delete Follow Request'
-      description: 'Delete a follow request from the specified user. Access: USR'
+      summary: "R606: Delete Follow Request"
+      description: "Delete a follow request from the specified user. Access: USR"
       tags:
-        - 'M06: Connections'
+        - "M06: Connections"
       parameters:
         - in: path
           name: user_id
@@ -1844,23 +1826,23 @@ paths:
             type: integer
           required: true
       responses:
-        '204':
-          description: 'Follow request deleted.'
+        "204":
+          description: "Follow request deleted."
 
-        '400':
-          description: 'Bad Request. The user_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified user or follow request does not exist.'
-  
+        "400":
+          description: "Bad Request. The user_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified user or follow request does not exist."
+
   /users/{user_id}/block:
     post:
       operationId: R607
-      summary: 'R607: Block User'
-      description: 'Block the specified user. Access: USR'
+      summary: "R607: Block User"
+      description: "Block the specified user. Access: USR"
       tags:
-        - 'M06: Connections'
+        - "M06: Connections"
       requestBody:
         required: true
         content:
@@ -1876,17 +1858,16 @@ paths:
                 - user_id_dest
                 - user_id_src
       responses:
-        '204':
-          description: 'User has been blocked.'
-          
-  
+        "204":
+          description: "User has been blocked."
+
   /users/{user_id}/unblock:
     delete:
       operationId: R608
-      summary: 'R608: Unblock User'
-      description: 'Unblock the specified user. Access: USR'
+      summary: "R608: Unblock User"
+      description: "Unblock the specified user. Access: USR"
       tags:
-        - 'M06: Connections'
+        - "M06: Connections"
       parameters:
         - in: path
           name: user_id
@@ -1894,50 +1875,50 @@ paths:
             type: integer
           required: true
       responses:
-        '204':
-          description: 'User has been unblocked'
-        '400':
-          description: 'Bad Request. The request body parameters are invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified user does not exist.'
-        '409':
-          description: 'Conflict. The user is already blocked.'
-  
+        "204":
+          description: "User has been unblocked"
+        "400":
+          description: "Bad Request. The request body parameters are invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified user does not exist."
+        "409":
+          description: "Conflict. The user is already blocked."
+
   #M07: Notifications
 
   /notifications/users/{user_id}:
     get:
       operationId: R701
-      summary: 'R701: List Notifications for a specific user'
-      description: 'Retrieve a list of notifications for the authenticated user. Access: USR'
+      summary: "R701: List Notifications for a specific user"
+      description: "Retrieve a list of notifications for the authenticated user. Access: USR"
       tags:
-        - 'M07: Notifications'
+        - "M07: Notifications"
       parameters:
-      - in: path
-        name: user_id
-        required: true
-        schema:
-          type: integer
-        description: 'The ID of the user to retrieve notifications for.'
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: "The ID of the user to retrieve notifications for."
       responses:
-        '200':
-          description: 'Ok. Show list of notifications UI'
-        '400':
-          description: 'Bad Request. Invalid query parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The notifications could not be found.'
-         
+        "200":
+          description: "Ok. Show list of notifications UI"
+        "400":
+          description: "Bad Request. Invalid query parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The notifications could not be found."
+
   /notifications/create:
     post:
       operationId: R702
-      summary: 'R702: Create Notification'
-      description: 'Create a new notification. Access: ADM'
+      summary: "R702: Create Notification"
+      description: "Create a new notification. Access: ADM"
       tags:
-        - 'M07: Notifications'
+        - "M07: Notifications"
       requestBody:
         required: true
         content:
@@ -1953,7 +1934,16 @@ paths:
                   type: integer
                 typeN:
                   type: string
-                  enum: ['LIKE', 'FOLLOW_REQUEST', 'GROUP_REQUEST', 'MESSAGE', 'COMMENT', 'INFO', 'TAG']
+                  enum:
+                    [
+                      "LIKE",
+                      "FOLLOW_REQUEST",
+                      "GROUP_REQUEST",
+                      "MESSAGE",
+                      "COMMENT",
+                      "INFO",
+                      "TAG",
+                    ]
                 is_read:
                   type: boolean
                 post_id:
@@ -1969,64 +1959,64 @@ paths:
                 - user_id_dest
                 - typeN
       responses:
-        '201':
-          description: 'Notification created successfully.'       
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified resource does not exist.'
-  
+        "201":
+          description: "Notification created successfully."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified resource does not exist."
+
   /notifications/{notification_id}/read:
     post:
       operationId: R703
-      summary: 'R703: Mark Notification as Read'
-      description: 'Mark a specific notification as read. Access: USR'
+      summary: "R703: Mark Notification as Read"
+      description: "Mark a specific notification as read. Access: USR"
       tags:
-        - 'M07: Notifications'
+        - "M07: Notifications"
       responses:
-        '204':
-          description: 'Notification marked as read.'       
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified notification does not exist.'
-  
+        "204":
+          description: "Notification marked as read."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified notification does not exist."
+
   /notifications/{notification_id}:
     get:
       operationId: R704
-      summary: 'R704: Retrieve Notification'
-      description: 'Retrieve details of a specific notification. Access: USR'
+      summary: "R704: Retrieve Notification"
+      description: "Retrieve details of a specific notification. Access: USR"
       tags:
-        - 'M07: Notifications'
+        - "M07: Notifications"
       parameters:
         - in: path
           name: notification_id
           required: true
           schema:
             type: integer
-          description: 'The ID of the notification to retrieve.'
+          description: "The ID of the notification to retrieve."
       responses:
-        '200':
-          description: 'Notification details retrieved successfully.'
-        '400':
-          description: 'Bad Request. The notification_id parameter is invalid.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '403':
-          description: 'Forbidden. The user does not have permission to view this notification.'
-        '404':
-          description: 'Not Found. The specified notification does not exist.'
-      
+        "200":
+          description: "Notification details retrieved successfully."
+        "400":
+          description: "Bad Request. The notification_id parameter is invalid."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "403":
+          description: "Forbidden. The user does not have permission to view this notification."
+        "404":
+          description: "Not Found. The specified notification does not exist."
+
     delete:
       operationId: R705
-      summary: 'R705: Delete Notification'
-      description: 'Delete a specific notification. Access: USR, ADM'
+      summary: "R705: Delete Notification"
+      description: "Delete a specific notification. Access: USR, ADM"
       tags:
-        - 'M07: Notifications'
+        - "M07: Notifications"
       parameters:
         - in: path
           name: notification_id
@@ -2034,39 +2024,38 @@ paths:
             type: integer
           required: true
       responses:
-        '204':
-          description: 'Notification deleted successfully.'
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified notification does not exist.'
+        "204":
+          description: "Notification deleted successfully."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified notification does not exist."
 
   #M08: Content Moderation and Reporting
 
   /report:
-    get: 
+    get:
       operationId: R801
-      summary: 'R801: Report Form'
-      description: 'Provide Report form. Access: USR'
+      summary: "R801: Report Form"
+      description: "Provide Report form. Access: USR"
       tags:
-        - 'M08: Content Moderation and Reporting'
+        - "M08: Content Moderation and Reporting"
       responses:
-        '200':
-          description: 'Ok. Show report UI'
-        '404':
-          description: 'Not Found. The specified resource does not exist.'
-        '401':
-          description: 'Unauthorized. The user does not have permission to view the report form.'
-      
-    
+        "200":
+          description: "Ok. Show report UI"
+        "404":
+          description: "Not Found. The specified resource does not exist."
+        "401":
+          description: "Unauthorized. The user does not have permission to view the report form."
+
     post:
       operationId: R802
-      summary: 'R802: Report Action'
-      description: 'Processes the report form submission. Access: USR'
+      summary: "R802: Report Action"
+      description: "Processes the report form submission. Access: USR"
       tags:
-        - 'M08: Content Moderation and Reporting'
+        - "M08: Content Moderation and Reporting"
       requestBody:
         required: true
         content:
@@ -2074,7 +2063,7 @@ paths:
             schema:
               type: object
               properties:
-                content:          
+                content:
                   type: string
                 comment_id:
                   type: integer
@@ -2087,1062 +2076,1335 @@ paths:
               required:
                 - content
                 - author_id
- 
+
       responses:
-        '302':
-          description: 'Redirect after processing the report submission.'
+        "302":
+          description: "Redirect after processing the report submission."
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302SuccessComment:
-                  description: 'Successful report submission. Redirect to the reported comment.'
-                  value: '/comments/{comment_id}'
+                  description: "Successful report submission. Redirect to the reported comment."
+                  value: "/comments/{comment_id}"
                 302SuccessPost:
-                  description: 'Successful report submission. Redirect to the reported post.'
-                  value: '/posts/{post_id}'
+                  description: "Successful report submission. Redirect to the reported post."
+                  value: "/posts/{post_id}"
                 302SuccessUser:
-                  description: 'Successful report submission. Redirect to the reported user profile.'
-                  value: '/users/{target_user_id}'
+                  description: "Successful report submission. Redirect to the reported user profile."
+                  value: "/users/{target_user_id}"
                 302Error:
-                  description: 'Failed report submission. Redirect to report form.'
-                  value: '/report'
-        '404':
-          description: 'Not Found. The resource (comment, post, or user) you are trying to report does not exist.'  
-        '401':
-          description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.' 
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
+                  description: "Failed report submission. Redirect to report form."
+                  value: "/report"
+        "404":
+          description: "Not Found. The resource (comment, post, or user) you are trying to report does not exist."
+        "401":
+          description: "Unauthorized. The user is not authenticated or lacks the necessary permissions."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
 
   #M09: Search and Results
-  
-  /search:
+
+  /:
     get:
       operationId: R901
-      summary: 'R901: Search Form'
-      description: 'Provide search form. Access: USR'
+      summary: "R901: Root Page with Search Form"
+      description: "Provides the root page with the search form. Access: PUB"
       tags:
-        - 'M09: Search and Results'
+        - "M09: Search and Results"
       responses:
-        '200':
-          description: 'Ok. Show search UI'
-        '404':
-          description: 'Not Found. The specified resource does not exist.'
+        "200":
+          description: "Ok. Show root page with search form UI"
+        "404":
+          description: "Not Found. The specified resource does not exist."
+    post:
+      operationId: R902
+      summary: "R902: Submit Search Form"
+      description: "Submits the search form and redirects to the search results page. Access: PUB"
+      tags:
+        - "M09: Search and Results"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: "Search string."
+              required:
+                - query
+      responses:
+        "302":
+          description: "Found. Redirect to search results page."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful search - Redirect to users search results page."
+                  value: "/search/users?query={query}&ord=desc"
+                302Failure:
+                  description: "Failed search - Stay in home page."
+                  value: "/"
+        "400":
+          description: "Bad Request. Invalid search parameters."
+        "404":
+          description: "Not Found. The specified resource does not exist."
 
+  /search/users:
+    get:
+      operationId: R903
+      summary: "R903: Search Users"
+      description: "Perform a search for users based on the query string. Access: PUB"
+      tags:
+        - "M09: Search and Results"
+      parameters:
+        - in: query
+          name: query
+          description: "Search string."
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: ord
+          description: "Order of results (asc/desc)."
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+            default: "desc"
+          required: false
+      responses:
+        "200":
+          description: "Search results for users based on the query."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        "404":
+          description: "Not Found. The specified resource does not exist."
+    post:
+      operationId: R904
+      summary: "R904: Redirect Search Users"
+      description: "Redirects to another search results page or performs a new search. Access: PUB"
+      tags:
+        - "M09: Search and Results"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: "Search string."
+                type:
+                  type: string
+                  description: "Type of search (users, posts, groups)."
+                  enum: ["users", "posts", "groups"]
+                  default: "users"
+                ord:
+                  type: string
+                  description: "Order of results (asc/desc)."
+                  enum: ["asc", "desc"]
+                  default: "desc"
+      responses:
+        "302":
+          description: "Found. Redirect to search results page."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful search - Redirect to search results page."
+                  value: "/search/{type}?query={query}&ord={ord}"
+                302Failure:
+                  description: "Failed search - Redirect to search form."
+                  value: "/search/users"
+        "400":
+          description: "Bad Request. Invalid search parameters."
+        "404":
+          description: "Not Found. The specified resource does not exist."
 
   /search/posts:
-      get:
-        operationId: R902 
-        summary: 'R902: Search for Posts'
-        description: 'Perform a full text search for posts based on the query string. Access: USR.'
-        tags:
-          - 'M09: Search and Results'
-        parameters:
-          - in: query
-            name: query
-            description: 'Search string for posts.'
-            schema:
-              type: string
-            required: true
-          - in: query
-            name: category
-            description: 'Category to filter posts.'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: date
-            description: 'Date to filter posts (format: YYYY-MM-DD).'
-            schema:
-              type: string
-              format: date
-            required: false  
-        responses:
-          '200':
-            description: 'Search results including post IDs.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    post_ids:
-                      type: array
-                      items:
-                        type: integer
-                  example:
-                    post_ids:
-                      - 1
-                      - 2
-                      - 3
-                    
-          '404':
-            description: 'No posts matched the query.' 
-            
-  /search/users:
-      get:
-        operationId: R903
-        summary: 'R903: Search for users'
-        description: 'Perform a exact match search for users based on the query string. Access: USR.'
-        tags:
-          - 'M09: Search and Results'
-        parameters:
-          - in: query
-            name: query
-            description: 'Search string for users.'
-            schema:
-              type: string
-            required: true
-        responses:
-          '200':
-            description: 'Search results by user IDs.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    users_id:
-                      type: array
-                      items:
-                        type: integer
-                  example:
-                    users_id:
-                      - 1
-                      - 2
-                      - 3
-                    
-          '404':
-            description: 'No users matched the query.'
-               
-  /search/groups:
-    get:
-        operationId: R904
-        summary: 'R904: Search for groups'
-        description: 'Perform a full search for groups based on the query string. Access: USR.'
-        tags:
-          - 'M09: Search and Results'
-        parameters:
-          - in: query
-            name: query
-            description: 'Search string for groups.'
-            schema:
-              type: string
-            required: true
-        responses:
-          '200':
-            description: 'Search results by group IDs.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    groups_id:
-                      type: array
-                      items:
-                        type: integer
-                  example:
-                    groups_id:
-                      - 1
-                      - 2
-                      - 3
-                    
-          '404':
-            description: 'No groups matched the query.'
-  
-  /search/posts/{post_id}/comments:
     get:
       operationId: R905
-      summary: 'R905:Search for comments of a post'
-      description: 'Perform a full search for comments of a specific post based on the query string. Access: USR.'
+      summary: "R905: Search Posts"
+      description: "Perform a search for posts based on the query string. Access: PUB"
       tags:
-        - 'M09: Search and Results'
+        - "M09: Search and Results"
+      parameters:
+        - in: query
+          name: query
+          description: "Search string."
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: ord
+          description: "Order of results (asc/desc)."
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+            default: "desc"
+          required: false
+      responses:
+        "200":
+          description: "Search results for posts based on the query."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        "404":
+          description: "Not Found. The specified resource does not exist."
+    post:
+      operationId: R906
+      summary: "R906: Redirect Search Posts"
+      description: "Redirects to another search results page or performs a new search. Access: PUB"
+      tags:
+        - "M09: Search and Results"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: "Search string."
+                type:
+                  type: string
+                  description: "Type of search (users, posts, groups)."
+                  enum: ["users", "posts", "groups"]
+                  default: "posts"
+                ord:
+                  type: string
+                  description: "Order of results (asc/desc)."
+                  enum: ["asc", "desc"]
+                  default: "desc"
+      responses:
+        "302":
+          description: "Found. Redirect to search results page."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful search - Redirect to search results page."
+                  value: "/search/{type}?query={query}&ord={ord}"
+                302Failure:
+                  description: "Failed search - Redirect to search form."
+                  value: "/search/posts"
+        "400":
+          description: "Bad Request. Invalid search parameters."
+        "404":
+          description: "Not Found. The specified resource does not exist."
+
+  /search/groups:
+    get:
+      operationId: R907
+      summary: "R907: Search Groups"
+      description: "Perform a search for groups based on the query string. Access: PUB"
+      tags:
+        - "M09: Search and Results"
+      parameters:
+        - in: query
+          name: query
+          description: "Search string."
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: ord
+          description: "Order of results (asc/desc)."
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+            default: "desc"
+          required: false
+      responses:
+        "200":
+          description: "Search results for groups based on the query."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        "404":
+          description: "Not Found. The specified resource does not exist."
+    post:
+      operationId: R908
+      summary: "R908: Redirect Search Groups"
+      description: "Redirects to another search results page or performs a new search. Access: PUB"
+      tags:
+        - "M09: Search and Results"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: "Search string."
+                type:
+                  type: string
+                  description: "Type of search (users, posts, groups)."
+                  enum: ["users", "posts", "groups"]
+                  default: "groups"
+                ord:
+                  type: string
+                  description: "Order of results (asc/desc)."
+                  enum: ["asc", "desc"]
+                  default: "desc"
+      responses:
+        "302":
+          description: "Found. Redirect to search results page."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful search - Redirect to search results page."
+                  value: "/search/{type}?query={query}&ord={ord}"
+                302Failure:
+                  description: "Failed search - Redirect to search form."
+                  value: "/search/groups"
+        "400":
+          description: "Bad Request. Invalid search parameters."
+        "404":
+          description: "Not Found. The specified resource does not exist."
+
+  /posts/{post_id}/comments/search:
+    get:
+      operationId: R909
+      summary: "R909: Search Comments"
+      description: "Perform a search for comments on a specific post based on the query string. Access: PUB"
+      tags:
+        - "M09: Search and Results"
       parameters:
         - in: path
           name: post_id
-          description: 'The ID of the post to search comments for.'
-          schema:
-            type: integer
-          required: true
-        - in: query
-          name: query
-          description: 'Search string for comments.'
+          description: "ID of the post."
           schema:
             type: string
           required: true
-
+        - in: query
+          name: query
+          description: "Search string."
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: ord
+          description: "Order of results (asc/desc)."
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+            default: "desc"
+          required: false
       responses:
-        '200':
-          description: 'Search results including comment IDs.'
+        "200":
+          description: "Search results for comments based on the query."
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  comments_id:
+                  results:
                     type: array
                     items:
-                      type: integer
-                example:
-                  comments_id:
-                    - 1
-                    - 2
-                    - 3
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '404':
-          description: 'No comments matched the query.'        
-  
-  /search/groups/{group_id}/members:
-    get:
-      operationId: R906
-      summary: 'R906: Search for members of a group'
-      description: 'Perform a full search for members of a specific group based on the query string. Access: USR.'
+                      type: object
+                      additionalProperties: true
+        "404":
+          description: "Not Found. The specified resource does not exist."
+    post:
+      operationId: R910
+      summary: "R910: Redirect Search Comments"
+      description: "Redirects to another search results page or performs a new search. Access: PUB"
       tags:
-        - 'M09: Search and Results'
+        - "M09: Search and Results"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: "Search string."
+                ord:
+                  type: string
+                  description: "Order of results (asc/desc)."
+                  enum: ["asc", "desc"]
+                  default: "desc"
+      responses:
+        "302":
+          description: "Found. Redirect to search results page."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful search - Redirect to search results page."
+                  value: "/posts/{post_id}/comments/search?query={query}&ord={ord}"
+                302Failure:
+                  description: "Failed search - Redirect to search form."
+                  value: "/posts/{post_id}/comments/search"
+        "400":
+          description: "Bad Request. Invalid search parameters."
+        "404":
+          description: "Not Found. The specified resource does not exist."
+
+  /groups/{group_id}/members/search:
+    get:
+      operationId: R911
+      summary: "R911: Search Group Members"
+      description: "Perform a search for members in a specific group based on the query string. Access: PUB"
+      tags:
+        - "M09: Search and Results"
       parameters:
         - in: path
           name: group_id
-          description: 'The ID of the group to search members for.'
-          schema:
-            type: integer
-          required: true
-        - in: query
-          name: query
-          description: 'Search string for group members.'
+          description: "ID of the group."
           schema:
             type: string
           required: true
+        - in: query
+          name: query
+          description: "Search string."
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: ord
+          description: "Order of results (asc/desc)."
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+            default: "desc"
+          required: false
       responses:
-        '200':
-          description: 'Search results by member IDs.'
+        "200":
+          description: "Search results for group members based on the query."
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  members_id:
+                  results:
                     type: array
                     items:
-                      type: integer
-                example:
-                  members_id:
-                    - 1
-                    - 2
-                    - 3
-        '400':
-          description: 'Bad Request. The request could not be understood or was missing required parameters.'
-        '404':
-          description: 'No members matched the query.'
-  
-
-  /search/communications:
-    get:
-        operationId: R907
-        summary: 'R907: Search for groups/messages'
-        description: 'Perform a full search for groups/messages based on the query string. Access: USR.'
-        tags:
-          - 'M09: Search and Results'
-        parameters:
-          - in: query
-            name: query
-            description: 'Search string for groups/messages.'
+                      type: object
+                      additionalProperties: true
+        "404":
+          description: "Not Found. The specified resource does not exist."
+    post:
+      operationId: R912
+      summary: "R912: Redirect Search Group Members"
+      description: "Redirects to another search results page or performs a new search. Access: PUB"
+      tags:
+        - "M09: Search and Results"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
             schema:
-              type: string
-            required: true
-        responses:
-          '200':
-            description: 'Search results by group or direct chat IDs.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    groups_id:
-                      type: array
-                      items:
-                        type: integer
-                    direct_chat_ids:
-                      type: array
-                      items:
-                        type: integer
-                  example:
-                    groups_id:
-                      - 1
-                      - 2
-                      - 3
-                    direct_chat_ids:
-                      - 101
-                      - 102
-                      - 103
-                    
-          '404':
-            description: 'No groups matched the query.' 
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: "Search string."
+                ord:
+                  type: string
+                  description: "Order of results (asc/desc)."
+                  enum: ["asc", "desc"]
+                  default: "desc"
+      responses:
+        "302":
+          description: "Found. Redirect to search results page."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful search - Redirect to search results page."
+                  value: "/groups/{group_id}/members/search?query={query}&ord={ord}"
+                302Failure:
+                  description: "Failed search - Redirect to search form."
+                  value: "/groups/{group_id}/members/search"
+        "400":
+          description: "Bad Request. Invalid search parameters."
+        "404":
+          description: "Not Found. The specified resource does not exist."
+
+  /communications/search:
+    get:
+      operationId: R913
+      summary: "R913: Search Communications"
+      description: "Perform a search for communications based on the query string. Access: PUB"
+      tags:
+        - "M09: Search and Results"
+      parameters:
+        - in: query
+          name: query
+          description: "Search string."
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: ord
+          description: "Order of results (asc/desc)."
+          schema:
+            type: string
+            enum: ["asc", "desc"]
+            default: "desc"
+          required: false
+      responses:
+        "200":
+          description: "Search results for communications based on the query."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        "404":
+          description: "Not Found. The specified resource does not exist."
+    post:
+      operationId: R914
+      summary: "R914: Redirect Search Communications"
+      description: "Redirects to another search results page or performs a new search. Access: PUB"
+      tags:
+        - "M09: Search and Results"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: "Search string."
+                ord:
+                  type: string
+                  description: "Order of results (asc/desc)."
+                  enum: ["asc", "desc"]
+                  default: "desc"
+      responses:
+        "302":
+          description: "Found. Redirect to search results page."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful search - Redirect to search results page."
+                  value: "/communications/search?query={query}&ord={ord}"
+                302Failure:
+                  description: "Failed search - Redirect to search form."
+                  value: "/communications/search"
+        "400":
+          description: "Bad Request. Invalid search parameters."
+        "404":
+          description: "Not Found. The specified resource does not exist."
 
   #M10: Group Management and Participation
-                
+
   /groups:
-      get:
-        operationId: R1001
-        summary: 'R1001: View All Groups'
-        description: 'Retrieve a paginated list of all available groups with a fixed page limit. Access: USR'
-        tags:
-          - 'M10: Group Management and Participation'
-        responses:
-          '200':
-            description: 'Ok. Returns a paginated list of groups with a fixed number of items per page.'
-          '401':
-            description: 'Unauthorized. The user is not authenticated or lacks the necessary permissions.'
-          '404':
-            description: 'Not Found. The groups or the requested page could not be found.'
-          '500':
-            description: 'Internal Server Error. An unexpected error occurred on the server.'
-  
+    get:
+      operationId: R1001
+      summary: "R1001: View All Groups"
+      description: "Retrieve a paginated list of all available groups with a fixed page limit. Access: USR"
+      tags:
+        - "M10: Group Management and Participation"
+      responses:
+        "200":
+          description: "Ok. Returns a paginated list of groups with a fixed number of items per page."
+        "401":
+          description: "Unauthorized. The user is not authenticated or lacks the necessary permissions."
+        "404":
+          description: "Not Found. The groups or the requested page could not be found."
+        "500":
+          description: "Internal Server Error. An unexpected error occurred on the server."
+
   /groups/users/{user_id}:
     get:
       operationId: R1002
-      summary: 'R1002: View All Groups for a Specific User'
-      description: 'Retrieve a list of all groups that a specific user is a member of. Access: USR'
+      summary: "R1002: View All Groups for a Specific User"
+      description: "Retrieve a list of all groups that a specific user is a member of. Access: USR"
       tags:
-        - 'M10: Group Management and Participation'
+        - "M10: Group Management and Participation"
       parameters:
         - in: path
           name: user_id
           required: true
           schema:
             type: integer
-          description: 'The ID of the user to retrieve groups for.'
+          description: "The ID of the user to retrieve groups for."
       responses:
-        '200':
-          description: 'Ok. Returns a list of groups for the specified user.'        
-        '400':
-          description: 'Bad Request. Invalid query parameters.'
-        '401':
-          description: 'Unauthorized. The user is not authenticated.'
-        '404':
-          description: 'Not Found. The specified user or groups could not be found.'
+        "200":
+          description: "Ok. Returns a list of groups for the specified user."
+        "400":
+          description: "Bad Request. Invalid query parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified user or groups could not be found."
 
-  
   /groups/{group_id}:
-      get:
-        operationId: R1003
-        summary: 'R1003: View Group'
-        description: 'Show the individual group page. Access: USR can view only public groups, OWN and MEM can also view private ones'
-        tags:
-          - 'M10: Group Management and Participation'
-        parameters:
-          - in: path
-            name: group_id
-            schema:
-              type: integer
-            required: true  
+    get:
+      operationId: R1003
+      summary: "R1003: View Group"
+      description: "Show the individual group page. Access: USR can view only public groups, OWN and MEM can also view private ones"
+      tags:
+        - "M10: Group Management and Participation"
+      parameters:
+        - in: path
+          name: group_id
+          schema:
+            type: integer
+          required: true
 
-        responses:
-          '200':
-            description: 'Ok. Show group UI'
-          '404':
-            description: 'Not Found. The specified group does not exist.'
+      responses:
+        "200":
+          description: "Ok. Show group UI"
+        "404":
+          description: "Not Found. The specified group does not exist."
 
-          '403':
-            description: 'Forbidden. User does not have the necessary access rights to view this private group.'
-          
-          
+        "403":
+          description: "Forbidden. User does not have the necessary access rights to view this private group."
 
-      delete:
-        operationId: R1004
-        summary: 'R1004: Delete Group'
-        description: 'Allows group owners to delete their group. Access: OWN'
-        tags:
-          - 'M10: Group Management and Participation'
-        parameters:
-          - in: path
-            name: group_id
-            schema:
-              type: integer
-            required: true
-        responses:
-          '302':
-            description: 'Group deleted successfully. Redirecting to the group list.'
-            headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  302Success:
-                    description: 'Group successfully deleted. Redirect to the group list.'
-                    value: '/groups'
-          '404':
-            description: 'Not Found. The specified group does not exist.'
-          '403':
-            description: 'Forbidden. Only the group owner can delete this group.'
+    delete:
+      operationId: R1004
+      summary: "R1004: Delete Group"
+      description: "Allows group owners to delete their group. Access: OWN"
+      tags:
+        - "M10: Group Management and Participation"
+      parameters:
+        - in: path
+          name: group_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "302":
+          description: "Group deleted successfully. Redirecting to the group list."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Group successfully deleted. Redirect to the group list."
+                  value: "/groups"
+        "404":
+          description: "Not Found. The specified group does not exist."
+        "403":
+          description: "Forbidden. Only the group owner can delete this group."
 
   /groups/{group_id}/edit:
-      get:
-        operationId: R1005
-        summary: 'R1005: Edit Group Form'
-        description: 'Retrieve the edit form for a specific group. Access: OWN'
-        tags:
-          - 'M10: Group Management and Participation'
-        parameters:
-          - in: path
-            name: group_id
-            required: true
-            schema:
-              type: integer
-            description: 'The ID of the group to retrieve the edit form for.'
-        responses:
-          '200':
-            description: 'Show Edit form for the group .'
-          '400':
-            description: 'Bad Request. Invalid request parameters.'
-          '401':
-            description: 'Unauthorized. The user is not authenticated.'
-          '404':
-            description: 'Not Found. The specified group does not exist.'
- 
-      put:
-        operationId: R1006
-        summary: 'R1006: Edit Group'
-        description: 'Allows group owners and moderators to edit group details. Access: OWN'
-        tags:
-          - 'M10: Group Management and Participation'
-        requestBody:
+    get:
+      operationId: R1005
+      summary: "R1005: Edit Group Form"
+      description: "Retrieve the edit form for a specific group. Access: OWN"
+      tags:
+        - "M10: Group Management and Participation"
+      parameters:
+        - in: path
+          name: group_id
           required: true
-          content:
-            application/x-www-form-urlencoded:
-              schema:
-                type: object
-                properties:
-                  group_id:
-                    type: integer
-                  name:
-                    type: string
-                  description:
-                    type: string
-                  photo_url:
-                    type: string
-                required:
-                  - group_id
-                  - name
-        responses:
-          '302':
-            description: 'Redirect after successful group update.'
-            headers:
-              Location:
-                schema:
+          schema:
+            type: integer
+          description: "The ID of the group to retrieve the edit form for."
+      responses:
+        "200":
+          description: "Show Edit form for the group ."
+        "400":
+          description: "Bad Request. Invalid request parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified group does not exist."
+
+    put:
+      operationId: R1006
+      summary: "R1006: Edit Group"
+      description: "Allows group owners and moderators to edit group details. Access: OWN"
+      tags:
+        - "M10: Group Management and Participation"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                group_id:
+                  type: integer
+                name:
                   type: string
-                examples:
-                  302Success:
-                    description: 'Group successfully updated. Redirect to the updated group page.'
-                    value: '/groups/{group_id}' 
-          '400':
-            description: 'Bad Request. The request could not be understood or was missing required parameters.'
+                description:
+                  type: string
+                photo_url:
+                  type: string
+              required:
+                - group_id
+                - name
+      responses:
+        "302":
+          description: "Redirect after successful group update."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Group successfully updated. Redirect to the updated group page."
+                  value: "/groups/{group_id}"
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
 
-          '404':
-            description: 'Not Found. The specified group does not exist.'
+        "404":
+          description: "Not Found. The specified group does not exist."
 
-          '403':
-            description: 'Forbidden. Only group owners can edit this group.'
+        "403":
+          description: "Forbidden. Only group owners can edit this group."
 
   /groups/create:
-      get:
-        operationId: R1007
-        summary: 'R1007: Create Group form'
-        description: 'Retrieve the Create Group form. Access: USR'
-        tags:
-          - 'M10: Group Management and Participation'
-        
-        responses:
-          '200':
-            description: 'Ok. Show create group UI'
-          '401':
-            description: 'Unauthorized. The user is not authenticated.'
-          '404':
-            description: 'Not Found. The specified resource does not exist.'
+    get:
+      operationId: R1007
+      summary: "R1007: Create Group form"
+      description: "Retrieve the Create Group form. Access: USR"
+      tags:
+        - "M10: Group Management and Participation"
 
-      post:
-        operationId: R1008
-        summary: 'R1008: Create Group Action'
-        description: 'Processes the create group form submission. Access: USR'
-        tags:
-          - 'M10: Group Management and Participation'
-        requestBody:
-          required: true
-          content:
-            application/x-www-form-urlencoded:
-              schema:
-                type: object
-                properties:
-                  name:          
-                    type: string
-                  description:
-                    type: string
-                  photo_url:
-                    type: string
-                  owner_id:
-                    type: integer
-                
-                required:
-                  - name
-                  - owner_id
-  
-        responses:
-          '302':
-            description: 'Group successfully created. Redirect to the newly created group page.'
-            headers:
-              Location:
-                schema:
+      responses:
+        "200":
+          description: "Ok. Show create group UI"
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified resource does not exist."
+
+    post:
+      operationId: R1008
+      summary: "R1008: Create Group Action"
+      description: "Processes the create group form submission. Access: USR"
+      tags:
+        - "M10: Group Management and Participation"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
                   type: string
-                examples:
-                  302Success:
-                    description: 'Group successfully created. Redirect to the newly created group page.'
-                    value: '/groups/{group_id}'
+                description:
+                  type: string
+                photo_url:
+                  type: string
+                owner_id:
+                  type: integer
 
-          '400':
-            description: 'Bad Request. The request could not be understood or was missing required parameters.'
-          '401':
-            description: 'Unauthorized. The user is not authenticated.'
-          '404':
-            description: 'Not Found. The specified resource does not exist.'
+              required:
+                - name
+                - owner_id
+
+      responses:
+        "302":
+          description: "Group successfully created. Redirect to the newly created group page."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Group successfully created. Redirect to the newly created group page."
+                  value: "/groups/{group_id}"
+
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The specified resource does not exist."
 
   /groups/{group_id}/members:
-      post:
-        operationId: R1009
-        summary: 'R1009: Add Member to Group'
-        description: 'Allows group owners to add members to the group. Access: OWN'
-        tags:
-          - 'M10: Group Management and Participation'
-        requestBody:
-          required: true
-          content:
-            application/x-www-form-urlencoded:
-              schema:
-                type: object
-                properties:
-                  group_id:
-                    type: integer
-                  user_id:
-                    type: integer
-                    minimum: 1
-                    description: 'ID of the user to be added. Must be a valid, positive integer.'
-                required:
-                  - group_id
-                  - user_id
-        responses:
-          '201':
-            description: 'Member successfully added to the group. Remain on the current page.'
-          '400':
-            description: 'Bad Request. The request could not be understood or was missing required parameters.'
-          '404':
-            description: 'Group or user not found.'
-          '409':
-            description: 'Conflict. User is already a member of the group.'
-          '403':
-            description: 'Forbidden. Only group owners can add members to the group.'
+    post:
+      operationId: R1009
+      summary: "R1009: Add Member to Group"
+      description: "Allows group owners to add members to the group. Access: OWN"
+      tags:
+        - "M10: Group Management and Participation"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                group_id:
+                  type: integer
+                user_id:
+                  type: integer
+                  minimum: 1
+                  description: "ID of the user to be added. Must be a valid, positive integer."
+              required:
+                - group_id
+                - user_id
+      responses:
+        "201":
+          description: "Member successfully added to the group. Remain on the current page."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "404":
+          description: "Group or user not found."
+        "409":
+          description: "Conflict. User is already a member of the group."
+        "403":
+          description: "Forbidden. Only group owners can add members to the group."
 
   /groups/{group_id}/members/{user_id}:
-      delete:
-        operationId: R1010
-        summary: 'R1010: Remove Member from Group'
-        description: 'Allows group owners to remove members from the group. Access: OWN'
-        tags:
-          - 'M10: Group Management and Participation'
-        parameters:
-          - in: path
-            name: group_id
-            required: true
-            schema:
-              type: integer
-          - in: path
-            name: user_id
-            required: true
-            schema:
-              type: integer
-        responses:
-          '204':
-            description: 'Member successfully removed from the group. Remain on the current page.'
-          '400':
-            description: 'Bad Request. The request could not be understood or was missing required parameters.'
-          '403':
-            description: 'Forbidden. You are not authorized to remove this member from the group.'
-          '404':
-            description: 'Group or user not found.'
-          '409':
-            description: 'Conflict. The specified user is not a member of the group.'
-  
-                   
+    delete:
+      operationId: R1010
+      summary: "R1010: Remove Member from Group"
+      description: "Allows group owners to remove members from the group. Access: OWN"
+      tags:
+        - "M10: Group Management and Participation"
+      parameters:
+        - in: path
+          name: group_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: "Member successfully removed from the group. Remain on the current page."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "403":
+          description: "Forbidden. You are not authorized to remove this member from the group."
+        "404":
+          description: "Group or user not found."
+        "409":
+          description: "Conflict. The specified user is not a member of the group."
+
   /analytics/engagement:
-      get:
-        operationId: R1101
-        summary: 'R1101: Retrieve Engagement Metrics'
-        description: 'Fetch likes, comments, and follower changes for daily, weekly, or monthly periods. Access: INF'
-        tags:
-          - 'M11: Analytics and Influencer Insights'
-        parameters:
+    get:
+      operationId: R1101
+      summary: "R1101: Retrieve Engagement Metrics"
+      description: "Fetch likes, comments, and follower changes for daily, weekly, or monthly periods. Access: INF"
+      tags:
+        - "M11: Analytics and Influencer Insights"
+      parameters:
         - in: query
           name: period
-          description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
+          description: "Time period for calculating engagement rate (daily, weekly, monthly, overall)"
           schema:
             type: string
-            enum: ['daily', 'weekly', 'monthly', 'overall']
+            enum: ["daily", "weekly", "monthly", "overall"]
           required: true
         - in: query
           name: date
-          description: 'Specific date for daily period (YYYY-MM-DD)'
+          description: "Specific date for daily period (YYYY-MM-DD)"
           schema:
             type: string
           required: false
         - in: query
           name: week_start_date
-          description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
+          description: "Start date for the week if period is weekly (YYYY-MM-DD)"
           schema:
             type: string
           required: false
         - in: query
           name: month
-          description: 'The month for the engagement data (format: YYYY-MM)'
+          description: "The month for the engagement data (format: YYYY-MM)"
           schema:
             type: string
           required: false
         - in: query
           name: year
-          description: 'The year for monthly data (format: YYYY)'
+          description: "The year for monthly data (format: YYYY)"
           schema:
             type: string
           required: false
-        responses:
-          '200':
-            description: 'Returns engagement metrics for the selected period.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    likes:
-                      type: integer
-                    comments:
-                      type: integer
-                    follower_changes:
-                      type: integer
-                    time :
-                      type : string
-                  example:
-                    likes: 1200
-                    comments: 150
-                    follower_changes: 5
-                    time: "month:2024-04"
+      responses:
+        "200":
+          description: "Returns engagement metrics for the selected period."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  likes:
+                    type: integer
+                  comments:
+                    type: integer
+                  follower_changes:
+                    type: integer
+                  time:
+                    type: string
+                example:
+                  likes: 1200
+                  comments: 150
+                  follower_changes: 5
+                  time: "month:2024-04"
 
-          '400':
-            description: 'Bad Request. The request could not be understood or was missing required parameters.'
-          '404':
-            description: 'Engagement data unavailable.'
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "404":
+          description: "Engagement data unavailable."
 
   /analytics/engagement-rate/{post_id}:
-      get:
-        operationId: R1102
-        summary: 'R1102: Retrieve Average Engagement Rate per Post'
-        description: 'Fetch the average engagement rate and total engagement for each post over a specified time range. Access: INF'
-        tags:
-          - 'M11: Analytics and Influencer Insights'
-        parameters:
-          - in: path
-            name: post_id
-            description: 'Unique identifier for the post'
-            schema:
-              type: integer
-            required: true
-          - in: query
-            name: period
-            description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
-            schema:
-              type: string
-              enum: ['daily', 'weekly', 'monthly', 'overall']
-            required: true
-          - in: query
-            name: date
-            description: 'Specific date for daily period (YYYY-MM-DD)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: week_start_date
-            description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: month
-            description: 'The month for the engagement data (format: YYYY-MM)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: year
-            description: 'The year for monthly data (format: YYYY)'
-            schema:
-              type: string
-            required: false
-        responses:
-          '200':
-            description: 'Returns the average engagement rate and the total engagement data per post in the selected period.'
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      post_id:
-                        type: integer
-                        description: 'Unique identifier for the post'
-                      engagement_rate:
-                        type: string
-                        description: 'Percentage of followers who engaged with the post'
-                      total_engagement:
-                        type: integer
-                        description: 'Total engagement count (likes, comments, shares) for the post'
-                      time :
-                        type : string
-                example:
-                  - post_id: 101
-                    engagement_rate: "45%"
-                    total_engagement: 3000
-                    time: "year: 2024"
-                  - post_id: 102
-                    engagement_rate: "30%"
-                    total_engagement: 1500
-                    time: "Year: 2020"
-                  - post_id: 103
-                    engagement_rate: "50%"
-                    total_engagement: 4000
-                    time: "month:2024-05"
-          '400':
-            description: 'Bad Request. The request could not be understood or was missing required parameters.'
-          '404':
-            description: 'Post not found or engagement data unavailable.'
+    get:
+      operationId: R1102
+      summary: "R1102: Retrieve Average Engagement Rate per Post"
+      description: "Fetch the average engagement rate and total engagement for each post over a specified time range. Access: INF"
+      tags:
+        - "M11: Analytics and Influencer Insights"
+      parameters:
+        - in: path
+          name: post_id
+          description: "Unique identifier for the post"
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: period
+          description: "Time period for calculating engagement rate (daily, weekly, monthly, overall)"
+          schema:
+            type: string
+            enum: ["daily", "weekly", "monthly", "overall"]
+          required: true
+        - in: query
+          name: date
+          description: "Specific date for daily period (YYYY-MM-DD)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: week_start_date
+          description: "Start date for the week if period is weekly (YYYY-MM-DD)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: month
+          description: "The month for the engagement data (format: YYYY-MM)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: year
+          description: "The year for monthly data (format: YYYY)"
+          schema:
+            type: string
+          required: false
+      responses:
+        "200":
+          description: "Returns the average engagement rate and the total engagement data per post in the selected period."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    post_id:
+                      type: integer
+                      description: "Unique identifier for the post"
+                    engagement_rate:
+                      type: string
+                      description: "Percentage of followers who engaged with the post"
+                    total_engagement:
+                      type: integer
+                      description: "Total engagement count (likes, comments, shares) for the post"
+                    time:
+                      type: string
+              example:
+                - post_id: 101
+                  engagement_rate: "45%"
+                  total_engagement: 3000
+                  time: "year: 2024"
+                - post_id: 102
+                  engagement_rate: "30%"
+                  total_engagement: 1500
+                  time: "Year: 2020"
+                - post_id: 103
+                  engagement_rate: "50%"
+                  total_engagement: 4000
+                  time: "month:2024-05"
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "404":
+          description: "Post not found or engagement data unavailable."
 
   /analytics/posts/performance:
-      get:
-        operationId: R1103
-        summary: 'R1103: Retrieve Top and Low-Performing Posts'
-        description: 'Fetch the top and low-performing posts based on engagement metrics. Access: INF'
-        tags:
-          - 'M11: Analytics and Influencer Insights'
-        parameters:
-          - in: query
-            name: period
-            description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
-            schema:
-              type: string
-              enum: ['daily', 'weekly', 'monthly', 'overall']
-            required: true
-          - in: query
-            name: date
-            description: 'Specific date for daily period (YYYY-MM-DD)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: week_start_date
-            description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: month
-            description: 'The month for the engagement data (format: YYYY-MM)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: year
-            description: 'The year for monthly data (format: YYYY)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: count
-            description: 'Number of posts to retrieve for both top and low-performing lists'
-            schema:
-              type: integer
-              default: 3
-          
-        responses:
-          '200':
-            description: 'Returns the top and low-performing posts for the selected period.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    top_posts:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          post_id:
-                            type: integer
-                          caption:
-                            type: string
-                          likes:
-                            type: integer
-                          comments:
-                            type: integer
-                          engagement_rate:
-                            type: string
-                          total_engagement:
-                            type: integer
-                            description: 'Sum of likes and comments for quick comparison'
-                          time :
-                            type : string
-                    low_posts:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          post_id:
-                            type: integer
-                          caption:
-                            type: string
-                          likes:
-                            type: integer
-                          comments:
-                            type: integer
-                          engagement_rate:
-                            type: string
-                          time :
-                            type : string
-                          total_engagement:
-                            type: integer
-                            description: 'Sum of likes and comments for quick comparison'
-                  example:
-                    top_posts:
-                      - post_id: 101
-                        caption: "Check out my latest adventure!"
-                        likes: 1200
-                        comments: 300
-                        engagement_rate: "60% of the followers engaged with the post"
-                        total_engagement: 1500
-                        time: "Month: 2023-06"
-                      - post_id: 102
-                        caption: "Morning vibes with coffee ☕️"
-                        likes: 900
-                        comments: 150
-                        engagement_rate: "50% of the followers engaged with the post"
-                        total_engagement: 1050
-                        time: "Month: 2023-06"
-                    low_posts:
-                      - post_id: 203
-                        caption: "Throwback Thursday!"
-                        likes: 30
-                        comments: 5
-                        engagement_rate: "1% of the followers engaged with the post"
-                        total_engagement: 35
-                        time: "Month: 2023-06"
-                      - post_id: 204
-                        caption: "Simple joys of life"
-                        likes: 40
-                        comments: 10
-                        engagement_rate: "2% of the followers engaged with the post"
-                        total_engagement: 50
-                        time: "Month: 2023-06"
+    get:
+      operationId: R1103
+      summary: "R1103: Retrieve Top and Low-Performing Posts"
+      description: "Fetch the top and low-performing posts based on engagement metrics. Access: INF"
+      tags:
+        - "M11: Analytics and Influencer Insights"
+      parameters:
+        - in: query
+          name: period
+          description: "Time period for calculating engagement rate (daily, weekly, monthly, overall)"
+          schema:
+            type: string
+            enum: ["daily", "weekly", "monthly", "overall"]
+          required: true
+        - in: query
+          name: date
+          description: "Specific date for daily period (YYYY-MM-DD)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: week_start_date
+          description: "Start date for the week if period is weekly (YYYY-MM-DD)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: month
+          description: "The month for the engagement data (format: YYYY-MM)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: year
+          description: "The year for monthly data (format: YYYY)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: count
+          description: "Number of posts to retrieve for both top and low-performing lists"
+          schema:
+            type: integer
+            default: 3
 
-          '400':
-            description: 'Bad Request. The request could not be understood or was missing required parameters.'
-          '404':
-            description: 'Performance Engagement data unavailable.'
-      
+      responses:
+        "200":
+          description: "Returns the top and low-performing posts for the selected period."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  top_posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        post_id:
+                          type: integer
+                        caption:
+                          type: string
+                        likes:
+                          type: integer
+                        comments:
+                          type: integer
+                        engagement_rate:
+                          type: string
+                        total_engagement:
+                          type: integer
+                          description: "Sum of likes and comments for quick comparison"
+                        time:
+                          type: string
+                  low_posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        post_id:
+                          type: integer
+                        caption:
+                          type: string
+                        likes:
+                          type: integer
+                        comments:
+                          type: integer
+                        engagement_rate:
+                          type: string
+                        time:
+                          type: string
+                        total_engagement:
+                          type: integer
+                          description: "Sum of likes and comments for quick comparison"
+                example:
+                  top_posts:
+                    - post_id: 101
+                      caption: "Check out my latest adventure!"
+                      likes: 1200
+                      comments: 300
+                      engagement_rate: "60% of the followers engaged with the post"
+                      total_engagement: 1500
+                      time: "Month: 2023-06"
+                    - post_id: 102
+                      caption: "Morning vibes with coffee ☕️"
+                      likes: 900
+                      comments: 150
+                      engagement_rate: "50% of the followers engaged with the post"
+                      total_engagement: 1050
+                      time: "Month: 2023-06"
+                  low_posts:
+                    - post_id: 203
+                      caption: "Throwback Thursday!"
+                      likes: 30
+                      comments: 5
+                      engagement_rate: "1% of the followers engaged with the post"
+                      total_engagement: 35
+                      time: "Month: 2023-06"
+                    - post_id: 204
+                      caption: "Simple joys of life"
+                      likes: 40
+                      comments: 10
+                      engagement_rate: "2% of the followers engaged with the post"
+                      total_engagement: 50
+                      time: "Month: 2023-06"
+
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "404":
+          description: "Performance Engagement data unavailable."
+
   /analytics/peak-engagement:
-      get:
-        operationId: R1104
-        summary: 'R1104: Retrieve Peak Engagement Times'
-        description: 'Fetches peak engagement times for a specific period. Access: INF'
-        tags:
-          - 'M11: Analytics and Influencer Insights'
-        parameters:
-          - in: query
-            name: period
-            description: 'Time period for calculating engagement rate (daily, weekly, monthly, overall)'
-            schema:
-              type: string
-              enum: ['daily', 'weekly', 'monthly', 'overall']
-            required: true
-          - in: query
-            name: date
-            description: 'Specific date for daily period (YYYY-MM-DD)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: week_start_date
-            description: 'Start date for the week if period is weekly (YYYY-MM-DD)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: month
-            description: 'The month for the engagement data (format: YYYY-MM)'
-            schema:
-              type: string
-            required: false
-          - in: query
-            name: year
-            description: 'The year for monthly data (format: YYYY)'
-            schema:
-              type: string
-            required: false
-        responses:
-          '200':
-            description: 'Returns peak engagement times for the selected period.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    peak_times:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          start_date:
-                            type: string
-                            format: date
-                            description: 'Date of start of the peak time interval. Only included for weekly or monthly periods.'
-                          end_date:
-                            type: string
-                            format: date
-                            description: 'Date of end of the peak time interval. Only included for weekly or monthly periods.'
-                          start_time:
-                            type: string
-                            format: time
-                            description: 'Start of peak engagement interval'
-                          end_time:
-                            type: string
-                            format: time
-                            description: 'End of peak engagement interval'
-                          total_engagement:
-                            type: integer
-                            description: 'Sum of likes and comments for quick comparison'
-                          time :
-                            type : string
-                      example:
-                        peak_times:
-                        - start_date: '2024-04-03'
-                          end_date: '2024-04-04'
-                          start_time: '18:00'
-                          end_time: '00:00'
+    get:
+      operationId: R1104
+      summary: "R1104: Retrieve Peak Engagement Times"
+      description: "Fetches peak engagement times for a specific period. Access: INF"
+      tags:
+        - "M11: Analytics and Influencer Insights"
+      parameters:
+        - in: query
+          name: period
+          description: "Time period for calculating engagement rate (daily, weekly, monthly, overall)"
+          schema:
+            type: string
+            enum: ["daily", "weekly", "monthly", "overall"]
+          required: true
+        - in: query
+          name: date
+          description: "Specific date for daily period (YYYY-MM-DD)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: week_start_date
+          description: "Start date for the week if period is weekly (YYYY-MM-DD)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: month
+          description: "The month for the engagement data (format: YYYY-MM)"
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: year
+          description: "The year for monthly data (format: YYYY)"
+          schema:
+            type: string
+          required: false
+      responses:
+        "200":
+          description: "Returns peak engagement times for the selected period."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  peak_times:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        start_date:
+                          type: string
+                          format: date
+                          description: "Date of start of the peak time interval. Only included for weekly or monthly periods."
+                        end_date:
+                          type: string
+                          format: date
+                          description: "Date of end of the peak time interval. Only included for weekly or monthly periods."
+                        start_time:
+                          type: string
+                          format: time
+                          description: "Start of peak engagement interval"
+                        end_time:
+                          type: string
+                          format: time
+                          description: "End of peak engagement interval"
+                        total_engagement:
+                          type: integer
+                          description: "Sum of likes and comments for quick comparison"
+                        time:
+                          type: string
+                    example:
+                      peak_times:
+                        - start_date: "2024-04-03"
+                          end_date: "2024-04-04"
+                          start_time: "18:00"
+                          end_time: "00:00"
                           total_engagement: 3000
                           time: "Month: 2024-04"
-                        - start_date: '2024-05-05'
-                          end_date: '2024-05-05'
-                          start_time: '09:00'
-                          end_time: '11:00'
+                        - start_date: "2024-05-05"
+                          end_date: "2024-05-05"
+                          start_time: "09:00"
+                          end_time: "11:00"
                           time: "Month: 2024-05"
                           total_engagement: 1500
-                        - start_time: '15:00'
-                          end_time: '16:30'
-                          total_engagement: 200 
+                        - start_time: "15:00"
+                          end_time: "16:30"
+                          total_engagement: 200
                           time: "Day: 2024-01-01"
 
-          '400':
-            description: 'Bad Request. The request could not be understood or was missing required parameters.'
-          '404':
-            description: 'Peak Engagement data unavailable.'        
-   
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "404":
+          description: "Peak Engagement data unavailable."
+
   /analytics/audience-demographics:
-      get:
-        operationId: R1105
-        summary: 'R1105: Retrieve Audience Demographics'
-        description: 'Fetch audience demographics, including age and location insights. Access: INF'
-        tags:
-          - 'M11: Analytics and Influencer Insights'
-        parameters:
-          - in: query
-            name: age_group
-            description: 'Optional. Filter audience demographics by age group.'
-            schema:
-              type: string
-              enum: ['14-17', '18-24', '25-34', '35-44', '45-60', '61-80', '80+']
-            required: false
-          - in: query
-            name: location
-            description: 'Optional. Filter audience demographics by location.'
-            schema:
-              type: string
-            required: false
-        responses:
-          '200':
-            description: 'Returns audience demographic insights.'
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    total_followers:
-                      type: integer
-                      description: 'Total number of followers.'
-                    age_distribution:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          age_group:
-                            type: string
-                            description: 'Age group of followers'
-                          followers_count:
-                            type: integer
-                            description: 'Number of followers in this age group'
-                          percentage:
-                            type: string
-                            description: 'Percentage of followers in this age group relative to total followers'
-                    location_distribution:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          location:
-                            type: string
-                            description: 'Location of followers'
-                          followers_count:
-                            type: integer
-                            description: 'Number of followers from this location'
-                          percentage:
-                            type: string
-                            description: 'Percentage of followers from this location relative to total followers'
-                    gender_distribution:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          gender:
-                            type: string
-                            description: 'Gender of followers'
-                          followers_count:
-                            type: integer
-                            description: 'Number of followers of this gender'
-                          percentage:
-                            type: string
-                            description: 'Percentage of followers of this gender'
-                example:
-                  total_followers: 10000
+    get:
+      operationId: R1105
+      summary: "R1105: Retrieve Audience Demographics"
+      description: "Fetch audience demographics, including age and location insights. Access: INF"
+      tags:
+        - "M11: Analytics and Influencer Insights"
+      parameters:
+        - in: query
+          name: age_group
+          description: "Optional. Filter audience demographics by age group."
+          schema:
+            type: string
+            enum: ["14-17", "18-24", "25-34", "35-44", "45-60", "61-80", "80+"]
+          required: false
+        - in: query
+          name: location
+          description: "Optional. Filter audience demographics by location."
+          schema:
+            type: string
+          required: false
+      responses:
+        "200":
+          description: "Returns audience demographic insights."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_followers:
+                    type: integer
+                    description: "Total number of followers."
                   age_distribution:
-                    - age_group: '14-17'
-                      followers_count: 1500
-                      percentage: "15%"
-                    - age_group: '18-24'
-                      followers_count: 4000
-                      percentage: "40%"
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        age_group:
+                          type: string
+                          description: "Age group of followers"
+                        followers_count:
+                          type: integer
+                          description: "Number of followers in this age group"
+                        percentage:
+                          type: string
+                          description: "Percentage of followers in this age group relative to total followers"
                   location_distribution:
-                    - location: 'USA'
-                      followers_count: 3000
-                      percentage: "30%"
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        location:
+                          type: string
+                          description: "Location of followers"
+                        followers_count:
+                          type: integer
+                          description: "Number of followers from this location"
+                        percentage:
+                          type: string
+                          description: "Percentage of followers from this location relative to total followers"
                   gender_distribution:
-                    - gender: 'Female'
-                      followers_count: 5500
-                      percentage: "55%"
-                    - gender: 'Male'
-                      followers_count: 4500
-                      percentage: "45%"
-          '400':
-            description: 'Bad Request. The request could not be understood or was missing required parameters.'
-          '404':
-            description: 'Audience demographics data not found.'
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        gender:
+                          type: string
+                          description: "Gender of followers"
+                        followers_count:
+                          type: integer
+                          description: "Number of followers of this gender"
+                        percentage:
+                          type: string
+                          description: "Percentage of followers of this gender"
+              example:
+                total_followers: 10000
+                age_distribution:
+                  - age_group: "14-17"
+                    followers_count: 1500
+                    percentage: "15%"
+                  - age_group: "18-24"
+                    followers_count: 4000
+                    percentage: "40%"
+                location_distribution:
+                  - location: "USA"
+                    followers_count: 3000
+                    percentage: "30%"
+                gender_distribution:
+                  - gender: "Female"
+                    followers_count: 5500
+                    percentage: "55%"
+                  - gender: "Male"
+                    followers_count: 4500
+                    percentage: "45%"
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "404":
+          description: "Audience demographics data not found."
