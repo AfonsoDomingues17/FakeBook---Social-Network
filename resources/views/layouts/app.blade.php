@@ -30,11 +30,11 @@
                     <h1>
                         <a href="{{ url('/') }}">FakeBook!</a>
                     </h1>
-                    <form  action="/search" method="GET">
-                    <div style="position: relative;">
-                        <input id="search" type="text" placeholder="search for users">
-                        <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
-                    </div>
+                    <form  action="{{route('search')}}" method="GET">
+                        <div style="position: relative;">
+                            <input id="search" type="text" placeholder="search for users">
+                            <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
+                        </div>
                     </form>
                     
             
