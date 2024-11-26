@@ -6,14 +6,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Post ID: {{ $post->id }}</p>
+                @if(auth()->user()->isAdmin())
+                    <p>Post Author: {{ $post->owner->username }}</p>
+                @endif
                 <form id="editPostForm" method="POST" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
                     <div>
                         <label for="description">Description:</label>
-                        <input type="text" id="description" name="description" value="{{ $post->description }}">
+                        <textarea id="description" name="description"> {{ $post->description }}</textarea>
                         @error('description')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -32,3 +34,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Adjust the size of the description textarea to fit the content as the user types
+    document.addEventListener('input', function (event) {
+        if (event.target.tagName.toLowerCase() === 'textarea') {
+            event.target.style.height = 'auto';
+            event.target.style.height = (event.target.scrollHeight) + 'px';
+        }
+    });
+</script>
