@@ -3,8 +3,8 @@
 @section('content')
 
 <section class="homepage-layout">
-    
-    <section id="posts">
+            
+    <section id="feed-posts">
         <h2>
             @if($type === 'public')
                 Public Posts
@@ -12,18 +12,16 @@
                 Following Posts
             @endif
         </h2>
-        <section id="posts-container">
-            @if($type === 'following' && !Auth::check())
-                <h3>Login to see posts from accounts you follow</h3>
-                <a href="{{ route('login') }}">
-                    <button id="follow-redirect-login">Login</button>
-                </a>
-            @else
-            <div class="post">
-                @each('partials.post', $posts, 'post')
-                </div>
-            @endif
-        </section>
+        @if($type === 'following' && !Auth::check())
+            <h3>Login to see posts from accounts you follow</h3>
+            <a href="{{ route('login') }}">
+                <button id="follow-redirect-login">Login</button>
+            </a>
+        @else
+        <div class="feed-posts-container">
+            @each('partials.post', $posts, 'post')
+            </div>
+        @endif
     </section>
     <section class="suggested-users">
         <h2>Users that you may know!</h2>
