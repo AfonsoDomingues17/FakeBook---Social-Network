@@ -4,14 +4,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('search-users').addEventListener('click', function() {
         updateSearchResults('users');
+        changeButton('users');
     });
 
     document.getElementById('search-posts').addEventListener('click', function() {
         updateSearchResults('posts');
+        changeButton('posts');
     });
 
     document.getElementById('search-groups').addEventListener('click', function() {
         updateSearchResults('groups');
+        changeButton('groups');
     });
 
     function updateSearchResults(type) {
@@ -57,4 +60,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('loading').style.display = 'none';
             });
     }
+
+    function changeButton(type) {
+        const allButtons = document.querySelectorAll('[id^="search-"]'); // Seleciona todos os botões com id começando por "search-"
+        allButtons.forEach(button => {
+            if (button.id === `search-${type}`) {
+                // Adiciona a classe "active" ao botão selecionado
+                button.classList.add('active');
+            } else {
+                // Remove a classe "active" dos outros botões
+                button.classList.remove('active');
+            }
+        });
+    }    
 });

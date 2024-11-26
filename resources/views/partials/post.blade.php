@@ -1,5 +1,5 @@
 <script src="{{ asset('js/post-carousel.js') }}"></script>
-<article class="Ipost">
+<article class="post">
     <div class="post_author">
         <img src="{{route('userphoto', ['user_id' => $post->owner_id])}}" alt="profile picture" width="70" height="70">
         @if (!(request()->routeIs('profile') && request()->route('user_id') == $post->owner_id))

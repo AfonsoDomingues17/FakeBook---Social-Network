@@ -40,8 +40,12 @@ body, html{
       border-radius: 10px;
       border: none;
       width: 20em;
-      
     }
+
+    #real-time-search {
+      display: block;
+    }
+
     #timeline_options{
       display: flex;
       gap: 1em;
@@ -137,7 +141,7 @@ footer{
     align-items: center;
 }
 }
-article.Ipost {
+article.post {
   background-color: #D3D3D3;
   margin: 1.5em;
   border-radius: 10px;

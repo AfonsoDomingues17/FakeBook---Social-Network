@@ -1,4 +1,11 @@
-<form class="search-bar" action="/search" method="GET">
-    <input type="text" name="query" placeholder="Search..." required>
-    <input type="hidden" name="type" value="users">
-</form>
+<ul class="nav nav-underline">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#" id="search-users">Users</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" id="search-posts">Posts</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" id="search-groups">Groups</a>
+  </li>
+</ul>

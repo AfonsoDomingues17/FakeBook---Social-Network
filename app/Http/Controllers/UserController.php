@@ -267,7 +267,7 @@ class UserController extends Controller
             $photoPath = str_replace('private/', '', $user->photo_url);
             Storage::disk('private')->delete($photoPath);
         }
-        
+
         // Remove user from all watchlists
         $user->watchlist()->delete(); // As admin
         $user->watchedBy()->detach(); // As watched user
@@ -289,33 +289,32 @@ class UserController extends Controller
         return redirect('/')->with('error', 'You do not have admin access.');
     }
 
-    
+    public function addToWatchlist($user_id)
+{
+    if (Auth::check() && Auth::user()->isAdmin()) {
+        $admin = Auth::user();
 
-    public function addToWatchlist(Request $request)
-    {
-        if (Auth::check() && Auth::user()->isAdmin()) {
-            $user_id = $request->input('user_id');
-            $admin = Auth::user();
-
-            if (!$admin->watchlistedUsers()->where('user_id', $user_id)->exists()) {
-                $admin->watchlistedUsers()->attach($user_id);
-            }
-
-            return redirect()->back()->with('success', 'User added to watchlist.');
+        if (!$admin->watchlistedUsers()->where('user_id', $user_id)->exists()) {
+            $admin->watchlistedUsers()->attach($user_id, [
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
-        return redirect('/')->with('error', 'You do not have admin access.');
+
+        return response()->json(['success' => true, 'message' => 'User added to watchlist.']);
     }
+    return response()->json(['success' => false, 'message' => 'You do not have admin access.'], 403);
+}
 
-    public function removeFromWatchlist(Request $request)
-    {
-        if (Auth::check() && Auth::user()->isAdmin()) {
-            $user_id = $request->input('user_id');
-            $admin = Auth::user();
+public function removeFromWatchlist($user_id)
+{
+    if (Auth::check() && Auth::user()->isAdmin()) {
+        $admin = Auth::user();
 
-            $admin->watchlistedUsers()->detach($user_id);
+        $admin->watchlistedUsers()->detach($user_id);
 
-            return redirect()->back()->with('success', 'User removed from watchlist.');
-        }
-        return redirect('/')->with('error', 'You do not have admin access.');
+        return response()->json(['success' => true, 'message' => 'User removed from watchlist.']);
     }
+    return response()->json(['success' => false, 'message' => 'You do not have admin access.'], 403);
+}
 }
