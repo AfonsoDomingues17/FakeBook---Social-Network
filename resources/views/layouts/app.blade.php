@@ -32,7 +32,8 @@
                     </h1>
                     <form  action="{{route('search')}}" method="GET">
                         <div style="position: relative;">
-                            <input id="search" type="text" placeholder="search for users">
+                            <input id="search" type="text" name="query" placeholder="search for users">
+                            <input type="hidden" name="type" value="users">
                             <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
                         </div>
                     </form>

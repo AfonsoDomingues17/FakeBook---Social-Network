@@ -8,11 +8,14 @@ use App\Models\Post;
 use App\Models\Group;
 use App\Models\Watchlist;
 use Illuminate\Support\Facades\Auth;
+use Log;
 
 class SearchController extends Controller
 {
     public function search(Request $request)
     {
+        Log::info('Entrou no search');
+        Log::info($request);
         // Extract the type and query from the query string
         $query = $request->input('query');
         $type = $request->input('type');
@@ -48,7 +51,8 @@ class SearchController extends Controller
             $groups = Group::whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
                         ->paginate(10, ['*'], 'page', $page);
         }
-
+        Log::info($query);
+        Log::info($users);
         if ($request->ajax()) {
             if ($type === 'users') {
                 return view('partials.user', compact('users'))->render();

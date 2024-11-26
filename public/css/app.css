@@ -92,10 +92,6 @@ body, html{
         cursor: pointer;
         
       }
-      button#public{
-        border-bottom: 5px solid #007bff;
-      }
-      
       
     }
 
@@ -292,16 +288,26 @@ article.post {
   display: flex;
   flex-direction: column;
   width: 60%;
+  box-sizing: border-box; 
+  overflow: hidden;
+  min-width: 400px;
   .post_author {
     display: flex;
     gap: 1em;
     align-items: center;
-    width: 95%;
+    width: 100%; 
+    overflow: hidden;
     img {
       border-radius: 50%;
       width: 5em;
       height: 5em;
       margin-left: 1em;
+    }
+    p{
+      margin: 0; 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
     }
     p a {
       font-size: 1.5em;
@@ -313,6 +319,9 @@ article.post {
       font-size: 1em;
       color: grey;
       margin-left: auto;
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
     }
   }
   p#postContent{
@@ -332,6 +341,7 @@ article.post {
     img {
       width: 95%;
       border-radius: 10px;
+      max-width: 100%;
     }
   }
   p#postdescription{
@@ -377,6 +387,21 @@ article.post {
     justify-content: space-between;
     align-items: center;
     margin-top: 1.5em;
+    a, button {
+      padding: 0.75em 1.5em; 
+      border-radius: 10px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+      display: inline-block; 
+      text-align: center; 
+      margin: 0.5em; 
+    }
   
   }
 
@@ -437,7 +462,6 @@ article.post {
   align-items: center;
   gap: 1em;
   padding: 1em;
-  width: 100%;
   padding-top: 2em;
   
   margin-left: auto;
@@ -498,28 +522,12 @@ article.post {
         text-decoration: none;
   }
 
-  section#user_posts #posts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
-    gap: 1em;
-    justify-items: stretch;
-}
+ 
 
 
-section#user_posts #posts .post {
-  background-color: white;
-  border-radius: 10px;
-  padding: 1.5em;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-a#addPost{
-  align-items: center;
-}
-
-section#user_posts #posts p {
-    font-size: 1em;
+section#user_posts {
+    display: flex;
+    flex-direction: column;
 }
   button {
         padding: 0.75em 1.5em;
@@ -546,4 +554,40 @@ section#user_posts #posts p {
         background-color: #004085;
     }
 }
+
+section#myposts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 1em; /* Adjust as needed */
+  padding: 0;
+  margin: 0;
+  
+}
+section#myposts>p {
+  text-align: center;
+  font-size: 1.5em;
+  grid-column: span 3;
+}
+
+section#myposts .post {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1.5em;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box; 
+  overflow: hidden;
+  height: 100%;
+  margin: 0; 
+  min-width: 400px;
+}
+
+a#addPost{
+  display: flex; /* Use Flexbox */
+  align-items: center; /* Center vertically */
+  justify-content: center;
+  margin: 0.5em auto;
+}
+
+
 
