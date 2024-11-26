@@ -34,10 +34,8 @@ class SearchController extends Controller
                 if (Auth::check() && Auth::user()->isAdmin()) {
                     $isInWatchlist = Watchlist::where('admin_id', Auth::id())->where('user_id', $user->id)->exists();
                 }
-                return [
-                    'user' => $user,
-                    'isInWatchlist' => $isInWatchlist
-                ];
+                $user->isInWatchlist = $isInWatchlist;
+                return $user;
             });
         } elseif ($type === 'posts') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);

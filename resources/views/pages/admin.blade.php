@@ -4,7 +4,6 @@
 <section class="admin-layout">
     <section class="left-sidebar">
         <h1>Admin Page</h1>
-        @include('partials.search')
     </section>
     <section id="watchlist">
         <h2>Watchlist</h2>

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="form">
 <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
 
@@ -63,7 +64,7 @@
     @endif
 
     <div class="radio-group">
-      <label for="is_public">Visibility</label>
+      <label for="is_public">Visibility:</label>
       <label for="public">Public</label>
       <input type="radio" id="public" name="is_public" value="public" required>
       <label for="private">Private</label>
@@ -73,8 +74,8 @@
     <button type="submit">
       Register
     </button>
-    <a class="button button-outline" href="{{ route('login') }}">Login</a>
 </form>
+</div>
 
 <script>
 function previewProfilePicture(event) {

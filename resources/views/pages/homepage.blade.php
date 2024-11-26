@@ -3,10 +3,7 @@
 @section('content')
 
 <section class="homepage-layout">
-    <section class="left-sidebar">
-        <h1>Welcome to FakeBook</h1>
-        @include('partials.search')
-    </section>
+    
     <section id="posts">
         <h2>
             @if($type === 'public')
@@ -22,7 +19,9 @@
                     <button id="follow-redirect-login">Login</button>
                 </a>
             @else
+            <div class="post">
                 @each('partials.post', $posts, 'post')
+                </div>
             @endif
         </section>
     </section>
@@ -32,6 +31,7 @@
             @include('partials.user', ['user' => $suggestedUser, 'isInWatchlist' => $suggestedUser->isInWatchlist])
         @endforeach
     </section>
+    
 </section>
 
 @endsection

@@ -2,23 +2,14 @@
 
 @section('content')
 
-<section class="homepage-layout">
-    <section class="left-sidebar">
-        <h1>Welcome to FakeBook</h1>
-        @include('partials.search')
-        <a class="button" id="search-users">Users</a><br>
-        <a class="button" id="search-posts">Posts</a><br>
-        <a class="button" id="search-groups">Groups</a>
-    </section>
-    <section id="search-results">
-        <h2>
-            Search results ({{$type}}) for "{{ $query }}"
+<section class="homepage-layout d-flex justify-content-center align-items-center">
+    <section id="search-results" class="d-flex flex-column align-items-center">
+        <h2 class="mt-2 mb-3">
+            Search results (<?=$type?>) for "{{ $query }}"
         </h2>
         <section id="search-results-container">
             @if($type === 'users')
-                @foreach($users as $userData)
-                    @include('partials.user', ['user' => $userData['user'], 'isInWatchlist' => $userData['isInWatchlist']])
-                @endforeach
+                @each('partials.user', $users, 'user')
             @elseif($type === 'posts')
                 @each('partials.post', $posts, 'post')
             @elseif($type === 'groups')
