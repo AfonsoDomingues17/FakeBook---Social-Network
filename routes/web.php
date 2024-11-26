@@ -6,8 +6,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MediaController;
-use App\Http\Controllers\CardController;
-use App\Http\Controllers\ItemController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;

@@ -38,4 +38,14 @@ class Post extends Model
     public function likedByUsers(){
             return $this->belongsToMany(Post::class, 'postLikes', 'post_id', 'user_id');
     }
+
+    public function getNumberOfComments()
+    {
+        return $this->comments()->count();
+    }
+
+    public function getNumberOfLikes()
+    {
+        return $this->likes()->count();
+    }
 }
