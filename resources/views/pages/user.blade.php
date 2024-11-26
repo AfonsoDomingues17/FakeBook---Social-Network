@@ -21,7 +21,7 @@
                             <button type="submit">Delete account</button>
                         </form>
                         <div id="watchlist-actions-{{ $user->id }}" data-user-id="{{ $user->id }}">
-            @if ($isInWatchlist)
+            @if ($user->isInWatchlist)
                 <form id="remove-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.remove', ['user_id' => $user->id]) }}" method="POST">
                     @csrf
                     <button type="submit">Remove from Watchlist</button>
