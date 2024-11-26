@@ -15,9 +15,10 @@ class PostPolicy
     {
         //
     }
-    public function view(User $user, Post $post)
+    public function view(?User $user, Post $post)
     {
-        return $post->is_public || $user->id === $post->owner_id || $user->typeu === 'ADMIN';
+        // Allow viewing if the post is public or if the user is the owner or an admin
+        return $post->is_public || ($user && ($user->id === $post->owner_id || $user->typeu === 'ADMIN'));
     }
 
     /**
