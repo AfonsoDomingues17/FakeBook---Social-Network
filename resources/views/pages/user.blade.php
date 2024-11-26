@@ -63,7 +63,6 @@
                 @else 
                     <p>You dont have any post! Post something!</p>
                 @endif
-                <a href="{{ route('posts.create') }}">Add post</a>
             </section>
             
         @else
