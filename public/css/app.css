@@ -45,6 +45,9 @@ body, html{
     #real-time-search {
       display: block;
     }
+    #real-time-search:empty {
+      display: none;
+    }
 
     #timeline_options{
       display: flex;
@@ -62,7 +65,7 @@ body, html{
     }
 
     .button{
-    
+
       p{
         padding: 0.5em;
         margin: 0;
@@ -70,7 +73,7 @@ body, html{
         border-radius: 5px;
         background-color: white;
       }
-    } 
+    }
 }
 
 main {
@@ -83,7 +86,7 @@ footer{
     align-content: center;
     text-align: center;
     height: 50px;
-    width: 100%; 
+    width: 100%;
     margin-top: auto;
     z-index: 1;
 }
@@ -102,7 +105,7 @@ footer{
   border-radius: 10px;
   width: 20em;
   justify-content: center;
-  
+
   input {
     padding: 1em;
     margin: 0.5em;
@@ -123,7 +126,9 @@ footer{
   }
   .radio-group{
     display: flex;
-    gap: 1em;
+  }
+  .radio-group label{
+    display: inline-block;
   }
   }
 }
@@ -131,12 +136,12 @@ footer{
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   .suggested-users{
-    grid-column: 3; 
-  justify-self: end; 
+    grid-column: 3;
+  justify-self: end;
   margin-right: 2em;
   }
   #posts {
-    grid-column: 2; 
+    grid-column: 2;
     width: 90%;
     align-items: center;
 }
@@ -179,7 +184,7 @@ article.post {
   .media {
     display: flex;
     justify-content: center;
-    align-items: center;  
+    align-items: center;
     margin-top: 1.5em;
     margin-bottom: 1.5em;
     img {
@@ -203,7 +208,7 @@ article.post {
       margin-left: auto;
       margin-right: 2em;
     }
-    
+
   }
   .interaction-bar{
     display: flex;
@@ -211,26 +216,26 @@ article.post {
     justify-content: center;
     align-items: center;
     margin-top: 1.5em;
-   
+
     i {
       font-size: 1.5em;
       cursor: pointer;
       flex: 1;
       text-align: center;
     }
-    
+
   }
 
 }
 
 
 .user {
-  
+
   #info{
   display: flex;
   gap: 1.5em;
   padding: 1em;
- 
+
   }
 
   span#user p {
@@ -257,7 +262,7 @@ article.post {
     align-self: center;
     justify-self: center;
     margin-left: auto;
-   
+
   }
 }
 
@@ -268,7 +273,7 @@ article.post {
   gap: 1em;
   padding: 1em;
   width: 90%;
-  
+
   margin-left: auto;
   img {
     border-radius: 50%;
@@ -280,8 +285,8 @@ article.post {
     gap: 4em;
     align-items: center;
     justify-content: center;
-    
-    
+
+
     .info {
       .p1{
         display: flex;
@@ -295,17 +300,17 @@ article.post {
       span#username p {
         font-size: 2em;
         font-weight: large;
-      } 
+      }
       span#realName p {
         font-size: 1.5em;
         font-weight: bold;
         margin-bottom: 0.2em;
-        
+
       }
       span#bio p {
         font-size: 1.2em;
         margin-top: 0;
-      } 
+      }
     }
     p{
       font-size: 1.5em;
@@ -320,8 +325,8 @@ article.post {
     display: inline-block; /* Ensure it behaves like a button */
     font-size: 1em; /* Font size */
     font-weight: bold; /* Font weight */
-    cursor: pointer; 
-    margin: 0.5em 0; 
+    cursor: pointer;
+    margin: 0.5em 0;
   }
   section#user_posts #posts{
     p{
@@ -330,7 +335,7 @@ article.post {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+
   }
   button {
     padding-right: 1.5em;
@@ -348,3 +353,6 @@ article.post {
   }
 }
 
+li {
+  list-style-type: none;
+}

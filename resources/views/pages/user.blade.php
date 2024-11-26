@@ -63,7 +63,9 @@
                 @else 
                     <p>You dont have any post! Post something!</p>
                 @endif
-                <a href="{{ route('posts.create') }}">Add post</a>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
+                        Add Post
+                    </button>
             </section>
             
         @else
@@ -93,5 +95,7 @@
         @endif
     </section>
 </div>
+
+@include('partials.create_post')
 <script src="{{ asset('js/watchlist.js') }}"></script>
 @endsection

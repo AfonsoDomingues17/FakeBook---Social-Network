@@ -21,7 +21,7 @@
             @else
             <div class="post">
                 @each('partials.post', $posts, 'post')
-                </div>
+            </div>
             @endif
         </section>
     </section>

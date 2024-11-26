@@ -48,15 +48,19 @@
     </script>
     @endif
 
-        @if(Auth::check())
-            @if (Auth::user()->isAdmin() || Auth::user()->id == $post->owner_id)
-                <a href="{{ route('posts.edit', $post->id) }}">Edit</a>
-                <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
-                    <button type="submit">Delete</button>
-                </form>
-            @endif
+    @if(Auth::check())
+        @if (Auth::user()->isAdmin() || Auth::user()->id == $post->owner_id)
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPostModal-{{ $post->id }}" data-post-id="{{ $post->id }}">
+                Edit Post
+            </button>
+            <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
+                <button type="submit">Delete</button>
+            </form>
         @endif
+    @endif
 </article>
+
+@include('partials.edit_post', ['post' => $post, 'modalId' => 'editPostModal-' . $post->id])
