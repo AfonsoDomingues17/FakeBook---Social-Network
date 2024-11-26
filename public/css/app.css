@@ -356,3 +356,66 @@ article.post {
 li {
   list-style-type: none;
 }
+
+/* Center the modal vertically and horizontally */
+.modal-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Style the modal header */
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+}
+
+/* Style the modal title */
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #000;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-body form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body form div {
+  display: flex;
+    flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.modal-body form label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body form input[type="checkbox"] {
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.modal-body form textarea {
+  width: 90%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  resize: none;
+  overflow: hidden;
+}
