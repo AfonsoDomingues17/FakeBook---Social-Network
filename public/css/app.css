@@ -70,7 +70,6 @@ body, html{
 }
 
 main {
-  padding-top: 100px; /* Adjust based on the height of your navbar */
   flex: 1;
   position: relative;
 }
