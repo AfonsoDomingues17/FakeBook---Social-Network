@@ -2106,59 +2106,10 @@ paths:
 
   #M09: Search and Results
 
-  /:
-    get:
-      operationId: R901
-      summary: "R901: Root Page with Search Form"
-      description: "Provides the root page with the search form. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      responses:
-        "200":
-          description: "Ok. Show root page with search form UI"
-        "404":
-          description: "Not Found. The specified resource does not exist."
-    post:
-      operationId: R902
-      summary: "R902: Submit Search Form"
-      description: "Submits the search form and redirects to the search results page. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                  description: "Search string."
-              required:
-                - query
-      responses:
-        "302":
-          description: "Found. Redirect to search results page."
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Successful search - Redirect to users search results page."
-                  value: "/search/users?query={query}&ord=desc"
-                302Failure:
-                  description: "Failed search - Stay in home page."
-                  value: "/"
-        "400":
-          description: "Bad Request. Invalid search parameters."
-        "404":
-          description: "Not Found. The specified resource does not exist."
-
   /search/users:
     get:
-      operationId: R903
-      summary: "R903: Search Users"
+      operationId: R901
+      summary: "R901: Search Users"
       description: "Perform a search for users based on the query string. Access: PUB"
       tags:
         - "M09: Search and Results"
@@ -2169,14 +2120,6 @@ paths:
           schema:
             type: string
           required: true
-        - in: query
-          name: ord
-          description: "Order of results (asc/desc)."
-          schema:
-            type: string
-            enum: ["asc", "desc"]
-            default: "desc"
-          required: false
       responses:
         "200":
           description: "Search results for users based on the query."
@@ -2190,35 +2133,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-        "404":
-          description: "Not Found. The specified resource does not exist."
-    post:
-      operationId: R904
-      summary: "R904: Redirect Search Users"
-      description: "Redirects to another search results page or performs a new search. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                  description: "Search string."
-                type:
-                  type: string
-                  description: "Type of search (users, posts, groups)."
-                  enum: ["users", "posts", "groups"]
-                  default: "users"
-                ord:
-                  type: string
-                  description: "Order of results (asc/desc)."
-                  enum: ["asc", "desc"]
-                  default: "desc"
-      responses:
         "302":
           description: "Found. Redirect to search results page."
           headers:
@@ -2228,7 +2142,7 @@ paths:
               examples:
                 302Success:
                   description: "Successful search - Redirect to search results page."
-                  value: "/search/{type}?query={query}&ord={ord}"
+                  value: "/search/users?query={query}"
                 302Failure:
                   description: "Failed search - Redirect to search form."
                   value: "/search/users"
@@ -2239,8 +2153,8 @@ paths:
 
   /search/posts:
     get:
-      operationId: R905
-      summary: "R905: Search Posts"
+      operationId: R902
+      summary: "R902: Search Posts"
       description: "Perform a search for posts based on the query string. Access: PUB"
       tags:
         - "M09: Search and Results"
@@ -2251,14 +2165,6 @@ paths:
           schema:
             type: string
           required: true
-        - in: query
-          name: ord
-          description: "Order of results (asc/desc)."
-          schema:
-            type: string
-            enum: ["asc", "desc"]
-            default: "desc"
-          required: false
       responses:
         "200":
           description: "Search results for posts based on the query."
@@ -2272,35 +2178,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-        "404":
-          description: "Not Found. The specified resource does not exist."
-    post:
-      operationId: R906
-      summary: "R906: Redirect Search Posts"
-      description: "Redirects to another search results page or performs a new search. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                  description: "Search string."
-                type:
-                  type: string
-                  description: "Type of search (users, posts, groups)."
-                  enum: ["users", "posts", "groups"]
-                  default: "posts"
-                ord:
-                  type: string
-                  description: "Order of results (asc/desc)."
-                  enum: ["asc", "desc"]
-                  default: "desc"
-      responses:
         "302":
           description: "Found. Redirect to search results page."
           headers:
@@ -2310,7 +2187,7 @@ paths:
               examples:
                 302Success:
                   description: "Successful search - Redirect to search results page."
-                  value: "/search/{type}?query={query}&ord={ord}"
+                  value: "/search/posts?query={query}"
                 302Failure:
                   description: "Failed search - Redirect to search form."
                   value: "/search/posts"
@@ -2321,8 +2198,8 @@ paths:
 
   /search/groups:
     get:
-      operationId: R907
-      summary: "R907: Search Groups"
+      operationId: R903
+      summary: "R903: Search Groups"
       description: "Perform a search for groups based on the query string. Access: PUB"
       tags:
         - "M09: Search and Results"
@@ -2333,14 +2210,6 @@ paths:
           schema:
             type: string
           required: true
-        - in: query
-          name: ord
-          description: "Order of results (asc/desc)."
-          schema:
-            type: string
-            enum: ["asc", "desc"]
-            default: "desc"
-          required: false
       responses:
         "200":
           description: "Search results for groups based on the query."
@@ -2354,35 +2223,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-        "404":
-          description: "Not Found. The specified resource does not exist."
-    post:
-      operationId: R908
-      summary: "R908: Redirect Search Groups"
-      description: "Redirects to another search results page or performs a new search. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                  description: "Search string."
-                type:
-                  type: string
-                  description: "Type of search (users, posts, groups)."
-                  enum: ["users", "posts", "groups"]
-                  default: "groups"
-                ord:
-                  type: string
-                  description: "Order of results (asc/desc)."
-                  enum: ["asc", "desc"]
-                  default: "desc"
-      responses:
         "302":
           description: "Found. Redirect to search results page."
           headers:
@@ -2392,7 +2232,7 @@ paths:
               examples:
                 302Success:
                   description: "Successful search - Redirect to search results page."
-                  value: "/search/{type}?query={query}&ord={ord}"
+                  value: "/search/groups?query={query}"
                 302Failure:
                   description: "Failed search - Redirect to search form."
                   value: "/search/groups"
@@ -2403,8 +2243,8 @@ paths:
 
   /posts/{post_id}/comments/search:
     get:
-      operationId: R909
-      summary: "R909: Search Comments"
+      operationId: R904
+      summary: "R904: Search Comments"
       description: "Perform a search for comments on a specific post based on the query string. Access: PUB"
       tags:
         - "M09: Search and Results"
@@ -2421,14 +2261,6 @@ paths:
           schema:
             type: string
           required: true
-        - in: query
-          name: ord
-          description: "Order of results (asc/desc)."
-          schema:
-            type: string
-            enum: ["asc", "desc"]
-            default: "desc"
-          required: false
       responses:
         "200":
           description: "Search results for comments based on the query."
@@ -2442,30 +2274,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-        "404":
-          description: "Not Found. The specified resource does not exist."
-    post:
-      operationId: R910
-      summary: "R910: Redirect Search Comments"
-      description: "Redirects to another search results page or performs a new search. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                  description: "Search string."
-                ord:
-                  type: string
-                  description: "Order of results (asc/desc)."
-                  enum: ["asc", "desc"]
-                  default: "desc"
-      responses:
         "302":
           description: "Found. Redirect to search results page."
           headers:
@@ -2475,7 +2283,7 @@ paths:
               examples:
                 302Success:
                   description: "Successful search - Redirect to search results page."
-                  value: "/posts/{post_id}/comments/search?query={query}&ord={ord}"
+                  value: "/posts/{post_id}/comments/search?query={query}"
                 302Failure:
                   description: "Failed search - Redirect to search form."
                   value: "/posts/{post_id}/comments/search"
@@ -2486,8 +2294,8 @@ paths:
 
   /groups/{group_id}/members/search:
     get:
-      operationId: R911
-      summary: "R911: Search Group Members"
+      operationId: R905
+      summary: "R905: Search Group Members"
       description: "Perform a search for members in a specific group based on the query string. Access: PUB"
       tags:
         - "M09: Search and Results"
@@ -2504,14 +2312,6 @@ paths:
           schema:
             type: string
           required: true
-        - in: query
-          name: ord
-          description: "Order of results (asc/desc)."
-          schema:
-            type: string
-            enum: ["asc", "desc"]
-            default: "desc"
-          required: false
       responses:
         "200":
           description: "Search results for group members based on the query."
@@ -2525,30 +2325,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-        "404":
-          description: "Not Found. The specified resource does not exist."
-    post:
-      operationId: R912
-      summary: "R912: Redirect Search Group Members"
-      description: "Redirects to another search results page or performs a new search. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                  description: "Search string."
-                ord:
-                  type: string
-                  description: "Order of results (asc/desc)."
-                  enum: ["asc", "desc"]
-                  default: "desc"
-      responses:
         "302":
           description: "Found. Redirect to search results page."
           headers:
@@ -2558,7 +2334,7 @@ paths:
               examples:
                 302Success:
                   description: "Successful search - Redirect to search results page."
-                  value: "/groups/{group_id}/members/search?query={query}&ord={ord}"
+                  value: "/groups/{group_id}/members/search?query={query}"
                 302Failure:
                   description: "Failed search - Redirect to search form."
                   value: "/groups/{group_id}/members/search"
@@ -2569,8 +2345,8 @@ paths:
 
   /communications/search:
     get:
-      operationId: R913
-      summary: "R913: Search Communications"
+      operationId: R906
+      summary: "R906: Search Communications"
       description: "Perform a search for communications based on the query string. Access: PUB"
       tags:
         - "M09: Search and Results"
@@ -2581,14 +2357,6 @@ paths:
           schema:
             type: string
           required: true
-        - in: query
-          name: ord
-          description: "Order of results (asc/desc)."
-          schema:
-            type: string
-            enum: ["asc", "desc"]
-            default: "desc"
-          required: false
       responses:
         "200":
           description: "Search results for communications based on the query."
@@ -2602,30 +2370,6 @@ paths:
                     items:
                       type: object
                       additionalProperties: true
-        "404":
-          description: "Not Found. The specified resource does not exist."
-    post:
-      operationId: R914
-      summary: "R914: Redirect Search Communications"
-      description: "Redirects to another search results page or performs a new search. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                  description: "Search string."
-                ord:
-                  type: string
-                  description: "Order of results (asc/desc)."
-                  enum: ["asc", "desc"]
-                  default: "desc"
-      responses:
         "302":
           description: "Found. Redirect to search results page."
           headers:
@@ -2635,7 +2379,7 @@ paths:
               examples:
                 302Success:
                   description: "Successful search - Redirect to search results page."
-                  value: "/communications/search?query={query}&ord={ord}"
+                  value: "/communications/search?query={query}"
                 302Failure:
                   description: "Failed search - Redirect to search form."
                   value: "/communications/search"
