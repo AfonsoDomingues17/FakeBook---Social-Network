@@ -10,7 +10,7 @@
                 <form id="editPostForm" method="POST" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
+                    <input type="hidden" name="previous_url" value="{{ url()->current() }}">
                     <div>
                         <label for="description">Description:</label>
                         <input type="text" id="description" name="description" value="{{ $post->description }}">

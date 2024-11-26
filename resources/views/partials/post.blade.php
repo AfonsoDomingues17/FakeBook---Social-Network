@@ -50,7 +50,7 @@
 
     @if(Auth::check())
         @if (Auth::user()->isAdmin() || Auth::user()->id == $post->owner_id)
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPostModal-{{ $post->id }}" data-post-id="{{ $post->id }}">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPostModal-{{ $post->id }}" data-post-id="{{ $post->id }}" data-current-url="{{ url()->current() }}">
                 Edit Post
             </button>
             <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
