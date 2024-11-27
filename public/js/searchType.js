@@ -1,25 +1,57 @@
 document.addEventListener('DOMContentLoaded', function() {
     var searchUrl = window.searchUrl;
-    var searchQuery = window.searchQuery;
 
-    document.getElementById('search-users').addEventListener('click', function() {
-        updateSearchResults('users');
-        changeButton('users');
-    });
+    // Get query parameters from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('query') || '';
+    const initialType = urlParams.get('type') || 'users';
 
-    document.getElementById('search-posts').addEventListener('click', function() {
-        updateSearchResults('posts');
-        changeButton('posts');
-    });
+    // Set the initial query in the input field
+    const queryInput = document.querySelector('input[name="query"]');
+    if (queryInput) {
+        queryInput.value = initialQuery;
+    }
 
-    document.getElementById('search-groups').addEventListener('click', function() {
-        updateSearchResults('groups');
-        changeButton('groups');
-    });
+    // Perform initial search if query and type are present
+    if (initialQuery && initialType) {
+        updateSearchResults(initialType, initialQuery);
+        changeButton(initialType);
+    }
 
-    function updateSearchResults(type) {
+    const searchUsersButton = document.getElementById('search-users');
+    const searchPostsButton = document.getElementById('search-posts');
+    const searchGroupsButton = document.getElementById('search-groups');
+
+    if (searchUsersButton) {
+        searchUsersButton.addEventListener('click', function() {
+            var searchQuery = queryInput ? queryInput.value : '';
+            updateSearchResults('users', searchQuery);
+            changeButton('users');
+            updateUrl('users', searchQuery);
+        });
+    }
+
+    if (searchPostsButton) {
+        searchPostsButton.addEventListener('click', function() {
+            var searchQuery = queryInput ? queryInput.value : '';
+            updateSearchResults('posts', searchQuery);
+            changeButton('posts');
+            updateUrl('posts', searchQuery);
+        });
+    }
+
+    if (searchGroupsButton) {
+        searchGroupsButton.addEventListener('click', function() {
+            var searchQuery = queryInput ? queryInput.value : '';
+            updateSearchResults('groups', searchQuery);
+            changeButton('groups');
+            updateUrl('groups', searchQuery);
+        });
+    }
+
+    function updateSearchResults(type, query) {
         document.getElementById('loading').style.display = 'block';
-        fetch(`${searchUrl}?type=${type}&query=${searchQuery}`)
+        fetch(`${searchUrl}?type=${type}&query=${query}`)
             .then(response => response.text())
             .then(data => {
                 // Create a temporary DOM element to parse the data
@@ -51,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     searchResults.appendChild(element);
                 });
 
-                document.querySelector('#search-results h2').innerHTML = `Search results (${type}) for "${searchQuery}"`;
+                document.querySelector('#search-results h2').innerHTML = `Search results (${type}) for "${query}"`;
 
                 document.getElementById('loading').style.display = 'none';
             })
@@ -62,15 +94,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function changeButton(type) {
-        const allButtons = document.querySelectorAll('[id^="search-"]'); // Seleciona todos os botões com id começando por "search-"
+        const allButtons = document.querySelectorAll('[id^="search-"]'); // Select all buttons with id starting with "search-"
         allButtons.forEach(button => {
             if (button.id === `search-${type}`) {
-                // Adiciona a classe "active" ao botão selecionado
+                // Add the "active" class to the selected button
                 button.classList.add('active');
             } else {
-                // Remove a classe "active" dos outros botões
+                // Remove the "active" class from other buttons
                 button.classList.remove('active');
             }
         });
-    }    
+    }
+
+    function updateUrl(type, query) {
+        const newUrl = `${window.location.pathname}?type=${type}&query=${query}`;
+        history.pushState({ path: newUrl }, '', newUrl);
+    }
 });

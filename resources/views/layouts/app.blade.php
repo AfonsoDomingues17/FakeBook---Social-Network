@@ -22,6 +22,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="{{ asset('js/search.js') }}" defer></script>
+        <script src="{{asset('js/searchType.js')}}" defer></script>
     </head>
     <body>
     <header>
@@ -52,6 +53,13 @@
                         </section>
                     @endif
 
+                    @if(Route::currentRouteName() === 'search')
+                        <section id="timeline_options">
+                            <button id="search-users">Users</button>
+                            <button id="search-posts">Posts</button>
+                        </section>
+                    @endif
+
                     <section id="account-options">
                         @if (Auth::check())
                             <a class="button" href="{{ url('/logout') }}"> <p>Logout</p></a>
@@ -60,12 +68,25 @@
                                     <span id="admin_page"><p>Admin Page</p></span>
                             </a> 
                             @else
-                            <a class="auth2" href="{{route('profile',['user_id'=> Auth::user()->id])}}"><p>{{Auth::user()->name}}</p><img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50"></a>
+                            <a class="auth2" href="{{route('profile',['user_id'=> Auth::user()->id])}}">
+                                <p>{{Auth::user()->name}}</p>
+                                <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
                             </a>
+                            
+                            
                             @endif
+                            <i id="dropdown-toggle" class="fa-solid fa-caret-down"></i>
+                            <div class="dropdown"> 
+                                @if (Auth::user()->isAdmin())
+                                    <a href="{{ route('admin.page') }}">Admin Page</a>
+                                @endif
+                                <a href="{{ url('/logout') }}">Logout</a>
+                            </div>
+                                                
                         @else
                             <a class="button" href="{{ url('/login') }}"> <p>Login</p></a>
                             <a class="button" href="{{ url('/register') }}"> <p>Register</p></a>
+                            
                         @endif
                     </section>
                 </div>
@@ -79,6 +100,7 @@
                 <a class="auth" href=""><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
                 <a class="auth" href=""><i class="fa-regular fa-paper-plane"></i></i><p>Messages</p></a>
                 <a class="auth" href=""><img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50"><p>{{Auth::user()->name}}</p></a>
+                <a id="buttonLog" class="button" href="{{ url('/logout') }}"> <p>Logout</p></a>
                 @endif
 
                 
