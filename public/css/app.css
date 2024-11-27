@@ -248,7 +248,7 @@ article.post {
       color: black;
     }
   }
-  button {
+  button:not(.edit-post-btn) {
     padding-right: 1.5em;
     padding-left: 1.5em;
     padding-top: 1em;
@@ -446,4 +446,40 @@ li {
   padding: 2px 5px;
   border-radius: 3px;
   font-size: 0.8em;
+}
+
+.post-control-options .edit-post-btn {
+  margin-top: 1em;
+  padding: 0.3rem 0.5rem;
+  font-size: 1em;
+  border-radius: 10px;
+  border: none;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  align-self: center;
+  justify-self: center;
+}
+
+.edit-post-btn:hover {
+  background-color: blue;
+}
+
+.post-control-button-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.post-control-options .delete-post-btn {
+  margin-top: 1em;
+  padding: 0.3rem 0.5rem;
+  font-size: 1em;
+  border-radius: 10px;
+  border: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  align-self: center;
+  justify-self: center;
 }
