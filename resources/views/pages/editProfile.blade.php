@@ -9,10 +9,9 @@
     {{ method_field('PUT') }}
 
         <img id="p_picture_review" src="{{route('userphoto', ['user_id' => $user->id])}}" alt="profile picture" width="200" height="200">
-        <label for="photo_url">Profile Picture</label>
         <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewProfilePicture(event)">
 
-        <label for="username">username</label>
+        <label for="username">Username</label>
         <input id="username" type="text" name="username" value="{{ old('username', $user->username)}}" required>
         @if ($errors->has('username'))
         <span class="error">
@@ -37,18 +36,26 @@
         @endif
 
         <div class="radio-group">
-        <label for="is_public">Visibility</label>
+        <label id="visi" for="is_public">Visibility:</label>
         
         @if ($user->is_public == 'public')
-        <label for="public">Public</label>
-        <input type="radio" id="public" name="is_public" value="public" required checked>
-        <label for="private">Private</label>
-        <input type="radio" id="private" name="is_public" value="private" required>
+            <div id="radio">
+                <label for="public">Public</label>
+                <input type="radio" id="public" name="is_public" value="public" required checked>
+            </div>
+            <div id="radio">
+                <label for="private">Private</label>
+                <input type="radio" id="private" name="is_public" value="private" required>
+            </div>
         @else
-        <label for="public">Public</label>
-        <input type="radio" id="public" name="is_public" value="public" required>
-        <label for="private">Private</label>
-        <input type="radio" id="private" name="is_public" value="private" required checked>
+            <div id="radio">
+                <label for="public">Public</label>
+                <input type="radio" id="public" name="is_public" value="public" required>
+            </div>
+            <div id="radio">
+                <label for="private">Private</label>
+                <input type="radio" id="private" name="is_public" value="private" required checked>
+            </div>
         @endif
         </div>
 

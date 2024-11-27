@@ -6,10 +6,8 @@
     {{ csrf_field() }}
 
   
-    <img id ="p_picture_review" src="https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg" alt="preview of profile picture" >
-    <label for="photo_url">Profile Picture</label>
+    <img id ="p_picture_review" src="https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg" alt="preview of profile picture" width="200" height="200">
     <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewProfilePicture(event)">
-
     
 
     <label for="name">Name</label>
@@ -65,14 +63,14 @@
 
     <div class="radio-group">
       <label for="is_public">Visibility:</label>
-        <div>
-          <label for="public">Public</label>
-          <input type="radio" id="public" name="is_public" value="public" required>
-        </div>
-        <div>
-          <label for="private">Private</label>
-          <input type="radio" id="private" name="is_public" value="private" required>
-        </div>
+      <div id="radio">
+        <label for="public">Public</label>
+        <input type="radio" id="public" name="is_public" value="public" required>
+      </div>
+      <div id="radio">
+        <label for="private">Private</label>
+        <input type="radio" id="private" name="is_public" value="private" required>
+      </div>
     </div>
 
     <button type="submit">

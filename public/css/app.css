@@ -127,7 +127,7 @@ body, html{
 #account-options .dropdown a:hover {
   background-color: #f0f2f5;
 }
-#buttonLog{
+#buttonLog, #buttonRegister, #buttonLogin {
   display: none;
   padding: 0.5em;
   border-radius: 10px;
@@ -156,7 +156,7 @@ body, html{
   .button{
     display: none;
   }
-  #buttonLog{
+  #buttonLog, #buttonRegister, #buttonLogin {
     display: block;
   }
   .navbar{
@@ -173,6 +173,7 @@ body, html{
   section.suggested-users {
     display: none;
   }
+
 
 }
 
@@ -193,7 +194,7 @@ body, html{
     display: none;
   }
 
-  a.auth2, .button, #buttonLog {
+  a.auth2, .button, #buttonLog, #buttonRegister, #buttonLogin {
     display: none;
   }
 
@@ -295,18 +296,31 @@ footer{
   margin-top: auto;
   z-index: 1;
 }
+#content{
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+}
 
 .form {
   display: flex;
   justify-content: center;
   align-items: center;
   form{
+    width: auto;
+    background-color: white;
+    img{
+      border-radius: 50%;
+      display: block; 
+      margin: 0 auto;
+      margin-bottom: 0.5em;
+    }
     display: flex;
     flex-direction: column;
 
     padding: 1em;
     margin: 1em;
-    border: 2px solid black;
+    border: 4px solid #007bff;
     border-radius: 10px;
     width: 20em;
     justify-content: center;
@@ -317,12 +331,18 @@ footer{
       border-radius: 10px;
       border: 1px solid black;
     }
+    input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      outline: none;
+    }
     button {
       padding: 1em;
       border-radius: 10px;
       border: none;
-      background-color: black;
+      background-color: #007bff;
       color: white;
+      font-weight: bold;
       cursor: pointer;
       margin-top: 1em;
     }
@@ -331,7 +351,17 @@ footer{
     }
     .radio-group{
       display: flex;
-      gap: 1em;
+      flex-direction: column;
+      #radio{
+        display: flex;
+        gap: 1em;
+        align-items: center;
+        input{
+          margin-left: auto;
+          margin-right: 10em;
+        }
+      }
+     
     }
   }
 }
@@ -387,6 +417,7 @@ ul#real-time-search {
   display: grid;
   grid-template-columns: 2fr 1fr;
   .suggested-users{
+    margin-left: auto;
     h2{
       text-align: center;
       padding-top: 1em;
@@ -457,7 +488,6 @@ article.post {
   p#postContent{
     font-size: 1.5em;
     margin-top: 1em;
-    padding-left: 4.5em;
     word-wrap: break-word;
     overflow-wrap: break-word;
     box-sizing: border-box;

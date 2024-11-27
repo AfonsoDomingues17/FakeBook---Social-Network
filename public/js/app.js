@@ -189,15 +189,15 @@ const type = getQueryParam('type') || 'public';
 const publicButton = document.getElementById('public');
 const followingButton = document.getElementById('following');
 
-
-if (type === 'public') {
-    publicButton.style.borderBottom = "5px solid #007bff"; 
-    followingButton.style.borderBottom = "none";       
-} else if (type === 'following') {
-    followingButton.style.borderBottom = "5px solid #007bff"; 
-    publicButton.style.borderBottom = "none";              
+if(publicButton && followingButton){
+  if (type === 'public') {
+      publicButton.style.borderBottom = "5px solid #007bff"; 
+      followingButton.style.borderBottom = "none";       
+  } else if (type === 'following') {
+      followingButton.style.borderBottom = "5px solid #007bff"; 
+      publicButton.style.borderBottom = "none";              
+  }
 }
-
 document.querySelectorAll('button').forEach(button => {
     button.addEventListener('click', () => {
         publicButton.style.borderBottom = "none";
@@ -245,7 +245,7 @@ document.querySelectorAll('#timeline_options button').forEach(button => {
 document.addEventListener('DOMContentLoaded', function() {
   const dropdownToggle = document.getElementById('dropdown-toggle');
   const dropdownMenu = document.querySelector('#account-options .dropdown');
-
+  if(!dropdownToggle || !dropdownMenu) return;
   dropdownToggle.addEventListener('click', function() {
       dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
   });
