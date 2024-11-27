@@ -10,7 +10,7 @@
                     @csrf
                     <div>
                         <label for="description">Description:</label>
-                        <textarea id="description" name="description" required></textarea>
+                        <input type="text" id="description" name="description" required>
                         @error('description')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -49,6 +49,7 @@
 </div>
 
 <script src="{{ asset('js/mediaPost.js') }}"></script>
+<!--
 <script>
     document.getElementById('media').addEventListener('change', function(event) {
         const mediaContainer = document.getElementById('media-preview');
@@ -73,3 +74,4 @@
         });
     });
 </script>
+>
