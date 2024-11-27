@@ -35,17 +35,15 @@
     <div class="action_buttons">
         @if(Auth::check())
             @if (Auth::user()->isAdmin() || Auth::user()->id == $post->owner_id)
-                <div class="post-control-button-container">
-                    <button type="button" class="btn btn-primary edit-post-btn" data-bs-toggle="modal" data-bs-target="#editPostModal-{{ $post->id }}" data-post-id="{{ $post->id }}" data-current-url="{{ url()->current() }}">
+                    <button type="button" id="editPostBtn" class="btn btn-primary edit-post-btn" data-bs-toggle="modal" data-bs-target="#editPostModal-{{ $post->id }}" data-post-id="{{ $post->id }}" data-current-url="{{ url()->current() }}">
                         Edit Post
                     </button>
                     <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
-                        <button type="submit" class="btn btn-danger delete-post-btn">Delete</button>
+                        <button type="submit" id="deletePostBtn" class="btn btn-danger delete-post-btn">Delete</button>
                     </form>
-                </div>
             @endif
         @endif
     </div>
@@ -61,3 +59,5 @@
     @endif
     
 </article>
+
+@include('partials.edit_post', ['post' => $post, 'modalId' => 'editPostModal-' . $post->id])

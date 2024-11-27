@@ -64,9 +64,9 @@
                     <p>You dont have any post! Post something!</p>
                 @endif
             </section>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
+            <button id="addPost" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
                         Add Post
-                    </button>
+            </button>
         @else
             @if ($user->is_public || (Auth::check() && Auth::user()->isAdmin()))
                 <section id="myposts">

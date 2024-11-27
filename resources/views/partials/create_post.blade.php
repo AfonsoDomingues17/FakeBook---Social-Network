@@ -10,7 +10,7 @@
                     @csrf
                     <div>
                         <label for="description">Description:</label>
-                        <input type="text" id="description" name="description" required>
+                        <textarea id="description" name="description" required></textarea>
                         @error('description')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
