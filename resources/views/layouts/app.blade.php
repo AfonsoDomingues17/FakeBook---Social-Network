@@ -62,6 +62,9 @@
 
                     <section id="account-options">
                         @if (Auth::check())
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                             <a class="button" href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         Logout
