@@ -62,7 +62,10 @@
 
                     <section id="account-options">
                         @if (Auth::check())
-                            <a class="button" href="{{ url('/logout') }}"> <p>Logout</p></a>
+                            <a class="button" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Logout
+                            </a>
                             @if (Auth::user()->isAdmin())
                             <a href="{{ route('admin.page') }}">
                                     <span id="admin_page"><p>Admin Page</p></span>
@@ -88,7 +91,10 @@
                                     <a href="{{ route('admin.page') }}">Admin Page</a>
                                 @endif
                                 @if(Auth::check())
-                                <a href="{{ url('/logout') }}">Logout</a>
+                                <a class="button" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Logout
+                                </a>
                                 @else
                                 <a href="{{ url('/login') }}"> <p>Login</p></a>
                                 <a href="{{ url('/register') }}"> <p>Register</p></a>
@@ -106,7 +112,10 @@
                 <a class="auth" href=""><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
                 <a class="auth" href=""><i class="fa-regular fa-paper-plane"></i></i><p>Messages</p></a>
                 <a class="auth" href=""><img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50"><p>{{Auth::user()->name}}</p></a>
-                <a id="buttonLog" class="button" href="{{ url('/logout') }}"> <p>Logout</p></a>
+                <a id="buttonLog" class="button" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <p>Logout</p>
+                                </a>
                 @else
                 <a id="buttonLogin" class="button" href="{{ url('/login') }}"> <p>Login</p></a>
                 <a id="buttonRegister" class="button" href="{{ url('/register') }}"> <p>Register</p></a>

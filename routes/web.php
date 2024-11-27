@@ -68,7 +68,7 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
-    Route::get('/logout', 'logout')->name('logout');
+    Route::post('/logout', 'logout')->name('logout');
 });
 
 Route::controller(RegisterController::class)->group(function () {

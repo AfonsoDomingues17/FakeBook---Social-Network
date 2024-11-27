@@ -6,7 +6,7 @@ info:
   description: "Web Resources Specification (A7) for FakeBook"
 
 servers:
-  - url: http://lbaw.fe.up.pt
+  - url: http://lbaw2421.fe.up.pt
     description: Production server
 
 externalDocs:
@@ -280,11 +280,33 @@ paths:
           description: "Error - Not the account owner."
         "404":
           description: "User not found."
-
+  /users/{user_id}/photo:
+    get:
+      operationId: R110
+      summary: "R110: View User Profile Photo"
+      description: "Retrieves the profile photo for a specified user. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            description: "The ID of the requested user."
+      responses:
+        "200":
+          description: "User profile photo displayed."
+        "400":
+          description: "Bad Request. The request could not be understood or was missing required parameters."
+        "401":
+          description: "Unauthorized. The user is not authenticated."
+        "404":
+          description: "Not Found. The user_id could not be found."
   /recover-password:
     post:
-      operationId: R110
-      summary: "R110: Recover Password"
+      operationId: R111
+      summary: "R111: Recover Password"
       description: "Sends a password recovery email to the user. Access: USR"
       tags:
         - "M01: Authentication and Individual Profile"
@@ -313,8 +335,8 @@ paths:
 
   /recover-password/users/{user_id}:
     put:
-      operationId: updatePassword
-      summary: "R111: Update Password"
+      operationId: R112
+      summary: "R112: Update Password"
       description: "Update the password for a specific user. Access: OWN"
       tags:
         - "M01: Authentication and Individual Profile"
