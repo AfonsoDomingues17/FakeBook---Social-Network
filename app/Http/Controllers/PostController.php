@@ -158,7 +158,7 @@ public function update(Request $request, $post_id)
     $post->update($validatedData);
 
     // Redirect to the previous page
-    return redirect($request->input('previous_url'));
+    return redirect($request->input('previous_url'))->with('success', 'Post updated successfully.');
 }
 
 public function destroy($post_id)

@@ -63,9 +63,10 @@
                 @else 
                     <p>You dont have any post! Post something!</p>
                 @endif
-                
             </section>
-            <a id="addPost"href="{{route('posts.create')}}">Add Post</a>
+            <button id="addPost" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
+                        Add Post
+            </button>
         @else
             @if ($user->is_public || (Auth::check() && Auth::user()->isAdmin()))
                 <section id="myposts">
@@ -93,5 +94,7 @@
         @endif
     </section>
 </div>
+
+@include('partials.create_post')
 <script src="{{ asset('js/watchlist.js') }}"></script>
 @endsection

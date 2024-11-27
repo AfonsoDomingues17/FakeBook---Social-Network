@@ -65,10 +65,14 @@
 
     <div class="radio-group">
       <label for="is_public">Visibility:</label>
-      <label for="public">Public</label>
-      <input type="radio" id="public" name="is_public" value="public" required>
-      <label for="private">Private</label>
-      <input type="radio" id="private" name="is_public" value="private" required>
+        <div>
+          <label for="public">Public</label>
+          <input type="radio" id="public" name="is_public" value="public" required>
+        </div>
+        <div>
+          <label for="private">Private</label>
+          <input type="radio" id="private" name="is_public" value="private" required>
+        </div>
     </div>
 
     <button type="submit">
