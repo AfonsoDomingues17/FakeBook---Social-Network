@@ -221,9 +221,11 @@ const usersButton = document.getElementById('search-users');
 const postsButton = document.getElementById('search-posts');
 
 function highlightButton(button) {
+  if(button){
   usersButton.style.borderBottom = "none";
   postsButton.style.borderBottom = "none";
   button.style.borderBottom = "5px solid #007bff";
+  }
 }
 
 if (type2 === 'users') {

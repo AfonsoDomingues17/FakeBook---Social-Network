@@ -7,7 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialType = urlParams.get('type') || 'users';
 
     // Set the initial query in the input field
-    document.querySelector('input[name="query"]').value = initialQuery;
+    const queryInput = document.querySelector('input[name="query"]');
+    if (queryInput) {
+        queryInput.value = initialQuery;
+    }
 
     // Perform initial search if query and type are present
     if (initialQuery && initialType) {
@@ -15,21 +18,36 @@ document.addEventListener('DOMContentLoaded', function() {
         changeButton(initialType);
     }
 
-    document.getElementById('search-users').addEventListener('click', function() {
-        var searchQuery = document.querySelector('input[name="query"]').value;
-        updateSearchResults('users', searchQuery);
-        changeButton('users');
-        updateUrl('users', searchQuery);
-    });
+    const searchUsersButton = document.getElementById('search-users');
+    const searchPostsButton = document.getElementById('search-posts');
+    const searchGroupsButton = document.getElementById('search-groups');
 
-    document.getElementById('search-posts').addEventListener('click', function() {
-        var searchQuery = document.querySelector('input[name="query"]').value;
-        updateSearchResults('posts', searchQuery);
-        changeButton('posts');
-        updateUrl('posts', searchQuery);
-    });
+    if (searchUsersButton) {
+        searchUsersButton.addEventListener('click', function() {
+            var searchQuery = queryInput ? queryInput.value : '';
+            updateSearchResults('users', searchQuery);
+            changeButton('users');
+            updateUrl('users', searchQuery);
+        });
+    }
 
-    
+    if (searchPostsButton) {
+        searchPostsButton.addEventListener('click', function() {
+            var searchQuery = queryInput ? queryInput.value : '';
+            updateSearchResults('posts', searchQuery);
+            changeButton('posts');
+            updateUrl('posts', searchQuery);
+        });
+    }
+
+    if (searchGroupsButton) {
+        searchGroupsButton.addEventListener('click', function() {
+            var searchQuery = queryInput ? queryInput.value : '';
+            updateSearchResults('groups', searchQuery);
+            changeButton('groups');
+            updateUrl('groups', searchQuery);
+        });
+    }
 
     function updateSearchResults(type, query) {
         document.getElementById('loading').style.display = 'block';
