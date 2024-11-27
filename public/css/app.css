@@ -62,6 +62,7 @@ body, html{
     
     .search-bar{
       padding-left: 1em;
+      flex-shrink: 0;
     }
     .search-bar input{
       
@@ -87,7 +88,7 @@ body, html{
         border-bottom-left-radius: 0;
         padding: 1em;
         padding-bottom: 0.5em;
-        font-size: 1.3em;
+        font-size: 1em;
         font-weight: bold;
         cursor: pointer;
         
@@ -216,8 +217,10 @@ footer{
 }
 input#search {
   height: 40px;
+  flex-shrink: 0;
   width: 70%;
   max-width: 400px;
+  min-width: 250px;
   padding: 10px 15px;
   border: 2px solid #ccc;
   border-radius: 25px;
@@ -237,11 +240,16 @@ ul#real-time-search {
   background-color: white;
   width: 70%; 
   max-width: 400px;
+  min-width: 250px;
   z-index: 1000; 
   overflow-y: auto;
   list-style-type: none;
   padding: 0;
   margin: 0;
+  border-radius: 10px;
+  button {
+    display: none;
+  }
 }
 #real-time-search.show {
   display: block; /* Show when there are results */
@@ -249,6 +257,7 @@ ul#real-time-search {
 
 #real-time-search li {
   cursor: pointer;
+
 }
 
 #real-time-search li:hover {
@@ -412,13 +421,13 @@ article.post {
   
   #info{
   display: flex;
-  gap: 1.5em;
+  gap: 1em;
   padding: 1em;
   align-items: center;
   img {
     border-radius: 50%;
-    width: 5em;
-    height: 5em;
+    width: 4em;
+    height: 4em;
   }
  
    
@@ -436,11 +445,11 @@ article.post {
     }
   }
   button {
-    padding-right: 1.5em;
-    padding-left: 1.5em;
+    padding-right: 1em;
+    padding-left: 1em;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-    font-size: 1em;
+    font-size: 0.8em;
     font-weight: bold;
     border-radius: 10px;
     border: none;
@@ -450,7 +459,6 @@ article.post {
     align-self: center;
     justify-self: center;
     margin-left: auto;
-    margin-bottom: 1em;
    
   }
 }
