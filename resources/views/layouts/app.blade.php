@@ -24,34 +24,30 @@
         <script src="{{ asset('js/search.js') }}" defer></script>
     </head>
     <body>
-        <main>
-            <header>
+    <header>
                 <div class="navbar">
                     <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('LOGO.png') }}" alt="FakeBook Logo" width="50" height="50"></a>
                     <h1>
                         <a href="{{ url('/') }}">FakeBook!</a>
                     </h1>
-                    <li class="nav-item">
-                        <form class="position-relative" role="search" action="/search" method="GET">
-                            <div style="width: 100%; position: relative;">
-                                <input class="form-control me-2 fs-4" type="search" name="query" id="search" placeholder="Search" aria-label="Search" data-bs-toggle="dropdown" aria-expanded="false" style="width: 98%;">
-                                <ul class="dropdown-menu position-absolute" id="real-time-search" aria-labelledby="search" style="width: 98%;"></ul>
-                            </div>
+                    <form  action="{{route('search')}}" method="GET">
+                        <div style="position: relative;">
+                            <input id="search" type="text" name="query" placeholder="search for users">
                             <input type="hidden" name="type" value="users">
-                        </form>
-                    </li>
-                    <li>
-                        @if(Route::currentRouteName() === 'search')
-                            @include('partials.search')
-                        @endif
-                    </li>
+                            <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
+                        </div>
+                    </form>
+                    
+            
+                    
                     @if(Route::currentRouteName() === 'homepage' && Auth::check() && !Auth::user()->isAdmin())
+                    
                         <section id="timeline_options">
                             <a href="{{ route('homepage', ['type' => 'public']) }}">
-                                <button id="public-posts-btn">Public Posts</button>
+                                <button id="public">Public Posts</button>
                             </a>
                             <a href="{{ route('homepage', ['type' => 'following']) }}" >
-                                <button id="following-posts-btn">Following Posts</button>
+                                <button id="following">Following Posts</button>
                             </a>
                         </section>
                     @endif
@@ -62,10 +58,9 @@
                             @if (Auth::user()->isAdmin())
                             <a href="{{ route('admin.page') }}">
                                     <span id="admin_page"><p>Admin Page</p></span>
-                                </a> 
+                            </a> 
                             @else
-                            <a class="button" href="{{url('/users/' . Auth::user()->id)}}">
-                                <p>{{ Auth::user()->name }}</p>
+                            <a class="auth2" href="{{route('profile',['user_id'=> Auth::user()->id])}}"><p>{{Auth::user()->name}}</p><img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50"></a>
                             </a>
                             @endif
                         @else
@@ -75,6 +70,21 @@
                     </section>
                 </div>
             </header>
+        <main>
+            <section id="sidebar">
+            <div class= "navigators">
+                <a class="auth" href="{{ url('/') }}"><i class="fa-solid fa-house"></i><p>Home</p></a>
+                <a class="auth" href=""><i class="fa-solid fa-user-group"></i><p>Groups</p></a>
+                @if(Auth::check())
+                <a class="auth" href=""><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
+                <a class="auth" href=""><i class="fa-regular fa-paper-plane"></i></i><p>Messages</p></a>
+                <a class="auth" href=""><img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50"><p>{{Auth::user()->name}}</p></a>
+                @endif
+
+                
+            </div>
+
+            </section>
             <section id="content">
                 @yield('content')
             </section>

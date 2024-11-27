@@ -55,7 +55,7 @@
     </section>
     <section id="user_posts">
         @if (Auth::check() && $user->id == Auth::user()->id) <!-- If the user is logged in and is the owner of the profile -->
-            <section id="posts">
+            <section id="myposts">
                 @if ($n_posts > 0)
                     @foreach ($posts as $post)
                         @include('partials.post', ['post' => $post])
@@ -63,9 +63,9 @@
                 @else 
                     <p>You dont have any post! Post something!</p>
                 @endif
-                <a href="{{ route('posts.create') }}">Add post</a>
+                
             </section>
-            
+            <a id="addPost"href="{{route('posts.create')}}">Add Post</a>
         @else
             @if ($user->is_public || (Auth::check() && Auth::user()->isAdmin()))
                 <section id="posts">

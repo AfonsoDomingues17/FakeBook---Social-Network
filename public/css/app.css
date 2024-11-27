@@ -8,22 +8,51 @@ body, html{
 
 .navbar{
     display: flex;
-    background-color: rgb(189, 184, 184);
+    background-color: white;
     align-items: center;
     gap: 2em;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;  
+    width: 100%; 
+    box-shadow: 0 4px 2px -2px gray; 
     a{
       text-decoration: none;
       color: black;
     }
     #account-options{
       display: flex;
-      margin-left: auto;
       padding-right: 2em;
+      margin-right: auto;
       gap: 1em;
+      align-items: center;
+      p{
+        margin: 0;
+      }
+      .button {
+        padding: 0.75em 1.5em;
+        border-radius: 10px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    
+    .button:hover {
+        background-color: #0056b3;
+    }
+    
+    .button:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+    
+    .button:active {
+        background-color: #004085;
+    }
     }
 
     #logo{
@@ -33,6 +62,7 @@ body, html{
     
     .search-bar{
       padding-left: 1em;
+      flex-shrink: 0;
     }
     .search-bar input{
       
@@ -49,37 +79,95 @@ body, html{
     #timeline_options{
       display: flex;
       gap: 1em;
-      padding-left: 7em;
+      flex: 1;
       button{
-        background-color: rgb(189, 184, 184);
         border: none;
-        border-bottom: 5px solid black;
+        background-color: white;
+        border-radius: 10px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
         padding: 1em;
+        padding-bottom: 0.5em;
         font-size: 1em;
         font-weight: bold;
         cursor: pointer;
+        
       }
+      
     }
 
-    .button{
-    
-      p{
-        padding: 0.5em;
-        margin: 0;
-        border: 2px solid black;
-        border-radius: 5px;
-        background-color: white;
-      }
-    } 
+     
+}
+.navbar form {
+  flex: 1; 
 }
 
+#sidebar{
+  background-color: white;
+  border-right: 2px solid white;
+  .navigators{
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    gap: 1em;
+    .auth{
+      display: flex;
+      gap: 1em;
+      align-items: center;
+      padding-bottom: 1em;
+      p{
+        padding: 0;
+        margin: 0;
+        margin-right: auto;
+      }
+      img {
+        border-radius: 50%;
+        width: 3em;
+        height: 3em;
+      }
+      
+    }
+    a{
+      text-decoration: none;
+      color: black;
+    }
+    i {
+      font-size: 2em;
+    }
+  }
+}
+.auth2{
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  p{
+    padding: 0;
+    margin: 0;
+    margin-right: auto;
+    font-weight: bold;
+  }
+  img {
+    border-radius: 50%;
+    width: 3em;
+    height: 3em;
+  }
+  
+}
 main {
   flex: 1;
   position: relative;
+  background-color: #F0F2F5;
+  display: grid;
+  grid-template-columns: 0.5fr 3fr;
+  margin-top: 1em;
+  p{
+    margin-bottom: 0;
+  }
+  
 }
 
 footer{
-  background-color: rgb(189, 184, 184);
+  background-color: white;
     align-content: center;
     text-align: center;
     height: 50px;
@@ -127,37 +215,108 @@ footer{
   }
   }
 }
+input#search {
+  height: 40px;
+  flex-shrink: 0;
+  width: 70%;
+  max-width: 400px;
+  min-width: 250px;
+  padding: 10px 15px;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  background-color: #F0F2F5;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input#search:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+ul#real-time-search {
+  display: none;
+  position: absolute;
+  background-color: white;
+  width: 70%; 
+  max-width: 400px;
+  min-width: 250px;
+  z-index: 1000; 
+  overflow-y: auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 10px;
+  button {
+    display: none;
+  }
+}
+#real-time-search.show {
+  display: block; /* Show when there are results */
+}
+
+#real-time-search li {
+  cursor: pointer;
+
+}
+
+#real-time-search li:hover {
+  background-color: #F0F2F5;
+}
 .homepage-layout{
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 2fr 1fr;
   .suggested-users{
-    grid-column: 3; 
+    h2{
+      text-align: center;
+      padding-top: 1em;
+    }
+    grid-column: 2; 
   justify-self: end; 
   margin-right: 2em;
   }
   #posts {
-    grid-column: 2; 
-    width: 90%;
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    h2{
+      text-align: center;
+      margin-top: 1em;
+    } 
 }
 }
+
+
+
 article.post {
-  background-color: #D3D3D3;
+  background-color: white;
   margin: 1.5em;
   border-radius: 10px;
   padding: 1.5em;
   display: flex;
   flex-direction: column;
+  width: 60%;
+  box-sizing: border-box; 
+  overflow: hidden;
+  min-width: 400px;
   .post_author {
     display: flex;
     gap: 1em;
     align-items: center;
-    width: 95%;
+    width: 100%; 
+    overflow: hidden;
     img {
       border-radius: 50%;
       width: 5em;
       height: 5em;
       margin-left: 1em;
+    }
+    p{
+      margin: 0; 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
     }
     p a {
       font-size: 1.5em;
@@ -169,12 +328,18 @@ article.post {
       font-size: 1em;
       color: grey;
       margin-left: auto;
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
     }
   }
   p#postContent{
     font-size: 1.5em;
     margin-top: 1em;
     padding-left: 4.5em;
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
+    box-sizing: border-box;
   }
   .media {
     display: flex;
@@ -185,18 +350,23 @@ article.post {
     img {
       width: 95%;
       border-radius: 10px;
+      max-width: 100%;
     }
   }
   p#postdescription{
     margin-left: 1em;
     font-size: 1.5em;
     margin-bottom: 0;
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
+    box-sizing: border-box;
   }
   .post_counts{
     display: flex;
     gap: 1em;
     margin-left: 1em;
     width: 100%;
+    margin-top: 0.5em;
     #r {
       display: flex;
       gap: 1em;
@@ -212,13 +382,36 @@ article.post {
     align-items: center;
     margin-top: 1.5em;
    
-    i {
+    p  {
       font-size: 1.5em;
       cursor: pointer;
       flex: 1;
       text-align: center;
     }
     
+  }
+  .action_buttons{
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5em;
+    a, button {
+      padding: 0.75em 1.5em; 
+      border-radius: 10px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+      display: inline-block; 
+      text-align: center; 
+      margin: 0.5em; 
+    }
+  
   }
 
 }
@@ -228,14 +421,22 @@ article.post {
   
   #info{
   display: flex;
-  gap: 1.5em;
+  gap: 1em;
   padding: 1em;
+  align-items: center;
+  img {
+    border-radius: 50%;
+    width: 4em;
+    height: 4em;
+  }
  
+   
   }
 
   span#user p {
-    font-size: 1.2em;
+    font-size: 1em;
     font-weight: bold;
+    margin-bottom: 0;
   }
   a {
     text-decoration: none;
@@ -244,14 +445,15 @@ article.post {
     }
   }
   button {
-    padding-right: 1.5em;
-    padding-left: 1.5em;
-    padding-top: 1em;
-    padding-bottom: 1em;
-    font-size: 1em;
+    padding-right: 1em;
+    padding-left: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    font-size: 0.8em;
+    font-weight: bold;
     border-radius: 10px;
     border: none;
-    background-color: black;
+    background-color: #007bff;
     color: white;
     cursor: pointer;
     align-self: center;
@@ -261,13 +463,14 @@ article.post {
   }
 }
 
+
 .profile {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1em;
   padding: 1em;
-  width: 90%;
+  padding-top: 2em;
   
   margin-left: auto;
   img {
@@ -283,6 +486,9 @@ article.post {
     
     
     .info {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
       .p1{
         display: flex;
         align-items: center;
@@ -312,39 +518,84 @@ article.post {
     }
   }
   a {
-    text-decoration: none;
-    color: white; /* Change text color to white */
-    background-color: black; /* Background color for button-like appearance */
-    padding: 1em 1.5em; /* Padding for button-like appearance */
-    border-radius: 10px; /* Rounded corners */
-    display: inline-block; /* Ensure it behaves like a button */
-    font-size: 1em; /* Font size */
-    font-weight: bold; /* Font weight */
-    cursor: pointer; 
-    margin: 0.5em 0; 
+    padding: 0.75em 1.5em;
+        border-radius: 10px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background-color 0.3s, box-shadow 0.3s; 
+        text-decoration: none;
   }
-  section#user_posts #posts{
-    p{
-      font-size: 1.5em;
-    }
+
+ 
+
+
+section#user_posts {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    
-  }
-  button {
-    padding-right: 1.5em;
-    padding-left: 1.5em;
-    padding-top: 1em;
-    padding-bottom: 1em;
-    font-size: 1em;
-    border-radius: 10px;
-    border: none;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    align-self: center;
-    justify-self: center;
-  }
 }
+  button {
+        padding: 0.75em 1.5em;
+        border-radius: 10px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    
+    button:hover {
+        background-color: #0056b3;
+    }
+    
+    button:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+    
+    button:active {
+        background-color: #004085;
+    }
+}
+
+section#myposts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 1em; /* Adjust as needed */
+  padding: 0;
+  margin: 0;
+  
+}
+section#myposts>p {
+  text-align: center;
+  font-size: 1.5em;
+  grid-column: span 3;
+}
+
+section#myposts .post {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1.5em;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box; 
+  overflow: hidden;
+  height: 100%;
+  margin: 0; 
+  min-width: 400px;
+}
+
+a#addPost{
+  display: flex; /* Use Flexbox */
+  align-items: center; /* Center vertically */
+  justify-content: center;
+  margin: 0.5em auto;
+}
+
+
 

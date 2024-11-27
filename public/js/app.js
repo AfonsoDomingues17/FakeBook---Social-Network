@@ -176,6 +176,36 @@ function addEventListeners() {
   
     return new_item;
   }
-  
+
   addEventListeners();
   
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+const type = getQueryParam('type') || 'public';
+
+const publicButton = document.getElementById('public');
+const followingButton = document.getElementById('following');
+
+
+if (type === 'public') {
+    publicButton.style.borderBottom = "5px solid #007bff"; 
+    followingButton.style.borderBottom = "none";       
+} else if (type === 'following') {
+    followingButton.style.borderBottom = "5px solid #007bff"; 
+    publicButton.style.borderBottom = "none";              
+}
+
+document.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', () => {
+        publicButton.style.borderBottom = "none";
+        followingButton.style.borderBottom = "none";
+        if (button.id === 'public') {
+            publicButton.style.borderBottom = "5px solid #007bff";
+        } else if (button.id === 'following') {
+            followingButton.style.borderBottom = "5px solid #007bff";
+        }
+    });
+});
