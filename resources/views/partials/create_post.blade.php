@@ -27,7 +27,7 @@
                     </div>
                     <div id="media-upload" style="display: none;">
                         <label for="media">Upload Media:</label>
-                        <input type="file" id="media" name="media[]" multiple onchange="validateFileCount()">
+                        <input type="file" id="media" name="media[]" accept="image/*" multiple onchange="validateFileCount()">
                         @error('media')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror

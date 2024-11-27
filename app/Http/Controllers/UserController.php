@@ -109,26 +109,49 @@ class UserController extends Controller
     }
     public function showProfile($user_id)
 {
-    $user = User::findOrFail($user_id);
-    $n_posts = $this->getNumberPosts($user_id);
-    $n_followers = $this->getNumberFollowers($user_id);
-    $n_following = $this->getNumberFollowing($user_id);
-    $posts = $user->posts()->orderBy('datecreation', 'desc')->get();
+    // Check if the user_id is a valid integer
+    if (!is_numeric($user_id) || (int)$user_id != $user_id) {
+        // Set an error message to be passed to the view
+        $error_message = 'Invalid user ID provided.';
+        $user = null; // Set user to null since we can't find a user
+    } else {
+        // Proceed with the valid user_id
+        $user = User::find($user_id);
 
-    $isInWatchlist = false;
-    if (Auth::check() && Auth::user()->isAdmin()) {
-        $isInWatchlist = Auth::user()->watchlistedUsers()->where('user_id', $user_id)->exists();
+        if (!$user) {
+            // If the user was not found in the database, set an error message
+            $error_message = 'User not found.';
+        } else {
+            // No errors, proceed with fetching the user posts and data
+            $n_posts = $this->getNumberPosts($user_id);
+            $n_followers = $this->getNumberFollowers($user_id);
+            $n_following = $this->getNumberFollowing($user_id);
+            $posts = $user->posts()->orderBy('datecreation', 'desc')->get();
+
+            $isInWatchlist = false;
+            if (Auth::check() && Auth::user()->isAdmin()) {
+                $isInWatchlist = Auth::user()->watchlistedUsers()->where('user_id', $user_id)->exists();
+            }
+
+            return view('pages.user', [
+                'user' => $user,
+                'n_posts' => $n_posts,
+                'n_followers' => $n_followers,
+                'n_following' => $n_following,
+                'posts' => $posts,
+                'isInWatchlist' => $isInWatchlist,
+                'error_message' => $error_message ?? null
+            ]);
+        }
     }
 
+    // If we reached here, it means there was an invalid user_id or no user found
     return view('pages.user', [
         'user' => $user,
-        'n_posts' => $n_posts,
-        'n_followers' => $n_followers,
-        'n_following' => $n_following,
-        'posts' => $posts,
-        'isInWatchlist' => $isInWatchlist
+        'error_message' => $error_message
     ]);
 }
+
 
     public function updateProfile(Request $request, $user_id)
     {   
