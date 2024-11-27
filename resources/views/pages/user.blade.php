@@ -68,7 +68,7 @@
             <a id="addPost"href="{{route('posts.create')}}">Add Post</a>
         @else
             @if ($user->is_public || (Auth::check() && Auth::user()->isAdmin()))
-                <section id="posts">
+                <section id="myposts">
                     @if ($n_posts > 0)
                         @foreach ($posts as $post)
                             @include('partials.post', ['post' => $post])
@@ -79,7 +79,7 @@
                 
                 </section>
             @else
-                <section id="posts">
+                <section id="priavate_messages">
                     <p>This user profile is private!</p>
                     @if (Auth::check())
                         <p>Follow to see more of this user</p>

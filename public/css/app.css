@@ -101,6 +101,126 @@ body, html{
 .navbar form {
   flex: 1; 
 }
+#account-options .dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  z-index: 1000;
+  padding: 1em;
+}
+#account-options i{
+  display: none;
+}
+
+
+#account-options .dropdown a {
+  display: block;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  color: black;
+}
+
+#account-options .dropdown a:hover {
+  background-color: #f0f2f5;
+}
+#buttonLog{
+  display: none;
+  padding: 0.5em;
+  border-radius: 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  p {
+    color: white;
+    text-align: center;
+    padding: 0;
+  }
+}
+.hidden {
+  display: none;
+}
+@media (max-width: 1183px){
+  a.auth2 {
+    display: none;
+  }
+}
+@media (max-width: 970px){
+  .button{
+    display: none;
+  }
+  #buttonLog{
+    display: block;
+  }
+  .navbar{
+    gap: 0;
+  }
+  .navbar {
+    #logo{
+    margin-right: 1em;
+    }
+    h1 {
+      margin-right: 1em;
+    }
+  }
+  section.suggested-users {
+    display: none;
+  }
+  
+}
+
+@media (max-width: 795px) {
+ 
+  #sidebar{
+    div.navigators {
+      align-items: center;
+    }
+    p{
+    display: none;
+    }
+  }
+  #account-options i {
+    display: block;
+  }
+  h1 {
+    display: none; 
+  }
+ 
+  a.auth2, .button, #buttonLog {
+    display: none;
+  }
+
+  #dropdown-toggle {
+    display: block;
+    cursor: pointer;
+  }
+  section#posts{
+    grid-column: 2;
+  }
+}
+#priavate_messages{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+  p{
+    font-size: 1.5em;
+    text-align: center;
+  }
+}
+
+
+
+
+
+
 
 #sidebar{
   background-color: white;
@@ -287,7 +407,9 @@ ul#real-time-search {
 }
 }
 
-
+#single{
+  display: none;
+}
 
 article.post {
   background-color: white;
@@ -308,9 +430,8 @@ article.post {
     overflow: hidden;
     img {
       border-radius: 50%;
-      width: 5em;
-      height: 5em;
-      margin-left: 1em;
+      width: 4em;
+      height: 4em;
     }
     p{
       margin: 0; 
@@ -319,7 +440,7 @@ article.post {
       text-overflow: ellipsis;
     }
     p a {
-      font-size: 1.5em;
+      font-size: 1.1em;
       font-weight: bold;
       color: black;
       text-decoration: none;
@@ -397,7 +518,10 @@ article.post {
     align-items: center;
     margin-top: 1.5em;
     a, button {
-      padding: 0.75em 1.5em; 
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
+      padding-left: 1.5em;
+      padding-right: 1.5em; 
       border-radius: 10px;
       border: none;
       background-color: #007bff;
@@ -405,11 +529,12 @@ article.post {
       cursor: pointer;
       font-size: 1em;
       font-weight: bold;
-      transition: background-color 0.3s, box-shadow 0.3s;
       text-decoration: none;
-      display: inline-block; 
-      text-align: center; 
       margin: 0.5em; 
+    }
+    button {
+      background-color: black;
+      color: red;
     }
   
   }
@@ -577,18 +702,7 @@ section#myposts>p {
   grid-column: span 3;
 }
 
-section#myposts .post {
-  background-color: white;
-  border-radius: 10px;
-  padding: 1.5em;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box; 
-  overflow: hidden;
-  height: 100%;
-  margin: 0; 
-  min-width: 400px;
-}
+
 
 a#addPost{
   display: flex; /* Use Flexbox */

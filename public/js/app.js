@@ -209,3 +209,49 @@ document.querySelectorAll('button').forEach(button => {
         }
     });
 });
+
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+const type2 = getQueryParam('type') || 'users';
+
+const usersButton = document.getElementById('search-users');
+const postsButton = document.getElementById('search-posts');
+
+function highlightButton(button) {
+  usersButton.style.borderBottom = "none";
+  postsButton.style.borderBottom = "none";
+  button.style.borderBottom = "5px solid #007bff";
+}
+
+if (type2 === 'users') {
+  highlightButton(usersButton);
+} else if (type2 === 'posts') {
+  highlightButton(postsButton);
+} else if (type2 === 'groups') {
+  highlightButton(groupsButton);
+}
+
+document.querySelectorAll('#timeline_options button').forEach(button => {
+  button.addEventListener('click', () => {
+      highlightButton(button);
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const dropdownToggle = document.getElementById('dropdown-toggle');
+  const dropdownMenu = document.querySelector('#account-options .dropdown');
+
+  dropdownToggle.addEventListener('click', function() {
+      dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Optional: Close the dropdown when clicking outside of it
+  document.addEventListener('click', function(event) {
+      if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+          dropdownMenu.style.display = 'none';
+      }
+  });
+});
