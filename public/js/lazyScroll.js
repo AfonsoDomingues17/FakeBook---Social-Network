@@ -41,7 +41,7 @@ window.addEventListener('scroll', debounce(function() {
             console.log(classToSearch);
             const elements = tempDiv.querySelectorAll(classToSearch);
 
-            const searchResults = document.getElementById('search-results-container');
+            const searchResults = document.getElementById('search-results');
             elements.forEach(element => {
                 searchResults.appendChild(element);
             });

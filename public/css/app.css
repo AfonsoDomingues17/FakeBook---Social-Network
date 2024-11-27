@@ -42,6 +42,10 @@ body, html{
       width: 20em;
     }
 
+    #real-time-search {
+      display: block;
+    }
+
     #timeline_options{
       display: flex;
       gap: 1em;
@@ -131,7 +135,7 @@ footer{
   justify-self: end; 
   margin-right: 2em;
   }
-  #feed-posts {
+  #posts {
     grid-column: 2; 
     width: 90%;
     align-items: center;

@@ -24,12 +24,10 @@ class SearchController extends Controller
         $groups = collect();
 
         if ($type === 'users') {
-            $usersQuery = User::where('id', '!=', 1)
-                        ->where(function($q) use ($query) {
-                            $q->where('name', 'ILIKE', '%' . $query . '%')
-                            ->orWhere('email', 'ILIKE', '%' . $query . '%')
-                            ->orWhere('username', 'ILIKE', '%' . $query . '%');
-                        })->paginate(10, ['*'], 'page', $page);
+            $usersQuery = User::where('name', 'ILIKE', '%' . $query . '%')
+                        ->orWhere('email', 'ILIKE', '%' . $query . '%')
+                        ->orWhere('username', 'ILIKE', '%' . $query . '%')
+                        ->paginate(10, ['*'], 'page', $page);
 
             $users = $usersQuery->map(function ($user) {
                 $isInWatchlist = false;

@@ -25,5 +25,7 @@
     var searchType = @json($type);
     var searchQuery = @json($query);
 </script>
+<script type="text/javascript" src={{ url('js/lazyScroll.js') }} defer></script>
+<script type="text/javascript" src={{ url('js/searchType.js') }} defer></script>
 
 @endsection
