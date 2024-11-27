@@ -10,16 +10,18 @@
     @if ($post->typep === 'TEXT')
         <p id="postContent">{{ $post->description }}</p>
 
-    @else 
+    @else
         <p id="postdescription">{{ $post->description }}</p>
         <div class="media">
         @if ($post->typep === 'MEDIA')
-                <img id="media-image-{{ $post->id }}" 
-                    src="{{ $post->media->isNotEmpty() ? route('media.show', $post->media->first()->id) : Storage::url('DEFAULT-POST.jpg') }}" 
+                <img id="media-image-{{ $post->id }}"
+                    src="{{ $post->media->isNotEmpty() ? route('media.show', $post->media->first()->id) : Storage::url('DEFAULT-POST.jpg') }}"
                     alt="Media">
                 @if ($post->media->count() > 1)
-                    <button id="media-prev-{{ $post->id }}">Previous</button>
-                    <button id="media-next-{{ $post->id }}">Next</button>
+                    <div class="post-media-controls">
+                        <button id="media-prev-{{ $post->id }}">Previous</button>
+                        <button id="media-next-{{ $post->id }}">Next</button>
+                    </div>
                 @endif
             @endif
         </div>

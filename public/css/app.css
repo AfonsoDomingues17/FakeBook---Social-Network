@@ -483,3 +483,31 @@ li {
   align-self: center;
   justify-self: center;
 }
+.media {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-media-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.post-media-controls button {
+  margin-top: 1em;
+  padding: 0.3rem 0.5rem;
+  font-size: 1em;
+  border-radius: 10px;
+  border: none;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  align-self: center;
+  justify-self: center;
+}
+
+.post-media-controls button:hover {
+  background-color: blue;
+}

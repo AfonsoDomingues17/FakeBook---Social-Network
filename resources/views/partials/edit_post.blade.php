@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @if(auth()->user()->isAdmin())
+                @if(auth()->check() && auth()->user()->isAdmin())
                     <p>Post Author: {{ $post->owner->username }}</p>
                 @endif
                 <form id="editPostForm" method="POST" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
