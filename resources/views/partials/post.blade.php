@@ -41,7 +41,7 @@
                     <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
+                        <input type="hidden" name="previous_url" value="{{ url()->current() }}">
                         <button type="submit" id="deletePostBtn" class="btn btn-danger delete-post-btn">Delete</button>
                     </form>
             @endif

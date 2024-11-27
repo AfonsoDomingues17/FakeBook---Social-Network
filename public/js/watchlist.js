@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         </form>
                     `;
                 }
-                attachWatchlistEventListeners(userId); // Re-attach event listeners after updating the DOM
+                // No need to manually reattach event listeners due to event delegation
             } else {
                 alert(data.message);
             }
@@ -42,28 +42,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function attachWatchlistEventListeners(userId) {
-        const addWatchlistForm = document.getElementById(`add-watchlist-form-${userId}`);
-        const removeWatchlistForm = document.getElementById(`remove-watchlist-form-${userId}`);
+    // Use event delegation for watchlist actions
+    document.body.addEventListener('submit', function (e) {
+        const form = e.target;
 
-        if (addWatchlistForm) {
-            addWatchlistForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                updateWatchlistActions('add', userId);
-            });
+        // Identify the action based on form ID
+        if (form.id.startsWith('add-watchlist-form-')) {
+            e.preventDefault();
+            const userId = form.id.split('-').pop();
+            updateWatchlistActions('add', userId);
+        } else if (form.id.startsWith('remove-watchlist-form-')) {
+            e.preventDefault();
+            const userId = form.id.split('-').pop();
+            updateWatchlistActions('remove', userId);
         }
-
-        if (removeWatchlistForm) {
-            removeWatchlistForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                updateWatchlistActions('remove', userId);
-            });
-        }
-    }
-
-    // Attach event listeners to all watchlist forms on page load
-    document.querySelectorAll('[id^="watchlist-actions-"]').forEach(function (element) {
-        const userId = element.getAttribute('data-user-id');
-        attachWatchlistEventListeners(userId);
     });
+
+    // No need to manually attach listeners to individual forms on page load
 });
