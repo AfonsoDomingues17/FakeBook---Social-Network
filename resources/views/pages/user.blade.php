@@ -3,6 +3,11 @@
 @section('content')
 
 <div class="profile">
+    @if(isset($error_message))
+        <div class="alert alert-danger">
+            {{ $error_message }}
+        </div>
+    @else
     <section id="profile">
 
                 <img src="{{ route('userphoto', ['user_id' => $user->id]) }}" alt="profile picture" width="200" height="200"><br>
@@ -93,6 +98,7 @@
             @endif  
         @endif
     </section>
+    @endif
 </div>
 
 @include('partials.create_post')

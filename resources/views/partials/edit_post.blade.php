@@ -9,7 +9,7 @@
                 <form id="editPostForm-{{ $post->id }}" method="POST" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="previous_url" value="{{ url()->current() }}">
+                    <input type="hidden" name="previous_url" value="{{ Request::fullUrl() }}">
                     <div>
                         <label for="description-{{ $post->id }}">Description:</label>
                         <textarea id="description-{{ $post->id }}" name="description">{{ $post->description }}</textarea>

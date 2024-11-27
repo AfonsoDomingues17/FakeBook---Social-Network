@@ -308,3 +308,11 @@ document.addEventListener('hidden.bs.modal', (event) => {
   const siblings = document.querySelectorAll('[inert]');
   siblings.forEach((sibling) => sibling.removeAttribute('inert'));
 });
+
+
+
+
+
+
+
+
