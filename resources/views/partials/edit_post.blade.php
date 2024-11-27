@@ -37,10 +37,10 @@
 
 <script>
     // Adjust the size of the description textarea to fit the content as the user types
-    document.addEventListener('input', function (event) {
-        if (event.target.tagName.toLowerCase() === 'textarea') {
+    document.addEventListener('input', event => {
+        if (event.target.tagName === 'TEXTAREA') {
             event.target.style.height = 'auto';
-            event.target.style.height = (event.target.scrollHeight) + 'px';
+            event.target.style.height = `${event.target.scrollHeight}px`;
         }
     });
 </script>

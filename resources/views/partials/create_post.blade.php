@@ -10,7 +10,7 @@
                     @csrf
                     <div>
                         <label for="description">Description:</label>
-                        <input type="text" id="description" name="description" required>
+                        <textarea id="description" name="description" required></textarea>
                         @error('description')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -31,6 +31,7 @@
                         @error('media')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
+                        <div id="media-preview"></div>
                     </div>
                     <div>
                         <label for="is_public">Public:</label>
@@ -48,3 +49,27 @@
 </div>
 
 <script src="{{ asset('js/mediaPost.js') }}"></script>
+<script>
+    document.getElementById('media').addEventListener('change', function(event) {
+        const mediaContainer = document.getElementById('media-preview');
+        mediaContainer.innerHTML = ''; // Clear previous previews
+
+        Array.from(event.target.files).forEach((file, index) => {
+            if (file.type.startsWith('image/')) {
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('image-wrapper');
+
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+
+                const label = document.createElement('span');
+                label.classList.add('image-label');
+                label.textContent = `Image ${index + 1}`;
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(label);
+                mediaContainer.appendChild(wrapper);
+            }
+        });
+    });
+</script>
