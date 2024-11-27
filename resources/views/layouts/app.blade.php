@@ -37,9 +37,9 @@
                             <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
                         </div>
                     </form>
-                    
-            
-                    
+                    @if(Route::currentRouteName() === 'search')
+                        @include('partials.search')
+                    @endif
                     @if(Route::currentRouteName() === 'homepage' && Auth::check() && !Auth::user()->isAdmin())
                     
                         <section id="timeline_options">
