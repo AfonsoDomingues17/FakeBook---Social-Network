@@ -49,29 +49,3 @@
 </div>
 
 <script src="{{ asset('js/mediaPost.js') }}"></script>
-<!--
-<script>
-    document.getElementById('media').addEventListener('change', function(event) {
-        const mediaContainer = document.getElementById('media-preview');
-        mediaContainer.innerHTML = ''; // Clear previous previews
-
-        Array.from(event.target.files).forEach((file, index) => {
-            if (file.type.startsWith('image/')) {
-                const wrapper = document.createElement('div');
-                wrapper.classList.add('image-wrapper');
-
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-
-                const label = document.createElement('span');
-                label.classList.add('image-label');
-                label.textContent = `Image ${index + 1}`;
-
-                wrapper.appendChild(img);
-                wrapper.appendChild(label);
-                mediaContainer.appendChild(wrapper);
-            }
-        });
-    });
-</script>
->

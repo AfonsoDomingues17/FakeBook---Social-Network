@@ -75,6 +75,29 @@ function validateFileCount() {
         if (!valid) {
             alert(errorMessage);
         }
+
+        // Show previews for valid files
+        const mediaContainer = document.getElementById('media-preview');
+        mediaContainer.innerHTML = ''; // Clear previous previews
+
+        Array.from(dataTransfer.files).forEach((file, index) => {
+            if (allowedTypes.includes(file.type)) {
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('image-wrapper');
+
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+
+                const label = document.createElement('span');
+                label.classList.add('image-label');
+                label.textContent = `Image ${index + 1}`;
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(label);
+                mediaContainer.appendChild(wrapper);
+            }
+        });
+
         mediaInput.files = dataTransfer.files; // Update input with valid files only
     });
 }
