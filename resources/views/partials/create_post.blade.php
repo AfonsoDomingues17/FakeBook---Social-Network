@@ -33,7 +33,7 @@
                         @enderror
                         <div id="media-preview"></div>
                     </div>
-                    <div>
+                    <div id="Type">
                         <label for="is_public">Public:</label>
                         <input type="hidden" name="is_public" value="0">
                         <input type="checkbox" id="is_public" name="is_public" value="1">

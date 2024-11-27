@@ -696,7 +696,6 @@ article.post {
     padding: 0.75em 1.5em;
     border-radius: 10px;
     border: none;
-    background-color: #007bff;
     color: white;
     cursor: pointer;
     font-size: 1em;
@@ -704,20 +703,18 @@ article.post {
     transition: background-color 0.3s, box-shadow 0.3s;
   }
 
-  button:hover {
-    background-color: #0056b3;
+}
+#Type{
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  input#is_public-22{
+    margin-bottom: 4px;
   }
-
-  button:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  }
-
-  button:active {
-    background-color: #004085;
+  input#is_public {
+    margin-bottom: 4px;
   }
 }
-
 section#myposts {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -778,11 +775,7 @@ button#addPost{
   flex-direction: column;
 }
 
-.modal-body form div:not(#media-preview) {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
+
 
 .modal-body form label {
   font-weight: 500;

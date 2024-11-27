@@ -17,7 +17,7 @@
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div>
+                    <div id="Type">
                         <label for="is_public-{{ $post->id }}">Public:</label>
                         <input type="hidden" name="is_public" value="0">
                         <input type="checkbox" id="is_public-{{ $post->id }}" name="is_public" value="1" {{ $post->is_public ? 'checked' : '' }}>
