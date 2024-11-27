@@ -2106,11 +2106,11 @@ paths:
 
   #M09: Search and Results
 
-  /search/users:
+  /search:
     get:
       operationId: R901
-      summary: "R901: Search Users"
-      description: "Perform a search for users based on the query string. Access: PUB"
+      summary: "R901: Search"
+      description: "Perform a search based on the query string and type. Access: PUB"
       tags:
         - "M09: Search and Results"
       parameters:
@@ -2120,9 +2120,19 @@ paths:
           schema:
             type: string
           required: true
+        - in: query
+          name: type
+          description: "Type of search. Can be 'users', 'posts', or 'groups'."
+          schema:
+            type: string
+            enum:
+              - users
+              - posts
+              - groups
+          required: true
       responses:
         "200":
-          description: "Search results for users based on the query."
+          description: "Search results based on the query and type."
           content:
             application/json:
               schema:
@@ -2142,100 +2152,10 @@ paths:
               examples:
                 302Success:
                   description: "Successful search - Redirect to search results page."
-                  value: "/search/users?query={query}"
+                  value: "/search?query={query}&type={type}"
                 302Failure:
                   description: "Failed search - Redirect to search form."
-                  value: "/search/users"
-        "400":
-          description: "Bad Request. Invalid search parameters."
-        "404":
-          description: "Not Found. The specified resource does not exist."
-
-  /search/posts:
-    get:
-      operationId: R902
-      summary: "R902: Search Posts"
-      description: "Perform a search for posts based on the query string. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      parameters:
-        - in: query
-          name: query
-          description: "Search string."
-          schema:
-            type: string
-          required: true
-      responses:
-        "200":
-          description: "Search results for posts based on the query."
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
-        "302":
-          description: "Found. Redirect to search results page."
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Successful search - Redirect to search results page."
-                  value: "/search/posts?query={query}"
-                302Failure:
-                  description: "Failed search - Redirect to search form."
-                  value: "/search/posts"
-        "400":
-          description: "Bad Request. Invalid search parameters."
-        "404":
-          description: "Not Found. The specified resource does not exist."
-
-  /search/groups:
-    get:
-      operationId: R903
-      summary: "R903: Search Groups"
-      description: "Perform a search for groups based on the query string. Access: PUB"
-      tags:
-        - "M09: Search and Results"
-      parameters:
-        - in: query
-          name: query
-          description: "Search string."
-          schema:
-            type: string
-          required: true
-      responses:
-        "200":
-          description: "Search results for groups based on the query."
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: true
-        "302":
-          description: "Found. Redirect to search results page."
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Successful search - Redirect to search results page."
-                  value: "/search/groups?query={query}"
-                302Failure:
-                  description: "Failed search - Redirect to search form."
-                  value: "/search/groups"
+                  value: "/search"
         "400":
           description: "Bad Request. Invalid search parameters."
         "404":
@@ -2243,8 +2163,8 @@ paths:
 
   /posts/{post_id}/comments/search:
     get:
-      operationId: R904
-      summary: "R904: Search Comments"
+      operationId: R902
+      summary: "R902: Search Comments"
       description: "Perform a search for comments on a specific post based on the query string. Access: PUB"
       tags:
         - "M09: Search and Results"
@@ -2294,8 +2214,8 @@ paths:
 
   /groups/{group_id}/members/search:
     get:
-      operationId: R905
-      summary: "R905: Search Group Members"
+      operationId: R903
+      summary: "R903: Search Group Members"
       description: "Perform a search for members in a specific group based on the query string. Access: PUB"
       tags:
         - "M09: Search and Results"
@@ -2345,8 +2265,8 @@ paths:
 
   /communications/search:
     get:
-      operationId: R906
-      summary: "R906: Search Communications"
+      operationId: R904
+      summary: "R904: Search Communications"
       description: "Perform a search for communications based on the query string. Access: PUB"
       tags:
         - "M09: Search and Results"

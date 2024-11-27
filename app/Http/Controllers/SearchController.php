@@ -43,13 +43,18 @@ class SearchController extends Controller
         } elseif ($type === 'posts') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-            $posts = Post::whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                        ->paginate(10, ['*'], 'page', $page);
+
+            $posts = Post::where(function($query) use ($tsQuery) {
+                $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
+                    ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
+            })->paginate(10, ['*'], 'page', $page);
         } elseif ($type === 'groups') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-            $groups = Group::whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                        ->paginate(10, ['*'], 'page', $page);
+            $groups = Group::where(function($query) use ($tsQuery) {
+                $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
+                    ->orWhereRaw("similarity(name, ?) > 0.3", [$tsQuery]);
+            })->paginate(10, ['*'], 'page', $page);
         }
         Log::info($query);
         Log::info($users);
