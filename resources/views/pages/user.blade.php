@@ -55,7 +55,7 @@
     </section>
     <section id="user_posts">
         @if (Auth::check() && $user->id == Auth::user()->id) <!-- If the user is logged in and is the owner of the profile -->
-            <section id="posts">
+            <section id="myposts">
                 @if ($n_posts > 0)
                     @foreach ($posts as $post)
                         @include('partials.post', ['post' => $post])
@@ -63,14 +63,13 @@
                 @else 
                     <p>You dont have any post! Post something!</p>
                 @endif
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
+            </section>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
                         Add Post
                     </button>
-            </section>
-            
         @else
             @if ($user->is_public || (Auth::check() && Auth::user()->isAdmin()))
-                <section id="posts">
+                <section id="myposts">
                     @if ($n_posts > 0)
                         @foreach ($posts as $post)
                             @include('partials.post', ['post' => $post])
@@ -81,7 +80,7 @@
                 
                 </section>
             @else
-                <section id="posts">
+                <section id="priavate_messages">
                     <p>This user profile is private!</p>
                     @if (Auth::check())
                         <p>Follow to see more of this user</p>

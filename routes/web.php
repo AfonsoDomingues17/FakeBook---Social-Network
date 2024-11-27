@@ -61,9 +61,8 @@ Route::get('/media/{media_id}', [MediaController::class, 'show'])->name('media.s
 
 // Search
 
-Route::controller(SearchController::class)->group(function () {
-    Route::get('/search', 'search')->name('search');
-});
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {

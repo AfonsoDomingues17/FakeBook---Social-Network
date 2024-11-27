@@ -12,17 +12,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = data;
                     const searchResults = tempDiv.querySelector('#search-results-container');
-                    console.log(searchResults);
-                    const elements = Array.from(searchResults.querySelectorAll('.user')).slice(0, 5);
-                    elements.forEach(element => {
-                        const item = document.createElement('li');
-                        item.classList.add('dropdown-item');
-                        item.innerHTML = element.innerHTML;
-                        realTime.appendChild(item);
-                    });
+                    if (searchResults) {
+                        const elements = Array.from(searchResults.querySelectorAll('.user')).slice(0, 5);
+                        elements.forEach(element => {
+                            const item = document.createElement('li');
+                            item.classList.add('user');
+                            item.innerHTML = element.innerHTML;
+                            realTime.appendChild(item);
+                        });
+                        realTime.classList.add('show'); // Show the dropdown
+                    } else {
+                        realTime.classList.remove('show'); // Hide the dropdown if no results
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching search results:', error);
+                    realTime.classList.remove('show'); // Hide the dropdown on error
                 });
         } else {
             realTime.innerHTML = '';
+            realTime.classList.remove('show'); // Hide the dropdown if the query is empty
         }
     });
 });

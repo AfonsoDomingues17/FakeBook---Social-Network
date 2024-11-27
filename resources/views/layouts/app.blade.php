@@ -22,37 +22,41 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="{{ asset('js/search.js') }}" defer></script>
+        <script src="{{asset('js/searchType.js')}}" defer></script>
     </head>
     <body>
-        <main>
-            <header>
+    <header>
                 <div class="navbar">
                     <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('LOGO.png') }}" alt="FakeBook Logo" width="50" height="50"></a>
                     <h1>
                         <a href="{{ url('/') }}">FakeBook!</a>
                     </h1>
-                    <li class="nav-item">
-                        <form class="position-relative" role="search" action="/search" method="GET">
-                            <div style="width: 100%; position: relative;">
-                                <input class="form-control me-2 fs-4" type="search" name="query" id="search" placeholder="Search" aria-label="Search" data-bs-toggle="dropdown" aria-expanded="false" style="width: 98%;">
-                                <ul class="dropdown-menu position-absolute" id="real-time-search" aria-labelledby="search" style="width: 98%;"></ul>
-                            </div>
+                    <form  action="{{route('search')}}" method="GET">
+                        <div style="position: relative;">
+                            <input id="search" type="text" name="query" placeholder="search for users">
                             <input type="hidden" name="type" value="users">
-                        </form>
-                    </li>
-                    <li>
-                        @if(Route::currentRouteName() === 'search')
-                            @include('partials.search')
-                        @endif
-                    </li>
+                            <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
+                        </div>
+                    </form>
+                    
+            
+                    
                     @if(Route::currentRouteName() === 'homepage' && Auth::check() && !Auth::user()->isAdmin())
+                    
                         <section id="timeline_options">
                             <a href="{{ route('homepage', ['type' => 'public']) }}">
-                                <button id="public-posts-btn">Public Posts</button>
+                                <button id="public">Public Posts</button>
                             </a>
                             <a href="{{ route('homepage', ['type' => 'following']) }}" >
-                                <button id="following-posts-btn">Following Posts</button>
+                                <button id="following">Following Posts</button>
                             </a>
+                        </section>
+                    @endif
+
+                    @if(Route::currentRouteName() === 'search')
+                        <section id="timeline_options">
+                            <button id="search-users">Users</button>
+                            <button id="search-posts">Posts</button>
                         </section>
                     @endif
 
@@ -62,19 +66,47 @@
                             @if (Auth::user()->isAdmin())
                             <a href="{{ route('admin.page') }}">
                                     <span id="admin_page"><p>Admin Page</p></span>
-                                </a> 
+                            </a> 
                             @else
-                            <a class="button" href="{{url('/users/' . Auth::user()->id)}}">
-                                <p>{{ Auth::user()->name }}</p>
+                            <a class="auth2" href="{{route('profile',['user_id'=> Auth::user()->id])}}">
+                                <p>{{Auth::user()->name}}</p>
+                                <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
                             </a>
+                            
+                            
                             @endif
+                            <i id="dropdown-toggle" class="fa-solid fa-caret-down"></i>
+                            <div class="dropdown"> 
+                                @if (Auth::user()->isAdmin())
+                                    <a href="{{ route('admin.page') }}">Admin Page</a>
+                                @endif
+                                <a href="{{ url('/logout') }}">Logout</a>
+                            </div>
+                                                
                         @else
                             <a class="button" href="{{ url('/login') }}"> <p>Login</p></a>
                             <a class="button" href="{{ url('/register') }}"> <p>Register</p></a>
+                            
                         @endif
                     </section>
                 </div>
             </header>
+        <main>
+            <section id="sidebar">
+            <div class= "navigators">
+                <a class="auth" href="{{ url('/') }}"><i class="fa-solid fa-house"></i><p>Home</p></a>
+                <a class="auth" href=""><i class="fa-solid fa-user-group"></i><p>Groups</p></a>
+                @if(Auth::check())
+                <a class="auth" href=""><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
+                <a class="auth" href=""><i class="fa-regular fa-paper-plane"></i></i><p>Messages</p></a>
+                <a class="auth" href=""><img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50"><p>{{Auth::user()->name}}</p></a>
+                <a id="buttonLog" class="button" href="{{ url('/logout') }}"> <p>Logout</p></a>
+                @endif
+
+                
+            </div>
+
+            </section>
             <section id="content">
                 @yield('content')
             </section>
