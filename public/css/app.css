@@ -145,6 +145,9 @@ footer{
     width: 90%;
     align-items: center;
   }
+  h2 {
+    margin-top: 1rem;
+  }
 }
 article.post {
   background-color: #D3D3D3;
@@ -351,6 +354,10 @@ article.post {
     align-self: center;
     justify-self: center;
   }
+}
+
+#posts h2 {
+  text-align: center;
 }
 
 li {
