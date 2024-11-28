@@ -103,18 +103,24 @@
                                 <a href="{{ url('/register') }}"> <p>Register</p></a>
                                 @endif
                             </div>
+                            @include('partials.create_post')
                     </section>
                 </div>
             </header>
         <main>
-            <section id="sidebar">
+        <section id="sidebar">
             <div class= "navigators">
                 <a class="auth" href="{{ url('/') }}"><i class="fa-solid fa-house"></i><p>Home</p></a>
                 <a class="auth" href=""><i class="fa-solid fa-user-group"></i><p>Groups</p></a>
+                @if(Auth::check() && !Auth::user()->isAdmin())
+                <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
+                @endif
                 @if(Auth::check())
-                <a class="auth" href=""><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
-                <a class="auth" href=""><i class="fa-regular fa-paper-plane"></i></i><p>Messages</p></a>
-                <a class="auth" href=""><img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50"><p>{{Auth::user()->name}}</p></a>
+                <a class="auth" href=""><i class="fa-regular fa-paper-plane"></i><p>Messages</p></a>
+                <a class="auth" href="{{ Auth::user()->isAdmin() ? route('admin.page') : route('profile', ['user_id' => Auth::user()->id]) }}">
+                    <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
+                    <p>{{ Auth::user()->name }}</p>
+                </a>
                 <a id="buttonLog" class="button" href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <p>Logout</p>
@@ -133,5 +139,6 @@
         <footer>
             <p>&copy; FakeBook 2024</p>
         </footer>
+        @include('partials.create_post')
     </body>
 </html>
