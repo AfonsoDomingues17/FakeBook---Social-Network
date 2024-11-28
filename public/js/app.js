@@ -111,24 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-document.addEventListener('shown.bs.modal', (event) => {
-  // Get all siblings of the modal
-  const modals = document.querySelectorAll('.modal');
-  const siblings = [...document.body.children].filter(
-      (child) => !child.contains(modals[0]) && child.tagName !== 'SCRIPT'
-  );
-
-  // Set inert attribute on all siblings
-  siblings.forEach((sibling) => sibling.setAttribute('inert', ''));
-});
-
-document.addEventListener('hidden.bs.modal', (event) => {
-  // Remove inert attribute from siblings
-  const siblings = document.querySelectorAll('[inert]');
-  siblings.forEach((sibling) => sibling.removeAttribute('inert'));
-});
-
-
 
 
 
