@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+
 class UserController extends Controller
 {
     public function showEditProfileForm($user_id)
@@ -106,6 +107,49 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
         $n_following = $user->following()->count();
         return $n_following;
+    }
+    public function createUserbyAdmin(Request $request)
+    {
+        
+        $request->merge([
+            'is_public' => $request->is_public === 'public' ? true : false,
+        ]);
+        
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:250',
+            'username' => 'required|string|max:250|unique:users',
+            'email' => 'required|email|max:250|unique:users',
+            'password' => 'required|min:8|confirmed',
+            'age' => 'required|integer|min:13',
+            'bio' => 'nullable|string|max:250',
+            'is_public' => 'required|boolean',
+            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        Log::info('Validation successful', $validatedData);
+
+        
+        $photoUrl = null;
+        if ($request->hasFile('photo_url')) {
+            
+            $file = $request->file('photo_url');
+            
+            $photoUrl = $file->store('profile_pictures', 'private'); // Stores in storage/app/public/profile_pictures
+        }
+        
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'age' => $request->age,
+            'bio' => $request->bio,
+            'is_public' => $request->is_public,
+            'photo_url' => $photoUrl
+        ]);
+        
+
+        return redirect()->route('profile', ['user_id' => $user->id])
+                     ->with('success', 'User created successfully.');
     }
     public function showProfile($user_id)
 {
