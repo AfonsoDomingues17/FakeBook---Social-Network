@@ -124,7 +124,10 @@
                 <a id="buttonLog" class="button" href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <p>Logout</p>
-                                </a>
+                </a>
+                    @if(Auth::user()->isAdmin())
+                        <a class="auth" href="{{url('/register')}}"><i class="fa-solid fa-user-plus"></i><p>Create User</p></a>
+                    @endif
                 @else
                 <a id="buttonLogin" class="button" href="{{ url('/login') }}"> <p>Login</p></a>
                 <a id="buttonRegister" class="button" href="{{ url('/register') }}"> <p>Register</p></a>

@@ -54,6 +54,7 @@ Route::delete('/posts/{post_id}/delete', [PostController::class, 'destroy'])->na
 Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
 Route::post('/admin/watchlist/add/{user_id}', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
 Route::post('/admin/watchlist/remove/{user_id}', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
+Route::post('admin/users/create', [UserController::class, 'createUserbyAdmin'])->name('admin.create');
 
 // Media
 Route::get('/media/{media_id}', [MediaController::class, 'show'])->name('media.show');

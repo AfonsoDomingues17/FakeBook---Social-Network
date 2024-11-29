@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="form">
-<form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ Auth::check() && Auth::user()->isAdmin() ?  route('admin.create') : route('register') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
 
   
@@ -72,10 +72,15 @@
         <input type="radio" id="private" name="is_public" value="private" required>
       </div>
     </div>
-
+  @if(Auth::check() && Auth::user()->isAdmin())
+    <button type="submit">
+      Create User
+    </button>
+  @else
     <button type="submit">
       Register
     </button>
+  @endif
 </form>
 </div>
 
