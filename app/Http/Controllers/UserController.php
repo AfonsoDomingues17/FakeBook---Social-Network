@@ -245,6 +245,27 @@ class UserController extends Controller
         $user->save();
         return redirect()->route('profile', ['user_id' => $user_id]);
     }
+    public function follow($user_id)
+    {
+        $user = User::findOrFail($user_id);
+        Log::info('User: ' . $user);
+        if($user->is_public){
+            $follower = Auth::user();
+            $follower->following()->attach($user_id, ['typer' => 'FOLLOW']);
+
+            return response()->json(['success' => true, 'message' => 'User followed successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'User is private.']);
+    }
+
+    public function unfollow($user_id)
+    {
+        $user = User::findOrFail($user_id);
+        $follower = Auth::user();
+        $follower->following()->detach($user_id);
+
+        return response()->json(['success' => true, 'message' => 'User unfollowed successfully.']);
+    }
     /**
      * Display a listing of the resource.
      */

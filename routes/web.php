@@ -64,6 +64,10 @@ Route::get('/media/{media_id}', [MediaController::class, 'show'])->name('media.s
 
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
+//Connections
+Route::post('/follow/users/{user_id}', [UserController::class, 'follow'])->name('follow');
+Route::delete('/unfollow/users/{user_id}', [UserController::class, 'unfollow'])->name('unfollow');
+
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {

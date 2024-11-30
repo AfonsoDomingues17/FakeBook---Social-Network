@@ -16,7 +16,7 @@ if(publicButton && followingButton){
       followingButton.style.borderBottom = "5px solid #007bff"; 
       publicButton.style.borderBottom = "none";              
   }
-}
+
 document.querySelectorAll('button').forEach(button => {
     button.addEventListener('click', () => {
         publicButton.style.borderBottom = "none";
@@ -28,7 +28,7 @@ document.querySelectorAll('button').forEach(button => {
         }
     });
 });
-
+}
 function getQueryParam(param) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(param);

@@ -228,12 +228,6 @@ body, html{
   }
 }
 
-
-
-
-
-
-
 #sidebar{
   background-color: white;
   border-right: 2px solid white;
@@ -642,6 +636,7 @@ article.post {
     width: 12em;
     height: 12em;
   }
+
   section#profile{
     display: flex;
     gap: 4em;
@@ -657,6 +652,17 @@ article.post {
         display: flex;
         align-items: center;
         gap: 2em;
+        .unfollow{
+          padding: 0.75em 1.5em;
+          border-radius: 10px;
+          border: 1px solid black;
+          background-color: white;
+          color: black;
+          cursor: pointer;
+          font-size: 1em;
+          font-weight: bold;
+          transition: background-color 0.3s, box-shadow 0.3s;
+        }
         button{
           padding: 0.75em 1.5em;
           border-radius: 10px;
@@ -899,3 +905,4 @@ button#addPost{
 #watchlist{
   padding: 1em;
 }
+
