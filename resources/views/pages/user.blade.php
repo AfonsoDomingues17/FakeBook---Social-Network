@@ -40,7 +40,11 @@
         </div>
                         @endif
                         @if (!Auth::user()->isAdmin() && Auth::user()->id != $user->id)
-                        <button>Follow</button>
+                            @if(Auth::user()->isFollowing($user->id))
+                            <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}">Following</button>
+                            @else
+                            <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
+                            @endif
                         <button>Send Message</button>
                         <button>Block</button>
                         @endif

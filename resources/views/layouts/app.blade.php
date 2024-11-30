@@ -23,6 +23,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script src="{{ asset('js/search.js') }}" defer></script>
         <script src="{{asset('js/searchType.js')}}" defer></script>
+        <script src="{{asset('js/connection.js')}}" defer></script>
     </head>
     <body>
     <header>
@@ -45,10 +46,10 @@
                     
                         <section id="timeline_options">
                             <a href="{{ route('homepage', ['type' => 'public']) }}">
-                                <button id="public">Public Posts</button>
+                                <button class="timeline" id="public">Public Posts</button>
                             </a>
                             <a href="{{ route('homepage', ['type' => 'following']) }}" >
-                                <button id="following">Following Posts</button>
+                                <button class="timeline" id="following">Following Posts</button>
                             </a>
                         </section>
                     @endif

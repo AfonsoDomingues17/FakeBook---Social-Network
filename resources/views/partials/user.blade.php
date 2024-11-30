@@ -8,10 +8,14 @@
                 <span id="nome"><p>{{$user->name}}</p></span>
             </div>
         
-        
+    </a> 
         @if (Auth::check() && !Auth::user()->isAdmin())
-        <button>Follow</button>
-        @endif
+            @if(Auth::user()->isFollowing($user->id))
+                <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}">Following</button>
+                @else
+                <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
+                @endif
+            @endif
         @if (Auth::check() && Auth::user()->isAdmin())
         <div id="watchlist-actions-{{ $user->id }}" data-user-id="{{ $user->id }}">
                 @if ($user->isInWatchlist)
@@ -28,5 +32,5 @@
             </div>
         @endif
         </section>
-    </a>
+    
 </article>

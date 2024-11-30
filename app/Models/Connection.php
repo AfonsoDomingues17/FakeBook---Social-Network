@@ -10,6 +10,8 @@ class Connection extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'connection';
+    const CREATED_AT = 'createdAt';
+
     protected $primaryKey = (['initiator_user_id', 'target_user_id']);
     
 }

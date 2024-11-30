@@ -35,6 +35,12 @@ class User extends Authenticatable
         return $this->typeu === 'ADMIN';
     }
 
+    public function isFollowing($user_id)
+    {
+        return $this->following->contains($user_id);
+    }
+
+
     public function isNormalUser()
     {
         return $this->typeu === 'normal';
@@ -69,7 +75,7 @@ class User extends Authenticatable
             'connection',
             'initiator_user_id',
             'target_user_id'
-        )->withPivot('createdAt', 'typeR');
+        )->withPivot('createdat', 'typer');
     }
 
     public function followers(){
@@ -78,7 +84,7 @@ class User extends Authenticatable
             'connection',
             'target_user_id',
             'initiator_user_id'
-        )->withPivot('createdAt', 'typeR');
+        )->withPivot('createdat', 'typer');
     }
 
     public function ownesGroups() {
