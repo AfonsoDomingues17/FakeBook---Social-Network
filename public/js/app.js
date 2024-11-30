@@ -17,7 +17,7 @@ if(publicButton && followingButton){
       publicButton.style.borderBottom = "none";              
   }
 
-document.querySelectorAll('button').forEach(button => {
+document.querySelectorAll('button.timeline').forEach(button => {
     button.addEventListener('click', () => {
         publicButton.style.borderBottom = "none";
         followingButton.style.borderBottom = "none";

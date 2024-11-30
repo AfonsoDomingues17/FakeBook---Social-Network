@@ -1,4 +1,5 @@
 document.addEventListener('click', (event) => {
+    
     if (event.target && event.target.id === 'Follow') {
         const followButton = event.target;
         const userId = followButton.dataset.userId;
@@ -12,7 +13,7 @@ document.addEventListener('click', (event) => {
         .then(response => response.json())
         .then(data => {
             if(data.success){
-                console.log(data);
+                
                 followButton.innerHTML = 'Following';
                 followButton.classList.add('unfollow');
                 followButton.setAttribute('id', 'unfollow');

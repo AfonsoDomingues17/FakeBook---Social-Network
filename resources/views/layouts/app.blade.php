@@ -46,10 +46,10 @@
                     
                         <section id="timeline_options">
                             <a href="{{ route('homepage', ['type' => 'public']) }}">
-                                <button id="public">Public Posts</button>
+                                <button class="timeline" id="public">Public Posts</button>
                             </a>
                             <a href="{{ route('homepage', ['type' => 'following']) }}" >
-                                <button id="following">Following Posts</button>
+                                <button class="timeline" id="following">Following Posts</button>
                             </a>
                         </section>
                     @endif
