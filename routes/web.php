@@ -9,6 +9,7 @@ use App\Http\Controllers\MediaController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\PasswordResetController;
 
 
 /*
@@ -80,3 +81,10 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
+
+// Password recovery related routes
+Route::get('/forgot-password', [PasswordResetController::class, 'showRequestForm'])->name('password.request');
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/password/reset/{token}/{user_id}', [PasswordResetController::class, 'showResetForm'])->name('password.reset')->middleware('check.reset.token');
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
+Route::get('/reset-not-found', function() { return view('errors.reset_not_found'); })->name('reset.not.found');

@@ -24,6 +24,7 @@
     <button type="submit">
         Login
     </button>
+    <a href="{{ route('password.request') }}">Forgot Your Password?</a>
     @if (session('success'))
         <p class="success">
             {{ session('success') }}
