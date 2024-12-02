@@ -37,7 +37,6 @@ class PasswordResetMail extends Mailable
             ->with([
                 'token' => $this->token,
                 'name' => $this->user->name,
-                'user_id' => $this->user->id,
             ])
             ->replyTo('no-reply@example.com')
             ->subject('Password Reset Request');

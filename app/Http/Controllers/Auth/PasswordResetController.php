@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Mail\PasswordResetMail;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -46,11 +47,28 @@ class PasswordResetController extends Controller
     }
 
     // Show the password reset form
-    public function showResetForm($token, $user_id)
+    public function showResetForm($token)
     {
-        $user = User::findOrFail($user_id);
-        $email = $user->email;
-        return view('auth.reset_password', ['token' => $token, 'email' => $email]);
+        // Check if the token exists in the database
+        $reset = DB::table('password_reset_tokens')->get()->first(function ($record) use ($token) {
+            return Hash::check($token, $record->token);
+        });
+
+        // If the token doesn't exist redirect to the not found page
+        if (!$reset) {
+            return redirect()->route('reset.not.found')->withErrors(['token' => 'Invalid token.']);
+        }
+
+        // Check if the token has expired
+        $expiration = config('auth.passwords.users.expire');
+        $expiredTime = Carbon::parse($reset->created_at)->addMinutes($expiration);
+
+        if (Carbon::now()->greaterThan($expiredTime)) {
+            return redirect()->route('reset.not.found')
+                ->withErrors(['token' => 'This password reset link has expired.']);
+        }
+
+        return view('auth.reset_password', ['token' => $token, 'email' => $reset->email]);
     }
 
     // Logic to reset the password
