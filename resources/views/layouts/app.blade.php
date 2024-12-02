@@ -133,6 +133,9 @@
                 <a id="buttonLogin" class="button" href="{{ url('/login') }}"> <p>Login</p></a>
                 <a id="buttonRegister" class="button" href="{{ url('/register') }}"> <p>Register</p></a>
                 @endif
+                <a class="auth" href="{{ route('help') }}"><i class="fa-solid fa-info-circle"></i>Help/Contacts</a>
+                <a class="auth" href="{{ route('about') }}"><i class="fa-solid fa-question-circle"></i>About Us</a>
+                <a class="auth" href="{{ route('settings') }}"><i class="fa-solid fa-cog"></i>Settings</a>
             </div>
 
             </section>
