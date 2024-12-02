@@ -24,6 +24,7 @@
         <script src="{{ asset('js/search.js') }}" defer></script>
         <script src="{{asset('js/searchType.js')}}" defer></script>
         <script src="{{asset('js/connection.js')}}" defer></script>
+        <script src="{{asset('js/watchlist.js')}}" defer></script>
     </head>
     <body>
     <header>
