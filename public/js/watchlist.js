@@ -1,3 +1,4 @@
+/*
 document.addEventListener('DOMContentLoaded', function () {
     function updateWatchlistActions(action, userId) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -60,3 +61,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // No need to manually attach listeners to individual forms on page load
 });
+
+*/
