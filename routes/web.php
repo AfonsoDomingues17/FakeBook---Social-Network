@@ -39,6 +39,8 @@ Route::put('/users/{user_id}/edit', [UserController::class, 'updateProfile'])->n
 Route::get('/users/{user_id}', [UserController::class, 'showProfile'])->name('profile');
 Route::get('/users/{user_id}/photo', [UserController::class, 'getPhoto'])->name('userphoto');
 Route::delete('/users/{user_id}/delete', [UserController::class, 'destroy'])->name('deleteuser');
+Route::post('/block/users/{user_id}', [UserController::class, 'blockUser'])->name('block');
+Route::delete('/unblock/users/{user_id}', [UserController::class, 'unblockUser'])->name('unblock');
 // Posts
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
