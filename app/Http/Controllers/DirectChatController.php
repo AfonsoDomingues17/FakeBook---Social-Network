@@ -3,63 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\DirectChat;
+use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DirectChatController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index()
     {
-        //
+        $user = Auth::user();
+        $directChats = DirectChat::where('user1_id', $user->id)
+            ->orWhere('user2_id', $user->id)
+            ->get();
+
+        return view('pages.direct_chats', compact('directChats'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(DirectChat $directChat)
-    {
+        $directChat = DirectChat::findOrFail($id);
         return view('pages.direct_chat', compact('directChat'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DirectChat $directChat)
+    public function store(Request $request)
     {
-        //
-    }
+        $user = Auth::user();
+        $recipientId = $request->input('recipient_id');
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, DirectChat $directChat)
-    {
-        //
-    }
+        $directChat = DirectChat::firstOrCreate([
+            'user1_id' => $user->id,
+            'user2_id' => $recipientId
+        ], [
+            'user1_id' => $user->id,
+            'user2_id' => $recipientId
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(DirectChat $directChat)
-    {
-        //
+        return redirect()->route('direct_chats.show', $directChat->id);
     }
 }

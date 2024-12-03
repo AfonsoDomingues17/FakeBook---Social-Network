@@ -9,7 +9,13 @@ class DirectChat extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $table = 'directChat';
+    protected $table = 'directchat';
+
+    protected $fillable = [
+        'user1_id',
+        'user2_id',
+        'dateCreation'
+    ];
 
     public function messages(){
         return $this->hasMany(Message::class,'direct_chat_id');

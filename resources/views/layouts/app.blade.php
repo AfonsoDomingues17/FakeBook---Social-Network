@@ -16,6 +16,7 @@
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
+        <script src="https://js.pusher.com/7.2/pusher.min.js" defer></script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer>
         </script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -24,7 +25,6 @@
         <script src="{{ asset('js/search.js') }}" defer></script>
         <script src="{{asset('js/searchType.js')}}" defer></script>
         <script src="{{asset('js/connection.js')}}" defer></script>
-        <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
         <script src="{{asset('js/notification.js')}}" defer></script>
         <script src="{{asset('js/watchlist.js')}}" defer></script>
     </head>
@@ -120,7 +120,7 @@
                 <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
                 @endif
                 @if(Auth::check())
-                <a class="auth" href=""><i class="fa-regular fa-paper-plane"></i><p>Messages</p></a>
+                <a class="auth" href="{{ route('direct_chats.index') }}"><i class="fa-regular fa-paper-plane"></i><p>Messages</p></a>
                 <a class="auth" href="{{ Auth::user()->isAdmin() ? route('admin.page') : route('profile', ['user_id' => Auth::user()->id]) }}">
                     <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
                     <p>{{ Auth::user()->name }}</p>
