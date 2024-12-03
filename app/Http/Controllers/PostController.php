@@ -183,7 +183,8 @@ public function destroy($post_id)
 
 function like(Request $request) {
     Log::info('Like post ' . $request->id);
-    event(new PostLike($request->id));
+    $event = event(new PostLike($request->id));
+    Log::info('Event', $event);
     return response()->json(['success' => true, 'message' => 'Post liked successfully']);
     
 }
