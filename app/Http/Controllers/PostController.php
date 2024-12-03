@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Post;
 use App\Models\Media;
 use Illuminate\Http\Request;
+use App\Events\PostLike;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -183,4 +184,15 @@ public function destroy($post_id)
     // Redirect to +revious page
     return redirect()->back();
 }
+
+
+function like(Request $request) {
+    Log::info('Like post ' . $request->id);
+    $event = event(new PostLike($request->id));
+    Log::info('Event', $event);
+    return response()->json(['success' => true, 'message' => 'Post liked successfully']);
+    
+}
+
+
 }

@@ -1,3 +1,4 @@
+/*
 document.addEventListener('DOMContentLoaded', function () {
     function updateWatchlistActions(action, userId) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

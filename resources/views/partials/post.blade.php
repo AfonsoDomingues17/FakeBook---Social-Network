@@ -27,7 +27,13 @@
         </div>
     @endif
     <div class="interaction-bar">
-        <p><i class="fa-regular fa-heart"></i> 20</p>
+        <form id="like-form" action="{{route('post.like')}}" method="POST">
+            @csrf
+            <input type="hidden" name="id" value="{{$post->id}}">
+            <button type="submit" class="like-button">
+                <i class="fa-regular fa-heart"></i>
+            </button>
+        </form>
         <p><i class="fa-regular fa-comment"></i> 33</p>
         <p><i class="fa-solid fa-share"></i> 10</p>
 
