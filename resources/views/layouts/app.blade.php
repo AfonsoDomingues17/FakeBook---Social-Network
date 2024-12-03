@@ -26,7 +26,7 @@
         <script src="{{asset('js/connection.js')}}" defer></script>
         <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
         <script src="{{asset('js/notification.js')}}" defer></script>
-
+        <script src="{{asset('js/watchlist.js')}}" defer></script>
     </head>
     <body>
     <header>
