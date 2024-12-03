@@ -43,8 +43,14 @@ class SearchController extends Controller
         } elseif ($type === 'posts') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-            $posts = Post::whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                        ->paginate(10, ['*'], 'page', $page);
+            $postQuery = Post::whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery]);
+
+            if (Auth::check()) {
+                $blockedUserIds = Auth::user()->blockedUsers()->pluck('target_user_id')->merge(Auth::user()->blockedBy()->pluck('initiator_user_id'));
+                $postQuery->whereNotIn('owner_id', $blockedUserIds);
+            }
+
+            $posts = $postQuery->paginate(10, ['*'], 'page', $page);
         } elseif ($type === 'groups') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
