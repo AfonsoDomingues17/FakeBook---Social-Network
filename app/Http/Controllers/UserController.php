@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Watchlist;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -372,7 +373,8 @@ class UserController extends Controller
                 $user->isInWatchlist = true; // Since these users are in the watchlist
                 return $user;
             });
-            return view('pages.admin', ['users' => $users]);
+            $questions = Question::all();
+            return view('pages.admin', ['users' => $users, 'questions' => $questions]);
         }
         return redirect('/')->with('error', 'You do not have admin access.');
     }

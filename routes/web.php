@@ -90,8 +90,9 @@ Route::get('/password/reset/{token}', [PasswordResetController::class, 'showRese
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
 Route::get('/reset-not-found', function() { return view('errors.reset_not_found'); })->name('reset.not.found');
 
-// Statuc pages related routes
+// Static pages related routes
 Route::get('/help', [StaticPageController::class, 'showHelpPage'])->name('help');
 Route::post('/help/form', [StaticPageController::class, 'sendHelpForm'])->name('help.form');
+Route::post('/questions/{id}', [StaticPageController::class, 'sendQuestionResponse'])->name('question.response');
 Route::get('/about', [StaticPageController::class, 'showAboutPage'])->name('about');
 Route::get('/settings' , [StaticPageController::class, 'showSettingsPage'])->name('settings');

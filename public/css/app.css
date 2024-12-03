@@ -786,6 +786,8 @@ button#addPost{
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
   padding: 1rem 1.5rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Style the modal title */
@@ -803,6 +805,8 @@ button#addPost{
 
 .modal-body {
   padding: 1.5rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .modal-body form {
@@ -910,7 +914,7 @@ button#addPost{
   padding: 2em;
 }
 
-#watchlist{
+#watchlist, #questions{
   padding: 1em;
 }
 
