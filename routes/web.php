@@ -74,12 +74,14 @@ Route::post('/follow/users/{user_id}', [UserController::class, 'follow'])->name(
 Route::delete('/unfollow/users/{user_id}', [UserController::class, 'unfollow'])->name('unfollow');
 
 // Messages
+
 Route::middleware('auth')->group(function () {
     Route::get('/direct-chats', [DirectChatController::class, 'index'])->name('direct_chats.index');
     Route::get('/direct-chats/{id}', [DirectChatController::class, 'show'])->name('direct_chats.show');
     Route::post('/direct-chats', [DirectChatController::class, 'store'])->name('direct_chats.store');
-
     Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('/messages/image/{message_id}', [MessageController::class, 'show'])->name('messages.show');
+    Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy'); // Add this line
 });
 
 

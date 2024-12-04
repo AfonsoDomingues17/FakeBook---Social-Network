@@ -914,3 +914,15 @@ button#addPost{
   padding: 1em;
 }
 
+#messages img {
+  max-width: 100%; 
+  max-height: 20vh; 
+  object-fit: cover; 
+  margin: 0.5rem 0; 
+  border-radius: 0.5rem; 
+}
+.message p {
+  max-height: 15vh; 
+  overflow-y: auto; 
+  padding: 0.5rem;
+}
