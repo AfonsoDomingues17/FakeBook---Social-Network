@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Post;
 use App\Models\Media;
 use Illuminate\Http\Request;
+use App\Events\PostLike;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +20,10 @@ class PostController extends Controller
         if (Auth::check()) {
             // User is logged in, show posts from followed users
             $user = Auth::user();
+            $blockedUserIds = $user->blockedUsers()->pluck('target_user_id')->merge($user->blockedBy()->pluck('initiator_user_id'));
+
             $posts = Post::whereIn('owner_id', $user->following()->pluck('target_user_id'))
+                         ->whereNotIn('owner_id', $blockedUserIds)
                          ->orderBy('datecreation', 'desc')
                          ->get();
         } else {
@@ -42,11 +46,13 @@ class PostController extends Controller
         }
         if ($type === 'public') {
             if (auth()->check()) {
+                $blockedUserIds = auth()->user()->blockedUsers()->pluck('target_user_id')->merge(auth()->user()->blockedBy()->pluck('initiator_user_id'));
                 $posts = Post::where('is_public', true)
                     ->whereHas('owner', function ($query) {
                         $query->where('is_public', true);
                     })
                     ->where('owner_id', '!=', auth()->id())
+                    ->whereNotIn('owner_id', $blockedUserIds)
                     ->get();
             } else {
                 $posts = Post::where('is_public', true)
@@ -178,4 +184,15 @@ public function destroy($post_id)
     // Redirect to +revious page
     return redirect()->back();
 }
+
+
+function like(Request $request) {
+    Log::info('Like post ' . $request->id);
+    $event = event(new PostLike($request->id));
+    Log::info('Event', $event);
+    return response()->json(['success' => true, 'message' => 'Post liked successfully']);
+    
+}
+
+
 }

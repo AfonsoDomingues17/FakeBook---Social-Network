@@ -65,12 +65,14 @@ class UserController extends Controller
     $suggestedUsers = [];
     if (Auth::check()) {
         $user = Auth::user();
+        $blockedUserIds = $user->blockedUsers()->pluck('target_user_id')->merge($user->blockedBy()->pluck('initiator_user_id'));
         $users = User::where('id', '!=', $user->id)
-            ->whereNotIn('id', $user->following()->pluck('id'))
-            ->where('typeu', '!=', 'ADMIN')
-            ->inRandomOrder()
-            ->take(5)
-            ->get();
+                ->whereNotIn('id', $user->following()->pluck('id'))
+                ->whereNotIn('id', $blockedUserIds)
+                ->where('typeu', '!=', 'ADMIN')
+                ->inRandomOrder()
+                ->take(5)
+                ->get();
 
         foreach ($users as $suggestedUser) {
             $isInWatchlist = Watchlist::where('admin_id', $user->id)->where('user_id', $suggestedUser->id)->exists();
@@ -167,6 +169,20 @@ class UserController extends Controller
             // If the user was not found in the database, set an error message
             $error_message = 'User not found.';
         } else {
+
+            $currentUser = Auth::user();
+            $isBlockedBy = false;
+
+            if ($currentUser) {
+                $isBlocked = $currentUser->blockedUsers()->where('target_user_id', $user_id)->exists();
+                $isBlockedBy = $user->blockedUsers()->where('target_user_id', $currentUser->id)->exists();
+            }
+
+            if ($isBlockedBy) {
+                // If the current user is blocked by the user, set an error message
+                $error_message = 'This user has blocked you.';
+                $user = null; // Set user to null to prevent displaying profile information
+            } else {
             // No errors, proceed with fetching the user posts and data
             $n_posts = $this->getNumberPosts($user_id);
             $n_followers = $this->getNumberFollowers($user_id);
@@ -185,10 +201,12 @@ class UserController extends Controller
                 'n_following' => $n_following,
                 'posts' => $posts,
                 'isInWatchlist' => $isInWatchlist,
+                'isBlocked' => $isBlocked ?? false,
                 'error_message' => $error_message ?? null
             ]);
         }
     }
+}
 
     // If we reached here, it means there was an invalid user_id or no user found
     return view('pages.user', [
@@ -406,5 +424,31 @@ public function removeFromWatchlist($user_id)
         return response()->json(['success' => true, 'message' => 'User removed from watchlist.']);
     }
     return response()->json(['success' => false, 'message' => 'You do not have admin access.'], 403);
+}
+
+public function blockUser($user_id)
+{
+    $user = User::findOrFail($user_id);
+    $currentUser = Auth::user();
+    $currentUser->following()->detach($user_id);
+    // Check if the user is already blocked
+    if (!$currentUser->blockedUsers()->where('target_user_id', $user_id)->exists()) {
+        $currentUser->blockedUsers()->attach($user_id, ['typer' => 'BLOCK']);
+    }
+
+    return redirect()->back()->with('success', 'User blocked successfully.');
+}
+
+public function unblockUser($user_id)
+{
+    $user = User::findOrFail($user_id);
+    $currentUser = Auth::user();
+
+    // Check if the user is blocked
+    if ($currentUser->blockedUsers()->where('target_user_id', $user_id)->exists()) {
+        $currentUser->blockedUsers()->detach($user_id);
+    }
+
+    return redirect()->back()->with('success', 'User unblocked successfully.');
 }
 }

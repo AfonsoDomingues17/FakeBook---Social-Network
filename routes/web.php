@@ -41,6 +41,8 @@ Route::put('/users/{user_id}/edit', [UserController::class, 'updateProfile'])->n
 Route::get('/users/{user_id}', [UserController::class, 'showProfile'])->name('profile');
 Route::get('/users/{user_id}/photo', [UserController::class, 'getPhoto'])->name('userphoto');
 Route::delete('/users/{user_id}/delete', [UserController::class, 'destroy'])->name('deleteuser');
+Route::post('/block/users/{user_id}', [UserController::class, 'blockUser'])->name('block');
+Route::delete('/unblock/users/{user_id}', [UserController::class, 'unblockUser'])->name('unblock');
 // Posts
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
@@ -49,6 +51,7 @@ Route::get('/posts/{post_id}', [PostController::class, 'show'])->name('posts.sho
 Route::get('/posts/{post_id}/edit', [PostController::class, 'edit'])->name('posts.edit');
 Route::put('/posts/{post_id}/edit', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{post_id}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
+Route::post('/post/like', [PostController::class, 'like'])->name('post.like');
 
 
 // Admin
@@ -57,6 +60,7 @@ Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
 Route::post('/admin/watchlist/add/{user_id}', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
 Route::post('/admin/watchlist/remove/{user_id}', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
 Route::post('admin/users/create', [UserController::class, 'createUserbyAdmin'])->name('admin.create');
+
 
 // Media
 Route::get('/media/{media_id}', [MediaController::class, 'show'])->name('media.show');

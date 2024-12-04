@@ -69,23 +69,27 @@ class User extends Authenticatable
         return $this->belongsToMany(Post::class, 'postLikes', 'user_id', 'post_id');
     }
     
-    public function following(){
-        return $this->belongsToMany(
-            User::class,
-            'connection',
-            'initiator_user_id',
-            'target_user_id'
-        )->withPivot('createdat', 'typer');
-    }
+    public function following()
+{
+    return $this->belongsToMany(
+        User::class,
+        'connection',
+        'initiator_user_id',
+        'target_user_id'
+    )->wherePivotIn('typer', ['FOLLOW', 'FRIEND'])
+     ->withPivot('createdat', 'typer');
+}
 
-    public function followers(){
-        return $this->belongsToMany(
-            User::class,
-            'connection',
-            'target_user_id',
-            'initiator_user_id'
-        )->withPivot('createdat', 'typer');
-    }
+public function followers()
+{
+    return $this->belongsToMany(
+        User::class,
+        'connection',
+        'target_user_id',
+        'initiator_user_id'
+    )->wherePivotIn('typer', ['FOLLOW', 'FRIEND'])
+     ->withPivot('createdat', 'typer');
+}
 
     public function ownesGroups() {
         return $this->hasMany(Group::class,'owner_id');
@@ -141,4 +145,16 @@ public function watchedBy()
 {
     return $this->belongsToMany(User::class, 'watchlists', 'user_id', 'admin_id');
 }
+
+public function blockedUsers()
+    {
+        return $this->belongsToMany(User::class, 'connection', 'initiator_user_id', 'target_user_id')
+                    ->wherePivot('typer', 'BLOCK');
+    }
+
+    public function blockedBy()
+    {
+        return $this->belongsToMany(User::class, 'connection', 'target_user_id', 'initiator_user_id')
+                    ->wherePivot('typer', 'BLOCK');
+    }
 }
