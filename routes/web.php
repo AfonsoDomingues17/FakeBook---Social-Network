@@ -81,7 +81,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/direct-chats', [DirectChatController::class, 'store'])->name('direct_chats.store');
     Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
     Route::get('/messages/image/{message_id}', [MessageController::class, 'show'])->name('messages.show');
-    Route::delete('/messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy'); // Add this line
+    Route::delete('/messages/{message_id}', [MessageController::class, 'destroy'])->name('messages.destroy'); // Update this line
+
 });
 
 

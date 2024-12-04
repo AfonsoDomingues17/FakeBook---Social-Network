@@ -31,13 +31,16 @@ class DirectChatController extends Controller
         $user = Auth::user();
         $recipientId = $request->input('recipient_id');
 
-        $directChat = DirectChat::firstOrCreate([
-            'user1_id' => $user->id,
-            'user2_id' => $recipientId
-        ], [
-            'user1_id' => $user->id,
-            'user2_id' => $recipientId
-        ]);
+        // Check if a direct chat already exists between the users
+        $directChat = DirectChat::betweenUsers($user->id, $recipientId);
+
+        // If no direct chat exists, create a new one
+        if (!$directChat) {
+            $directChat = DirectChat::create([
+                'user1_id' => $user->id,
+                'user2_id' => $recipientId
+            ]);
+        }
 
         return redirect()->route('direct_chats.show', $directChat->id);
     }

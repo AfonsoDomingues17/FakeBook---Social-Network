@@ -113,8 +113,10 @@ class MessageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Message $message)
+    public function destroy($message_id)
     {
+        $message = Message::findOrFail($message_id);
+
         // Ensure the user is authorized to delete the message
         if (Auth::id() !== $message->author_id) {
             abort(403, 'Unauthorized action.');
@@ -140,7 +142,7 @@ class MessageController extends Controller
             'message_id' => $message->id
         ]);
 
-        
+        // Delete the message
         $message->delete();
 
         return response()->json(['status' => 'Message deleted successfully.']);
