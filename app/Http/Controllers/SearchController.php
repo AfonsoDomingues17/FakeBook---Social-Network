@@ -32,7 +32,7 @@ class SearchController extends Controller
                         ->orWhere('username', 'ILIKE', '%' . $query . '%')
                         ->paginate(10, ['*'], 'page', $page);
 
-            $users = $usersQuery->map(function ($user) {
+            $usersWatchlist = $usersQuery->map(function ($user) {
                 $isInWatchlist = false;
                 if (Auth::check() && Auth::user()->isAdmin()) {
                     $isInWatchlist = Watchlist::where('admin_id', Auth::id())->where('user_id', $user->id)->exists();
@@ -40,6 +40,12 @@ class SearchController extends Controller
                 $user->isInWatchlist = $isInWatchlist;
                 return $user;
             });
+            
+            $usersFiltered = $usersWatchlist->filter(function ($user) {
+                return $user->typeu !== 'ADMIN' && $user->id !== Auth::id();
+            });
+
+            $users = $usersFiltered;
         } elseif ($type === 'posts') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
