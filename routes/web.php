@@ -69,6 +69,10 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 //Connections
 Route::post('/follow/users/{user_id}', [UserController::class, 'follow'])->name('follow');
 Route::delete('/unfollow/users/{user_id}', [UserController::class, 'unfollow'])->name('unfollow');
+Route::post('/follow/accept/users/{user_id}', [UserController::class, 'acceptFollowRequest'])->name('acceptfollow');
+Route::delete('/follow/decline/notifications/{notification_id}', [UserController::class, 'declineFollowRequest'])->name('declinefollow');
+Route::delete('/follow/request/delete/{user_id}', [UserController::class, 'deleteFollowRequest'])->name('deletefollowrequest');
+
 
 
 // Authentication

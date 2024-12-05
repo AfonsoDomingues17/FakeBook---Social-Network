@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\FollowRequestDeleted;
 use App\Models\User;
 use App\Models\Watchlist;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Notification;
+use App\Events\FollowRequest;
 
 class UserController extends Controller
 {
@@ -107,6 +110,11 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
         $n_following = $user->following()->count();
         return $n_following;
+    }
+    public function getNumberNotifications($user_id){
+        $user = User::findOrFail($user_id);
+        $n_notifications = $user->notifications()->count();
+        return $n_notifications;
     }
     public function createUserbyAdmin(Request $request)
     {
@@ -255,7 +263,42 @@ class UserController extends Controller
 
             return response()->json(['success' => true, 'message' => 'User followed successfully.']);
         }
-        return response()->json(['success' => false, 'message' => 'User is private.']);
+        else{
+            $notification = Notification::create([
+                'content' => 'has sent you a follow request.',
+                'user_id_dest' => $user_id,
+                'user_id_src' => Auth::id(),
+                'typen' => 'FOLLOW_REQUEST',
+                'isread' => false,
+            ]);
+            event(new FollowRequest(Auth::id(),$notification->id));
+            Log::info('User is private reuqest sent.');
+            return response()->json(['success' => false, 'message' => 'User is private reuqest sent.']);
+        }
+    }
+
+    public function acceptFollowRequest($user_id){
+        $user = User::findOrFail($user_id);
+        $follower = Auth::user();
+        $user->following()->attach($follower->id, ['typer' => 'FOLLOW']);
+        $is_Following = Auth::user()->isFollowing($user_id);
+        return response()->json(['success' => true, 'message' => 'User followed successfully.', 'isFollowing' => $is_Following]);
+
+    }
+    public function deleteFollowRequest($user_id){
+        $notification = Notification::where('user_id_dest', $user_id)
+        ->where('user_id_src', Auth::id())
+        ->where('typen', 'FOLLOW_REQUEST')
+        ->firstOrFail();
+        event(new FollowRequestDeleted($notification->id));
+        $notification->delete();
+
+        return response()->json(['success' => true, 'message' => 'Request deleted successfully.']);
+    }
+    public function declineFollowRequest($notification_id){
+        $notification = Notification::findOrFail($notification_id);
+        $notification->delete();
+        return response()->json(['success' => true, 'message' => 'Request declined successfully.']);
     }
 
     public function unfollow($user_id)

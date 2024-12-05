@@ -41,9 +41,11 @@
                         @endif
                         @if (!Auth::user()->isAdmin() && Auth::user()->id != $user->id)
                             @if(Auth::user()->isFollowing($user->id))
-                            <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}">Following</button>
+                                <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}">Following</button>
+                            @elseif(Auth::user()->hasSentFollowRequestTo($user->id))
+                                <button class="pending" id="pending" data-user-id="{{$user->id}}">Pending</button>
                             @else
-                            <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
+                                <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
                             @endif
                         <button>Send Message</button>
                         <button>Block</button>
@@ -77,7 +79,7 @@
                         Add Post
             </button>
         @else
-            @if ($user->is_public || (Auth::check() && Auth::user()->isAdmin()))
+            @if ($user->is_public || (Auth::check() && Auth::user()->isAdmin()) || (Auth::check() && Auth::user()->isFollowing($user->id)))
                 <section id="myposts">
                     @if ($n_posts > 0)
                         @foreach ($posts as $post)
@@ -92,8 +94,11 @@
                 <section id="priavate_messages">
                     <p>This user profile is private!</p>
                     @if (Auth::check())
-                        <p>Follow to see more of this user</p>
-                        <button>Follow</button>
+                        @if(Auth::user()->hasSentFollowRequestTo($user->id))
+                            <button class="pending" id="pending" data-user-id="{{$user->id}}">Pending</button>
+                        @else
+                            <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
+                        @endif
                     @else
                         <p>Login to see more of this user</p>
                         <a href="{{url('/login')}}">Login</a>

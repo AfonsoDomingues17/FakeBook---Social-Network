@@ -9,6 +9,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        <meta name="user-id" content="{{ Auth::id() }}">
 
         <!-- Styles -->
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
@@ -73,17 +74,46 @@
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         Logout
                             </a>
+                            <div id="notification-container">
+                                <i id="noti" class="fa-solid fa-bell"></i>
+                                @if (Auth::user()->unreadNotifications()->count() > 0)
+                                    <span id="number_noti">{{ Auth::user()->unreadNotifications()->count() }}</span>
+                                @else
+                                    <span id="number_noti" style="display: none;">0</span>
+                                @endif
+                                <div id="notification-dropdown">
+                                    <ul>
+                                        @foreach (Auth::user()->notifications as $notification)
+                                            <li id="notification" data-notification-id="{{$notification->id}}">
+                                                <a href="{{route('profile', ['user_id' => $notification->sender->id])}}">
+                                                <img src="{{route('userphoto', ['user_id' => $notification->sender->id])}}" alt="profile picture" width="50" height="50">
+                                                <p>{{'@'. $notification->sender->username . ' '}} <span id="noti_content">{{$notification->content}}</span></p>
+                                                </a>
+                                                <button  style="display:none" id="Follow" data-user-id="{{$notification->sender->id}}">Follow</button>
+
+                                                @if ($notification->typen === 'FOLLOW_REQUEST')
+                                                    <div id="notification-actions">
+                                                        <button id="accept" data-user-id="{{ $notification->sender->id }}">Accept</button>
+                                                        <button id="reject" data-user-id="{{ $notification->sender->id }}">Eliminate</button>
+                                                    </div>
+                                                @elseif (!Auth::user()->isFollowing($notification->sender->id))
+                                                    <button id="Follow" data-user-id="{{$notification->sender->id}}">Follow Back</button>
+
+                                                @endif
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                             @if (Auth::user()->isAdmin())
-                            <a href="{{ route('admin.page') }}">
-                                    <span id="admin_page"><p>Admin Page</p></span>
-                            </a> 
+                                <a href="{{ route('admin.page') }}">
+                                        <span id="admin_page"><p>Admin Page</p></span>
+                                </a> 
                             @else
-                            <a class="auth2" href="{{route('profile',['user_id'=> Auth::user()->id])}}">
-                                <p>{{Auth::user()->name}}</p>
-                                <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
-                            </a>
-                            
-                            
+                                <a class="auth2" href="{{route('profile',['user_id'=> Auth::user()->id])}}">
+                                    <p>{{Auth::user()->name}}</p>
+                                    <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
+                                </a>
                             @endif
                 
                                                
