@@ -28,24 +28,35 @@ document.addEventListener('DOMContentLoaded', function() {
             updateSearchResults('users', searchQuery);
             changeButton('users');
             updateUrl('users', searchQuery);
+            window.searchType = 'users'; // Update global searchType
+            window.noMoreResults = false; // Reset noMoreResults
+            document.getElementById('category-search').style.display = 'none';
+            uncheckAllCheckboxes();
         });
     }
-
+    
     if (searchPostsButton) {
         searchPostsButton.addEventListener('click', function() {
             var searchQuery = queryInput ? queryInput.value : '';
             updateSearchResults('posts', searchQuery);
             changeButton('posts');
             updateUrl('posts', searchQuery);
+            window.searchType = 'posts'; // Update global searchType
+            window.noMoreResults = false; // Reset noMoreResults
+            document.getElementById('category-search').style.display = 'block';
         });
     }
-
+    
     if (searchGroupsButton) {
         searchGroupsButton.addEventListener('click', function() {
             var searchQuery = queryInput ? queryInput.value : '';
             updateSearchResults('groups', searchQuery);
             changeButton('groups');
             updateUrl('groups', searchQuery);
+            window.searchType = 'groups'; // Update global searchType
+            window.noMoreResults = false; // Reset noMoreResults
+            document.getElementById('category-search').style.display = 'none';
+            uncheckAllCheckboxes();
         });
     }
 
@@ -54,10 +65,10 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`${searchUrl}?type=${type}&query=${query}`)
             .then(response => response.text())
             .then(data => {
-                // Create a temporary DOM element to parse the data
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = data;
-
+                // Parse the response and update the DOM
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+    
                 // TYPE SWITCH
                 let classToSearch; 
                 switch (type) {
@@ -74,16 +85,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         classToSearch = '';
                         break;
                 }
-
-                const elements = tempDiv.querySelectorAll(classToSearch);
+    
+                const elements = doc.querySelectorAll(classToSearch);
                 const searchResults = document.getElementById('search-results-container');
                 searchResults.innerHTML = ''; // Clear previous results
-
+    
                 elements.forEach(element => {
                     searchResults.appendChild(element);
                 });
-
+    
+                // Update the heading text
                 document.querySelector('#search-results h2').innerHTML = `Search results (${type}) for "${query}"`;
+    
+                // Update the global searchType variable
+                window.searchType = type;    
 
                 document.getElementById('loading').style.display = 'none';
             })
@@ -109,5 +124,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateUrl(type, query) {
         const newUrl = `${window.location.pathname}?type=${type}&query=${query}`;
         history.pushState({ path: newUrl }, '', newUrl);
+    }
+
+    function uncheckAllCheckboxes() {
+        const checkboxes = document.querySelectorAll('.category-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
     }
 });

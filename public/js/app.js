@@ -38,11 +38,13 @@ const type2 = getQueryParam('type') || 'users';
 
 const usersButton = document.getElementById('search-users');
 const postsButton = document.getElementById('search-posts');
+const groupsButton = document.getElementById('search-groups');
 
 function highlightButton(button) {
   if(button){
   usersButton.style.borderBottom = "none";
   postsButton.style.borderBottom = "none";
+  groupsButton.style.borderBottom = "none";
   button.style.borderBottom = "5px solid #007bff";
   }
 }
@@ -55,7 +57,7 @@ if (type2 === 'users') {
   highlightButton(groupsButton);
 }
 
-document.querySelectorAll('#timeline_options button').forEach(button => {
+document.querySelectorAll('#search_options [id^="search-"]').forEach(button => {
   button.addEventListener('click', () => {
       highlightButton(button);
   });

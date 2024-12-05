@@ -17,7 +17,7 @@
             @endif
         </section>
     </section>
-    <div id="loading" style="display: none;">Loading...</div>
+    <div id="loading" style="display: none;" class="spinner-border" role="status"></div>
 </section>
 
 <script>
@@ -27,5 +27,6 @@
 </script>
 <script type="text/javascript" src={{ url('js/lazyScroll.js') }} defer></script>
 <script type="text/javascript" src={{ url('js/searchType.js') }} defer></script>
+<script type="text/javascript" src={{ url('js/searchFilter.js') }} defer></script>
 
 @endsection
