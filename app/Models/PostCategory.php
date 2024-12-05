@@ -7,8 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostCategory extends Model
 {
+    protected $fillable = [
+        'post_id',
+        'category_id',
+    ];
     use HasFactory;
-    public $timestamps = false;
-    protected $table = 'postCategory';
-    protected $primaryKey = (['post_id', 'category_id']);
+
+    protected $table = 'postcategory';
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class, 'post_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }

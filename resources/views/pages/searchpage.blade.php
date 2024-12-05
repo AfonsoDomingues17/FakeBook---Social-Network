@@ -27,5 +27,6 @@
 </script>
 <script type="text/javascript" src={{ url('js/lazyScroll.js') }} defer></script>
 <script type="text/javascript" src={{ url('js/searchType.js') }} defer></script>
+<script type="text/javascript" src={{ url('js/searchFilter.js') }} defer></script>
 
 @endsection
