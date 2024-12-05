@@ -17,7 +17,7 @@
             @endif
         </section>
     </section>
-    <div id="loading" style="display: none;">Loading...</div>
+    <div id="loading" style="display: none;" class="spinner-border" role="status"></div>
 </section>
 
 <script>
