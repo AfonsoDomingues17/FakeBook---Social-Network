@@ -58,10 +58,7 @@
                     @endif
 
                     @if(Route::currentRouteName() === 'search')
-                        <section id="timeline_options">
-                            <button id="search-users">Users</button>
-                            <button id="search-posts">Posts</button>
-                        </section>
+                        @include('partials.search')
                     @endif
 
                     <section id="account-options">

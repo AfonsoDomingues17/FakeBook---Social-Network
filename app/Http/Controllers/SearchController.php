@@ -31,8 +31,8 @@ class SearchController extends Controller
                         ->orWhere('email', 'ILIKE', '%' . $query . '%')
                         ->orWhere('username', 'ILIKE', '%' . $query . '%')
                         ->paginate(10, ['*'], 'page', $page);
-
-            $users = $usersQuery->map(function ($user) {
+            
+            $usersWatchlist = $usersQuery->map(function ($user) {
                 $isInWatchlist = false;
                 if (Auth::check() && Auth::user()->isAdmin()) {
                     $isInWatchlist = Watchlist::where('admin_id', Auth::id())->where('user_id', $user->id)->exists();
@@ -40,22 +40,33 @@ class SearchController extends Controller
                 $user->isInWatchlist = $isInWatchlist;
                 return $user;
             });
+            
+            $usersFiltered = $usersWatchlist->where('typeu', '!=', 'ADMIN')->where('id', '!=', Auth::id());
+
+            $users = $usersFiltered;
         } elseif ($type === 'posts') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-            $postQuery = Post::whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery]);
+            $postQuery = Post::where(function($query) use ($tsQuery) {
+                $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
+                    ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
+            });
+
 
             if (Auth::check()) {
                 $blockedUserIds = Auth::user()->blockedUsers()->pluck('target_user_id')->merge(Auth::user()->blockedBy()->pluck('initiator_user_id'));
-                $postQuery->whereNotIn('owner_id', $blockedUserIds);
+                $postQuery->whereNotIn('owner_id', $blockedUserIds)
+                         ->where('owner_id', '!=', Auth::id())
+                         ->where('is_public', 'true');
             }
-
             $posts = $postQuery->paginate(10, ['*'], 'page', $page);
         } elseif ($type === 'groups') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-            $groups = Group::whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                        ->paginate(10, ['*'], 'page', $page);
+            $groups = Group::where(function($query) use ($tsQuery) {
+                $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
+                    ->orWhereRaw("similarity(name, ?) > 0.3", [$tsQuery]);
+            })->paginate(10, ['*'], 'page', $page);
         }
         Log::info($query);
         Log::info($users);
