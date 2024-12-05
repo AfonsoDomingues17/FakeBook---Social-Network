@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('users', searchQuery);
             window.searchType = 'users'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
+            document.getElementById('category-search').style.display = 'none';
+            uncheckAllCheckboxes();
         });
     }
     
@@ -41,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('posts', searchQuery);
             window.searchType = 'posts'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
+            document.getElementById('category-search').style.display = 'block';
         });
     }
     
@@ -52,6 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('groups', searchQuery);
             window.searchType = 'groups'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
+            document.getElementById('category-search').style.display = 'none';
+            uncheckAllCheckboxes();
         });
     }
 
@@ -93,8 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.querySelector('#search-results h2').innerHTML = `Search results (${type}) for "${query}"`;
     
                 // Update the global searchType variable
-                window.searchType = type;
-    
+                window.searchType = type;    
+
                 document.getElementById('loading').style.display = 'none';
             })
             .catch(error => {
@@ -119,5 +124,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateUrl(type, query) {
         const newUrl = `${window.location.pathname}?type=${type}&query=${query}`;
         history.pushState({ path: newUrl }, '', newUrl);
+    }
+
+    function uncheckAllCheckboxes() {
+        const checkboxes = document.querySelectorAll('.category-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
     }
 });

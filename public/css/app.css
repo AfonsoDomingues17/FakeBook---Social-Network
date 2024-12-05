@@ -76,11 +76,11 @@ body, html{
     display: block;
   }
 
-  #timeline_options{
+  #timeline_options, #search_options{
     display: flex;
     gap: 1em;
     flex: 1;
-    button{
+    button:not(#filter-category) {
       border: none;
       background-color: white;
       border-radius: 10px;
@@ -91,9 +91,7 @@ body, html{
       font-size: 1em;
       font-weight: bold;
       cursor: pointer;
-
     }
-
   }
 
 

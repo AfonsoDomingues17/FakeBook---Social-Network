@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Group;
 use App\Models\Watchlist;
+use App\Models\PostCategory;
 use Illuminate\Support\Facades\Auth;
 use Log;
 
@@ -45,13 +46,19 @@ class SearchController extends Controller
 
             $users = $usersFiltered;
         } elseif ($type === 'posts') {
+            $categories = request()->query('categories', 'all'); // Defaults to 'all' if 'category' is not in the URL
+
+            // If it's not 'all', convert the string into an array
+            if ($categories !== 'all') {
+                $categories = explode(',', $categories);
+            }
+
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
             $postQuery = Post::where(function($query) use ($tsQuery) {
                 $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
                     ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
-            });
-
+            })->paginate(10, ['*'], 'page', $page);
 
             if (Auth::check()) {
                 $blockedUserIds = Auth::user()->blockedUsers()->pluck('target_user_id')->merge(Auth::user()->blockedBy()->pluck('initiator_user_id'));
@@ -59,7 +66,16 @@ class SearchController extends Controller
                          ->where('owner_id', '!=', Auth::id())
                          ->where('is_public', 'true');
             }
-            $posts = $postQuery->paginate(10, ['*'], 'page', $page);
+
+            if ($categories !== 'all') {
+                $postCategorized = collect($postQuery->items())->filter(function ($post) use ($categories) {
+                    return PostCategory::where('post_id', $post->id)->whereIn('category_id', $categories)->exists();
+                });
+            } else {
+                $postCategorized = $postQuery;
+            }
+
+            $posts = $postCategorized;
         } elseif ($type === 'groups') {
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);

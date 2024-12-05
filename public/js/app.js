@@ -57,7 +57,7 @@ if (type2 === 'users') {
   highlightButton(groupsButton);
 }
 
-document.querySelectorAll('#timeline_options button').forEach(button => {
+document.querySelectorAll('#search_options [id^="search-"]').forEach(button => {
   button.addEventListener('click', () => {
       highlightButton(button);
   });
