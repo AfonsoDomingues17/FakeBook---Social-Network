@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\DirectChatController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\StaticPageController;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -73,6 +75,18 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 //Connections
 Route::post('/follow/users/{user_id}', [UserController::class, 'follow'])->name('follow');
 Route::delete('/unfollow/users/{user_id}', [UserController::class, 'unfollow'])->name('unfollow');
+
+// Messages
+
+Route::middleware('auth')->group(function () {
+    Route::get('/direct-chats', [DirectChatController::class, 'index'])->name('direct_chats.index');
+    Route::get('/direct-chats/{id}', [DirectChatController::class, 'show'])->name('direct_chats.show');
+    Route::post('/direct-chats', [DirectChatController::class, 'store'])->name('direct_chats.store');
+    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('/messages/image/{message_id}', [MessageController::class, 'show'])->name('messages.show');
+    Route::delete('/messages/{message_id}', [MessageController::class, 'destroy'])->name('messages.destroy'); // Update this line
+
+});
 
 
 // Authentication

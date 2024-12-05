@@ -54,7 +54,11 @@
                             @else
                                 <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
                             @endif
-                            <button>Send Message</button>
+                            <form action="{{ route('direct_chats.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="recipient_id" value="{{ $user->id }}">
+                                <button type="submit">Send Message</button>
+                            </form>
                             <form action="{{ route('block', ['user_id' => $user->id]) }}" method="POST">
                                 @csrf
                                 <button type="submit">Block</button>

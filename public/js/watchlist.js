@@ -1,4 +1,3 @@
-/*
 document.addEventListener('DOMContentLoaded', function () {
     function updateWatchlistActions(action, userId) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -48,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const form = e.target;
 
         // Identify the action based on form ID
-        if (form.id.startsWith('add-watchlist-form-') || form.id.startsWith('remove-watchlist-form-')) {
+        if (typeof form.id === 'string' && (form.id.startsWith('add-watchlist-form-') || form.id.startsWith('remove-watchlist-form-'))) {
             e.preventDefault();
             const userId = form.id.split('-').pop();
             const formUserId = form.getAttribute('data-user-id');
