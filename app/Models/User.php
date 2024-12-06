@@ -59,6 +59,19 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class,'user_id_dest');
     }
 
+    public function hasSentFollowRequestTo($userId)
+    {
+        return Notification::where('typen', 'FOLLOW_REQUEST')
+            ->where('user_id_dest', $userId)
+            ->where('user_id_src', $this->id)
+            ->exists();
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->notifications->where('is_read', false);
+    }
+
     public function posts() {
         return $this->hasMany(Post::class,'owner_id');
     }

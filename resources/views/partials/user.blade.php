@@ -11,10 +11,12 @@
         @if (Auth::check() && !Auth::user()->isAdmin())
             @if(Auth::user()->isFollowing($user->id))
                 <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}">Following</button>
-                @else
+            @elseif(Auth::user()->hasSentFollowRequestTo($user->id))
+                <button class="pending" id="pending" data-user-id="{{$user->id}}">Pending</button>
+            @else
                 <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
-                @endif
-            @endif
+            @endif    
+        @endif
         @if (Auth::check() && Auth::user()->isAdmin())
         <div id="watchlist-actions-{{ $user->id }}" data-user-id="{{ $user->id }}">
                 @if ($user->isInWatchlist)
