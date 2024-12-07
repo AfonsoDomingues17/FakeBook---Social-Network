@@ -28,6 +28,7 @@
         <script src="{{asset('js/connection.js')}}" defer></script>
         <script src="{{asset('js/notification.js')}}" defer></script>
         <script src="{{asset('js/watchlist.js')}}" defer></script>
+        <script src="{{asset('js/group.js')}}" defer></script>
     </head>
     <body>
     <header>
@@ -135,6 +136,7 @@
                                 @endif
                             </div>
                             @include('partials.create_post')
+                            @include('partials.create_group')
                     </section>
                 </div>
             </header>
@@ -142,7 +144,7 @@
         <section id="sidebar">
             <div class= "navigators">
                 <a class="auth" href="{{ url('/') }}"><i class="fa-solid fa-house"></i><p>Home</p></a>
-                <a class="auth" href=""><i class="fa-solid fa-user-group"></i><p>Groups</p></a>
+                <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#groupCreationModal"><i class="fa-solid fa-user-group"></i><p>Create Group</p></a> 
                 @if(Auth::check() && !Auth::user()->isAdmin())
                 <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
                 @endif
@@ -177,5 +179,6 @@
             <p>&copy; FakeBook 2024</p>
         </footer>
         @include('partials.create_post')
+        @include('partials.create_group')
     </body>
 </html>
