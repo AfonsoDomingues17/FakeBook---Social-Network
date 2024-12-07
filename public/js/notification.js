@@ -1,5 +1,3 @@
-Pusher.logToConsole = true;
-
 const pusherAppKey = 'd0fbf1ca7b9f6c2d83f5';
 const pusherCluster = 'eu';
 
@@ -9,9 +7,7 @@ const pusher = new Pusher(pusherAppKey, {
 });
 
 const channel = pusher.subscribe('FakeBook');
-channel.bind('pusher:subscription_succeeded', function() {
-    console.log('Subscription succeeded');
-});
+
 
 channel.bind('notification-followrequest-deleted', function(data) {
     const notification = document.querySelector(`li[data-notification-id="${data.notification_id}"]`);
@@ -29,11 +25,11 @@ channel.bind('notification-followrequest-deleted', function(data) {
 
 channel.bind('notification-followrequest', function(data) {
     const authenticatedUserId = document.querySelector('meta[name="user-id"]').getAttribute('content');
-    console.log('Notification received:', authenticatedUserId);
-    if (String(data.user.id) !== String(authenticatedUserId)) {
+    if ((String(data.user.id) !== String(authenticatedUserId)) && (String(authenticatedUserId) === String(data.notification.user_id_dest))) {
         showNotificationPopup(data);
         addNotificationToDropdown(data);
         incrementNotificationCount();
+
     }
 });
 
