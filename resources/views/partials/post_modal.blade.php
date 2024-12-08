@@ -58,9 +58,9 @@
                             @endif
                         </article>
                     </div>
-                    <div class="col-md-3" style="display: flex; flex-direction: column; max-height: 60vh">
+                    <div class="col-md-3" style="display: flex; flex-direction: column">
                         <h5 style="align-self: start">Comments</h5>
-                        <div id="comments-section-{{ $post->id }}" style="overflow-y: auto">
+                        <div id="comments-section-{{ $post->id }}" style="max-height: 55vh; overflow-y: auto">
                             @foreach($post->comments as $comment)
                                 @include ('partials.comment', ['comment' => $comment])
                             @endforeach

@@ -29,3 +29,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+document.querySelectorAll('form[id^="comment-form-"]').forEach((form) => {
+    // Prevent adding multiple listeners
+    if (form.dataset.listenerAdded) return;
+    form.dataset.listenerAdded = true;
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const csrfToken = formData.get('_token');
+        const postId = formData.get('post_id');
+        const url = form.action;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            });
+
+            if (response.ok) {
+                const html = await response.text();
+                const commentsSection = document.getElementById(`comments-section-${postId}`);
+                commentsSection.insertAdjacentHTML('beforeend', html); // Append the new comment
+                form.reset(); // Clear the form
+            }
+        } catch (error) {
+            console.error('Error during fetch request:', error);
+        }
+    });
+});

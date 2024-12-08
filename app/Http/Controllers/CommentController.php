@@ -41,9 +41,9 @@ class CommentController extends Controller
 
         $validatedData['author_id'] = auth()->id();
 
-        Comment::create($validatedData);
+        $comment = Comment::create($validatedData);
 
-        return redirect()->back();
+        return view('partials.comment', compact('comment'));
     }
 
     /**
