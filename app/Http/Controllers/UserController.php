@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use App\Models\Country;
 
 class UserController extends Controller
 {
@@ -29,8 +30,13 @@ class UserController extends Controller
         
             $user = User::findOrFail($user_id);
             $this->authorize('update', $user);
-            return view('pages.editProfile', ['user'=> $user]);
-        
+            $countries = Country::all(); 
+
+    // Pass the user and countries to the view
+        return view('pages.editProfile', [
+            'user' => $user,
+            'countries' => $countries
+        ]);
     }
     public function getPhoto($user_id)
 {   
@@ -139,7 +145,9 @@ class UserController extends Controller
             'age' => 'required|integer|min:13',
             'bio' => 'nullable|string|max:250',
             'is_public' => 'required|boolean',
-            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gender' => 'required|string|in:Male,Female,Other',
+            'country' => 'required|string|exists:countries,name',
         ]);
         Log::info('Validation successful', $validatedData);
 
@@ -160,7 +168,9 @@ class UserController extends Controller
             'age' => $request->age,
             'bio' => $request->bio,
             'is_public' => $request->is_public,
-            'photo_url' => $photoUrl
+            'photo_url' => $photoUrl,
+            'gender' => $request->gender,
+            'country' => $request->country,
         ]);
         
 
@@ -230,53 +240,63 @@ class UserController extends Controller
 
 
     public function updateProfile(Request $request, $user_id)
-    {   
-        $user = User::findOrFail($user_id);
+{   
+    $user = User::findOrFail($user_id);
+    $this->authorize('update', $user);
 
-        $this->authorize('update', $user);
+    Log::info('Incoming request data', $request->all());
 
-        Log::info('Incoming request data', $request->all());
-        $request->merge([
-            'is_public' => $request->is_public === 'public' ? true : false,
-        ]);
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:250',
-            'username' => [
-                'required',
-                'string',
-                'max:250',
-                Rule::unique('users')->ignore($user_id),
-            ],
-            'age' => 'required|integer|min:13',
-            'bio' => 'nullable|string|max:250',
-            'is_public' => 'required|boolean',
-            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-        Log::info('Validation successful', $validatedData);
+    // Convert is_public to boolean
+    $request->merge([
+        'is_public' => $request->is_public === 'public' ? true : false,
+    ]);
 
-        
+    // Validate input
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:250',
+        'username' => [
+            'required',
+            'string',
+            'max:250',
+            Rule::unique('users')->ignore($user_id),
+        ],
+        'age' => 'required|integer|min:13',
+        'bio' => 'nullable|string|max:250',
+        'is_public' => 'required|boolean',
+        'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'gender' => 'nullable|string|max:50',
+        'country' => 'nullable|string|max:100',
+    ]);
+    
+    Log::info('Validation successful', $validatedData);
+
+    // Update user information
         $user->name = $request->name;
         $user->username = $request->username;
         $user->age = $request->age;
         $user->bio = $request->bio;
         $user->is_public = $request->is_public;
+        $user->gender = $request->gender;
+        $user->country = $request->country;
 
-        if ($request->hasFile('photo_url')) {
-            if ($user->photo_url) {
-                $oldPhotoPath = str_replace('private/','', $user->photo_url);
-                Log::info('Old photo path: ' . $oldPhotoPath);
-                Storage::disk('private')->delete($oldPhotoPath);
-            }
-    
-            $path = $request->file('photo_url')->store('profile_pictures','private');
-            Log::info('Path: ' . $path);
-            $user->photo_url = $path;
+    // Handle profile picture update
+    if ($request->hasFile('photo_url')) {
+        if ($user->photo_url) {
+            $oldPhotoPath = str_replace('private/', '', $user->photo_url);
+            Log::info('Old photo path: ' . $oldPhotoPath);
+            Storage::disk('private')->delete($oldPhotoPath);
         }
-        Log::info('user: ' . $user->photo_url);
 
-        $user->save();
-        return redirect()->route('profile', ['user_id' => $user_id]);
+        $path = $request->file('photo_url')->store('profile_pictures', 'private');
+        Log::info('New photo path: ' . $path);
+        $user->photo_url = $path;
     }
+
+    // Save the updated user record
+    $user->save();
+    return redirect()->route('profile', ['user_id' => $user_id]);
+}
+
     public function follow($user_id)
     {
         $user = User::findOrFail($user_id);
@@ -356,15 +376,16 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'name' => 'required|string|max:250',
+            'username' => 'required|string|max:250|unique:users',
+            'email' => 'required|email|max:250|unique:users',
+            'password' => 'required|min:8|confirmed',
             'age' => 'required|integer|min:13',
-            'bio' => 'nullable|string',
-            'photo_url' => 'nullable|string',
+            'bio' => 'nullable|string|max:250',
             'is_public' => 'required|boolean',
-            'typeU' => 'required|string|in:NORMAL,INFLUENCER', 
+            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gender' => 'required|string|in:Male,Female,Other',
+            'country' => 'required|string|exists:countries,name',
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']);
@@ -613,7 +634,7 @@ public function showInfluencerPage($user_id)
     $postLikesChart = Chartjs::build()
         ->name('postLikesChart')
         ->type('bar')
-        ->size(['width' => 400, 'height' => 400])
+        ->size(['width' => 200, 'height' => 200])
         ->labels($postLikes->keys()->toArray())
         ->datasets([
             [
