@@ -80,7 +80,7 @@ body, html{
     display: flex;
     gap: 1em;
     flex: 1;
-    button:not(#filter-category) {
+    button:not(#filter-category):not(#feed-order) {
       border: none;
       background-color: white;
       border-radius: 10px;
