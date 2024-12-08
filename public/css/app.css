@@ -1076,3 +1076,30 @@ button#addPost{
   }
 }
 
+/* Style for the direct chats container */
+.direct-chats-container {
+  padding-top: 20px;
+  padding-left: 20px;
+  margin-top: 0;
+  text-align: left;
+  align-self: flex-start;
+  justify-self: flex-start;
+}
+
+/* Style for the h1 element in the direct chats container */
+.direct-chats-container h1 {
+  margin-top: 0;
+  text-align: left;
+}
+
+/* Style for the links in the direct chats container */
+.direct-chats-container ul li a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.direct-chats-container ul li a:hover {
+  color: #0056b3;
+}

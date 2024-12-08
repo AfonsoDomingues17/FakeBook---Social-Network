@@ -60,6 +60,13 @@
                 <x-chartjs-component :chart="$postCommentsChart" />
             </div>
         </div>
+
+        <div class="chart-container" data-chart-type="categoriesUsed" data-chart-data="{{ json_encode($categoriesUsed) }}">
+            <h2>Categories Used</h2>
+            <div style="width: 75%">
+                <x-chartjs-component :chart="$categoriesUsedChart" />
+            </div>
+        </div>
     </div>
 </div>
 

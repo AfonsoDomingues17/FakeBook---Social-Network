@@ -521,6 +521,7 @@ public function unblockUser($user_id)
     return redirect()->back()->with('success', 'User unblocked successfully.');
 }
 
+
 public function showInfluencerPage($user_id)
 {
     $user = User::findOrFail($user_id);
@@ -562,11 +563,21 @@ public function showInfluencerPage($user_id)
     // Posts Statistics
     $posts = Post::where('owner_id', $user_id)->get();
     $postLikes = $posts->mapWithKeys(function ($post) {
-        return [$post->id => $post->likes()->count()];
+        return [$post->id => $post->getNumberOfLikes()];
     });
     $postComments = $posts->mapWithKeys(function ($post) {
-        return [$post->id => $post->comments()->count()];
+        return [$post->id => $post->getNumberOfComments()];
     });
+
+    // Categories used in posts
+    $categoriesUsed = DB::table('postcategory')
+        ->join('category', 'postcategory.category_id', '=', 'category.id')
+        ->join('post', 'postcategory.post_id', '=', 'post.id')
+        ->where('post.owner_id', $user_id)
+        ->select(DB::raw('category.name as category, count(*) as count'))
+        ->groupBy('category.name')
+        ->orderBy('count', 'desc')
+        ->get();
 
     // Create Charts
     $followersByCountryChart = Chartjs::build()
@@ -585,6 +596,24 @@ public function showInfluencerPage($user_id)
         ->options([
             'responsive' => true,
             'maintainAspectRatio' => false,
+            'scales' => [
+                'x' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Country'
+                    ]
+                ],
+                'y' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Number of Followers'
+                    ],
+                    'ticks' => [
+                        'beginAtZero' => true,
+                        'precision' => 0
+                    ]
+                ]
+            ]
         ]);
 
     $followersByAgeChart = Chartjs::build()
@@ -603,6 +632,24 @@ public function showInfluencerPage($user_id)
         ->options([
             'responsive' => true,
             'maintainAspectRatio' => false,
+            'scales' => [
+                'x' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Age'
+                    ]
+                ],
+                'y' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Number of Followers'
+                    ],
+                    'ticks' => [
+                        'beginAtZero' => true,
+                        'precision' => 0
+                    ]
+                ]
+            ]
         ]);
 
     $followersByGenderChart = Chartjs::build()
@@ -629,12 +676,22 @@ public function showInfluencerPage($user_id)
         ->options([
             'responsive' => true,
             'maintainAspectRatio' => false,
+            'plugins' => [
+                'legend' => [
+                    'display' => true,
+                    'position' => 'top',
+                ],
+                'title' => [
+                    'display' => true,
+                    'text' => 'Followers by Gender'
+                ]
+            ]
         ]);
 
     $postLikesChart = Chartjs::build()
         ->name('postLikesChart')
         ->type('bar')
-        ->size(['width' => 200, 'height' => 200])
+        ->size(['width' => 400, 'height' => 400])
         ->labels($postLikes->keys()->toArray())
         ->datasets([
             [
@@ -647,6 +704,24 @@ public function showInfluencerPage($user_id)
         ->options([
             'responsive' => true,
             'maintainAspectRatio' => false,
+            'scales' => [
+                'x' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Post ID'
+                    ]
+                ],
+                'y' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Number of Likes'
+                    ],
+                    'ticks' => [
+                        'beginAtZero' => true,
+                        'precision' => 0
+                    ]
+                ]
+            ]
         ]);
 
     $postCommentsChart = Chartjs::build()
@@ -665,6 +740,74 @@ public function showInfluencerPage($user_id)
         ->options([
             'responsive' => true,
             'maintainAspectRatio' => false,
+            'scales' => [
+                'x' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Post ID'
+                    ]
+                ],
+                'y' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Number of Comments'
+                    ],
+                    'ticks' => [
+                        'beginAtZero' => true,
+                        'precision' => 0
+                    ]
+                ]
+            ]
+        ]);
+
+    $categoriesUsedChart = Chartjs::build()
+        ->name('categoriesUsedChart')
+        ->type('pie')
+        ->size(['width' => 400, 'height' => 400])
+        ->labels($categoriesUsed->pluck('category')->toArray())
+        ->datasets([
+            [
+                'label' => 'Categories Used',
+                'backgroundColor' => [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(199, 199, 199, 0.2)',
+                    'rgba(83, 102, 255, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                'borderColor' => [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(199, 199, 199, 1)',
+                    'rgba(83, 102, 255, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                ],
+                'data' => $categoriesUsed->pluck('count')->toArray(),
+            ],
+        ])
+        ->options([
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+            'plugins' => [
+                'legend' => [
+                    'display' => true,
+                    'position' => 'top',
+                ],
+                'title' => [
+                    'display' => true,
+                    'text' => 'Categories Used in Posts'
+                ]
+            ]
         ]);
 
     return view('pages.influencer', [
@@ -674,11 +817,13 @@ public function showInfluencerPage($user_id)
         'followersByGenderChart' => $followersByGenderChart,
         'postLikesChart' => $postLikesChart,
         'postCommentsChart' => $postCommentsChart,
+        'categoriesUsedChart' => $categoriesUsedChart,
         'followersByCountry' => $followersByCountry,
         'followersByAge' => $followersByAge,
         'followersByGender' => $followersByGender,
         'postLikes' => $postLikes,
         'postComments' => $postComments,
+        'categoriesUsed' => $categoriesUsed,
     ]);
 }
 }
