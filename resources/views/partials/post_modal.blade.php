@@ -70,7 +70,7 @@
                                 <form id="comment-form-{{ $post->id }}" action="{{ route('comments.store') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                    <textarea name="content" class="form-control" placeholder="Write a comment..."></textarea>
+                                    <textarea name="content" class="form-control" placeholder="Write a comment..." style="width: 100%"></textarea>
                                     <button type="submit" class="btn btn-primary mt-2">Submit</button>
                                 </form>
                             </div>

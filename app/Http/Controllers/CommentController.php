@@ -43,7 +43,7 @@ class CommentController extends Controller
 
         $comment = Comment::create($validatedData);
 
-        return view('partials.comment', compact('comment'));
+        return view('partials.comment', ['comment' => $comment])->render();
     }
 
     /**
@@ -57,23 +57,27 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Comment $comment)
+    public function edit()
     {
-        return view('comments.edit', compact('comment'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $comment_id)
     {
+        $comment = Comment::findOrFail($comment_id);
+        $this->authorize('update', $comment);
+
         $validatedData = $request->validate([
             'content' => 'required|string|max:1000',
         ]);
-    
+        $validatedData['is_edited'] = true;
+
         $comment->update($validatedData);
-    
-        return redirect()->route('comments.show', $comment);
+
+        return $comment->content;
     }
 
     /**
