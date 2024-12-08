@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\DirectChatController;
@@ -54,6 +55,9 @@ Route::get('/posts/{post_id}/edit', [PostController::class, 'edit'])->name('post
 Route::put('/posts/{post_id}/edit', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{post_id}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
 Route::post('/post/like', [PostController::class, 'like'])->name('post.like');
+// Comments
+Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
+Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
 
 
 // Admin

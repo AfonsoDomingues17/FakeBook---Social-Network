@@ -15,6 +15,12 @@ class CommentController extends Controller
         //
     }
 
+    public function getPostComments($post_id)
+    {
+        $comments = Comment::where('post_id', $post_id)->get();
+        return view('partials.comment', compact('comments'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -30,13 +36,14 @@ class CommentController extends Controller
     {
         $validatedData = $request->validate([
             'content' => 'required|string|max:1000',
-            'post_id' => 'required|integer|exists:posts,id',
-            'user_id' => 'required|integer|exists:users,id',
+            'post_id' => 'required|integer|exists:post,id',
         ]);
+
+        $validatedData['author_id'] = auth()->id();
 
         Comment::create($validatedData);
 
-        return redirect()->route('comments.index');
+        return redirect()->back();
     }
 
     /**

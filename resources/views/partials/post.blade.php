@@ -63,6 +63,8 @@
         initMediaCarousel({{ $post->id }}, mediaUrls{{ $post->id }});
     </script>
     @endif
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal-{{ $post->id }}">View Post</button>
     @include('partials.edit_post', ['post' => $post, 'modalId' => 'editPostModal-' . $post->id])
+    @include('partials.post_modal', ['post' => $post])
 </article>
 

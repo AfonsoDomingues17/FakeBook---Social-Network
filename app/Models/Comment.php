@@ -10,6 +10,7 @@ class Comment extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'comment';
+    protected $fillable = ['content', 'author_id', 'post_id'];
 
     public function post()
     {
