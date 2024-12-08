@@ -16,6 +16,11 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Notification;
 use App\Events\FollowRequest;
+use App\Models\Post;
+use Illuminate\Support\Facades\DB;
+use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class UserController extends Controller
 {
@@ -493,5 +498,166 @@ public function unblockUser($user_id)
     }
 
     return redirect()->back()->with('success', 'User unblocked successfully.');
+}
+
+public function showInfluencerPage($user_id)
+{
+    $user = User::findOrFail($user_id);
+
+    if ($user->typeu !== 'INFLUENCER') {
+        abort(403, 'Unauthorized action.');
+    }
+
+    // Followers by Country
+    $followersByCountry = DB::table('users')
+        ->join('connection', 'users.id', '=', 'connection.initiator_user_id')
+        ->where('connection.target_user_id', $user_id)
+        ->whereIn('connection.typer', ['FOLLOW', 'FRIEND'])
+        ->select(DB::raw('users.country as country, count(*) as count'))
+        ->groupBy('users.country')
+        ->orderBy('count', 'desc')
+        ->get();
+
+    // Followers by Age
+    $followersByAge = DB::table('users')
+        ->join('connection', 'users.id', '=', 'connection.initiator_user_id')
+        ->where('connection.target_user_id', $user_id)
+        ->whereIn('connection.typer', ['FOLLOW', 'FRIEND'])
+        ->select(DB::raw('users.age as age, count(*) as count'))
+        ->groupBy('users.age')
+        ->orderBy('count', 'desc')
+        ->get();
+
+    // Followers by Gender
+    $followersByGender = DB::table('users')
+        ->join('connection', 'users.id', '=', 'connection.initiator_user_id')
+        ->where('connection.target_user_id', $user_id)
+        ->whereIn('connection.typer', ['FOLLOW', 'FRIEND'])
+        ->select(DB::raw('users.gender as gender, count(*) as count'))
+        ->groupBy('users.gender')
+        ->orderBy('count', 'desc')
+        ->get();
+
+    // Posts Statistics
+    $posts = Post::where('owner_id', $user_id)->get();
+    $postLikes = $posts->mapWithKeys(function ($post) {
+        return [$post->id => $post->likes()->count()];
+    });
+    $postComments = $posts->mapWithKeys(function ($post) {
+        return [$post->id => $post->comments()->count()];
+    });
+
+    // Create Charts
+    $followersByCountryChart = Chartjs::build()
+        ->name('followersByCountryChart')
+        ->type('bar')
+        ->size(['width' => 400, 'height' => 400])
+        ->labels($followersByCountry->pluck('country')->toArray())
+        ->datasets([
+            [
+                'label' => 'Followers by Country',
+                'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                'borderColor' => 'rgba(75, 192, 192, 1)',
+                'data' => $followersByCountry->pluck('count')->toArray(),
+            ],
+        ])
+        ->options([
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+        ]);
+
+    $followersByAgeChart = Chartjs::build()
+        ->name('followersByAgeChart')
+        ->type('bar')
+        ->size(['width' => 400, 'height' => 400])
+        ->labels($followersByAge->pluck('age')->toArray())
+        ->datasets([
+            [
+                'label' => 'Followers by Age',
+                'backgroundColor' => 'rgba(153, 102, 255, 0.2)',
+                'borderColor' => 'rgba(153, 102, 255, 1)',
+                'data' => $followersByAge->pluck('count')->toArray(),
+            ],
+        ])
+        ->options([
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+        ]);
+
+    $followersByGenderChart = Chartjs::build()
+        ->name('followersByGenderChart')
+        ->type('pie')
+        ->size(['width' => 400, 'height' => 400])
+        ->labels($followersByGender->pluck('gender')->toArray())
+        ->datasets([
+            [
+                'label' => 'Followers by Gender',
+                'backgroundColor' => [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                ],
+                'borderColor' => [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                ],
+                'data' => $followersByGender->pluck('count')->toArray(),
+            ],
+        ])
+        ->options([
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+        ]);
+
+    $postLikesChart = Chartjs::build()
+        ->name('postLikesChart')
+        ->type('bar')
+        ->size(['width' => 400, 'height' => 400])
+        ->labels($postLikes->keys()->toArray())
+        ->datasets([
+            [
+                'label' => 'Post Likes',
+                'backgroundColor' => 'rgba(255, 159, 64, 0.2)',
+                'borderColor' => 'rgba(255, 159, 64, 1)',
+                'data' => $postLikes->values()->toArray(),
+            ],
+        ])
+        ->options([
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+        ]);
+
+    $postCommentsChart = Chartjs::build()
+        ->name('postCommentsChart')
+        ->type('bar')
+        ->size(['width' => 400, 'height' => 400])
+        ->labels($postComments->keys()->toArray())
+        ->datasets([
+            [
+                'label' => 'Post Comments',
+                'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                'borderColor' => 'rgba(75, 192, 192, 1)',
+                'data' => $postComments->values()->toArray(),
+            ],
+        ])
+        ->options([
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+        ]);
+
+    return view('pages.influencer', [
+        'user' => $user,
+        'followersByCountryChart' => $followersByCountryChart,
+        'followersByAgeChart' => $followersByAgeChart,
+        'followersByGenderChart' => $followersByGenderChart,
+        'postLikesChart' => $postLikesChart,
+        'postCommentsChart' => $postCommentsChart,
+        'followersByCountry' => $followersByCountry,
+        'followersByAge' => $followersByAge,
+        'followersByGender' => $followersByGender,
+        'postLikes' => $postLikes,
+        'postComments' => $postComments,
+    ]);
 }
 }
