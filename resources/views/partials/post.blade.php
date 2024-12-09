@@ -75,7 +75,8 @@
             '.username-link',
             '.edit-post-btn',
             '.delete-post-btn',
-            '.post-media-controls'
+            '.post-media-controls',
+            '.modal'
         ];
 
         document.body.addEventListener('click', function(event) {
