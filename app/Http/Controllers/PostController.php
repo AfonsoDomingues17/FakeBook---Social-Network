@@ -178,10 +178,13 @@ public function destroy($post_id)
         $media->delete(); // Delete the media record
     }
 
+    // Delete associated comments
+    $post->comments()->delete();
+
     // Delete the post
     $post->delete();
     
-    // Redirect to +revious page
+    // Redirect to previous page
     return redirect()->back();
 }
 
