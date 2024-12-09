@@ -65,3 +65,29 @@ document.querySelectorAll('.comment').forEach(comment => {
         }
     });
 });
+
+async function deleteComment(event, commentId) {
+    event.preventDefault();
+    const form = event.target;
+
+    if (!confirm('Are you sure you want to delete this comment?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value,
+            },
+        });
+
+        if(response.status === 204) {
+            document.getElementById(`comment-${commentId}`).remove();
+        } else {
+            console.error('Failed to delete comment:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Error during fetch request:', error);
+    }
+}

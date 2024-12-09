@@ -59,6 +59,7 @@ Route::post('/post/like', [PostController::class, 'like'])->name('post.like');
 Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
 Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
 Route::put('/comments/{comment_id}', [CommentController::class, 'update'])->name('comments.update');
+Route::delete('/comments/{comment_id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 // Admin
 
