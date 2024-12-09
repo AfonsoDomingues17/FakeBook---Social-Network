@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\Country;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log; // Import the Log facade
@@ -21,7 +21,8 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm(): View
     {
-        return view('auth.register');
+        $countries = Country::all();
+        return view('auth.register', compact('countries'));
     }
 
     /**
@@ -43,7 +44,9 @@ class RegisterController extends Controller
             'age' => 'required|integer|min:13',
             'bio' => 'nullable|string|max:250',
             'is_public' => 'required|boolean',
-            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gender' => 'required|string|in:Male,Female,Other',
+            'country' => 'required|string|exists:countries,name',
         ]);
         Log::info('Validation successful', $validatedData);
 
@@ -64,7 +67,9 @@ class RegisterController extends Controller
             'age' => $request->age,
             'bio' => $request->bio,
             'is_public' => $request->is_public,
-            'photo_url' => $photoUrl
+            'photo_url' => $photoUrl,
+            'gender' => $request->gender,
+            'country' => $request->country,
         ]);
 
         $credentials = $request->only('email', 'password');
