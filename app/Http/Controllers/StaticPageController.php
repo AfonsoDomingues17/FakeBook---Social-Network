@@ -6,6 +6,7 @@ use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\QuestionResponseMail;
+use Illuminate\Support\Facades\Log;
 
 class StaticPageController extends Controller
 {
@@ -15,16 +16,22 @@ class StaticPageController extends Controller
     }
     public function sendHelpForm(Request $request)
     {
+        $request->merge([
+            'is_unban' => $request->is_unban === 'true' ? true : false,
+        ]);
+
         $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|max:255',
-            'message' => 'required|max:500'
+            'message' => 'required|max:500',
+            'is_unban' => 'required|boolean'
         ]);
 
         Question::create([
             'name' => $request->name,
             'email' => $request->email,
-            'message' => $request->message
+            'message' => $request->message,
+            'is_unban' => $request->is_unban
         ]);
         return redirect()->back()->with('success', 'Your question has been submitted.');
     }

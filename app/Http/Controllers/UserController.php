@@ -16,93 +16,93 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Notification;
 use App\Events\FollowRequest;
+use App\Models\Banlist;
 
 class UserController extends Controller
 {
     public function showEditProfileForm($user_id)
-    {
-        
-            $user = User::findOrFail($user_id);
-            $this->authorize('update', $user);
-            return view('pages.editProfile', ['user'=> $user]);
-        
+    {  
+        $user = User::findOrFail($user_id);
+        $this->authorize('update', $user);
+        return view('pages.editProfile', ['user'=> $user]);   
     }
+
     public function getPhoto($user_id)
-{   
-    Log::info(message: 'Entrou no getPhoto');
-    $user = User::findOrFail($user_id);
-    Log::info($user->photo_url);
-    if ($user->photo_url) {
-        Log::info(message: 'phto_url exists');
+    {   
+        Log::info(message: 'Entrou no getPhoto');
+        $user = User::findOrFail($user_id);
+        Log::info($user->photo_url);
+        if ($user->photo_url) {
+            Log::info(message: 'phto_url exists');
 
-        $path = storage_path('app/private/' . $user->photo_url);
-        Log::info($path);
+            $path = storage_path('app/private/' . $user->photo_url);
+            Log::info($path);
 
-        if (!Storage::disk('private')->exists($user->photo_url)) {
-            abort(404);
+            if (!Storage::disk('private')->exists($user->photo_url)) {
+                abort(404);
+            }
+            $file = Storage::disk('private')->get($user->photo_url);
+            $type = Storage::disk('private')->mimeType($user->photo_url);
+
+            return Response::make($file, 200)->header("Content-Type", $type);
+        } else {
+            $defaultPath = storage_path('app/private/profile_pictures/default-profile.png');
+            Log::info($defaultPath);
+            if (!file_exists($defaultPath)) {
+                abort(404);
+            }
+
+            $file = file_get_contents($defaultPath);
+            $type = mime_content_type($defaultPath);
+            return response($file, 200)->header("Content-Type", $type);
         }
-
-        $file = Storage::disk('private')->get($user->photo_url);
-        $type = Storage::disk('private')->mimeType($user->photo_url);
-
-        return Response::make($file, 200)->header("Content-Type", $type);
-    } else {
-        $defaultPath = storage_path('app/private/profile_pictures/default-profile.png');
-        Log::info($defaultPath);
-        if (!file_exists($defaultPath)) {
-            abort(404);
-        }
-
-        $file = file_get_contents($defaultPath);
-        $type = mime_content_type($defaultPath);
-        return response($file, 200)->header("Content-Type", $type);
     }
-}
+
     public function getUsers(){
         $users = User::take(10)->get();
         return view('pages.homepage', ['users' => $users]);
     }
 
     public function getSuggestedUsers()
-{
-    $suggestedUsers = [];
-    if (Auth::check()) {
-        $user = Auth::user();
-        $blockedUserIds = $user->blockedUsers()->pluck('target_user_id')->merge($user->blockedBy()->pluck('initiator_user_id'));
-        $users = User::where('id', '!=', $user->id)
-                ->whereNotIn('id', $user->following()->pluck('id'))
-                ->whereNotIn('id', $blockedUserIds)
-                ->where('typeu', '!=', 'ADMIN')
+    {
+        $suggestedUsers = [];
+        if (Auth::check()) {
+            $user = Auth::user();
+            $blockedUserIds = $user->blockedUsers()->pluck('target_user_id')->merge($user->blockedBy()->pluck('initiator_user_id'));
+            $users = User::where('id', '!=', $user->id)
+                    ->whereNotIn('id', $user->following()->pluck('id'))
+                    ->whereNotIn('id', $blockedUserIds)
+                    ->where('typeu', '!=', 'ADMIN')
+                    ->inRandomOrder()
+                    ->take(5)
+                    ->get();
+
+            foreach ($users as $suggestedUser) {
+                $isInWatchlist = Watchlist::where('admin_id', $user->id)->where('user_id', $suggestedUser->id)->exists();
+                $suggestedUser->isInWatchlist = $isInWatchlist;
+                $suggestedUsers[] = $suggestedUser;
+            }
+        } else {
+            $users = User::where('typeu', '!=', 'ADMIN')
                 ->inRandomOrder()
                 ->take(5)
                 ->get();
 
-        foreach ($users as $suggestedUser) {
-            $isInWatchlist = Watchlist::where('admin_id', $user->id)->where('user_id', $suggestedUser->id)->exists();
-            $suggestedUser->isInWatchlist = $isInWatchlist;
-            $suggestedUsers[] = $suggestedUser;
+            foreach ($users as $suggestedUser) {
+                $suggestedUser->isInWatchlist = false;
+                $suggestedUsers[] = $suggestedUser;
+            }
         }
-    } else {
-        $users = User::where('typeu', '!=', 'ADMIN')
-            ->inRandomOrder()
-            ->take(5)
-            ->get();
 
-        foreach ($users as $suggestedUser) {
-            $suggestedUser->isInWatchlist = false;
-            $suggestedUsers[] = $suggestedUser;
-        }
+        return $suggestedUsers;
     }
-
-    return $suggestedUsers;
-}
-        
-    
+          
     public function getNumberPosts($user_id){
         $user = User::findOrFail($user_id);
         $n_posts = $user->posts()->count();
         return $n_posts;
     }
+
     public function getNumberFollowers($user_id){
         $user = User::findOrFail($user_id);
         $n_followers = $user->followers()->count();
@@ -114,11 +114,13 @@ class UserController extends Controller
         $n_following = $user->following()->count();
         return $n_following;
     }
+
     public function getNumberNotifications($user_id){
         $user = User::findOrFail($user_id);
         $n_notifications = $user->notifications()->count();
         return $n_notifications;
     }
+
     public function createUserbyAdmin(Request $request)
     {
         
@@ -162,67 +164,67 @@ class UserController extends Controller
         return redirect()->route('profile', ['user_id' => $user->id])
                      ->with('success', 'User created successfully.');
     }
+
     public function showProfile($user_id)
-{
-    // Check if the user_id is a valid integer
-    if (!is_numeric($user_id) || (int)$user_id != $user_id) {
-        // Set an error message to be passed to the view
-        $error_message = 'Invalid user ID provided.';
-        $user = null; // Set user to null since we can't find a user
-    } else {
-        // Proceed with the valid user_id
-        $user = User::find($user_id);
-
-        if (!$user) {
-            // If the user was not found in the database, set an error message
-            $error_message = 'User not found.';
+    {
+        // Check if the user_id is a valid integer
+        if (!is_numeric($user_id) || (int)$user_id != $user_id) {
+            // Set an error message to be passed to the view
+            $error_message = 'Invalid user ID provided.';
+            $user = null; // Set user to null since we can't find a user
         } else {
+            // Proceed with the valid user_id
+            $user = User::find($user_id);
 
-            $currentUser = Auth::user();
-            $isBlockedBy = false;
-
-            if ($currentUser) {
-                $isBlocked = $currentUser->blockedUsers()->where('target_user_id', $user_id)->exists();
-                $isBlockedBy = $user->blockedUsers()->where('target_user_id', $currentUser->id)->exists();
-            }
-
-            if ($isBlockedBy) {
-                // If the current user is blocked by the user, set an error message
-                $error_message = 'This user has blocked you.';
-                $user = null; // Set user to null to prevent displaying profile information
+            if (!$user) {
+                // If the user was not found in the database, set an error message
+                $error_message = 'User not found.';
             } else {
-            // No errors, proceed with fetching the user posts and data
-            $n_posts = $this->getNumberPosts($user_id);
-            $n_followers = $this->getNumberFollowers($user_id);
-            $n_following = $this->getNumberFollowing($user_id);
-            $posts = $user->posts()->orderBy('datecreation', 'desc')->get();
 
-            $isInWatchlist = false;
-            if (Auth::check() && Auth::user()->isAdmin()) {
-                $isInWatchlist = Auth::user()->watchlistedUsers()->where('user_id', $user_id)->exists();
+                $currentUser = Auth::user();
+                $isBlockedBy = false;
+
+                if ($currentUser) {
+                    $isBlocked = $currentUser->blockedUsers()->where('target_user_id', $user_id)->exists();
+                    $isBlockedBy = $user->blockedUsers()->where('target_user_id', $currentUser->id)->exists();
+                }
+
+                if ($isBlockedBy) {
+                    // If the current user is blocked by the user, set an error message
+                    $error_message = 'This user has blocked you.';
+                    $user = null; // Set user to null to prevent displaying profile information
+                } else {
+                    // No errors, proceed with fetching the user posts and data
+                    $n_posts = $this->getNumberPosts($user_id);
+                    $n_followers = $this->getNumberFollowers($user_id);
+                    $n_following = $this->getNumberFollowing($user_id);
+                    $posts = $user->posts()->orderBy('datecreation', 'desc')->get();
+
+                    $isInWatchlist = false;
+                    if (Auth::check() && Auth::user()->isAdmin()) {
+                        $isInWatchlist = Auth::user()->watchlistedUsers()->where('user_id', $user_id)->exists();
+                    }
+
+                    return view('pages.user', [
+                        'user' => $user,
+                        'n_posts' => $n_posts,
+                        'n_followers' => $n_followers,
+                        'n_following' => $n_following,
+                        'posts' => $posts,
+                        'isInWatchlist' => $isInWatchlist,
+                        'isBlocked' => $isBlocked ?? false,
+                        'error_message' => $error_message ?? null
+                    ]);
+                }
             }
-
-            return view('pages.user', [
-                'user' => $user,
-                'n_posts' => $n_posts,
-                'n_followers' => $n_followers,
-                'n_following' => $n_following,
-                'posts' => $posts,
-                'isInWatchlist' => $isInWatchlist,
-                'isBlocked' => $isBlocked ?? false,
-                'error_message' => $error_message ?? null
-            ]);
         }
+
+        // If we reached here, it means there was an invalid user_id or no user found
+        return view('pages.user', [
+            'user' => $user,
+            'error_message' => $error_message
+        ]);
     }
-}
-
-    // If we reached here, it means there was an invalid user_id or no user found
-    return view('pages.user', [
-        'user' => $user,
-        'error_message' => $error_message
-    ]);
-}
-
 
     public function updateProfile(Request $request, $user_id)
     {   
@@ -272,6 +274,7 @@ class UserController extends Controller
         $user->save();
         return redirect()->route('profile', ['user_id' => $user_id]);
     }
+
     public function follow($user_id)
     {
         $user = User::findOrFail($user_id);
@@ -304,6 +307,7 @@ class UserController extends Controller
         return response()->json(['success' => true, 'message' => 'User followed successfully.', 'isFollowing' => $is_Following]);
 
     }
+
     public function deleteFollowRequest($user_id){
         $notification = Notification::where('user_id_dest', $user_id)
         ->where('user_id_src', Auth::id())
@@ -314,6 +318,7 @@ class UserController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Request deleted successfully.']);
     }
+
     public function declineFollowRequest($notification_id){
         $notification = Notification::findOrFail($notification_id);
         $notification->delete();
@@ -426,6 +431,7 @@ class UserController extends Controller
 
         return redirect()->route('homepage')->with('success', 'Account deleted successfully.');
     }
+
     public function adminPage()
     {
         if (Auth::check() && Auth::user()->isAdmin()) {
@@ -441,57 +447,104 @@ class UserController extends Controller
     }
 
     public function addToWatchlist($user_id)
-{
-    if (Auth::check() && Auth::user()->isAdmin()) {
-        $admin = Auth::user();
+    {
+        if (Auth::check() && Auth::user()->isAdmin()) {
+            $admin = Auth::user();
 
-        if (!$admin->watchlistedUsers()->where('user_id', $user_id)->exists()) {
-            $admin->watchlistedUsers()->attach($user_id, [
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            if (!$admin->watchlistedUsers()->where('user_id', $user_id)->exists()) {
+                $admin->watchlistedUsers()->attach($user_id, [
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            return response()->json(['success' => true, 'message' => 'User added to watchlist.']);
+        }
+        return response()->json(['success' => false, 'message' => 'You do not have admin access.'], 403);
+    }
+
+    public function removeFromWatchlist($user_id)
+    {
+        if (Auth::check() && Auth::user()->isAdmin()) {
+            $admin = Auth::user();
+
+            $admin->watchlistedUsers()->detach($user_id);
+
+            return response()->json(['success' => true, 'message' => 'User removed from watchlist.']);
+        }
+        return response()->json(['success' => false, 'message' => 'You do not have admin access.'], 403);
+    }
+
+    public function blockUser($user_id)
+    {
+        $user = User::findOrFail($user_id);
+        $currentUser = Auth::user();
+        $currentUser->following()->detach($user_id);
+        // Check if the user is already blocked
+        if (!$currentUser->blockedUsers()->where('target_user_id', $user_id)->exists()) {
+            $currentUser->blockedUsers()->attach($user_id, ['typer' => 'BLOCK']);
         }
 
-        return response()->json(['success' => true, 'message' => 'User added to watchlist.']);
-    }
-    return response()->json(['success' => false, 'message' => 'You do not have admin access.'], 403);
-}
-
-public function removeFromWatchlist($user_id)
-{
-    if (Auth::check() && Auth::user()->isAdmin()) {
-        $admin = Auth::user();
-
-        $admin->watchlistedUsers()->detach($user_id);
-
-        return response()->json(['success' => true, 'message' => 'User removed from watchlist.']);
-    }
-    return response()->json(['success' => false, 'message' => 'You do not have admin access.'], 403);
-}
-
-public function blockUser($user_id)
-{
-    $user = User::findOrFail($user_id);
-    $currentUser = Auth::user();
-    $currentUser->following()->detach($user_id);
-    // Check if the user is already blocked
-    if (!$currentUser->blockedUsers()->where('target_user_id', $user_id)->exists()) {
-        $currentUser->blockedUsers()->attach($user_id, ['typer' => 'BLOCK']);
+        return redirect()->back()->with('success', 'User blocked successfully.');
     }
 
-    return redirect()->back()->with('success', 'User blocked successfully.');
-}
+    public function unblockUser($user_id)
+    {
+        $user = User::findOrFail($user_id);
+        $currentUser = Auth::user();
 
-public function unblockUser($user_id)
-{
-    $user = User::findOrFail($user_id);
-    $currentUser = Auth::user();
+        // Check if the user is blocked
+        if ($currentUser->blockedUsers()->where('target_user_id', $user_id)->exists()) {
+            $currentUser->blockedUsers()->detach($user_id);
+        }
 
-    // Check if the user is blocked
-    if ($currentUser->blockedUsers()->where('target_user_id', $user_id)->exists()) {
-        $currentUser->blockedUsers()->detach($user_id);
+        return redirect()->back()->with('success', 'User unblocked successfully.');
     }
 
-    return redirect()->back()->with('success', 'User unblocked successfully.');
-}
+    public function banUser(Request $request, $user_id)
+    {
+        if(Auth::check() && Auth::user()->isAdmin())
+        {
+            if(!Banlist::where('user_id', $user_id)->exists())
+            {
+                $validatedData = $request->validate([
+                    'reason' => 'required|string|max:250',
+                ]);
+                $validatedData['user_id'] = $user_id;
+                $ban = Banlist::create($validatedData);
+            }
+        }
+        return redirect()->route('profile', ['user_id' => $user_id]);
+    }
+
+    public function unbanUser($user_id)
+    {
+        if(Auth::check() && Auth::user()->isAdmin())
+        {
+            if(Banlist::where('user_id', $user_id)->exists())
+            {
+                Banlist::where('user_id', $user_id)->delete();
+            }
+        }
+        return redirect()->route('profile', ['user_id' => $user_id]);
+    }
+
+    public function acceptUnbanRequest($id)
+    {
+        if(Auth::check() && Auth::user()->isAdmin())
+        {   
+            $question = Question::findOrFail($id);
+            $user_email = $question->email;
+            $user = User::where('email', $user_email)->first();
+            if($user)
+            {
+                if(Banlist::where('user_id', $user->id)->exists())
+                {
+                    Banlist::where('user_id', $user->id)->delete();
+                    $question->delete();
+                }
+            }
+        }
+        return redirect()->route('admin.page');
+    }
 }

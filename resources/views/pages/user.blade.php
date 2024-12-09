@@ -22,12 +22,14 @@
                     @if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
                         <a href="{{route('editprofile',['user_id' => $user->id])}}">Edit Profile</a> 
                     @endif
-                    @if (Auth::user()->isAdmin())
+                    @if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
                         <form action="{{ route('deleteuser', ['user_id' => $user->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this account? This action cannot be undone.');">
                             @csrf
                             @method('DELETE')
                             <button type="submit">Delete account</button>
                         </form>
+                    @endif
+                    @if (Auth::user()->isAdmin())
                         <div id="watchlist-actions-{{ $user->id }}" data-user-id="{{ $user->id }}">
                             @if ($user->isInWatchlist)
                                 <form id="remove-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.remove', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
@@ -41,6 +43,17 @@
                                 </form>
                             @endif
                         </div>
+                        @if($user->isBanned())
+                        <form action="{{ route('admin.banlist.remove', ['user_id' => $user->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to unban this account?');">
+                            @csrf
+                            <button type="submit">Unban account</button>
+                        </form>
+                        @else
+                        <button id="banUser" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#banUserModal">
+                            Ban user
+                        </button>
+                        @endif
+                        @include('partials.ban_user', ['user' => $user])
                     @endif
                     @if (!Auth::user()->isAdmin() && Auth::user()->id != $user->id)
                         @if ($isBlocked)
@@ -80,7 +93,7 @@
             <span id="bio"><p>{{$user->bio}}</p></span><br>
         </div>
     </section>
-    @if (!$isBlocked)
+    @if (!$isBlocked && (Auth::check() && !Auth::user()->isBanned()))
     <section id="user_posts">
         @if (Auth::check() && $user->id == Auth::user()->id) <!-- If the user is logged in and is the owner of the profile -->
             <section id="myposts">
