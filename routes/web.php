@@ -63,7 +63,9 @@ Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
 Route::post('/admin/watchlist/add/{user_id}', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
 Route::post('/admin/watchlist/remove/{user_id}', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
 Route::post('admin/users/create', [UserController::class, 'createUserbyAdmin'])->name('admin.create');
-
+Route::post('admin/banlist/add/{user_id}', [UserController::class, 'banUser'])->name('admin.banlist.add');
+Route::post('admin/banlist/remove/{user_id}', [UserController::class, 'unbanUser'])->name('admin.banlist.remove');
+Route::post('admin/unban/request/{id}', [UserController::class, 'acceptUnbanRequest'])->name('admin.unban.request');
 
 // Media
 Route::get('/media/{media_id}', [MediaController::class, 'show'])->name('media.show');

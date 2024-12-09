@@ -112,6 +112,12 @@
                     <label for="email">Email:</label>
                     <input type="email" name="email" id="email" class="form-control" required>
                 </div>
+                @if (Auth::check() && Auth::user()->isBanned())
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="is_unban" id="unban_request" value="true">
+                    <label class="form-check-label" for="unban_request">I want to request my unban</label>
+                </div>
+                @endif
                 <div class="form-group">
                     <label for="message">Message:</label>
                     <textarea name="message" id="message" class="form-control" required></textarea>

@@ -36,31 +36,30 @@
                     <h1>
                         <a href="{{ url('/') }}">FakeBook!</a>
                     </h1>
-                    <form  action="{{route('search')}}" method="GET">
-                        <div style="position: relative;">
-                            <input id="search" type="text" name="query" placeholder="search for users">
-                            <input type="hidden" name="type" value="users">
-                            <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
-                        </div>
-                    </form>
-                    
-            
-                    
-                    @if(Route::currentRouteName() === 'homepage' && Auth::check() && !Auth::user()->isAdmin())
-                    
-                        <section id="timeline_options">
-                            <a href="{{ route('homepage', ['type' => 'public']) }}">
-                                <button class="timeline" id="public">Public Posts</button>
-                            </a>
-                            <a href="{{ route('homepage', ['type' => 'following']) }}" >
-                                <button class="timeline" id="following">Following Posts</button>
-                            </a>
-                        </section>
-                    @endif
+                        @if((Auth::check() && !Auth::user()->isBanned()) || !Auth::check())
+                        <form  action="{{route('search')}}" method="GET">
+                            <div style="position: relative;">
+                                <input id="search" type="text" name="query" placeholder="search for users">
+                                <input type="hidden" name="type" value="users">
+                                <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
+                            </div>
+                        </form>
+                        @endif
+                        @if(Route::currentRouteName() === 'homepage' && Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isBanned())
+                        
+                            <section id="timeline_options">
+                                <a href="{{ route('homepage', ['type' => 'public']) }}">
+                                    <button class="timeline" id="public">Public Posts</button>
+                                </a>
+                                <a href="{{ route('homepage', ['type' => 'following']) }}" >
+                                    <button class="timeline" id="following">Following Posts</button>
+                                </a>
+                            </section>
+                        @endif
 
-                    @if(Route::currentRouteName() === 'search')
-                        @include('partials.search')
-                    @endif
+                        @if(Route::currentRouteName() === 'search')
+                            @include('partials.search')
+                        @endif
 
                     <section id="account-options">
                         @if (Auth::check())
@@ -142,29 +141,31 @@
         <section id="sidebar">
             <div class= "navigators">
                 <a class="auth" href="{{ url('/') }}"><i class="fa-solid fa-house"></i><p>Home</p></a>
-                <a class="auth" href=""><i class="fa-solid fa-user-group"></i><p>Groups</p></a>
-                @if(Auth::check() && Auth::user()->typeu === 'INFLUENCER')
-                    <a  class="auth" href="{{ route('influencer.page', Auth::user()->id) }}"> <i class="fa-solid fa-chart-line"></i> <p>View Statistics </p> </a>
-                @endif
-                @if(Auth::check() && !Auth::user()->isAdmin())
-                <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
+                @if(Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isBanned())
+                    <a class="auth" href=""><i class="fa-solid fa-user-group"></i><p>Groups</p></a>
+                    @if(Auth::check() && Auth::user()->typeu === 'INFLUENCER')
+                        <a  class="auth" href="{{ route('influencer.page', Auth::user()->id) }}"> <i class="fa-solid fa-chart-line"></i> <p>View Statistics </p> </a>
+                    @endif
+                    <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
                 @endif
                 @if(Auth::check())
-                <a class="auth" href="{{ route('direct_chats.index') }}"><i class="fa-regular fa-paper-plane"></i><p>Messages</p></a>
-                <a class="auth" href="{{ Auth::user()->isAdmin() ? route('admin.page') : route('profile', ['user_id' => Auth::user()->id]) }}">
-                    <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
-                    <p>{{ Auth::user()->name }}</p>
-                </a>
-                <a id="buttonLog" class="button" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <p>Logout</p>
-                </a>
-                    @if(Auth::user()->isAdmin())
-                        <a class="auth" href="{{url('/register')}}"><i class="fa-solid fa-user-plus"></i><p>Create User</p></a>
+                    @if(!Auth::user()->isAdmin() && !Auth::user()->isBanned())
+                        <a class="auth" href="{{ route('direct_chats.index') }}"><i class="fa-regular fa-paper-plane"></i><p>Messages</p></a>
                     @endif
+                    <a class="auth" href="{{ Auth::user()->isAdmin() ? route('admin.page') : route('profile', ['user_id' => Auth::user()->id]) }}">
+                        <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
+                        <p>{{ Auth::user()->name }}</p>
+                    </a>
+                    <a id="buttonLog" class="button" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <p>Logout</p>
+                    </a>
+                        @if(Auth::user()->isAdmin())
+                            <a class="auth" href="{{url('/register')}}"><i class="fa-solid fa-user-plus"></i><p>Create User</p></a>
+                        @endif
                 @else
-                <a id="buttonLogin" class="button" href="{{ url('/login') }}"> <p>Login</p></a>
-                <a id="buttonRegister" class="button" href="{{ url('/register') }}"> <p>Register</p></a>
+                    <a id="buttonLogin" class="button" href="{{ url('/login') }}"> <p>Login</p></a>
+                    <a id="buttonRegister" class="button" href="{{ url('/register') }}"> <p>Register</p></a>
                 @endif
                 <a class="auth" href="{{ route('help') }}"><i class="fa-solid fa-info-circle"></i><p>Help/Contacts</p></a>
                 <a class="auth" href="{{ route('about') }}"><i class="fa-solid fa-question-circle"></i><p>About Us</p></a>
