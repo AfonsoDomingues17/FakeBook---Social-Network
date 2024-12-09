@@ -930,14 +930,7 @@ button#addPost{
   border-radius: 0.25rem;
 }
 
-.modal-body form textarea {
-  width: 90%;
-  padding: 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  resize: none;
-  overflow: hidden;
-}
+
 
 #media-preview {
   display: flex;
@@ -953,7 +946,7 @@ button#addPost{
 .image-wrapper img {
   width: 100%;
   height: auto;
-  object-fit: contain; /* Maintain aspect ratio */
+  object-fit: contain; 
 }
 
 .image-label {
@@ -1091,7 +1084,7 @@ button#addPost{
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: white;
   margin: 5% auto;
   padding: 20px;
   border: 1px solid #888;
@@ -1099,18 +1092,44 @@ button#addPost{
   max-width: 500px;
 }
 
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+#modal-footer {
+  display: flex;
+  justify-content: center;
+  i {
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0.5em;
+    background-color: #F0F2F5;
+    border-radius: 50%;
+  }
+  i:hover{
+    background-color: black;
+    color: white;
+  }
 }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+.modal-body{
+  section#CreationPage form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    #form-image{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+    }
+    textarea {
+      resize: none;
+      overflow: hidden;
+      height: 150px;
+      width: 100%;
+    }
+    button{
+      margin: 0 auto;
+    }
+  }
+  
 }
 
 

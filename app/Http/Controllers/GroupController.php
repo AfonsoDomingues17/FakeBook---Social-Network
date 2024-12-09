@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class GroupController extends Controller
 {
@@ -20,7 +23,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -28,7 +31,19 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'description' => 'nullable|string|max:255',
+            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        Group::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'photo_url' => $request->photo_url,
+            'owner_id' => Auth::id()
+        ]);
+        return redirect()->route('/');
     }
 
     /**

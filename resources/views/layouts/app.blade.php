@@ -33,7 +33,7 @@
     <body>
     <header>
                 <div class="navbar">
-                    <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('LOGO.png') }}" alt="FakeBook Logo" width="50" height="50"></a>
+                    <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('public/LOGO.png') }}" alt="FakeBook Logo" width="50" height="50"></a>
                     <h1>
                         <a href="{{ url('/') }}">FakeBook!</a>
                     </h1>
@@ -144,11 +144,11 @@
         <section id="sidebar">
             <div class= "navigators">
                 <a class="auth" href="{{ url('/') }}"><i class="fa-solid fa-house"></i><p>Home</p></a>
+                @if(Auth::check())
                 <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#groupCreationModal"><i class="fa-solid fa-user-group"></i><p>Create Group</p></a> 
-                @if(Auth::check() && !Auth::user()->isAdmin())
+                @if(!Auth::user()->isAdmin())
                 <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
                 @endif
-                @if(Auth::check())
                 <a class="auth" href="{{ route('direct_chats.index') }}"><i class="fa-regular fa-paper-plane"></i><p>Messages</p></a>
                 <a class="auth" href="{{ Auth::user()->isAdmin() ? route('admin.page') : route('profile', ['user_id' => Auth::user()->id]) }}">
                     <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
