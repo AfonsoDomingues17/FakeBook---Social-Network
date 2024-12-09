@@ -143,6 +143,9 @@
                 <a class="auth" href="{{ url('/') }}"><i class="fa-solid fa-house"></i><p>Home</p></a>
                 @if(Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isBanned())
                     <a class="auth" href=""><i class="fa-solid fa-user-group"></i><p>Groups</p></a>
+                    @if(Auth::check() && Auth::user()->typeu === 'INFLUENCER')
+                        <a  class="auth" href="{{ route('influencer.page', Auth::user()->id) }}"> <i class="fa-solid fa-chart-line"></i> <p>View Statistics </p> </a>
+                    @endif
                     <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
                 @endif
                 @if(Auth::check())

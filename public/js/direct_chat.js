@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             scrollToBottom();
         }
     });
-
+    
     channel.bind('delete-message', function(data) {
         var messageId = data.message_id;
         var messageElement = document.querySelector('.message[data-message-id="' + messageId + '"]');
