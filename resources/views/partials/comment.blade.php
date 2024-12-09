@@ -5,7 +5,7 @@
     </div>
 
     <p>{{ $comment->content }}</p>
-    @if (Auth::check() && Auth::user()->id == $comment->user->id || Auth::user()->isAdmin())
+    @if (Auth::check() && (Auth::user()->id == $comment->user->id || Auth::user()->isAdmin()))
         <div class="comment-options" style="display: none; justify-content: space-between; margin-top: 5px">
             <button class="edit-link btn btn-link" onclick="toggleEditForm({{ $comment->id }})">Edit</button>
             <form action="{{ route('comments.destroy', ['comment_id' => $comment->id]) }}" method="POST" onsubmit="deleteComment(event, {{ $comment->id }});">
