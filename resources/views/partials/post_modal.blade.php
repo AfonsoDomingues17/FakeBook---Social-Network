@@ -1,4 +1,3 @@
-<script src="{{ asset('js/post-modal.js') }}"></script>
 <div class="modal fade" id="postModal-{{ $post->id }}" tabindex="-1" aria-labelledby="postModalLabel-{{ $post->id }}" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -81,3 +80,5 @@
         </div>
     </div>
 </div>
+
+<script src="{{ asset('js/post-modal.js') }}"></script>

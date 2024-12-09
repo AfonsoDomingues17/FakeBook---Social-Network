@@ -1,3 +1,12 @@
+// Used to load the edit-comment.js script to be executed when creating a comment
+function loadScript(callback) {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '/js/edit-comment.js'; // Hardcoded URL
+    script.onload = callback;
+    document.head.appendChild(script);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.modal').forEach(modal => {
         const postId = modal.getAttribute('id').split('-')[1];
@@ -56,7 +65,7 @@ document.querySelectorAll('form[id^="comment-form-"]').forEach((form) => {
                 const html = await response.text();
                 const commentsSection = document.getElementById(`comments-section-${postId}`);
                 commentsSection.insertAdjacentHTML('beforeend', html); // Append the new comment
-                form.reset(); // Clear the form
+                loadScript(form.reset());
             }
         } catch (error) {
             console.error('Error during fetch request:', error);
