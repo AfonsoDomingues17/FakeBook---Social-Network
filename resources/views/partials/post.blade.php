@@ -63,8 +63,40 @@
         initMediaCarousel({{ $post->id }}, mediaUrls{{ $post->id }});
     </script>
     @endif
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal-{{ $post->id }}">View Post</button>
+    <button id="view-post-btn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal-{{ $post->id }}" style="display: none">View Post</button>
     @include('partials.edit_post', ['post' => $post, 'modalId' => 'editPostModal-' . $post->id])
     @include('partials.post_modal', ['post' => $post])
 </article>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const avoid = [
+            '.like-button',
+            '.username-link',
+            '.edit-post-btn',
+            '.delete-post-btn',
+            '.post-media-controls'
+        ];
+
+        document.body.addEventListener('click', function(event) {
+            const post = event.target.closest('.post');
+            if (post) {
+                const isExcluded = avoid.some(selector => event.target.closest(selector));
+                if (!isExcluded) {
+                    const viewPostBtn = post.querySelector('#view-post-btn');
+                    if (viewPostBtn) {
+                        viewPostBtn.click();
+                    }
+                }
+            }
+        });
+
+        avoid.forEach(selector => {
+            document.querySelectorAll(selector).forEach(element => {
+                element.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                });
+            });
+        });
+    });
+</script>
