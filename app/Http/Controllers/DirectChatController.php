@@ -13,9 +13,17 @@ class DirectChatController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $directChats = DirectChat::where('user1_id', $user->id)
-            ->orWhere('user2_id', $user->id)
-            ->get();
+
+        // Get the IDs of users that the current user has blocked or has been blocked by
+        $blockedUserIds = $user->blockedUsers()->pluck('target_user_id')->merge($user->blockedBy()->pluck('initiator_user_id'));
+
+        // Retrieve direct chats excluding those with blocked users
+        $directChats = DirectChat::where(function ($query) use ($user) {
+            $query->where('user1_id', $user->id)
+                  ->orWhere('user2_id', $user->id);
+        })->whereNotIn('user1_id', $blockedUserIds)
+          ->whereNotIn('user2_id', $blockedUserIds)
+          ->get();
 
         return view('pages.direct_chats', compact('directChats'));
     }

@@ -22,7 +22,7 @@ class Post extends Model
     }
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'postCategory', 'post_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'postcategory', 'post_id', 'category_id');
     }
     public function media()
     {
@@ -33,10 +33,10 @@ class Post extends Model
         return $this->belongsTo(User::class, 'owner_id'); 
     }
     public function taggedUsers(){
-        return $this->belongsToMany(Post::class, 'postTag', 'post_id','tagged_user_id');
+        return $this->belongsToMany(Post::class, 'posttag', 'post_id','tagged_user_id');
         }
     public function likedByUsers(){
-            return $this->belongsToMany(Post::class, 'postLikes', 'post_id', 'user_id');
+            return $this->belongsToMany(Post::class, 'postlikes', 'post_id', 'user_id');
     }
 
     public function getNumberOfComments()
@@ -46,6 +46,6 @@ class Post extends Model
 
     public function getNumberOfLikes()
     {
-        return $this->likes()->count();
+        return $this->likedByUsers()->count();
     }
 }

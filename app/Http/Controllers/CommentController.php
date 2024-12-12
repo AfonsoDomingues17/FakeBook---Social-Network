@@ -15,6 +15,12 @@ class CommentController extends Controller
         //
     }
 
+    public function getPostComments($post_id)
+    {
+        $comments = Comment::where('post_id', $post_id)->get();
+        return view('partials.comment', compact('comments'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -30,13 +36,14 @@ class CommentController extends Controller
     {
         $validatedData = $request->validate([
             'content' => 'required|string|max:1000',
-            'post_id' => 'required|integer|exists:posts,id',
-            'user_id' => 'required|integer|exists:users,id',
+            'post_id' => 'required|integer|exists:post,id',
         ]);
 
-        Comment::create($validatedData);
+        $validatedData['author_id'] = auth()->id();
 
-        return redirect()->route('comments.index');
+        $comment = Comment::create($validatedData);
+
+        return view('partials.comment', ['comment' => $comment])->render();
     }
 
     /**
@@ -50,32 +57,39 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Comment $comment)
+    public function edit()
     {
-        return view('comments.edit', compact('comment'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $comment_id)
     {
+        $comment = Comment::findOrFail($comment_id);
+        $this->authorize('update', $comment);
+
         $validatedData = $request->validate([
             'content' => 'required|string|max:1000',
         ]);
-    
+        $validatedData['is_edited'] = true;
+
         $comment->update($validatedData);
-    
-        return redirect()->route('comments.show', $comment);
+
+        return $comment->content;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy($comment_id)
     {
+        $comment = Comment::findOrFail($comment_id);
+        $this->authorize('delete', $comment);
+
         $comment->delete();
 
-        return redirect()->route('comments.index');
+        return response('Successful Delete', 204);
     }
 }

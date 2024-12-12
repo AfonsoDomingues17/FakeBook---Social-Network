@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('users', searchQuery);
             window.searchType = 'users'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
-            document.getElementById('category-search').style.display = 'none';
+            document.getElementById('filter-dropdown').style.display = 'none';
+            document.getElementById('order-dropdown').style.display = 'none';
             uncheckAllCheckboxes();
         });
     }
@@ -43,7 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('posts', searchQuery);
             window.searchType = 'posts'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
-            document.getElementById('category-search').style.display = 'block';
+            document.getElementById('filter-dropdown').style.display = 'block';
+            document.getElementById('order-dropdown').style.display = 'block';
         });
     }
     
@@ -55,7 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('groups', searchQuery);
             window.searchType = 'groups'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
-            document.getElementById('category-search').style.display = 'none';
+            document.getElementById('filter-dropdown').style.display = 'none';
+            document.getElementById('order-dropdown').style.display = 'none';
             uncheckAllCheckboxes();
         });
     }

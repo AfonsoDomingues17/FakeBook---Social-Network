@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\DirectChatController;
@@ -46,6 +47,7 @@ Route::get('/users/{user_id}/photo', [UserController::class, 'getPhoto'])->name(
 Route::delete('/users/{user_id}/delete', [UserController::class, 'destroy'])->name('deleteuser');
 Route::post('/block/users/{user_id}', [UserController::class, 'blockUser'])->name('block');
 Route::delete('/unblock/users/{user_id}', [UserController::class, 'unblockUser'])->name('unblock');
+Route::get('/influencer/{user_id}', [UserController::class, 'showInfluencerPage'])->name('influencer.page');
 // Posts
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
@@ -60,14 +62,20 @@ Route::post('/post/like', [PostController::class, 'like'])->name('post.like');
 Route::post('/groups/create', [GroupController::class, 'createGroup'])->name('group.create');
 Route::get('/groups/{group_id}/photo', [GroupController::class, 'getPhoto'])->name('groupPhoto');
 Route::get('/groups/{group_id}', [GroupController::class, 'show'])->name('group.show');
-
+// Comments
+Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
+Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
+Route::put('/comments/{comment_id}', [CommentController::class, 'update'])->name('comments.update');
+Route::delete('/comments/{comment_id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 // Admin
 Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
 Route::post('/admin/watchlist/add/{user_id}', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
 Route::post('/admin/watchlist/remove/{user_id}', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
 Route::post('admin/users/create', [UserController::class, 'createUserbyAdmin'])->name('admin.create');
-
+Route::post('admin/banlist/add/{user_id}', [UserController::class, 'banUser'])->name('admin.banlist.add');
+Route::post('admin/banlist/remove/{user_id}', [UserController::class, 'unbanUser'])->name('admin.banlist.remove');
+Route::post('admin/unban/request/{id}', [UserController::class, 'acceptUnbanRequest'])->name('admin.unban.request');
 
 // Media
 Route::get('/media/{post_id}', [MediaController::class, 'show'])->name('media.show');

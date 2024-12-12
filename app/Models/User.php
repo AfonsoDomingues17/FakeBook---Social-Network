@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'age', 'bio', 'is_public', 'photo_url', 'typeU'
+        'name', 'username', 'email', 'password', 'age', 'bio', 'is_public', 'photo_url', 'typeU','country', 'gender'
     ];
 
     /**
@@ -173,5 +173,10 @@ public function blockedUsers()
     {
         return $this->belongsToMany(User::class, 'connection', 'target_user_id', 'initiator_user_id')
                     ->wherePivot('typer', 'BLOCK');
+    }
+
+    public function isBanned()
+    {
+        return $this->hasOne(Banlist::class, 'user_id')->exists();
     }
 }

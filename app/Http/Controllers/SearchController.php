@@ -46,20 +46,25 @@ class SearchController extends Controller
 
             $users = $usersFiltered;
         } elseif ($type === 'posts') {
-            $categories = request()->query('categories', 'all'); // Defaults to 'all' if 'category' is not in the URL
-
-            // If it's not 'all', convert the string into an array
+            $categories = request()->query('categories', 'all'); 
+            $order = request()->query('order', 'relevance');
             if ($categories !== 'all') {
                 $categories = explode(',', $categories);
             }
 
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-            $postQuery = Post::where(function($query) use ($tsQuery) {
-                $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                    ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
-            })->paginate(10, ['*'], 'page', $page);
-
+            if($order !== 'relevance')
+                $postQuery = Post::where(function($query) use ($tsQuery) {
+                    $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
+                        ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
+                })->orderBy('datecreation', $order)->paginate(10, ['*'], 'page', $page);
+            else
+                $postQuery = Post::where(function($query) use ($tsQuery) {
+                    $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
+                        ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
+                })->paginate(10, ['*'], 'page', $page);
+            
             if (Auth::check()) {
                 $blockedUserIds = Auth::user()->blockedUsers()->pluck('target_user_id')->merge(Auth::user()->blockedBy()->pluck('initiator_user_id'));
                 $postQuery->whereNotIn('owner_id', $blockedUserIds)
@@ -84,8 +89,6 @@ class SearchController extends Controller
                     ->orWhereRaw("similarity(name, ?) > 0.3", [$tsQuery]);
             })->paginate(10, ['*'], 'page', $page);
         }
-        Log::info($query);
-        Log::info($users);
         if ($request->ajax()) {
             if ($type === 'users') {
                 return view('partials.user', compact('users'))->render();
