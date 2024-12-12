@@ -24,7 +24,7 @@
                 @endphp
                 
                     <article class="user" data-id="{{ $otherUser->id }}">
-                        <a href="{{ route('profile', ['user_id' => $otherUser->id]) }}" class="conversation-link" data-type="direct" data-id="{{ $otherUser->id }}">
+                        <a href="{{ route('profile', ['user_id' => $otherUser->id]) }}" class="conversation-link" data-type="direct" data-id="{{ $directChat->id }}">
                             <section id="info">
                                 <img src="{{ route('userphoto', ['user_id' => $otherUser->id]) }}" width="100" height="100" alt="user profile picture">
                                 <div class="user-info">
@@ -49,8 +49,3 @@
     
 
 @endsection
-<script>
-    const directChatId = '{{ $directChat->id }}';
-    const currentUserId = {{ Auth::id() }};
-</script>
-<script src="{{ asset('js/direct_chat.js') }}" defer></script>
