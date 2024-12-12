@@ -23,7 +23,7 @@ class DirectChatController extends Controller
     public function show($id)
     {
         $directChat = DirectChat::findOrFail($id);
-        return view('pages.direct_chat', compact('directChat'));
+        return view('partials.direct_chat', compact('directChat'));
     }
 
     public function store(Request $request)

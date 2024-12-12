@@ -58,6 +58,8 @@ Route::post('/post/like', [PostController::class, 'like'])->name('post.like');
 
 //Groups
 Route::post('/groups/create', [GroupController::class, 'createGroup'])->name('group.create');
+Route::get('/groups/{group_id}/photo', [GroupController::class, 'getPhoto'])->name('groupPhoto');
+Route::get('/groups/{group_id}', [GroupController::class, 'show'])->name('group.show');
 
 
 // Admin
@@ -94,6 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/messages/{message_id}', [MessageController::class, 'destroy'])->name('messages.destroy'); // Update this line
 
 });
+
+// Conversations
+
 
 
 // Authentication

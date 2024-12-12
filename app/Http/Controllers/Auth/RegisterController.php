@@ -53,7 +53,7 @@ class RegisterController extends Controller
             
             $file = $request->file('photo_url');
             
-            $photoUrl = $file->store('profile_pictures', 'private'); // Stores in storage/app/public/profile_pictures
+            $photoUrl = $file->store('profile_pictures', 'private'); 
         }
         
         $user = User::create([

@@ -1132,5 +1132,116 @@ button#addPost{
   
 }
 
+.direct-chats-page {
+  main{
+    grid-template-columns: 70px 3fr;
+  }
+  #sidebar{
+  width: 70px;
+  .navigators {
+    align-items: center;
+  }
+  p{
+    display: none;
+  }
+}
+}
 
+div#Conversas {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 1em;
+  height: 100%;
+  max-width: 40%;
+  border-right: 1px solid #ccc;
+  ul {
+    padding-left: 0;
+    a{
+      text-decoration: none;
+      color: black;
+    }
+  }
+  section#info:hover {
+    background-color: white;
+  }
+  section#info{
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    width: 100%;
+    padding: 1em;
+    img {
+      border-radius: 50%;
+    }
+    span#groupName{
+      font-size: 1em;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    span#groupLastMessage{
+      font-size: 0.8em;
+      opacity: 0.8;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+     
+    }
+    
+  }
+}
+
+div#chat {
+  display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+
+
+  #chat-header {
+      flex: 0 0 auto; /* Fixed height */
+      display: flex;
+      gap: 1em;
+      align-items: center;
+      background-color: #f1f1f1;
+      padding: 1em;
+      border-bottom: 1px solid #ccc;
+      a{
+        text-decoration: none;
+        color: black;
+      }
+      p#gname {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+      cursor: pointer;
+  }
+
+  #messages {
+      flex: 1 1 auto; 
+      overflow-y: auto; 
+      padding: 1em;
+      background-color: #fff;
+  }
+
+  .message {
+      margin-bottom: 1em;
+  }
+
+  div#inputform {
+      flex: 0 0 auto; 
+      display: space-between;
+      padding: 1em;
+      background-color: #f1f1f1;
+      border-top: 1px solid #ccc;
+  }
+  div#initial {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+}
 
