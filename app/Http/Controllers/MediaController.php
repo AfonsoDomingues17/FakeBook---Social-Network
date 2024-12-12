@@ -6,6 +6,7 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class MediaController extends Controller
 {
@@ -36,26 +37,43 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($media_id)
+    public function show($post_id)
 {
-    $media = Media::findOrFail($media_id);
+    Log::info('MediaController@show');
+    $media = Media::where('post_id', $post_id)->first();
+
+    if (!$media) {
+        $defaultPath = storage_path('app/private/post_pictures/DEFAULT_POST.jpg');
+        if (!file_exists($defaultPath)) {
+            abort(404);
+        }
+
+        $file = file_get_contents($defaultPath);
+        $type = mime_content_type($defaultPath);
+        return response($file, 200)->header("Content-Type", $type);
+    }
+    else {
 
     // Ensure the user has permission to view the media
     $this->authorize('view', $media->post);
 
     // Get the file path
     $filePath = $media->photo_url;
+   
+        $path = storage_path('app/private/' . $filePath);
+        Log::info($path);
 
-    // Check if the file exists in storage
-    if (!Storage::exists($filePath)) {
-        abort(404, 'File not found.');
+        if (!Storage::disk('private')->exists($filePath)) {
+            abort(404);
+        }
+        
+        $file = Storage::disk('private')->get($filePath);
+        $type = Storage::disk('private')->mimeType($filePath);
+
+        return Response::make($file, 200)->header("Content-Type", $type);
+        
     }
-
-    // Serve the file as a response
-    $fileContent = Storage::get($filePath);
-    $mimeType = Storage::mimeType($filePath);
-
-    return Response::make($fileContent, 200, ['Content-Type' => $mimeType]);
+    
 }
 
     /**

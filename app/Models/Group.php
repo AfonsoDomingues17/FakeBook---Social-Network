@@ -11,6 +11,10 @@ class Group extends Model
     use HasFactory;
     public $timestamps = false;
 
+    protected $fillable = [
+        'name', 'description', 'photo_url', 'owner_id'
+    ];
+
     public function participants(){
         return $this
         ->belongsToMany(User::class, 'groupParticipant', 'group_id', 'user_id')

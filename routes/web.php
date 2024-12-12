@@ -10,6 +10,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\DirectChatController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\StaticPageController;
+use App\Http\Controllers\GroupController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -56,6 +57,11 @@ Route::get('/posts/{post_id}/edit', [PostController::class, 'edit'])->name('post
 Route::put('/posts/{post_id}/edit', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{post_id}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
 Route::post('/post/like', [PostController::class, 'like'])->name('post.like');
+
+//Groups
+Route::post('/groups/create', [GroupController::class, 'createGroup'])->name('group.create');
+Route::get('/groups/{group_id}/photo', [GroupController::class, 'getPhoto'])->name('groupPhoto');
+Route::get('/groups/{group_id}', [GroupController::class, 'show'])->name('group.show');
 // Comments
 Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
 Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
@@ -63,7 +69,6 @@ Route::put('/comments/{comment_id}', [CommentController::class, 'update'])->name
 Route::delete('/comments/{comment_id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 // Admin
-
 Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
 Route::post('/admin/watchlist/add/{user_id}', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
 Route::post('/admin/watchlist/remove/{user_id}', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
@@ -73,7 +78,7 @@ Route::post('admin/banlist/remove/{user_id}', [UserController::class, 'unbanUser
 Route::post('admin/unban/request/{id}', [UserController::class, 'acceptUnbanRequest'])->name('admin.unban.request');
 
 // Media
-Route::get('/media/{media_id}', [MediaController::class, 'show'])->name('media.show');
+Route::get('/media/{post_id}', [MediaController::class, 'show'])->name('media.show');
 
 
 // Search
@@ -99,6 +104,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/messages/{message_id}', [MessageController::class, 'destroy'])->name('messages.destroy'); // Update this line
 
 });
+
+// Conversations
+
 
 
 // Authentication

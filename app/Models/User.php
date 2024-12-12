@@ -110,8 +110,12 @@ public function followers()
 
     public function participantsGroups(){
         return $this
-        ->belongsToMany(Group::class, 'groupParticipant', 'user_id', 'group_id')
+        ->belongsToMany(Group::class, 'groupparticipant', 'user_id', 'group_id')
         ->withPivot('date_joined');
+    }
+
+    public function groups(){
+        return $this->participantsGroups->merge($this->ownesGroups);
     }
 
     public function messages() {

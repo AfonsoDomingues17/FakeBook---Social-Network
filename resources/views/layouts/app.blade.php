@@ -28,11 +28,13 @@
         <script src="{{asset('js/connection.js')}}" defer></script>
         <script src="{{asset('js/notification.js')}}" defer></script>
         <script src="{{asset('js/watchlist.js')}}" defer></script>
+        <script src="{{asset('js/group.js')}}" defer></script>
+        <script src="{{asset('js/conversations.js')}}" defer></script>
     </head>
-    <body>
+    <body class="@yield('body-class')">
     <header>
                 <div class="navbar">
-                    <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('LOGO.png') }}" alt="FakeBook Logo" width="50" height="50"></a>
+                    <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('public/LOGO.png') }}" alt="FakeBook Logo" width="50" height="50"></a>
                     <h1>
                         <a href="{{ url('/') }}">FakeBook!</a>
                     </h1>
@@ -134,6 +136,7 @@
                                 @endif
                             </div>
                             @include('partials.create_post')
+                            @include('partials.create_group')
                     </section>
                 </div>
             </header>
@@ -142,15 +145,15 @@
             <div class= "navigators">
                 <a class="auth" href="{{ url('/') }}"><i class="fa-solid fa-house"></i><p>Home</p></a>
                 @if(Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isBanned())
-                    <a class="auth" href=""><i class="fa-solid fa-user-group"></i><p>Groups</p></a>
-                    @if(Auth::check() && Auth::user()->typeu === 'INFLUENCER')
+                    <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#groupCreationModal"><i class="fa-solid fa-user-group"></i><p>Create Group</p></a> 
+                    @if(Auth::user()->typeu === 'INFLUENCER')
                         <a  class="auth" href="{{ route('influencer.page', Auth::user()->id) }}"> <i class="fa-solid fa-chart-line"></i> <p>View Statistics </p> </a>
                     @endif
                     <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fa-solid fa-plus"></i><p>Create Post</p></a>
                 @endif
                 @if(Auth::check())
                     @if(!Auth::user()->isAdmin() && !Auth::user()->isBanned())
-                        <a class="auth" href="{{ route('direct_chats.index') }}"><i class="fa-regular fa-paper-plane"></i><p>Messages</p></a>
+                        <a class="auth" href="{{ route('direct_chats.index') }}"><i class="fa-regular fa-paper-plane"></i><p>Conversas</p></a>
                     @endif
                     <a class="auth" href="{{ Auth::user()->isAdmin() ? route('admin.page') : route('profile', ['user_id' => Auth::user()->id]) }}">
                         <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
@@ -173,7 +176,7 @@
             </div>
 
             </section>
-            <section id="content">
+            <section id="content" >
                 @yield('content')
             </section>
         </main>
@@ -181,5 +184,6 @@
             <p>&copy; FakeBook 2024</p>
         </footer>
         @include('partials.create_post')
+        @include('partials.create_group')
     </body>
 </html>

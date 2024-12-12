@@ -41,15 +41,12 @@ class UserController extends Controller
     }
 
     public function getPhoto($user_id)
-    {   
-        Log::info(message: 'Entrou no getPhoto');
-        $user = User::findOrFail($user_id);
-        Log::info($user->photo_url);
-        if ($user->photo_url) {
-            Log::info(message: 'phto_url exists');
+{   
+    $user = User::findOrFail($user_id);
+    if ($user->photo_url) {
 
-            $path = storage_path('app/private/' . $user->photo_url);
-            Log::info($path);
+        $path = storage_path('app/private/' . $user->photo_url);
+        Log::info($path);
 
             if (!Storage::disk('private')->exists($user->photo_url)) {
                 abort(404);
@@ -57,13 +54,13 @@ class UserController extends Controller
             $file = Storage::disk('private')->get($user->photo_url);
             $type = Storage::disk('private')->mimeType($user->photo_url);
 
-            return Response::make($file, 200)->header("Content-Type", $type);
-        } else {
-            $defaultPath = storage_path('app/private/profile_pictures/default-profile.png');
-            Log::info($defaultPath);
-            if (!file_exists($defaultPath)) {
-                abort(404);
-            }
+        return Response::make($file, 200)->header("Content-Type", $type);
+    } else {
+        $defaultPath = storage_path('app/private/profile_pictures/default-profile.png');
+        Log::info($defaultPath);
+        if (!file_exists($defaultPath)) {
+            abort(404);
+        }
 
             $file = file_get_contents($defaultPath);
             $type = mime_content_type($defaultPath);
@@ -161,7 +158,7 @@ class UserController extends Controller
             
             $file = $request->file('photo_url');
             
-            $photoUrl = $file->store('profile_pictures', 'private'); // Stores in storage/app/public/profile_pictures
+            $photoUrl = $file->store('profile_pictures', 'private');
         }
         
         $user = User::create([
