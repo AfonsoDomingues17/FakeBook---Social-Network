@@ -56,7 +56,7 @@ class UserController extends Controller
 
         return Response::make($file, 200)->header("Content-Type", $type);
     } else {
-        $defaultPath = storage_path('app/private/profile_pictures/default-profile.png');
+        $defaultPath = storage_path('app/private/profile_pictures/DEFAULT_USER.png');
         Log::info($defaultPath);
         if (!file_exists($defaultPath)) {
             abort(404);
