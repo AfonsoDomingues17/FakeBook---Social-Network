@@ -31,7 +31,7 @@
                     <form action="{{route('group.create')}}" method="POST" enctype="multipart/form-data">
                         {{ csrf_field() }}
                             <div id="form-image">
-                                <img id="g_picture_review" src="https://www.diamorfosi.com.gr/app/wp-content/plugins/profilegrid-user-profiles-groups-and-communities/public/partials/images/default-group.png" alt="preview of profile picture" width="200" height="200" style="border-radius: 50%;">
+                                <img id="g_picture_review" src="{{Storage::url('public/DEFAULT_GROUP.png')}}" alt="preview of profile picture" width="200" height="200" style="border-radius: 50%;">
                                 <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewGroupPicture(event)" class="form-control">
                             </div>
                             <div id="form-group">
