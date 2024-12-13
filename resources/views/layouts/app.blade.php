@@ -30,6 +30,7 @@
         <script src="{{asset('js/watchlist.js')}}" defer></script>
         <script src="{{asset('js/group.js')}}" defer></script>
         <script src="{{asset('js/conversations.js')}}" defer></script>
+        <script src="{{asset('js/direct_chats.js')}}" defer></script>
     </head>
     <body class="@yield('body-class')">
     <header>

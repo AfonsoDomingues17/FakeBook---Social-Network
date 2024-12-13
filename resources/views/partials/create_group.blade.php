@@ -9,14 +9,14 @@
             <div class="modal-body">
                 <section id="pageUsers">
                     <h3>Add members to the group</h3>
-                    @if (count(Auth::user()->followers) == 0)
+                    @if (count(Auth::user()->following) == 0)
                         <p>You don't have any followers to add to the group</p>
                       
                     @else
-                    @foreach (Auth::user()->followers as $follower)
+                    @foreach (Auth::user()->following->take(5) as $follower)
                         
                         <div class="user">
-                            <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="100"  height="100" alt="user profile picture">
+                            <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="70"  height="70" alt="user profile picture">
                                 <div class="user-info">
                                     <span id="user"><p>{{$follower->username}}</p></span>
                                     <span id="nome"><p>{{$follower->name}}</p></span>
@@ -31,7 +31,7 @@
                     <form action="{{route('group.create')}}" method="POST" enctype="multipart/form-data">
                         {{ csrf_field() }}
                             <div id="form-image">
-                                <img id="g_picture_review" src="https://www.diamorfosi.com.gr/app/wp-content/plugins/profilegrid-user-profiles-groups-and-communities/public/partials/images/default-group.png" alt="preview of profile picture" >
+                                <img id="g_picture_review" src="https://www.diamorfosi.com.gr/app/wp-content/plugins/profilegrid-user-profiles-groups-and-communities/public/partials/images/default-group.png" alt="preview of profile picture" width="200" height="200" style="border-radius: 50%;">
                                 <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewGroupPicture(event)" class="form-control">
                             </div>
                             <div id="form-group">
@@ -54,6 +54,7 @@
     </div>
 </div>
 @endif
+
 <script>
 function previewGroupPicture(event) {
     const reader = new FileReader();

@@ -23,7 +23,7 @@
                                 <div class="media" style="align-items: center">
                                     @if ($post->typep === 'MEDIA')
                                         <img id="media-image-{{ $post->id }}"
-                                             src="{{ $post->media->isNotEmpty() ? route('media.show', $post->media->first()->id) : Storage::url('DEFAULT-POST.jpg') }}"
+                                             src="{{ route('media.show', ['post_id' => $post->id]) }}"
                                              alt="Media" style="width: 75%">
                                         @if ($post->media->count() > 1)
                                             <div class="post-media-controls">
