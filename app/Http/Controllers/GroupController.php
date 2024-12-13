@@ -81,6 +81,10 @@ class GroupController extends Controller
 
 
     }
+    public function groupInfo($group_id){
+        $group = Group::find($group_id);
+        return view('partials.group_info', ['group' => $group]);
+    }
 
     /**
      * Display the specified resource.

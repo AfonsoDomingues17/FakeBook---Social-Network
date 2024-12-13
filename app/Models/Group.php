@@ -17,7 +17,7 @@ class Group extends Model
 
     public function participants(){
         return $this
-        ->belongsToMany(User::class, 'groupParticipant', 'group_id', 'user_id')
+        ->belongsToMany(User::class, 'groupparticipant', 'group_id', 'user_id')
         ->withPivot('date_joined');
     }
     public function messages(){
@@ -27,5 +27,7 @@ class Group extends Model
     public function owner(){
         return $this->belongsTo(User::class,'owner_id');
     }
+
+   
 
 }

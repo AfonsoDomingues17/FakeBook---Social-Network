@@ -10,7 +10,7 @@
             @foreach(Auth::user()->groups() as $group)
             <a href="#" class="conversation-link"  data-type="group" data-type="group" data-id="{{ $group->id }}">
                 <section id="info">
-                    <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" width="100"  height="55 alt="group profile picture">
+                    <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" width="50"  height="50" alt="group profile picture">
                     <div class="group-info">
                         <span id="groupName"><p>{{ $group->name }}</p></span>
                         <span id="groupLastMessage"><p>Tomas: David dá para mim!</p></span>
@@ -39,13 +39,17 @@
         </ul>
     </div>
     
+    <div id="special" class="container">
     <div id="chat" class="container" >
         <div id="initial">
         <img id="logo" src="{{ Storage::url('public/LOGO.png') }}" alt="FakeBook Logo" width="200" height="200">
         <h1>Your conversations!</h1>
         <p>Send photos and messages to friends or groups</p>
         </div>
+        
     </div>
+    </div>
+    
     
 
 @endsection
