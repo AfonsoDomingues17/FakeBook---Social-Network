@@ -62,6 +62,8 @@ Route::post('/post/like', [PostController::class, 'like'])->name('post.like');
 Route::post('/groups/create', [GroupController::class, 'createGroup'])->name('group.create');
 Route::get('/groups/{group_id}/photo', [GroupController::class, 'getPhoto'])->name('groupPhoto');
 Route::get('/groups/{group_id}', [GroupController::class, 'show'])->name('group.show');
+Route::get('/groups/{group_id}/info', [GroupController::class, 'groupInfo'])->name('group.info');
+
 // Comments
 Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
 Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');

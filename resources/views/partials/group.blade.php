@@ -1,4 +1,4 @@
-<div id="chat-header">
+<div id="chat-header" data-id="{{$group->id}}">
         <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" width="100"  height="55" alt="group profile picture">
         <div>
         <p id="gname">{{$group->name}}</p>

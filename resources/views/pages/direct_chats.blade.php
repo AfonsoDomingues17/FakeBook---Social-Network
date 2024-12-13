@@ -39,13 +39,17 @@
         </ul>
     </div>
     
+    <div id="special" class="container">
     <div id="chat" class="container" >
         <div id="initial">
         <img id="logo" src="{{ Storage::url('public/LOGO.png') }}" alt="FakeBook Logo" width="200" height="200">
         <h1>Your conversations!</h1>
         <p>Send photos and messages to friends or groups</p>
         </div>
+        
     </div>
+    </div>
+    
     
 
 @endsection
