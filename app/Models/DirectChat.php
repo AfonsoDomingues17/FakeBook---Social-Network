@@ -17,8 +17,9 @@ class DirectChat extends Model
         'dateCreation'
     ];
 
-    public function messages(){
-        return $this->hasMany(Message::class,'direct_chat_id');
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'direct_chat_id');
     }
     public function user1(){
         return $this->belongsTo(User::class, 'user1_id');
@@ -37,5 +38,9 @@ class DirectChat extends Model
             $query->where('user1_id', $user2_id)
                   ->where('user2_id', $user1_id);
         })->first();
+    }
+    public function getOtherUserAttribute()
+    {
+        return $this->user1_id == auth()->id() ? $this->user2 : $this->user1;
     }
 }

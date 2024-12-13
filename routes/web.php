@@ -104,7 +104,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
     Route::get('/messages/image/{message_id}', [MessageController::class, 'show'])->name('messages.show');
     Route::delete('/messages/{message_id}', [MessageController::class, 'destroy'])->name('messages.destroy'); // Update this line
-
+    Route::get('/groups/{group_id}', [GroupController::class, 'show'])->name('group.show');
 });
 
 // Conversations

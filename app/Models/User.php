@@ -114,10 +114,10 @@ public function followers()
         ->withPivot('date_joined');
     }
 
-    public function groups(){
-        return $this->participantsGroups->merge($this->ownesGroups);
+    public function getGroupsAttribute()
+    {
+        return $this->ownesGroups->merge($this->participantsGroups);
     }
-
     public function messages() {
         return $this->hasMany(Message::class, 'author_id');
     }
