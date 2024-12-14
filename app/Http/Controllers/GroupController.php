@@ -89,10 +89,10 @@ class GroupController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($group_id)
+    public function show($id)
     {
-        $group = Group::find($group_id);
-        return view('partials.group', ['group' => $group]);
+        $group = Group::find($id);
+        return view('partials.chat', ['chat' => $group, 'type' => 'group']);
     }
     
 

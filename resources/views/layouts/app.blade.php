@@ -29,8 +29,6 @@
         <script src="{{asset('js/notification.js')}}" defer></script>
         <script src="{{asset('js/watchlist.js')}}" defer></script>
         <script src="{{asset('js/group.js')}}" defer></script>
-        <script src="{{asset('js/conversations.js')}}" defer></script>
-        <script src="{{asset('js/direct_chats.js')}}" defer></script>
     </head>
     <body class="@yield('body-class')">
     <header>
@@ -154,7 +152,7 @@
                 @endif
                 @if(Auth::check())
                     @if(!Auth::user()->isAdmin() && !Auth::user()->isBanned())
-                        <a class="auth" href="{{ route('direct_chats.index') }}"><i class="fa-regular fa-paper-plane"></i><p>Conversas</p></a>
+                        <a class="auth" href="{{ route('direct_chats.index') }}"><i class="fa-regular fa-paper-plane"></i><p>Conversations</p></a>
                     @endif
                     <a class="auth" href="{{ Auth::user()->isAdmin() ? route('admin.page') : route('profile', ['user_id' => Auth::user()->id]) }}">
                         <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">

@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use PHPUnit\TextUI\Configuration\Group;
 
 class Message extends Model
 {
     use HasFactory;
+    
+    protected $fillable = [
+        'content', 'image_url', 'author_id', 'group_id', 'direct_chat_id'
+    ];
     public $timestamps = false;
     protected $table = 'message';
 

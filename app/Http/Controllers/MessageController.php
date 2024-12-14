@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\DirectChat;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -35,6 +37,7 @@ class MessageController extends Controller
         $user = Auth::user();
         
         $directChatId = $request->input('direct_chat_id');
+        $groupId = $request->input('group_id');
         $content = $request->input('content');
         $image = $request->file('image');
 
@@ -43,7 +46,6 @@ class MessageController extends Controller
         }
 
         $message = new Message();
-        $message->direct_chat_id = $directChatId;
         $message->author_id = $user->id;
         $message->content = $content;
 
@@ -52,25 +54,49 @@ class MessageController extends Controller
             $message->image_url = $filePath;
         }
 
-        $message->save();
+        if ($directChatId) {
+            $message->direct_chat_id = $directChatId;
+            $message->save();
 
-        // Load the author relationship once
-        $message->load('author');
+            // Load the author relationship once
+            $message->load('author');
 
-        // Broadcast the message using Pusher
-        $pusher = new Pusher(
-            env('PUSHER_APP_KEY'),
-            env('PUSHER_APP_SECRET'),
-            env('PUSHER_APP_ID'),
-            [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true
-            ]
-        );
+            // Broadcast the message using Pusher
+            $pusher = new Pusher(
+                env('PUSHER_APP_KEY'),
+                env('PUSHER_APP_SECRET'),
+                env('PUSHER_APP_ID'),
+                [
+                    'cluster' => env('PUSHER_APP_CLUSTER'),
+                    'useTLS' => true
+                ]
+            );
 
-        $pusher->trigger('direct-chat-' . $directChatId, 'new-message', [
-            'message' => $message
-        ]);
+            $pusher->trigger('direct-chat-' . $directChatId, 'new-message', [
+                'message' => $message
+            ]);
+        } elseif ($groupId) {
+            $message->group_id = $groupId;
+            $message->save();
+
+            // Load the author relationship once
+            $message->load('author');
+
+            // Broadcast the message using Pusher
+            $pusher = new Pusher(
+                env('PUSHER_APP_KEY'),
+                env('PUSHER_APP_SECRET'),
+                env('PUSHER_APP_ID'),
+                [
+                    'cluster' => env('PUSHER_APP_CLUSTER'),
+                    'useTLS' => true
+                ]
+            );
+
+            $pusher->trigger('group-chat-' . $groupId, 'new-message', [
+                'message' => $message
+            ]);
+        }
 
         return response()->json(['message' => $message]);
     }
@@ -138,9 +164,15 @@ class MessageController extends Controller
             ]
         );
 
-        $pusher->trigger('direct-chat-' . $message->direct_chat_id, 'delete-message', [
-            'message_id' => $message->id
-        ]);
+        if ($message->direct_chat_id) {
+            $pusher->trigger('direct-chat-' . $message->direct_chat_id, 'delete-message', [
+                'message_id' => $message->id
+            ]);
+        } elseif ($message->group_id) {
+            $pusher->trigger('group-chat-' . $message->group_id, 'delete-message', [
+                'message_id' => $message->id
+            ]);
+        }
 
         // Delete the message
         $message->delete();

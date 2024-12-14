@@ -6,6 +6,7 @@ use App\Models\DirectChat;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Group;
 
 class DirectChatController extends Controller
 {
@@ -13,25 +14,23 @@ class DirectChatController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $directChats = DirectChat::with(['user1', 'user2', 'messages' => function($query) {
+            $query->latest()->first();
+        }])->where('user1_id', $user->id)->orWhere('user2_id', $user->id)->get();
 
-        // Get the IDs of users that the current user has blocked or has been blocked by
-        $blockedUserIds = $user->blockedUsers()->pluck('target_user_id')->merge($user->blockedBy()->pluck('initiator_user_id'));
+        $groups = Group::with(['messages' => function($query) {
+            $query->latest()->first();
+        }])->whereHas('participants', function($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
 
-        // Retrieve direct chats excluding those with blocked users
-        $directChats = DirectChat::where(function ($query) use ($user) {
-            $query->where('user1_id', $user->id)
-                  ->orWhere('user2_id', $user->id);
-        })->whereNotIn('user1_id', $blockedUserIds)
-          ->whereNotIn('user2_id', $blockedUserIds)
-          ->get();
-
-        return view('pages.direct_chats', compact('directChats'));
+        return view('pages.direct_chats', compact('directChats', 'groups'));
     }
 
     public function show($id)
     {
         $directChat = DirectChat::findOrFail($id);
-        return view('partials.direct_chat', compact('directChat'));
+        return view('partials.chat', ['chat' => $directChat, 'type' => 'direct']);
     }
 
     public function store(Request $request)
@@ -50,6 +49,6 @@ class DirectChatController extends Controller
             ]);
         }
 
-        return redirect()->route('direct_chats.show', $directChat->id);
+        return redirect()->route('direct_chats.index');
     }
 }
