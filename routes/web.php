@@ -11,6 +11,7 @@ use App\Http\Controllers\DirectChatController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\ReportController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -78,6 +79,12 @@ Route::post('admin/users/create', [UserController::class, 'createUserbyAdmin'])-
 Route::post('admin/banlist/add/{user_id}', [UserController::class, 'banUser'])->name('admin.banlist.add');
 Route::post('admin/banlist/remove/{user_id}', [UserController::class, 'unbanUser'])->name('admin.banlist.remove');
 Route::post('admin/unban/request/{id}', [UserController::class, 'acceptUnbanRequest'])->name('admin.unban.request');
+
+// Reports
+Route::get('/reports', [ReportController::class, 'showReports'])->name('reports');
+Route::post('/report/users/{user_id}', [ReportController::class, 'reportUser'])->name('report.user');
+Route::post('/report/posts/{post_id}', [ReportController::class, 'reportPost'])->name('report.post');
+Route::post('/report/comments/{comment_id}', [ReportController::class, 'reportComment'])->name('report.comment');
 
 // Media
 Route::get('/media/{post_id}', [MediaController::class, 'show'])->name('media.show');

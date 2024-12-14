@@ -162,6 +162,7 @@
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <p>Logout</p>
                     </a>
+                    <a class="auth" href="{{ route('reports') }}"><i class="fa-solid fa-flag"></i><p>Reports</p></a>
                         @if(Auth::user()->isAdmin())
                             <a class="auth" href="{{url('/register')}}"><i class="fa-solid fa-user-plus"></i><p>Create User</p></a>
                         @endif
