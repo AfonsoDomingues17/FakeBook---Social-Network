@@ -10,6 +10,13 @@ class Report extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'report';
+    protected $fillable = [
+        'content',
+        'comment_id',
+        'post_id',
+        'target_user_id',
+        'author_id',
+    ];
 
     public function comment()
     {

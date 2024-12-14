@@ -36,7 +36,10 @@
         </form>
         <p><i class="fa-regular fa-comment"></i> 33</p>
         <p><i class="fa-solid fa-share"></i> 10</p>
-
+        <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
+            <i class="fa-regular fa-flag"></i>
+        </button>
+        @include('partials.report_modal', ['type' => 'post', 'id' => $post->id]) 
     </div>
     <div class="action_buttons">
         @if(Auth::check())
@@ -76,7 +79,8 @@
             '.edit-post-btn',
             '.delete-post-btn',
             '.post-media-controls',
-            '.modal'
+            '.modal',
+            '.report-button',
         ];
 
         document.body.addEventListener('click', function(event) {
