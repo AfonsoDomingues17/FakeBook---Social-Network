@@ -6,7 +6,7 @@
     <div id="Conversas">
         <h1>Conversas</h1>
         <ul>
-            @foreach($groups as $group)
+            @foreach(Auth::user()->groups() as $group)
                 <a href="#" class="conversation-link" data-type="group" data-id="{{ $group->id }}">
                     <section id="info">
                         <img src="{{ route('groupPhoto', ['group_id' => $group->id]) }}" width="50" height="50" alt="group profile picture">
@@ -48,6 +48,6 @@
     </div>
 <script src="{{ asset('js/conversations.js') }}" defer></script>
 <script>
-    var currentUserId = {{ Auth::id() }};
+    const currentUserId = {{ Auth::id() }};
 </script>
 @endsection

@@ -1193,19 +1193,30 @@ div#Conversas {
 div#special{
   display: flex;
  margin-right: 0;
+ padding-right: 0;
 div#group_info{
   display: flex;
   flex-direction: column;
   gap: 1em;
-  background-color: white;
+  background-color: #F0F2F5;
   width: 100%;
-  padding-left: 3em;
-  padding-top: 1.5em;
+  height: 100vh;
+  overflow-y: auto;
+  
+  border-left: 1px solid #ccc;
+  p#description{
+    font-size: 1.3em;
+  }
   div#group-header{
     display: flex;
     flex-direction: column;
     gap: 1em;
     align-items: center;
+    background-color: white;
+    padding-left: 3em;
+    padding-top: 1.5em;
+    padding-right: 3em;
+    padding-bottom: 1.5em;
     div {
       display: flex;
       gap: 2em;
@@ -1216,22 +1227,114 @@ div#group_info{
       }
       i {
         font-size: 1.5em;
+        cursor: pointer;
       }
+    
     }
+
     p#gname{
       font-size: 2em;
       font-weight: bold;
     }
   }
+  div#additional_info{
+    background-color: white;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+
+  }
   div#group-members{
+    background-color: white;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+  
+    >p{
+      font-size: 1.5em;
+    }
+    span#AddMember{
+      font-size: 1.5em;
+      cursor: pointer;
+      display: flex;
+      gap: 1em;
+      align-items: center;
+      padding-top: 1em;
+      padding-bottom: 1em;
+      p{
+        font-size: 1em;
+      }
+      span{
+        display: flex;
+        background-color: #007bff;
+        width: 60px;
+        height: 60px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+      i{
+
+        background-color: #007bff;
+        color: white;
+      }
+    }
+    ul{
+      padding-left: 0;
+    }
     >p{
       font-size: 1.5em;
       margin-bottom: 1em;
     }
     div#owner{
       display: flex;
-      gap:1em;
+      gap:1.5em;
       align-items: center;
+      img{border-radius: 50%;}
+      p{
+        font-size: 1.5em;
+      }
+    }
+  }
+  div#group-footer{
+    
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    justify-content: flex-start;
+    align-items: flex-start;
+    p{
+      font-size: 1.5em;
+      color: red;
+    }
+    button{
+      display: flex;
+      gap: 1em;
+      border: none;
+      align-items: center;
+      background-color: white;
+      padding-top: 1em;
+      padding-bottom: 1em;
+      span{
+        display: flex;
+        background-color: red;
+        width: 60px;
+        height: 60px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        
+      }
+      i{
+        color: white;
+        font-size: 1.5em;
+      }
     }
   }
 
@@ -1260,7 +1363,7 @@ div#chat {
       cursor: pointer;
   }
 
-  #messages {
+  div#messages {
       flex: 1 1 auto; 
       overflow-y: auto; 
       padding: 1em;

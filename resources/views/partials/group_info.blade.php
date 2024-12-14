@@ -1,19 +1,26 @@
 <div id="group_info" sty>
     <div id="group-header">
         <div id="top_bar">
-        <i class="fa-solid fa-xmark"></i>
+        <i id="close" class="fa-solid fa-xmark"></i>
         <p>Group Details</p>
         </div>
-        <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" alt="group profile picture" width="400" height="220">
+        <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" alt="group profile picture" width="250" height="250">
         <p id="gname">{{ $group->name }}</p>
-        <p>{{ $group->description }}</p>
-        <p>Nummber of mmbers</p>
+        <p>Group: {{$group->participants->count() + 1}} members</p>
+    </div>
+    <div id="additional_info">
+        <p id="description">{{ $group->description }}</p>
+        <p>Created by {{$group->owner->name}}, em 23/03/2004</p>
     </div>
     <div id="group-members">
-        <p>Group Members</p>
+        <h2>Group Members</h2>
+        <span id="AddMember">
+            <span><i class="fa-solid fa-user-plus"></i></span>
+            <p>Add member</p>
+        </span>
         <ul>
             <div id="owner">
-                <img src="{{ route('userphoto', ['user_id' => $group->owner_id]) }}" alt="" width="70" height="70">
+                <img src="{{ route('userphoto', ['user_id' => $group->owner_id]) }}" alt="Owner porfile picture" width="60" height="60">
                 <p>Me</p>
             </div>
             @if(!$group->participants->isEmpty())
@@ -29,7 +36,22 @@
             
     </div>
     <div id="group-footer">
-        <button id="leave-group">Leave Group</button>
-        <button id="delete_group">Delete Group</button>
+        <form action="">
+            <button type="submit"  id="leave-group">
+                <span>
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </span>
+                <p>Leave Group</p>
+            </button>
+        </form>
+        <form action="">
+            
+            <button type="submit" id="delete_group">
+                <span>
+                <i class="fa-solid fa-trash"></i>
+                </span>
+                <p>Delete Group</p
+            ></button>
+        </form>
     </div>   
 </div>
