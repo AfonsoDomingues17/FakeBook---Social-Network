@@ -85,6 +85,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
 
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                if (image && image.size > maxSize) {
+                    alert('Image size should not exceed 2MB.');
+                    return;
+                }
+
                 fetch(this.action, {
                     method: this.method,
                     body: formData,

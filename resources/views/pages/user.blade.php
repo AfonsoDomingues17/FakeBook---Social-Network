@@ -83,7 +83,7 @@
                             <button id="reportUser" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportUserModal-{{ $user->id }}">
                                 Report
                             </button>
-                            @include('partials.report', ['type' => 'user', 'id' => $user->id])
+                            @include('partials.report_modal', ['type' => 'user', 'id' => $user->id])
                         @endif
                     @endif
                 @endif
