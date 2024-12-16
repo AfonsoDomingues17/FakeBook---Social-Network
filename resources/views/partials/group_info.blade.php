@@ -32,10 +32,12 @@
     </div>
     <div id="group-members">
         <h2>Group Members</h2>
-        <span id="AddMember">
-            <span><i class="fa-solid fa-user-plus"></i></span>
-            <p>Add member</p>
-        </span>
+        @if($group->owner_id == Auth::user()->id)
+            <span id="AddMember" >
+                <span><i class="fa-solid fa-user-plus"></i></span>
+                <p>Add members</p>
+            </span>
+        @endif
         <ul>
             <div id="owner">
             <img src="{{ route('userphoto', ['user_id' => $group->owner_id]) }}" alt="Owner profile picture" width="60" height="60">
@@ -47,12 +49,14 @@
                         <div id="member">
                             <img src="{{ route('userphoto', ['user_id' => $groupMember->id]) }}" alt="group member profile pic" width="60" height="60">
                             <p>{{ $groupMember->name }}</p>
+                            @if($group->owner_id == Auth::user()->id)
+                            <button class="remove-member-btn btn btn-danger" data-user-id="{{ $groupMember->id }}">Remove</button>
+                            @endif
                         </div>
                     @endif
                 @endforeach
             @endif
         </ul>   
-            
     </div>
     <div id="group-footer">
         <form action="{{ route('group.leave', ['group_id' => $group->id]) }}" method="POST">
@@ -74,3 +78,4 @@
         @endif
     </div>
 </div>
+

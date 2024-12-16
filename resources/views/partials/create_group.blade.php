@@ -11,7 +11,7 @@
                     <h3>Add members to the group</h3>
                     <input type="text" id="searchUsers" placeholder="Search for users">
                     @if (count(Auth::user()->following) == 0)
-                        <p>You don't have any followers to add to the group</p>
+                        <p>You don't follow anyone to add to the group</p>
                     @else
                     @foreach (Auth::user()->following->take(5) as $follower)
                         <div class="user">

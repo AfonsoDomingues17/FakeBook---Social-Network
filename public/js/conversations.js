@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         .catch(error => console.error('Error fetching group info:', error));
                 }
             }
-            else if(close){
+            else if(close && !event.target.closest('#groupParticipantsModal')){
                 console.log(chatContainer);
                 specialContainer.innerHTML = '';
                 specialContainer.appendChild(chatContainer);
@@ -215,12 +215,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         // Close group info when clicking outside of it
         document.addEventListener('click', function(event) {
-            if (!event.target.closest('#group_info') && !event.target.closest('#chat-header')) {
+            if (!event.target.closest('#group_info') && !event.target.closest('#chat-header') && !event.target.closest('#groupParticipantsModal')) {
                 const close = document.querySelector('#close');
                 if (close) {
                     close.click();
                 }
             }
         });
-    }
+    }   
 });

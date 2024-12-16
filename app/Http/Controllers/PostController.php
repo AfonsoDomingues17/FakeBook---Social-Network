@@ -81,7 +81,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('partials.create_post');
+        $categories = Category::all();
+        return view('partials.create_post', compact('categories'));
     }
 
     /**
@@ -95,13 +96,13 @@ class PostController extends Controller
         $validatedData = $request->validate([
             'description' => 'string|max:1000',
             'is_public' => 'boolean',
-            'typep' => ['required', Rule::in(['TEXT', 'MEDIA'])],
             'media' => 'array|max:5',
-            'media.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024'
+            'media.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+            'category' => 'nullable|exists:category,id'
         ]);
 
-        // Log the validated data
-        \Log::info('Validated data', $validatedData);
+        // Determine the post type based on whether files are uploaded
+        $validatedData['typep'] = $request->hasFile('media') ? 'MEDIA' : 'TEXT';
 
         // Add the owner_id to the validated data
         $validatedData['owner_id'] = Auth::id();
@@ -124,6 +125,11 @@ class PostController extends Controller
                     'post_id' => $post->id,
                 ]);
             }
+        }
+
+        // Handle category assignment
+        if ($request->filled('category')) {
+            $post->categories()->attach($request->input('category'));
         }
 
         // Redirect to the user's profile page

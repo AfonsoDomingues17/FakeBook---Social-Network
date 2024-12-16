@@ -133,7 +133,7 @@
                                 <a href="{{ url('/register') }}"> <p>Register</p></a>
                                 @endif
                             </div>
-                            @include('partials.create_post')
+                            @include('partials.create_post', ['categories' => $categories])
                             @include('partials.create_group')
                     </section>
                 </div>
@@ -182,8 +182,5 @@
         <footer>
             <p>&copy; FakeBook 2024</p>
         </footer>
-        @include('partials.create_post')
-        @include('partials.create_group')
-        @include('partials.group_participants')
     </body>
 </html>

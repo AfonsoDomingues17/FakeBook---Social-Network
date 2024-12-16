@@ -11,4 +11,5 @@ class PostCategory extends Model
     public $timestamps = false;
     protected $table = 'postcategory';
     protected $primaryKey = (['post_id', 'category_id']);
+    public $incrementing = false;
 }

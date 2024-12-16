@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const backButton = document.getElementById('backButton');
     const groupCreationModal = document.getElementById('groupCreationModal');
     const addMemberButtons = document.querySelectorAll('.add-member-btn');
+
     let selectedUsers = [];
 
     if (groupCreationModal) {
@@ -55,19 +56,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.addEventListener('click', (event) => {
-        if(event.target.id === 'pencilEditGname'){
+        if (event.target.classList.contains('remove-member-btn')) {
+            const groupId = document.querySelector('#group_info').dataset.groupId;
+            const userId = event.target.getAttribute('data-user-id');
+            fetch(`/groups/${groupId}/remove-member`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ user_id: userId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    event.target.closest('#member').remove();
+                }
+            })
+            .catch(error => console.error('Error removing member:', error));
+        } else if (event.target.id === 'pencilEditGname') {
             const gname = document.getElementById('gname');
             const gnameInput = document.getElementById('gname_edit');
             gname.style.display = 'none';
             gnameInput.style.display = 'flex';
-        }
-        else if(event.target.id == 'pencilEditGdescription'){
+        } else if (event.target.id == 'pencilEditGdescription') {
             const gdescription = document.getElementById('gdescription');
             const gdescriptionInput = document.getElementById('gdescription_edit');
             gdescription.style.display = 'none';
             gdescriptionInput.style.display = 'flex';
-        }
-        else if(event.target.classList.contains('fa-check')){
+        } else if (event.target.classList.contains('fa-check') && event.target.closest('#gname_edit, #gdescription_edit')) {
             const input = event.target.previousElementSibling;
             const value = input.value;
             const field = input.name;
