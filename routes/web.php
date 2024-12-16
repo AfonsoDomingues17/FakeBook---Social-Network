@@ -91,8 +91,8 @@ Route::get('/media/{post_id}', [MediaController::class, 'show'])->name('media.sh
 
 
 // Search
-
 Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::post('/advsearch', [SearchController::class, 'advancedSearch'])->name('advancedSearch');
 
 //Connections
 Route::post('/follow/users/{user_id}', [UserController::class, 'follow'])->name('follow');
@@ -101,9 +101,7 @@ Route::post('/follow/accept/users/{user_id}', [UserController::class, 'acceptFol
 Route::delete('/follow/decline/notifications/{notification_id}', [UserController::class, 'declineFollowRequest'])->name('declinefollow');
 Route::delete('/follow/request/delete/{user_id}', [UserController::class, 'deleteFollowRequest'])->name('deletefollowrequest');
 
-
 // Messages
-
 Route::middleware('auth')->group(function () {
     Route::get('/direct-chats', [DirectChatController::class, 'index'])->name('direct_chats.index');
     Route::get('/direct-chats/{id}', [DirectChatController::class, 'show'])->name('direct_chats.show');
@@ -117,14 +115,12 @@ Route::middleware('auth')->group(function () {
 // Conversations
 
 
-
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::post('/logout', 'logout')->name('logout');
 });
-
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', [RegisterController::class, 'register']);

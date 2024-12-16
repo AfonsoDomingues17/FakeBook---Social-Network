@@ -38,13 +38,19 @@
                         <a href="{{ url('/') }}">FakeBook!</a>
                     </h1>
                         @if((Auth::check() && !Auth::user()->isBanned()) || !Auth::check())
-                        <form  action="{{route('search')}}" method="GET">
-                            <div style="position: relative;">
-                                <input id="search" type="text" name="query" placeholder="search for users">
+                        <section id="search-options">
+                            <form  action="{{route('search')}}" method="GET">
+                                <div style="position: relative;">
+                                <input id="search" type="text" name="query" placeholder="search here..." value="">
                                 <input type="hidden" name="type" value="users">
                                 <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
-                            </div>
-                        </form>
+                                </div>
+                            </form>
+                            <button id="advancedSearch" data-bs-toggle="modal" data-bs-target="#advancedSearchModal">
+                                <i class="fa-solid fa-magnifying-glass"></i><p>Advanced</p>
+                            </button>
+                            @include('partials.search_modal')
+                        </section>
                         @endif
                         @if(Route::currentRouteName() === 'homepage' && Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isBanned())
                         
@@ -162,14 +168,14 @@
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <p>Logout</p>
                     </a>
-                    <a class="auth" href="{{ route('reports') }}"><i class="fa-solid fa-flag"></i><p>Reports</p></a>
-                        @if(Auth::user()->isAdmin())
-                            <a class="auth" href="{{url('/register')}}"><i class="fa-solid fa-user-plus"></i><p>Create User</p></a>
-                        @endif
+                    @if(Auth::user()->isAdmin())
+                        <a class="auth" href="{{url('/register')}}"><i class="fa-solid fa-user-plus"></i><p>Create User</p></a>
+                    @endif
                 @else
                     <a id="buttonLogin" class="button" href="{{ url('/login') }}"> <p>Login</p></a>
                     <a id="buttonRegister" class="button" href="{{ url('/register') }}"> <p>Register</p></a>
                 @endif
+                <a class="auth" href="{{ route('reports') }}"><i class="fa-solid fa-flag"></i><p>Reports</p></a>
                 <a class="auth" href="{{ route('help') }}"><i class="fa-solid fa-info-circle"></i><p>Help/Contacts</p></a>
                 <a class="auth" href="{{ route('about') }}"><i class="fa-solid fa-question-circle"></i><p>About Us</p></a>
                 <a class="auth" href="{{ route('settings') }}"><i class="fa-solid fa-cog"></i><p>Settings</p></a>

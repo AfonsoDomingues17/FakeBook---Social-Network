@@ -20,10 +20,31 @@ body, html{
     text-decoration: none;
     color: black;
   }
+  #search-options{
+    display: flex;
+    gap: 1em;
+    #advancedSearch{
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      border-radius: 25px;
+      border: 2px solid #ccc;
+      background-color: #F0F2F5;
+      i{
+        font-size: 1.5em;
+      }
+      p{
+        margin: 0;
+        padding: 0;
+        font-size: 1em;
+        font-weight: bold;
+      }
+    }
+  }
   #account-options{
     display: flex;
     padding-right: 2em;
-    margin-right: auto;
+    margin-left: auto;
     gap: 1em;
     align-items: center;
     p{

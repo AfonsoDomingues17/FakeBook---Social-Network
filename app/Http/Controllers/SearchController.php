@@ -10,13 +10,12 @@ use App\Models\Watchlist;
 use App\Models\PostCategory;
 use Illuminate\Support\Facades\Auth;
 use Log;
+use App\Models\Category;
 
 class SearchController extends Controller
 {
     public function search(Request $request)
     {
-        Log::info('Entrou no search');
-        Log::info($request);
         // Extract the type and query from the query string
         $query = $request->input('query');
         $type = $request->input('type');
@@ -82,6 +81,7 @@ class SearchController extends Controller
 
             $posts = $postCategorized;
         } elseif ($type === 'groups') {
+            Log::info($query);
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
             $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
             $groups = Group::where(function($query) use ($tsQuery) {
@@ -99,6 +99,103 @@ class SearchController extends Controller
             }
         } else {
             return view('pages.searchpage', compact('users', 'posts', 'groups', 'type', 'query'));
+        }
+    }
+
+    public function advancedSearch(Request $request)
+    {
+        $type = $request->input('type');
+        $page = $request->input('page', 1);
+                
+        // Initialize an empty collection for results
+        $users = collect();
+        $posts = collect();
+        $groups = collect();
+
+        if ($type === 'users') {
+            $country = $request->input('user-country');
+            $fullname = $request->input('user-fullname');
+            $username = $request->input('user-username');
+
+            $users = User::query();
+
+            if ($country) {
+                $users->where('country', 'ILIKE', '%' . $country . '%');
+            }
+
+            if ($fullname) {
+                $users->where('name', 'ILIKE', '%' . $fullname . '%');
+            }
+
+            if ($username) {
+                $users->where('username', 'ILIKE', '%' . $username . '%');
+            }
+            $users = $users->paginate(10, ['*'], 'page', $page);
+            
+
+            $usersWatchlist = $users->map(function ($user) {
+                $isInWatchlist = false;
+                if (Auth::check() && Auth::user()->isAdmin()) {
+                    $isInWatchlist = Watchlist::where('admin_id', Auth::id())->where('user_id', $user->id)->exists();
+                }
+                $user->isInWatchlist = $isInWatchlist;
+                return $user;
+            });
+            
+            $usersFiltered = $usersWatchlist->where('typeu', '!=', 'ADMIN')->where('id', '!=', Auth::id());
+
+            $users = $usersFiltered;
+
+        } elseif ($type === 'posts') {
+            $category = $request->input('post-category');
+            $description = $request->input('post-description');
+            $postType = $request->input('post-type');
+
+            $posts = Post::query();
+
+            if ($description) {
+                $posts->where('description', 'ILIKE', '%' . $description . '%');
+            }
+
+            if ($type) {
+                $posts->where('typep', 'ILIKE', '%' . $postType . '%');
+            }
+
+            $posts = $posts->paginate(10, ['*'], 'page', $page);
+
+            if ($category) {
+                $postCategorized = collect($posts->items())->filter(function ($post) use ($category) {
+                    return PostCategory::where('post_id', $post->id)->where('category_id', $category)->exists();
+                });
+                $posts = $postCategorized;
+            }
+
+        } elseif ($type === 'groups') {
+            $name = $request->input('group-name');
+            $description = $request->input('group-description');
+
+            $groups = Group::query();
+
+            if ($name) {
+                $groups->where('name', 'ILIKE', '%' . $name . '%');
+            }
+
+            if ($description) {
+                $groups->where('description', 'ILIKE', '%' . $description . '%');
+            }
+
+            $groups = $groups->paginate(10, ['*'], 'page', $page);
+        }
+        if ($request->ajax()) {
+            if ($type === 'users') {
+                return view('partials.user', compact('users'))->render();
+            } elseif ($type === 'posts') {
+                return view('partials.post', compact('posts'))->render();
+            } elseif ($type === 'groups') {
+                return view('partials.group', compact('groups'))->render();
+            }
+        } else {
+            return view('pages.searchpage', compact('users', 'posts', 'groups', 'type'));
         }
     }
 }
