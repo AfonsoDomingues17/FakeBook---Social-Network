@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Response;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\GroupParticipant;
 
 
 
@@ -46,11 +47,18 @@ class GroupController extends Controller
             $photoUrl = $file->store('group_pictures', 'private'); // Stores in storage/app/public/profile_pictures
         }
 
-        Group::create([
+        $group = Group::create([
             'name' => $request->name,
             'description' => $request->description,
             'photo_url' => $photoUrl,
             'owner_id' => Auth::id()
+        ]);
+
+            // Add the owner as a group participant
+        GroupParticipant::create([
+            'group_id' => $group->id,
+            'user_id' => Auth::id(),
+            'date_joined' => now()
         ]);
         return redirect()->route('homepage');
     }
@@ -118,5 +126,45 @@ class GroupController extends Controller
     public function destroy(Group $group)
     {
         //
+    }
+        public function leaveGroup($group_id)
+    {
+        $user = Auth::user();
+        $group = Group::find($group_id);
+
+        if ($group->owner_id == $user->id) {
+            // Transfer ownership to the next member
+            $new_owner_id = GroupParticipant::where('group_id', $group_id)
+                ->where('user_id', '!=', $user->id)
+                ->orderBy('date_joined', 'asc')
+                ->value('user_id');
+
+            if ($new_owner_id) {
+                $group->owner_id = $new_owner_id;
+                $group->save();
+            } else {
+                // If no other members, delete the group
+                $group->delete();
+                return redirect()->route('homepage')->with('success', 'Group has been deleted.');
+            }
+        }
+
+        // Remove the user from the group participants
+        $group->participants()->detach($user->id);
+
+        return redirect()->route('homepage')->with('success', 'You have left the group.');
+    }
+
+    public function deleteGroup($group_id)
+    {
+        $group = Group::find($group_id);
+
+        if ($group->owner_id != Auth::id()) {
+            return redirect()->back()->with('error', 'Only the group owner can delete the group.');
+        }
+
+        $group->delete();
+
+        return redirect()->route('homepage')->with('success', 'Group has been deleted.');
     }
 }

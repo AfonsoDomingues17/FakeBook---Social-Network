@@ -11,4 +11,5 @@ class GroupParticipant extends Model
     public $timestamps = false;
     protected $table = 'groupParticipant';
     protected $primaryKey = (['group_id', 'user_id']);
+    protected $fillable = ['group_id', 'user_id', 'date_joined'];
 }

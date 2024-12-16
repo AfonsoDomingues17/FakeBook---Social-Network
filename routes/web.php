@@ -64,7 +64,8 @@ Route::post('/groups/create', [GroupController::class, 'createGroup'])->name('gr
 Route::get('/groups/{group_id}/photo', [GroupController::class, 'getPhoto'])->name('groupPhoto');
 Route::get('/groups/{group_id}', [GroupController::class, 'show'])->name('group.show');
 Route::get('/groups/{group_id}/info', [GroupController::class, 'groupInfo'])->name('group.info');
-
+Route::post('/groups/{group_id}/leave', [GroupController::class, 'leaveGroup'])->name('group.leave');
+Route::delete('/groups/{group_id}/delete', [GroupController::class, 'deleteGroup'])->name('group.delete');
 // Comments
 Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
 Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
