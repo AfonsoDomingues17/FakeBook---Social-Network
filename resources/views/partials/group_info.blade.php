@@ -5,11 +5,29 @@
         <p>Group Details</p>
         </div>
         <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" alt="group profile picture" width="250" height="250">
-        <p id="gname">{{ $group->name }}</p>
+        <span id="gname">
+            <p>{{ $group->name }}</p>
+            @if($group->owner_id == Auth::user()->id)
+                <i id="pencilEditGname"  class="fa-solid fa-pencil"></i>
+            @endif          
+        </span>
+        <span id="gname_edit" class="gedit" style="display: none;">
+            <input type="text" name="group_name" id="group_name" value="{{ $group->name }}"></input>
+            <i class="fa-solid fa-check"></i>    
+        </span>
         <p>Group: {{$group->participants->count() + 1}} members</p>
     </div>
     <div id="additional_info">
-        <p id="description">{{ $group->description }}</p>
+        <span id="gdescription">
+            <p>{{ $group->description }}</p>
+            @if($group->owner_id == Auth::user()->id)
+                <i id="pencilEditGdescription"  class="fa-solid fa-pencil"></i>
+            @endif
+        </span>
+        <span id="gdescription_edit" class="gedit" style="display: none;">
+            <input type="text" name="group_description" id="group_description" value="{{ $group->description }}"></input>
+            <i class="fa-solid fa-check"></i>    
+        </span>
         <p>Created by {{$group->owner->name}}, em 23/03/2004</p>
     </div>
     <div id="group-members">

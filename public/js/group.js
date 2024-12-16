@@ -24,4 +24,16 @@ document.addEventListener('click', (event) => {
         groupParticipantsModal.show(); 
 
     }
+    else if(event.target.id === 'pencilEditGname'){
+        const gname = document.getElementById('gname');
+        const gnameInput = document.getElementById('gname_edit');
+        gname.style.display = 'none';
+        gnameInput.style.display = 'flex';
+    }
+    else if(event.target.id == 'pencilEditGdescription'){
+        const gdescription = document.getElementById('gdescription');
+        const gdescriptionInput = document.getElementById('gdescription_edit');
+        gdescription.style.display = 'none';
+        gdescriptionInput.style.display = 'flex';
+    }
 });
