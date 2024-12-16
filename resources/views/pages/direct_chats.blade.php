@@ -5,15 +5,17 @@
 @section('content')
     <div id="Conversas">
         <h1>Conversas</h1>
+        <input type="text" id="searchUsers" placeholder="Search for conversations">
         <ul>
             @foreach(Auth::user()->groups() as $group)
                 <a href="#" class="conversation-link" data-type="group" data-id="{{ $group->id }}">
                     <section id="info">
-                        <img src="{{ route('groupPhoto', ['group_id' => $group->id]) }}" width="50" height="50" alt="group profile picture">
+                        <img src="{{ route('groupPhoto', ['group_id' => $group->id]) }}" width="60" height="60" alt="group profile picture">
                         <div class="group-info">
                             <span id="groupName"><p>{{ $group->name }}</p></span>
                             <span id="groupLastMessage"><p>{{ $group->messages->first() ? $group->messages->first()->content : 'No messages yet' }}</p></span>
                         </div>
+                        <p id="timeMessage">17:17</p>
                     </section>
                 </a>
             @endforeach
@@ -30,6 +32,7 @@
                                 <span id="user"><p>{{ $otherUser->username }}</p></span>
                                 <span id="groupLastMessage"><p>{{ $lastMessage ? $lastMessage->content : 'No messages yet' }}</p></span>
                             </div>
+                            <p id="timeMessage">17:17</p>
                         </section>
                     </a>
                 </article>
@@ -38,7 +41,7 @@
     </div>
     
     <div id="special" class="container">
-        <div id="chat" class="container">
+        <div id="chat" >
             <div id="initial">
                 <img id="logo" src="{{ Storage::url('public/LOGO.png') }}" alt="FakeBook Logo" width="200" height="200">
                 <h1>Your conversations!</h1>
