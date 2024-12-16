@@ -1,11 +1,13 @@
 body, html{
   margin: 0;
-  height: 100%;
   font-family: 'Roboto', sans-serif;
   display: flex;
   flex-direction: column;
+  height: 100vh;
 }
-
+header{
+  flex: 0 1 auto;
+}
 .navbar{
   display: flex;
   background-color: white;
@@ -240,6 +242,8 @@ body, html{
 .hidden {
   display: none;
 }
+
+
 @media (max-width: 1183px){
   a.auth2 {
     display: none;
@@ -378,12 +382,10 @@ body, html{
 
 }
 main {
-  flex: 1;
-  position: relative;
+  flex: 1 1 auto;
   background-color: #F0F2F5;
-  display: grid;
-  grid-template-columns: 0.5fr 3fr;
-  margin-top: 1em;
+  display: flex;
+  overflow: hidden;
   p{
     margin-bottom: 0;
   }
@@ -394,10 +396,9 @@ footer{
   background-color: white;
   align-content: center;
   text-align: center;
-  height: 50px;
   width: 100%;
   margin-top: auto;
-  z-index: 1;
+  flex: 0 1 auto;
 }
 #content{
   display: flex;
@@ -405,7 +406,6 @@ footer{
   align-items: center;
   width: 100%;
   height: 100%;
-  min-width: 0;
 }
 
 .form {
@@ -520,28 +520,51 @@ ul#real-time-search {
   background-color: #F0F2F5;
 }
 .homepage-layout{
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  height: 100%;
+  width: 100%;
+  display: flex;
   .suggested-users{
     margin-left: auto;
+    width: 25%;
+    margin-right: 3em;
+    height: 100%;
     h2{
+      font-size: 1.7em;
       text-align: center;
       padding-top: 1em;
     }
-    grid-column: 2;
-    justify-self: end;
-    margin-right: 2em;
   }
   #posts {
-    grid-column: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: auto;
+    width: 70%;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
     h2{
       text-align: center;
       margin-top: 1em;
     }
+    
   }
+  #posts::-webkit-scrollbar {
+    display: none; 
+  }
+}
+@media(max-width: 1500px){
+  .homepage-layout{
+    .suggested-users{
+      width: 40%;
+    }
+    article.post{
+      width: 70%;
+    }
+  }
+
+  
 }
 
 #single{
@@ -555,10 +578,8 @@ article.post {
   padding: 1.5em;
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 50%;
   box-sizing: border-box;
-  overflow: hidden;
-  min-width: 400px;
   .post_author {
     display: flex;
     gap: 1em;
@@ -679,12 +700,15 @@ article.post {
 
 
 .user {
+  width: 100%;
 
   #info{
     display: flex;
     gap: 1em;
     padding: 1em;
     align-items: center;
+    width: 100%;
+ 
     img {
       border-radius: 50%;
       width: 4em;
@@ -720,8 +744,6 @@ article.post {
     background-color: #007bff;
     color: white;
     cursor: pointer;
-    align-self: center;
-    justify-self: center;
     margin-left: auto;
 
   }
@@ -1073,7 +1095,7 @@ button#addPost{
   width: 100%;
   border: none;
   background-color: #F0F2F5;
-  height: 40px;
+  height: 60px;
   border-radius: 5px;
   margin-bottom: 1em;
   padding-left: 1em;
@@ -1128,6 +1150,9 @@ button#addPost{
     margin-bottom: 0.5em;
   }
   .user{
+    #info{
+      width: 100%;
+    }
     border-top: 2px solid #F0F2F5;
   }
   div.user:last-of-type{
@@ -1176,9 +1201,6 @@ button#addPost{
 }
 
 .direct-chats-page {
-  main{
-    grid-template-columns: 70px 3fr;
-  }
   #sidebar{
     background-color: #F0F2F5;
   width: 70px;
@@ -1270,12 +1292,9 @@ div#Conversas {
 }
 div#special{
   display: flex;
- margin-right: 0;
- padding-right: 0;
- padding-left: 0;
- min-width: 0;
- height: 100%;
- width: 100%;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
 div#group_info{
   display: flex;
   flex-direction: column;
@@ -1467,7 +1486,7 @@ div#group_info{
 
 div#chat {
   display: flex;
-  height: 100%; /* Full viewport height */
+  height: 100%; 
   flex-direction: column;
   padding-left: 0;
   padding-right: 0;
@@ -1479,8 +1498,8 @@ div#chat {
       background-color: #f1f1f1;
       padding-left: 1.5em;
       padding-right: 1.5em;
-      padding-top: 0.5em;
-      padding-bottom: 0.5em;
+      padding-top: 1em;
+      padding-bottom: 1em;
       border-bottom: 1px solid #ccc;
       a{
         text-decoration: none;
@@ -1574,6 +1593,8 @@ div#chat {
     align-items: center;
     justify-content: center;
     text-align: center;
+    height: 100%;
+    min-height: 0;
   }
   
 

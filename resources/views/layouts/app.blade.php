@@ -137,7 +137,7 @@
                             @include('partials.create_group')
                     </section>
                 </div>
-            </header>
+        </header>
         <main>
         <section id="sidebar">
             <div class= "navigators">
@@ -178,6 +178,7 @@
             <section id="content" >
                 @yield('content')
             </section>
+            
         </main>
         <footer>
             <p>&copy; FakeBook 2024</p>
