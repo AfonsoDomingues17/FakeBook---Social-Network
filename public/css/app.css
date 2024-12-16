@@ -692,7 +692,7 @@ article.post {
   }
 
   span#user p {
-    font-size: 1em;
+    font-size: 1.2em;
     font-weight: bold;
     margin-bottom: 0;
   }
@@ -822,8 +822,6 @@ article.post {
     transition: background-color 0.3s, box-shadow 0.3s;
     text-decoration: none;
   }
-
-
 
 
   section#user_posts {
@@ -1086,7 +1084,6 @@ button#addPost{
 .modal-content {
   background-color: white;
   margin: 5% auto;
-  padding: 20px;
   border: 1px solid #888;
   width: 80%;
   max-width: 500px;
@@ -1095,6 +1092,9 @@ button#addPost{
 #modal-footer {
   display: flex;
   justify-content: center;
+  border-top: 2px solid #F0F2F5;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
   i {
     font-size: 1.5em;
     cursor: pointer;
@@ -1109,6 +1109,28 @@ button#addPost{
 }
 
 .modal-body{
+  h3{
+    margin-bottom: 0.5em;
+  }
+  .user{
+    border-top: 2px solid #F0F2F5;
+  }
+  #searchUsers{
+    width: 100%;
+    border: none;
+    background-color: #F0F2F5;
+    height: 40px;
+    border-radius: 5px;
+    margin-bottom: 1em;
+  }
+  #searchUsers::placeholder{
+    padding-left: 1em;
+  }
+  div.user:last-of-type{
+    section#info{
+    padding-bottom: 0;
+    }
+  }
   section#CreationPage form {
     display: flex;
     flex-direction: column;
@@ -1128,6 +1150,23 @@ button#addPost{
     button{
       margin: 0 auto;
     }
+  }
+  button#AddMember{
+    border-radius: 0;
+    font-size: 1.2em;
+    font-weight: normal;
+    padding-right: 1.2em;
+    padding-left: 1.2em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    border-radius: 10px;
+    color: #007bff;
+    background-color: white;
+    border: 2px solid #007bff;
+  }
+  button#AddMember:hover{
+    background-color: #007bff;
+    color: white;
   }
   
 }
