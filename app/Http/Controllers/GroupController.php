@@ -39,27 +39,27 @@ class GroupController extends Controller
             'description' => 'nullable|string|max:255',
             'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+    
         $photoUrl = null;
         if ($request->hasFile('photo_url')) {
-            
             $file = $request->file('photo_url');
-            
-            $photoUrl = $file->store('group_pictures', 'private'); // Stores in storage/app/public/profile_pictures
+            $photoUrl = $file->store('group_pictures', 'private'); // Stores in storage/app/private/group_pictures
         }
-
+    
         $group = Group::create([
             'name' => $request->name,
             'description' => $request->description,
             'photo_url' => $photoUrl,
             'owner_id' => Auth::id()
         ]);
-
-            // Add the owner as a group participant
+    
+        // Add the owner as a group participant
         GroupParticipant::create([
             'group_id' => $group->id,
             'user_id' => Auth::id(),
             'date_joined' => now()
         ]);
+    
         return redirect()->route('homepage');
     }
     public function getPhoto($group_id){

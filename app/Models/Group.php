@@ -20,7 +20,7 @@ class Group extends Model
         ->withPivot('date_joined');
     }
     public function messages(){
-        return $this->hasMany(Message::class,'group_id');
+        return $this->hasMany(Message::class);
     }
 
     public function owner(){

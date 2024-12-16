@@ -1,16 +1,34 @@
-<div id="group_info">
+<div id="group_info" sty>
     <div id="group-header">
         <div id="top_bar">
-            <i id="close" class="fa-solid fa-xmark"></i>
-            <p>Group Details</p>
+        <i id="close" class="fa-solid fa-xmark"></i>
+        <p>Group Details</p>
         </div>
-        <img src="{{ route('groupPhoto', ['group_id' => $group->id]) }}" alt="group profile picture" width="250" height="250">
-        <p id="gname">{{ $group->name }}</p>
-        <p>Group: {{ $group->participants->count() + 1 }} members</p>
+        <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" alt="group profile picture" width="250" height="250">
+        <span id="gname">
+            <p>{{ $group->name }}</p>
+            @if($group->owner_id == Auth::user()->id)
+                <i id="pencilEditGname"  class="fa-solid fa-pencil"></i>
+            @endif          
+        </span>
+        <span id="gname_edit" class="gedit" style="display: none;">
+            <input type="text" name="group_name" id="group_name" value="{{ $group->name }}"></input>
+            <i class="fa-solid fa-check"></i>    
+        </span>
+        <p>Group: {{$group->participants->count() + 1}} members</p>
     </div>
     <div id="additional_info">
-        <p id="description">{{ $group->description }}</p>
-        <p>Created by {{ $group->owner->name }}, on {{ $group->created_at->format('d/m/Y') }}</p>
+        <span id="gdescription">
+            <p>{{ $group->description }}</p>
+            @if($group->owner_id == Auth::user()->id)
+                <i id="pencilEditGdescription"  class="fa-solid fa-pencil"></i>
+            @endif
+        </span>
+        <span id="gdescription_edit" class="gedit" style="display: none;">
+            <input type="text" name="group_description" id="group_description" value="{{ $group->description }}"></input>
+            <i class="fa-solid fa-check"></i>    
+        </span>
+        <p>Created by {{$group->owner_id}}, em 23/03/2004</p>
     </div>
     <div id="group-members">
         <h2>Group Members</h2>
@@ -20,18 +38,20 @@
         </span>
         <ul>
             <div id="owner">
-                <img src="{{ route('userphoto', ['user_id' => $group->owner_id]) }}" alt="Owner profile picture" width="60" height="60">
-                <p>{{ $group->owner->name }}</p>
+                <img src="{{ route('userphoto', ['user_id' => $group->owner_id]) }}" alt="Owner porfile picture" width="60" height="60">
+                <p>Me</p>
             </div>
             @if(!$group->participants->isEmpty())
-                @foreach ($group->participants as $groupMember)
-                    <div id="member">
-                        <img src="{{ route('userphoto', ['user_id' => $groupMember->id]) }}" alt="">
-                        <p>{{ $groupMember->name }}</p>
-                    </div>
-                @endforeach
+            @foreach ($group->participants as $groupMember)
+                <div id="member">
+                    <img src="{{ route('userphoto', ['user_id' => $groupMember->id]) }}" alt="">
+                    <p>{{ $groupMember->name }}</p>
+                </div>
+            @endforeach
             @endif
-        </ul>
+               
+         </ul>   
+            
     </div>
     <div id="group-footer">
         <form action="{{ route('group.leave', ['group_id' => $group->id]) }}" method="POST">
