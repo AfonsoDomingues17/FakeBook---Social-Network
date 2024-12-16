@@ -38,28 +38,41 @@ class GroupController extends Controller
             'name' => 'required|string|max:50',
             'description' => 'nullable|string|max:255',
             'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'selected_users' => 'nullable|string'
         ]);
-    
+
         $photoUrl = null;
         if ($request->hasFile('photo_url')) {
             $file = $request->file('photo_url');
             $photoUrl = $file->store('group_pictures', 'private'); // Stores in storage/app/private/group_pictures
         }
-    
+
         $group = Group::create([
             'name' => $request->name,
             'description' => $request->description,
             'photo_url' => $photoUrl,
             'owner_id' => Auth::id()
         ]);
-    
+
         // Add the owner as a group participant
         GroupParticipant::create([
             'group_id' => $group->id,
             'user_id' => Auth::id(),
             'date_joined' => now()
         ]);
-    
+
+        // Add selected users as group participants
+        if ($request->selected_users) {
+            $selectedUsers = explode(',', $request->selected_users);
+            foreach ($selectedUsers as $userId) {
+                GroupParticipant::create([
+                    'group_id' => $group->id,
+                    'user_id' => $userId,
+                    'date_joined' => now()
+                ]);
+            }
+        }
+
         return redirect()->route('homepage');
     }
     public function getPhoto($group_id){
@@ -167,4 +180,30 @@ class GroupController extends Controller
 
         return redirect()->route('homepage')->with('success', 'Group has been deleted.');
     }
+
+    public function updateGroup(Request $request, $group_id)
+    {
+        $group = Group::find($group_id);
+
+        if ($group->owner_id != Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'group_name' => 'nullable|string|max:50',
+            'group_description' => 'nullable|string|max:255',
+        ]);
+
+        if ($request->has('group_name')) {
+            $group->name = $request->group_name;
+        }
+
+        if ($request->has('group_description')) {
+            $group->description = $request->group_description;
+        }
+
+        $group->save();
+
+        return response()->json($group);
+}
 }

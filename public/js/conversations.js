@@ -189,21 +189,37 @@ document.addEventListener('DOMContentLoaded', function() {
             const target = event.target.closest('#chat-header');
             const close = event.target.closest('#close');
             if (target && target.dataset.id) {
-                fetch(`/groups/${target.dataset.id}/info`)
-                    .then(response => response.text())
-                    .then(html => {
-                        if (window.innerWidth < 1300) { // Replace content if screen is too small
-                            specialContainer.innerHTML = html;
-                        } else { // Append content if screen is large enough
-                            specialContainer.innerHTML += html;
-                        }
-                    })
-                    .catch(error => console.error('Error fetching group info:', error));
+                const groupInfo = document.querySelector('#group_info');
+                if (groupInfo && groupInfo.dataset.groupId == target.dataset.id) {
+                    // Close group info if already open
+                    specialContainer.innerHTML = '';
+                    specialContainer.appendChild(chatContainer);
+                } else {
+                    fetch(`/groups/${target.dataset.id}/info`)
+                        .then(response => response.text())
+                        .then(html => {
+                            if (window.innerWidth < 1300) { // Replace content if screen is too small
+                                specialContainer.innerHTML = html;
+                            } else { // Append content if screen is large enough
+                                specialContainer.innerHTML += html;
+                            }
+                        })
+                        .catch(error => console.error('Error fetching group info:', error));
+                }
             }
             else if(close){
                 console.log(chatContainer);
                 specialContainer.innerHTML = '';
                 specialContainer.appendChild(chatContainer);
+            }
+        });
+        // Close group info when clicking outside of it
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('#group_info') && !event.target.closest('#chat-header')) {
+                const close = document.querySelector('#close');
+                if (close) {
+                    close.click();
+                }
             }
         });
     }

@@ -66,6 +66,7 @@ Route::get('/groups/{group_id}', [GroupController::class, 'show'])->name('group.
 Route::get('/groups/{group_id}/info', [GroupController::class, 'groupInfo'])->name('group.info');
 Route::post('/groups/{group_id}/leave', [GroupController::class, 'leaveGroup'])->name('group.leave');
 Route::delete('/groups/{group_id}/delete', [GroupController::class, 'deleteGroup'])->name('group.delete');
+Route::post('/groups/{group_id}/update', [GroupController::class, 'updateGroup'])->name('group.update');
 // Comments
 Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
 Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');

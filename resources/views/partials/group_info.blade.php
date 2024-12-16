@@ -1,4 +1,4 @@
-<div id="group_info" sty>
+<div id="group_info" data-group-id="{{ $group->id }}">
     <div id="group-header">
         <div id="top_bar">
         <i id="close" class="fa-solid fa-xmark"></i>
@@ -15,7 +15,7 @@
             <input type="text" name="group_name" id="group_name" value="{{ $group->name }}"></input>
             <i class="fa-solid fa-check"></i>    
         </span>
-        <p>Group: {{$group->participants->count() + 1}} members</p>
+        <p>Group: {{$group->participants->count()}} members</p>
     </div>
     <div id="additional_info">
         <span id="gdescription">
@@ -38,19 +38,20 @@
         </span>
         <ul>
             <div id="owner">
-                <img src="{{ route('userphoto', ['user_id' => $group->owner_id]) }}" alt="Owner porfile picture" width="60" height="60">
-                <p>Me</p>
+            <img src="{{ route('userphoto', ['user_id' => $group->owner_id]) }}" alt="Owner profile picture" width="60" height="60">
+            <p>{{ $group->owner->name }}</p>
             </div>
             @if(!$group->participants->isEmpty())
-            @foreach ($group->participants as $groupMember)
-                <div id="member">
-                    <img src="{{ route('userphoto', ['user_id' => $groupMember->id]) }}" alt="">
-                    <p>{{ $groupMember->name }}</p>
-                </div>
-            @endforeach
+                @foreach ($group->participants as $groupMember)
+                    @if($groupMember->id != $group->owner_id)
+                        <div id="member">
+                            <img src="{{ route('userphoto', ['user_id' => $groupMember->id]) }}" alt="group member profile pic" width="60" height="60">
+                            <p>{{ $groupMember->name }}</p>
+                        </div>
+                    @endif
+                @endforeach
             @endif
-               
-         </ul>   
+        </ul>   
             
     </div>
     <div id="group-footer">
