@@ -9,6 +9,7 @@
             <div class="modal-body">
                 <section id="pageUsers">
                     <h3>Add members to the group</h3>
+                    <input type="text" id="searchUsers" placeholder="Search for users">
                     @if (count(Auth::user()->following) == 0)
                         <p>You don't have any followers to add to the group</p>
                       
@@ -16,11 +17,15 @@
                     @foreach (Auth::user()->following->take(5) as $follower)
                         
                         <div class="user">
+                            <section id="info">
                             <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="70"  height="70" alt="user profile picture">
                                 <div class="user-info">
                                     <span id="user"><p>{{$follower->username}}</p></span>
                                     <span id="nome"><p>{{$follower->name}}</p></span>
                                 </div>
+                                <button id="AddMember">Add</button>
+                            </section>
+                            
                         </div>
                     
                     @endforeach

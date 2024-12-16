@@ -95,7 +95,6 @@
                                                     </div>
                                                 @elseif (!Auth::user()->isFollowing($notification->sender->id))
                                                     <button id="Follow" data-user-id="{{$notification->sender->id}}">Follow Back</button>
-
                                                 @endif
                                             </li>
                                         @endforeach
@@ -185,5 +184,6 @@
         </footer>
         @include('partials.create_post')
         @include('partials.create_group')
+        @include('partials.group_participants')
     </body>
 </html>

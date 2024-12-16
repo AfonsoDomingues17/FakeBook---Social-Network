@@ -692,7 +692,7 @@ article.post {
   }
 
   span#user p {
-    font-size: 1em;
+    font-size: 1.2em;
     font-weight: bold;
     margin-bottom: 0;
   }
@@ -822,8 +822,6 @@ article.post {
     transition: background-color 0.3s, box-shadow 0.3s;
     text-decoration: none;
   }
-
-
 
 
   section#user_posts {
@@ -1086,7 +1084,6 @@ button#addPost{
 .modal-content {
   background-color: white;
   margin: 5% auto;
-  padding: 20px;
   border: 1px solid #888;
   width: 80%;
   max-width: 500px;
@@ -1095,6 +1092,9 @@ button#addPost{
 #modal-footer {
   display: flex;
   justify-content: center;
+  border-top: 2px solid #F0F2F5;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
   i {
     font-size: 1.5em;
     cursor: pointer;
@@ -1109,6 +1109,28 @@ button#addPost{
 }
 
 .modal-body{
+  h3{
+    margin-bottom: 0.5em;
+  }
+  .user{
+    border-top: 2px solid #F0F2F5;
+  }
+  #searchUsers{
+    width: 100%;
+    border: none;
+    background-color: #F0F2F5;
+    height: 40px;
+    border-radius: 5px;
+    margin-bottom: 1em;
+  }
+  #searchUsers::placeholder{
+    padding-left: 1em;
+  }
+  div.user:last-of-type{
+    section#info{
+    padding-bottom: 0;
+    }
+  }
   section#CreationPage form {
     display: flex;
     flex-direction: column;
@@ -1128,6 +1150,23 @@ button#addPost{
     button{
       margin: 0 auto;
     }
+  }
+  button#AddMember{
+    border-radius: 0;
+    font-size: 1.2em;
+    font-weight: normal;
+    padding-right: 1.2em;
+    padding-left: 1.2em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    border-radius: 10px;
+    color: #007bff;
+    background-color: white;
+    border: 2px solid #007bff;
+  }
+  button#AddMember:hover{
+    background-color: #007bff;
+    color: white;
   }
   
 }
@@ -1193,19 +1232,30 @@ div#Conversas {
 div#special{
   display: flex;
  margin-right: 0;
+ padding-right: 0;
 div#group_info{
   display: flex;
   flex-direction: column;
   gap: 1em;
-  background-color: white;
+  background-color: #F0F2F5;
   width: 100%;
-  padding-left: 3em;
-  padding-top: 1.5em;
+  height: 100vh;
+  overflow-y: auto;
+  
+  border-left: 1px solid #ccc;
+  p#description{
+    font-size: 1.3em;
+  }
   div#group-header{
     display: flex;
     flex-direction: column;
     gap: 1em;
     align-items: center;
+    background-color: white;
+    padding-left: 3em;
+    padding-top: 1.5em;
+    padding-right: 3em;
+    padding-bottom: 1.5em;
     div {
       display: flex;
       gap: 2em;
@@ -1216,22 +1266,114 @@ div#group_info{
       }
       i {
         font-size: 1.5em;
+        cursor: pointer;
       }
+    
     }
+
     p#gname{
       font-size: 2em;
       font-weight: bold;
     }
   }
+  div#additional_info{
+    background-color: white;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+
+  }
   div#group-members{
+    background-color: white;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+  
+    >p{
+      font-size: 1.5em;
+    }
+    span#AddMember{
+      font-size: 1.5em;
+      cursor: pointer;
+      display: flex;
+      gap: 1em;
+      align-items: center;
+      padding-top: 1em;
+      padding-bottom: 1em;
+      p{
+        font-size: 1em;
+      }
+      span{
+        display: flex;
+        background-color: #007bff;
+        width: 60px;
+        height: 60px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+      i{
+
+        background-color: #007bff;
+        color: white;
+      }
+    }
+    ul{
+      padding-left: 0;
+    }
     >p{
       font-size: 1.5em;
       margin-bottom: 1em;
     }
     div#owner{
       display: flex;
-      gap:1em;
+      gap:1.5em;
       align-items: center;
+      img{border-radius: 50%;}
+      p{
+        font-size: 1.5em;
+      }
+    }
+  }
+  div#group-footer{
+    
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    justify-content: flex-start;
+    align-items: flex-start;
+    p{
+      font-size: 1.5em;
+      color: red;
+    }
+    button{
+      display: flex;
+      gap: 1em;
+      border: none;
+      align-items: center;
+      background-color: white;
+      padding-top: 1em;
+      padding-bottom: 1em;
+      span{
+        display: flex;
+        background-color: red;
+        width: 60px;
+        height: 60px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        
+      }
+      i{
+        color: white;
+        font-size: 1.5em;
+      }
     }
   }
 
@@ -1260,7 +1402,7 @@ div#chat {
       cursor: pointer;
   }
 
-  #messages {
+  div#messages {
       flex: 1 1 auto; 
       overflow-y: auto; 
       padding: 1em;

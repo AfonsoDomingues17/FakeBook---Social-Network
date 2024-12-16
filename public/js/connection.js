@@ -1,6 +1,7 @@
 document.addEventListener('click', (event) => {
     
     if (event.target && event.target.id === 'Follow') {
+        console.log('Follow button clicked');
         const followButton = event.target;
         const userId = followButton.dataset.userId;
         
