@@ -189,16 +189,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (specialContainer) {
         document.addEventListener('click', function(event) {
             const target = event.target.closest('#chat-header');
+            const chat = event.target.closest('#chat');
             const close = event.target.closest('#close');
+            console.log(chat)
             if (target && target.dataset.id) {
                 fetch(`/groups/${target.dataset.id}/info`)
                     .then(response => response.text())
                     .then(html => {
-                        if (window.innerWidth < 1300) { // Replace content if screen is too small
                             specialContainer.innerHTML = html;
-                        } else { // Append content if screen is large enough
-                            specialContainer.innerHTML += html;
-                        }
+
+                        
                     })
                     .catch(error => console.error('Error fetching group info:', error));
             }
