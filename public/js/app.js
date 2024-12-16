@@ -112,9 +112,15 @@ document.addEventListener('DOMContentLoaded', function () {
   observer.observe(document.body, { childList: true, subtree: true });
 });
 
-
-
-
+function previewSentPicture(event) {
+  const reader = new FileReader();
+  reader.onload = function () {
+      const output = document.getElementById('image-preview');
+      output.src = reader.result;
+      output.style.display = 'block';
+  };
+  reader.readAsDataURL(event.target.files[0]);
+}
 
 
 

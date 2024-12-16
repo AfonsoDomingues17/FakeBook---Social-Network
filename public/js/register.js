@@ -1,7 +1,7 @@
 function previewProfilePicture(event) {
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = function () {
-        var output = document.getElementById('p_picture_review');
+        const output = document.getElementById('p_picture_review');
         output.src = reader.result;
     };
     reader.readAsDataURL(event.target.files[0]);

@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(html => {
                         chatContainer.innerHTML = html;
                         // Set background color of the clicked info section to white
-                        this.querySelector('section#info').style.backgroundColor = '#ffffff';
+                        this.querySelector('section#info').style.backgroundColor = '#F0F2F5';
 
                         // Unsubscribe from the previous channel if any
                         if (currentChannel) {
@@ -49,13 +49,12 @@ document.addEventListener('DOMContentLoaded', function() {
         channel.bind('new-message', function(data) {
             let message = data.message;
             if (!document.querySelector('.message[data-message-id="' + message.id + '"]')) {
-                var messageElement = `
-                    <div class="message" data-message-id="${message.id}" style="position: relative;">
-                        <strong>${message.author.name}:</strong>
-                        <p>${message.content || ''}</p>
+                const messageElement = `
+                    <div class="message ${message.author_id === parseInt(currentUserId) ? 'my-message' : ''}" data-message-id="${message.id}">
+                        <span id="Mymessage"><p>${message.content || ''}</p></span>
                         ${message.image_url ? `<img src="/messages/image/${message.id}" alt="Image">` : ''}
                         ${message.author_id === parseInt(currentUserId) 
-                            ? '<button class="delete-message btn btn-danger btn-sm" style="position: absolute; top: 0; right: 0; display: none;">Delete</button>' 
+                            ? '<button class="delete-message btn btn-danger btn-sm" style="display: none;">Delete</button>' 
                             : ''}
                     </div>`;
                 document.getElementById('messages').insertAdjacentHTML('beforeend', messageElement);
@@ -117,6 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         scrollToBottom();
                     }
                     this.reset();
+                    const imagePreview = document.getElementById('image-preview');
+                    imagePreview.src = '#';
+                    imagePreview.style.display = 'none';
                 })
                 .catch(error => {
                     alert('Error: ' + error.message);
@@ -208,3 +210,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
