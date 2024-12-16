@@ -28,7 +28,7 @@
             <input type="text" name="group_description" id="group_description" value="{{ $group->description }}"></input>
             <i class="fa-solid fa-check"></i>    
         </span>
-        <p>Created by {{$group->owner_id}}, em 23/03/2004</p>
+        <p>Created by {{$group->owner->name}}, em 23/03/2004</p>
     </div>
     <div id="group-members">
         <h2>Group Members</h2>
