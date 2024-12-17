@@ -559,7 +559,7 @@ ul#real-time-search {
       padding-top: 1em;
     }
   }
-  #posts {
+  #posts, #search-results {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -573,7 +573,6 @@ ul#real-time-search {
       text-align: center;
       margin-top: 1em;
     }
-    
   }
   #posts::-webkit-scrollbar {
     display: none; 
