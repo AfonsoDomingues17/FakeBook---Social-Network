@@ -26,7 +26,8 @@
             
         </section>
         <section class="suggested-users">
-            <h2>Users that you may know!</h2>
+            
+            <h3>Users that you may know!</h3>
             @foreach($suggestedUsers as $suggestedUser)
                 @include('partials.user', ['user' => $suggestedUser, 'isInWatchlist' => $suggestedUser->isInWatchlist])
             @endforeach

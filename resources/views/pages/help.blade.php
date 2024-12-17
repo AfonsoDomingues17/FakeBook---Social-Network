@@ -101,7 +101,7 @@
             </ul>
         </div>
         <h2>Contact Form</h2>
-        <div class="form">
+        <div ">
             <form action="{{ route('help.form') }}" method="POST">
                 @csrf
                 <div class="form-group">

@@ -31,11 +31,14 @@
             @csrf
             <input type="hidden" name="id" value="{{$post->id}}">
             <button type="submit" class="like-button">
-                <i class="fa-regular fa-heart"></i>
+                <p>
+                    <i class="fa-regular fa-heart"></i>
+                    33
+                </p>
+                
             </button>
         </form>
         <p><i class="fa-regular fa-comment"></i> 33</p>
-        <p><i class="fa-solid fa-share"></i> 10</p>
         <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
             <i class="fa-regular fa-flag"></i>
         </button>
