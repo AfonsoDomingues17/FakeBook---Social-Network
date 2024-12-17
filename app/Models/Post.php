@@ -36,7 +36,7 @@ class Post extends Model
         return $this->belongsToMany(Post::class, 'posttag', 'post_id','tagged_user_id');
         }
     public function likedByUsers(){
-            return $this->belongsToMany(Post::class, 'postlikes', 'post_id', 'user_id');
+            return $this->belongsToMany(User::class, 'postlikes', 'post_id', 'user_id');
     }
 
     public function getNumberOfComments()

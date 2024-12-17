@@ -27,13 +27,20 @@
         </div>
     @endif
     <div class="interaction-bar">
-        <form id="like-form" action="{{route('post.like')}}" method="POST">
-            @csrf
-            <input type="hidden" name="id" value="{{$post->id}}">
-            <button type="submit" class="like-button">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-        </form>
+        <div class="like-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
+            <form class="like-form" action="{{ route('post.like') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $post->id }}">
+                <button type="submit" class="like-button">
+                    @if (Auth::check() && $post->likedByUsers()->where('user_id', Auth::user()->id)->exists())
+                        <i class="fa-solid fa-heart"></i>
+                    @else
+                        <i class="fa-regular fa-heart"></i>
+                    @endif
+                </button>
+            </form>
+            <span class="like-count">{{ $post->getNumberOfLikes() }}</span>
+        </div>
         <p><i class="fa-regular fa-comment"></i> 33</p>
         <p><i class="fa-solid fa-share"></i> 10</p>
         <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">

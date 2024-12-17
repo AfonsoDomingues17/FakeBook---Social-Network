@@ -195,13 +195,34 @@ public function destroy($post_id)
 }
 
 
-function like(Request $request) {
-    Log::info('Like post ' . $request->id);
-    $event = event(new PostLike($request->id));
-    Log::info('Event', $event);
-    return response()->json(['success' => true, 'message' => 'Post liked successfully']);
-    
-}
+    function like(Request $request) {
+        if(!Auth::check()) {
+            return response()->json(['error' => 'Not authenticated'], 401);
+        }
 
+        $postId = $request->id;
+        $userId = Auth::id();
+        $post = Post::findOrFail($postId);
 
+        $this->authorize('like', $post);
+
+        $existingLike = $post->likedByUsers()->where('user_id', $userId)->first();
+
+        if ($existingLike) {
+            // Unlike Post
+            $post->likedByUsers()->detach($userId);
+            $liked = false;
+        } else {
+            // Like Post
+            $post->likedByUsers()->attach($userId);
+            $liked = true;
+
+            $event = event(new PostLike($request->id));
+            Log::info('Event', $event);
+        }
+
+        $likeCount = $post->getNumberOfLikes();
+
+        return response()->json(['success'=> true, 'liked' => $liked, 'likeCount' => $likeCount]);
+    }
 }
