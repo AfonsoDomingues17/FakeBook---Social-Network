@@ -34,9 +34,9 @@
     <header>
                 <div class="navbar">
                     <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('public/LOGO.png') }}" alt="FakeBook Logo" width="50" height="50"></a>
-                    <h1>
+                    <h2>
                         <a href="{{ url('/') }}">FakeBook!</a>
-                    </h1>
+                    </h2>
                         @if((Auth::check() && !Auth::user()->isBanned()) || !Auth::check())
                         <form  action="{{route('search')}}" method="GET">
                             <div style="position: relative;">
