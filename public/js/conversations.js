@@ -36,20 +36,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    function attachGroupInfoEventListeners() {
-        console.log('Attaching group info event listeners');
+   function attachGroupInfoEventListeners() {
         const addMemberSpan = document.getElementById('AddMembers');
-        const addMembersForm = document.getElementById('add-members-form');
 
         if (addMemberSpan) {
-            console.log('Add members span found');
             addMemberSpan.addEventListener('click', function() {
                 console.log('Add members span clicked');
-                if (addMembersForm.style.display === 'none' || addMembersForm.style.display === '') {
-                    addMembersForm.style.display = 'block';
-                } else {
-                    addMembersForm.style.display = 'none';
-                }
             });
         } else {
             console.log('Add members span not found');
@@ -218,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const target = event.target.closest('#chat-header');
             const chat = event.target.closest('#chat');
             const close = event.target.closest('#close');
-            console.log(chat)
             if (target && target.dataset.id) {
                 const groupInfo = document.querySelector('#group_info');
                 if (groupInfo && groupInfo.dataset.groupId == target.dataset.id) {
@@ -237,15 +228,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                 }
             }
-            else if(close && !event.target.closest('#groupParticipantsModal')){
-                console.log(chatContainer);
+            else if(close && !event.target.closest('#addMembersModal')){
                 specialContainer.innerHTML = '';
                 specialContainer.appendChild(chatContainer);
             }
         });
         // Close group info when clicking outside of it
         document.addEventListener('click', function(event) {
-            if (!event.target.closest('#group_info') && !event.target.closest('#chat-header') && !event.target.closest('#groupParticipantsModal')) {
+            if (!event.target.closest('#group_info') && !event.target.closest('#chat-header') && !event.target.closest('#addMembersModal')) {
                 const close = document.querySelector('#close');
                 if (close) {
                     close.click();
