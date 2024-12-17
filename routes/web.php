@@ -89,6 +89,9 @@ Route::get('/reports', [ReportController::class, 'showReports'])->name('reports'
 Route::post('/report/users/{user_id}', [ReportController::class, 'reportUser'])->name('report.user');
 Route::post('/report/posts/{post_id}', [ReportController::class, 'reportPost'])->name('report.post');
 Route::post('/report/comments/{comment_id}', [ReportController::class, 'reportComment'])->name('report.comment');
+Route::get('/reports/user/{user_id}', [ReportController::class, 'getUserReports'])->name('reports.user');
+Route::get('/reports/post/{post_id}', [ReportController::class, 'getPostReports'])->name('reports.post');
+Route::get('/reports/comment/{comment_id}', [ReportController::class, 'getCommentReports'])->name('reports.comment');
 
 // Media
 Route::get('/media/{post_id}', [MediaController::class, 'show'])->name('media.show');
