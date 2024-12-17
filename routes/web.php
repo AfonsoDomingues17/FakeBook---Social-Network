@@ -89,14 +89,17 @@ Route::get('/reports', [ReportController::class, 'showReports'])->name('reports'
 Route::post('/report/users/{user_id}', [ReportController::class, 'reportUser'])->name('report.user');
 Route::post('/report/posts/{post_id}', [ReportController::class, 'reportPost'])->name('report.post');
 Route::post('/report/comments/{comment_id}', [ReportController::class, 'reportComment'])->name('report.comment');
+Route::get('/reports/user/{user_id}', [ReportController::class, 'getUserReports'])->name('reports.user');
+Route::get('/reports/post/{post_id}', [ReportController::class, 'getPostReports'])->name('reports.post');
+Route::get('/reports/comment/{comment_id}', [ReportController::class, 'getCommentReports'])->name('reports.comment');
 
 // Media
 Route::get('/media/{post_id}', [MediaController::class, 'show'])->name('media.show');
 
 
 // Search
-
 Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/advsearch', [SearchController::class, 'advancedSearch'])->name('advancedSearch');
 
 //Connections
 Route::post('/follow/users/{user_id}', [UserController::class, 'follow'])->name('follow');
@@ -105,9 +108,7 @@ Route::post('/follow/accept/users/{user_id}', [UserController::class, 'acceptFol
 Route::delete('/follow/decline/notifications/{notification_id}', [UserController::class, 'declineFollowRequest'])->name('declinefollow');
 Route::delete('/follow/request/delete/{user_id}', [UserController::class, 'deleteFollowRequest'])->name('deletefollowrequest');
 
-
 // Messages
-
 Route::middleware('auth')->group(function () {
     Route::get('/direct-chats', [DirectChatController::class, 'index'])->name('direct_chats.index');
     Route::get('/direct-chats/{id}', [DirectChatController::class, 'show'])->name('direct_chats.show');
@@ -121,14 +122,12 @@ Route::middleware('auth')->group(function () {
 // Conversations
 
 
-
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::post('/logout', 'logout')->name('logout');
 });
-
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', [RegisterController::class, 'register']);

@@ -80,17 +80,27 @@ class ReportController extends Controller
             return $report;
         });
 
-        $userReports = $reports->where('type', 'user')->groupBy('target_user_id')->sortByDesc(function ($group) {
+        $userReports = $reports->where('type', 'user')->groupBy('target_user_id')->filter(function ($group) {
+            return count($group) >= 5;
+        })->sortByDesc(function ($group) {
             return count($group);
         });
 
-        $postReports = $reports->where('type', 'post')->groupBy('post_id')->sortByDesc(function ($group) {
+        $postReports = $reports->where('type', 'post')->groupBy('post_id')->filter(function ($group) {
+            return count($group) >= 5;
+        })->sortByDesc(function ($group) {
             return count($group);
         });
 
-        $commentReports = $reports->where('type', 'comment')->groupBy('comment_id')->sortByDesc(function ($group) {
+        $commentReports = $reports->where('type', 'comment')->groupBy('comment_id')->filter(function ($group) {
+            return count($group) >= 5;
+        })->sortByDesc(function ($group) {
             return count($group);
         });
+
+        Log::info('User Reports: ', $userReports->toArray());
+        Log::info('Post Reports: ', $postReports->toArray());
+        Log::info('Comment Reports: ', $commentReports->toArray());
 
         return view('pages.reports', [
             'userReports' => $userReports,
@@ -98,7 +108,6 @@ class ReportController extends Controller
             'commentReports' => $commentReports
         ]);
     }
-
     public function reportUser(Request $request, $user_id)
     {
         if (Auth::check()) {
@@ -139,6 +148,22 @@ class ReportController extends Controller
         return redirect()->to(url('/'));
     }
 
+        public function getUserReports($user_id)
+    {
+        $reports = Report::where('target_user_id', $user_id)->get();
+        return response()->json($reports);
+    }
+
+    public function getPostReports($post_id)
+    {
+        $reports = Report::where('post_id', $post_id)->get();
+        return response()->json($reports);
+    }
+        public function getCommentReports($comment_id)
+    {
+        $reports = Report::where('comment_id', $comment_id)->get();
+        return response()->json($reports);
+    }
     public function reportComment(Request $request, $comment_id)
     {
         

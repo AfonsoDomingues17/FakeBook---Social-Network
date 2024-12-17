@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('users', searchQuery);
             window.searchType = 'users'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
-            document.getElementById('filter-dropdown').style.display = 'none';
+            document.getElementById('filter-dropdown').style.display = 'block';
             document.getElementById('order-dropdown').style.display = 'none';
             uncheckAllCheckboxes();
         });
@@ -92,18 +92,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 const elements = doc.querySelectorAll(classToSearch);
                 const searchResults = document.getElementById('search-results-container');
                 searchResults.innerHTML = ''; // Clear previous results
+
+                document.getElementById('filter-dropdown').innerHTML = doc.querySelector('#filter-dropdown').innerHTML;
     
                 elements.forEach(element => {
                     searchResults.appendChild(element);
                 });
     
                 // Update the heading text
-                document.querySelector('#search-results h2').innerHTML = `Search results (${type}) for "${query}"`;
+                document.querySelector('#search-results h2').innerHTML = `Search results (${type})`;
     
                 // Update the global searchType variable
                 window.searchType = type;    
 
                 document.getElementById('loading').style.display = 'none';
+
+                // Reattach event listeners for the filter dropdown
+                window.reattachFilterEventListeners();
             })
             .catch(error => {
                 console.error('Error fetching search results:', error);
@@ -130,8 +135,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function uncheckAllCheckboxes() {
-        const checkboxes = document.querySelectorAll('.category-checkbox');
-        checkboxes.forEach(checkbox => {
+        const catCheckboxes = document.querySelectorAll('.category-checkbox');
+        catCheckboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        const countryCheckboxes = document.querySelectorAll('.country-checkbox');
+        countryCheckboxes.forEach(checkbox => {
             checkbox.checked = false;
         });
     }

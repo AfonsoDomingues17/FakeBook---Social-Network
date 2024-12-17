@@ -16,8 +16,8 @@
                     <form action="{{ route('report.user', $id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div>
-                            <label for="content">Report motive:</label>
-                            <textarea id="content" name="content" required></textarea>
+                            <label for="content-{{ $id }}">Report motive:</label>
+                            <textarea id="content-{{ $id }}" name="content" required></textarea>
                             @error('content')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
@@ -28,8 +28,8 @@
                     <form action="{{ route('report.post', $id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div>
-                            <label for="content">Report motive:</label>
-                            <textarea id="content" name="content" required></textarea>
+                            <label for="content-{{ $id }}">Report motive:</label>
+                            <textarea id="content-{{ $id }}" name="content" required></textarea>
                             @error('content')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
@@ -40,8 +40,8 @@
                     <form action="{{ route('report.comment', $id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div>
-                            <label for="content">Report motive:</label>
-                            <textarea id="content" name="content" required></textarea>
+                            <label for="content-{{ $id }}">Report motive:</label>
+                            <textarea id="content-{{ $id }}" name="content" required></textarea>
                             @error('content')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
