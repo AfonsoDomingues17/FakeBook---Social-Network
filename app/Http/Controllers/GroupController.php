@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Response;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\GroupParticipant;
 
 
 
@@ -37,21 +38,41 @@ class GroupController extends Controller
             'name' => 'required|string|max:50',
             'description' => 'nullable|string|max:255',
             'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'selected_users' => 'nullable|string'
         ]);
+
         $photoUrl = null;
         if ($request->hasFile('photo_url')) {
-            
             $file = $request->file('photo_url');
-            
-            $photoUrl = $file->store('group_pictures', 'private'); // Stores in storage/app/public/profile_pictures
+            $photoUrl = $file->store('group_pictures', 'private'); // Stores in storage/app/private/group_pictures
         }
 
-        Group::create([
+        $group = Group::create([
             'name' => $request->name,
             'description' => $request->description,
             'photo_url' => $photoUrl,
             'owner_id' => Auth::id()
         ]);
+
+        // Add the owner as a group participant
+        GroupParticipant::create([
+            'group_id' => $group->id,
+            'user_id' => Auth::id(),
+            'date_joined' => now()
+        ]);
+
+        // Add selected users as group participants
+        if ($request->selected_users) {
+            $selectedUsers = explode(',', $request->selected_users);
+            foreach ($selectedUsers as $userId) {
+                GroupParticipant::create([
+                    'group_id' => $group->id,
+                    'user_id' => $userId,
+                    'date_joined' => now()
+                ]);
+            }
+        }
+
         return redirect()->route('homepage');
     }
     public function getPhoto($group_id){
@@ -119,4 +140,70 @@ class GroupController extends Controller
     {
         //
     }
+        public function leaveGroup($group_id)
+    {
+        $user = Auth::user();
+        $group = Group::find($group_id);
+
+        if ($group->owner_id == $user->id) {
+            // Transfer ownership to the next member
+            $new_owner_id = GroupParticipant::where('group_id', $group_id)
+                ->where('user_id', '!=', $user->id)
+                ->orderBy('date_joined', 'asc')
+                ->value('user_id');
+
+            if ($new_owner_id) {
+                $group->owner_id = $new_owner_id;
+                $group->save();
+            } else {
+                // If no other members, delete the group
+                $group->delete();
+                return redirect()->route('homepage')->with('success', 'Group has been deleted.');
+            }
+        }
+
+        // Remove the user from the group participants
+        $group->participants()->detach($user->id);
+
+        return redirect()->route('homepage')->with('success', 'You have left the group.');
+    }
+
+    public function deleteGroup($group_id)
+    {
+        $group = Group::find($group_id);
+
+        if ($group->owner_id != Auth::id()) {
+            return redirect()->back()->with('error', 'Only the group owner can delete the group.');
+        }
+
+        $group->delete();
+
+        return redirect()->route('homepage')->with('success', 'Group has been deleted.');
+    }
+
+    public function updateGroup(Request $request, $group_id)
+    {
+        $group = Group::find($group_id);
+
+        if ($group->owner_id != Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'group_name' => 'nullable|string|max:50',
+            'group_description' => 'nullable|string|max:255',
+        ]);
+
+        if ($request->has('group_name')) {
+            $group->name = $request->group_name;
+        }
+
+        if ($request->has('group_description')) {
+            $group->description = $request->group_description;
+        }
+
+        $group->save();
+
+        return response()->json($group);
+}
 }

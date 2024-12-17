@@ -9,6 +9,8 @@ class GroupParticipant extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $table = 'groupParticipant';
-    protected $primaryKey = (['group_id', 'user_id']);
+    protected $table = 'groupparticipant';
+    protected $fillable = ['group_id', 'user_id', 'date_joined'];
+    public $incrementing = false; // Disable auto-incrementing primary key
+    protected $primaryKey = ['group_id', 'user_id']; // Define composite primary key
 }
