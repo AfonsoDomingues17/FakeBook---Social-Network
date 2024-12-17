@@ -101,7 +101,6 @@
                                                     </div>
                                                 @elseif (!Auth::user()->isFollowing($notification->sender->id))
                                                     <button id="Follow" data-user-id="{{$notification->sender->id}}">Follow Back</button>
-
                                                 @endif
                                             </li>
                                         @endforeach
@@ -140,11 +139,11 @@
                                 <a href="{{ url('/register') }}"> <p>Register</p></a>
                                 @endif
                             </div>
-                            @include('partials.create_post')
+                            @include('partials.create_post', ['categories' => $categories])
                             @include('partials.create_group')
                     </section>
                 </div>
-            </header>
+        </header>
         <main>
         <section id="sidebar">
             <div class= "navigators">
@@ -185,11 +184,10 @@
             <section id="content" >
                 @yield('content')
             </section>
+            
         </main>
         <footer>
             <p>&copy; FakeBook 2024</p>
         </footer>
-        @include('partials.create_post')
-        @include('partials.create_group')
     </body>
 </html>

@@ -15,23 +15,25 @@
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div>
-                        <label for="typep">Post Type:</label>
-                        <select id="typep" name="typep" onchange="toggleMediaUpload()" required>
-                            <option value="TEXT">Text</option>
-                            <option value="MEDIA">Media</option>
-                        </select>
-                        @error('typep')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div id="media-upload" style="display: none;">
+                    <div id="media-upload">
                         <label for="media">Upload Media:</label>
                         <input type="file" id="media" name="media[]" accept="image/*" multiple onchange="validateFileCount()">
                         @error('media')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         <div id="media-preview"></div>
+                    </div>
+                    <div>
+                        <label for="category">Category:</label>
+                        <select id="category" name="category">
+                            <option value="">Select a category if applies</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('category')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div id="Type">
                         <label for="is_public">Public:</label>
