@@ -4,7 +4,7 @@
     <section id="reports-page">
         <h2 class="text-center">Reports</h2>
         <section id="reports-page-content">
-            @if(!Auth::user()->isAdmin())
+            @if(!Auth::check() || (Auth::check() && !Auth::user()->isAdmin()))
             <h3>Reported Content</h3>
             <p>
                 FakeBook is committed to maintaining a safe and welcoming environment for all users.
