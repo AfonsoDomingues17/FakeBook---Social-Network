@@ -52,8 +52,8 @@
                                             @foreach($group as $report)
                                                 <tr>
                                                     <td>{{ $report->content }}</td>
-                                                    <td>{{ $report->createdat }}</td>
-                                                    <td>{{ $report->solvedat ?? 'N/A' }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($report->createdAt)->format('d/m/Y H:i') }}</td>
+                                                    <td>{{ $report->solvedAt ? \Carbon\Carbon::parse($report->solvedAt)->format('d/m/Y H:i') : 'N/A' }}</td>
                                                     <td>{{ $report->id }}</td>
                                                     <td>{{ $report->author_id }}</td>
                                                 </tr>
@@ -92,8 +92,8 @@
                                             @foreach($group as $report)
                                                 <tr>
                                                     <td>{{ $report->content }}</td>
-                                                    <td>{{ $report->createdat }}</td>
-                                                    <td>{{ $report->solvedat ?? 'N/A' }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($report->createdAt)->format('d/m/Y H:i') }}</td>
+                                                    <td>{{ $report->solvedAt ? \Carbon\Carbon::parse($report->solvedAt)->format('d/m/Y H:i') : 'N/A' }}</td>
                                                     <td>{{ $report->id }}</td>
                                                     <td>{{ $report->author_id }}</td>
                                                 </tr>
@@ -132,8 +132,8 @@
                                             @foreach($group as $report)
                                                 <tr>
                                                     <td>{{ $report->content }}</td>
-                                                    <td>{{ $report->createdat }}</td>
-                                                    <td>{{ $report->solvedat ?? 'N/A' }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($report->createdAt)->format('d/m/Y H:i') }}</td>
+                                                    <td>{{ $report->solvedAt ? \Carbon\Carbon::parse($report->solvedAt)->format('d/m/Y H:i') : 'N/A' }}</td>
                                                     <td>{{ $report->id }}</td>
                                                     <td>{{ $report->author_id }}</td>
                                                 </tr>
