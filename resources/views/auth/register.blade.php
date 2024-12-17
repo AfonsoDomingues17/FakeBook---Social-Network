@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div id="register">
 <div class="form">
 <form method="POST" action="{{ Auth::check() && Auth::user()->isAdmin() ?  route('admin.create') : route('register') }}" enctype="multipart/form-data">
     {{ csrf_field() }}
