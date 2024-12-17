@@ -39,7 +39,8 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{$post->id}}">
                                     <button type="submit" class="like-button">
-                                        <i class="fa-regular fa-heart"></i>
+                                        <i class="fa-regular fa-heart">23</i>
+
                                     </button>
                                 </form>
                                 <p><i class="fa-regular fa-comment"></i> 33</p>

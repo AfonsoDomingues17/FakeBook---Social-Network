@@ -1,14 +1,14 @@
-<div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true" style="display: none">
+<div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true" style="display: none; height: 100vh;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createPostModalLabel">Create A Post!</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div id="CreatePostModalContent">
                 <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div>
+                    <div id="description">
                         <label for="description">Description:</label>
                         <textarea id="description" name="description" required></textarea>
                         @error('description')
@@ -23,7 +23,7 @@
                         @enderror
                         <div id="media-preview"></div>
                     </div>
-                    <div>
+                    <div id="postCategory">
                         <label for="category">Category:</label>
                         <select id="category" name="category">
                             <option value="">Select a category if applies</option>
@@ -43,7 +43,9 @@
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <div id="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
                 </form>
             </div>
         </div>

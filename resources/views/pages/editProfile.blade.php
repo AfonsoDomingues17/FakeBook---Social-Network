@@ -53,7 +53,7 @@
 
         <!-- Country Search Input and Dropdown -->
         <label for="country">Country</label>
-        <input id="country-search" type="text" class="form-control" placeholder="Start typing your country..." value="{{ old('country', $user->country) }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
+        <input id="country-search" type="text" placeholder="Start typing your country..." value="{{ old('country', $user->country) }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
         <select id="country" name="country" size="5" required onchange="selectCountry(event)">
             @foreach ($countries as $country)
                 <option value="{{ $country->name }}" {{ old('country', $user->country) == $country->name ? 'selected' : '' }}>{{ $country->name }}</option>

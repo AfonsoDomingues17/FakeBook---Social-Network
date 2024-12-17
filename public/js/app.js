@@ -122,6 +122,21 @@ function previewSentPicture(event) {
   reader.readAsDataURL(event.target.files[0]);
 }
 
+const toggleButton = document.getElementById('toggleDropdown');
+  const dropdown = document.getElementById('DropdownMore');
 
+  toggleButton.addEventListener('click', function() {
+    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+      dropdown.style.display = 'block';
+    } else {
+      dropdown.style.display = 'none';
+    }
+  });
 
+  // Optional: Close the dropdown if clicked outside
+  document.addEventListener('click', function(event) {
+    if (!toggleButton.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
 
