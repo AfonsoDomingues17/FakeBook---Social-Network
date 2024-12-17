@@ -11,50 +11,46 @@
                     <h3>Add members to the group</h3>
                     <input type="text" id="searchUsers" placeholder="Search for users">
                     @if (count(Auth::user()->following) == 0)
-                        <p>You don't have any followers to add to the group</p>
-                      
+                        <p>You don't follow anyone to add to the group</p>
                     @else
                     @foreach (Auth::user()->following->take(5) as $follower)
-                        
                         <div class="user">
                             <section id="info">
-                            <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="70"  height="70" alt="user profile picture">
+                                <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="70" height="70" alt="user profile picture">
                                 <div class="user-info">
                                     <span id="user"><p>{{$follower->username}}</p></span>
                                     <span id="nome"><p>{{$follower->name}}</p></span>
                                 </div>
-                                <button id="AddMember">Add</button>
+                                <button type="button" id="AddMember" class="add-member-btn btn btn-secondary" data-user-id="{{ $follower->id }}">Add</button>
                             </section>
-                            
                         </div>
-                    
                     @endforeach
                     @endif
-                    
                 </section>
                 <section id="CreationPage" style="display: none;">
-                    <form action="{{route('group.create')}}" method="POST" enctype="multipart/form-data">
+                    <form id="create-group-form" action="{{route('group.create')}}" method="POST" enctype="multipart/form-data">
                         {{ csrf_field() }}
-                            <div id="form-image">
-                                <img id="g_picture_review" src="{{Storage::url('public/DEFAULT_GROUP.png')}}" alt="preview of profile picture" width="200" height="200" style="border-radius: 50%;">
-                                <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewGroupPicture(event)" class="form-control">
-                            </div>
-                            <div id="form-group">
+                        <div id="form-image">
+                            <img id="g_picture_review" src="{{Storage::url('public/DEFAULT_GROUP.png')}}" alt="preview of profile picture" width="200" height="200" style="border-radius: 50%;">
+                            <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewGroupPicture(event)" class="form-control">
+                        </div>
+                        <div id="form-group">
                             <label for="name">Name</label>
                             <input id="name" type="text" name="name" value="{{old('name')}}" placeholder="Name for the group" required class="form-control">
-                            </div>
-                            <div id="form-group">
+                        </div>
+                        <div id="form-group">
                             <label for="description">Description</label>
                             <textarea name="description" id="group_description" placeholder="Group description" class="form-control">{{old('description')}}</textarea>
-                            </div>
+                        </div>
+                        <input type="hidden" name="selected_users" id="selected_users">
+                        <button type="button" class="btn btn-secondary" id="backButton">Back</button>
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </form>
                 </section>
             </div>
             <div id="modal-footer">
-            <i id="nextButton" class="fa-solid fa-check"></i>
+                <i id="nextButton" class="fa-solid fa-check"></i>
             </div>
-            
         </div>
     </div>
 </div>

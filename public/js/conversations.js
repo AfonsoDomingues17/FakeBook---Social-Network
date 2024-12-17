@@ -193,21 +193,37 @@ document.addEventListener('DOMContentLoaded', function() {
             const close = event.target.closest('#close');
             console.log(chat)
             if (target && target.dataset.id) {
-                fetch(`/groups/${target.dataset.id}/info`)
-                    .then(response => response.text())
-                    .then(html => {
+                const groupInfo = document.querySelector('#group_info');
+                if (groupInfo && groupInfo.dataset.groupId == target.dataset.id) {
+                    // Close group info if already open
+                    specialContainer.innerHTML = '';
+                    specialContainer.appendChild(chatContainer);
+                } else {
+                    fetch(`/groups/${target.dataset.id}/info`)
+                        .then(response => response.text())
+                        .then(html => {
                             specialContainer.innerHTML = html;
 
                         
                     })
-                    .catch(error => console.error('Error fetching group info:', error));
+                        .catch(error => console.error('Error fetching group info:', error));
+                }
             }
-            else if(close){
+            else if(close && !event.target.closest('#groupParticipantsModal')){
                 console.log(chatContainer);
                 specialContainer.innerHTML = '';
                 specialContainer.appendChild(chatContainer);
             }
         });
-    }
+        // Close group info when clicking outside of it
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('#group_info') && !event.target.closest('#chat-header') && !event.target.closest('#groupParticipantsModal')) {
+                const close = document.querySelector('#close');
+                if (close) {
+                    close.click();
+                }
+            }
+        });
+    }   
 });
 

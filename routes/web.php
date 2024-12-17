@@ -12,7 +12,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ReportController;
-
+use App\Http\Controllers\GroupParticipantController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -64,7 +64,11 @@ Route::post('/groups/create', [GroupController::class, 'createGroup'])->name('gr
 Route::get('/groups/{group_id}/photo', [GroupController::class, 'getPhoto'])->name('groupPhoto');
 Route::get('/groups/{group_id}', [GroupController::class, 'show'])->name('group.show');
 Route::get('/groups/{group_id}/info', [GroupController::class, 'groupInfo'])->name('group.info');
-
+Route::post('/groups/{group_id}/leave', [GroupController::class, 'leaveGroup'])->name('group.leave');
+Route::delete('/groups/{group_id}/delete', [GroupController::class, 'deleteGroup'])->name('group.delete');
+Route::post('/groups/{group_id}/update', [GroupController::class, 'updateGroup'])->name('group.update');
+Route::post('/groups/{group_id}/add-members', [GroupParticipantController::class, 'addMembers'])->name('group.addMembers');
+Route::delete('/groups/{group_id}/remove-member', [GroupParticipantController::class, 'removeMember'])->name('group.removeMember');
 // Comments
 Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
 Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
