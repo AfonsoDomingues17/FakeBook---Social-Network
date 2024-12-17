@@ -35,6 +35,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+
+    function attachGroupInfoEventListeners() {
+        console.log('Attaching group info event listeners');
+        const addMemberSpan = document.getElementById('AddMembers');
+        const addMembersForm = document.getElementById('add-members-form');
+
+        if (addMemberSpan) {
+            console.log('Add members span found');
+            addMemberSpan.addEventListener('click', function() {
+                console.log('Add members span clicked');
+                if (addMembersForm.style.display === 'none' || addMembersForm.style.display === '') {
+                    addMembersForm.style.display = 'block';
+                } else {
+                    addMembersForm.style.display = 'none';
+                }
+            });
+        } else {
+            console.log('Add members span not found');
+        }
+    }
+
     function initializePusher(conversationId, conversationType) {
         Pusher.logToConsole = true;
 
@@ -209,10 +230,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         .then(response => response.text())
                         .then(html => {
                             specialContainer.innerHTML = html;
-
+                            attachGroupInfoEventListeners();  
                         
                     })
                         .catch(error => console.error('Error fetching group info:', error));
+                    
                 }
             }
             else if(close && !event.target.closest('#groupParticipantsModal')){

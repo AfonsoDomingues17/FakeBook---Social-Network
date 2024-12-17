@@ -33,10 +33,26 @@
     <div id="group-members">
         <h2>Group Members</h2>
         @if($group->owner_id == Auth::user()->id)
-            <span id="AddMember" >
+            <span id="AddMembers" class="add-member-span">
                 <span><i class="fa-solid fa-user-plus"></i></span>
                 <p>Add members</p>
             </span>
+            @if($followersNotInGroup->isEmpty())
+                <p id="no-followers-message" style="display: none;">You don't follow anyone who is not already in the group.</p>
+            @else
+                <form id="add-members-form" action="{{ route('group.addMembers', ['group_id' => $group->id]) }}" method="POST" style="display: none;">
+                    @csrf
+                    <h3>Select users to add to the group:</h3>
+                    @foreach ($followersNotInGroup as $follower)
+                        <div class="user">
+                            <input type="checkbox" name="user_ids[]" value="{{ $follower->id }}">
+                            <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="60" height="60" alt="user profile picture">
+                            <span>{{ $follower->name }}</span>
+                        </div>
+                    @endforeach
+                    <button type="submit" class="btn btn-primary">Add Selected Members</button>
+                </form>
+            @endif
         @endif
         <ul>
             <div id="owner">

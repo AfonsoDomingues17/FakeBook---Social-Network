@@ -1424,7 +1424,7 @@ div#group_info{
     >p{
       font-size: 1.5em;
     }
-    span#AddMember{
+    span#AddMembers{
       font-size: 1.5em;
       cursor: pointer;
       display: flex;

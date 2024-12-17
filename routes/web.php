@@ -67,7 +67,7 @@ Route::get('/groups/{group_id}/info', [GroupController::class, 'groupInfo'])->na
 Route::post('/groups/{group_id}/leave', [GroupController::class, 'leaveGroup'])->name('group.leave');
 Route::delete('/groups/{group_id}/delete', [GroupController::class, 'deleteGroup'])->name('group.delete');
 Route::post('/groups/{group_id}/update', [GroupController::class, 'updateGroup'])->name('group.update');
-Route::post('/groups/{group_id}/add-members', [GroupParticipantController::class, 'addMembers'])->name('group.addMembers');
+Route::post('/groups/{group_id}/add-members', [GroupController::class, 'addMembers'])->name('group.addMembers');
 Route::delete('/groups/{group_id}/remove-member', [GroupParticipantController::class, 'removeMember'])->name('group.removeMember');
 // Comments
 Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
@@ -76,13 +76,15 @@ Route::put('/comments/{comment_id}', [CommentController::class, 'update'])->name
 Route::delete('/comments/{comment_id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 // Admin
-Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
-Route::post('/admin/watchlist/add/{user_id}', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
-Route::post('/admin/watchlist/remove/{user_id}', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
-Route::post('admin/users/create', [UserController::class, 'createUserbyAdmin'])->name('admin.create');
-Route::post('admin/banlist/add/{user_id}', [UserController::class, 'banUser'])->name('admin.banlist.add');
-Route::post('admin/banlist/remove/{user_id}', [UserController::class, 'unbanUser'])->name('admin.banlist.remove');
-Route::post('admin/unban/request/{id}', [UserController::class, 'acceptUnbanRequest'])->name('admin.unban.request');
+Route::middleware(['admin'])->group(function () {
+    Route::get('/admin', [UserController::class, 'adminPage'])->name('admin.page');
+    Route::post('/admin/watchlist/add/{user_id}', [UserController::class, 'addToWatchlist'])->name('admin.watchlist.add');
+    Route::post('/admin/watchlist/remove/{user_id}', [UserController::class, 'removeFromWatchlist'])->name('admin.watchlist.remove');
+    Route::post('admin/users/create', [UserController::class, 'createUserbyAdmin'])->name('admin.create');
+    Route::post('admin/banlist/add/{user_id}', [UserController::class, 'banUser'])->name('admin.banlist.add');
+    Route::post('admin/banlist/remove/{user_id}', [UserController::class, 'unbanUser'])->name('admin.banlist.remove');
+    Route::post('admin/unban/request/{id}', [UserController::class, 'acceptUnbanRequest'])->name('admin.unban.request');
+});
 
 // Reports
 Route::get('/reports', [ReportController::class, 'showReports'])->name('reports');

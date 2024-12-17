@@ -31,10 +31,5 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme($schema);
         }
 
-        // Share categories with all views
-        View::composer('*', function ($view) {
-            $categories = Category::all();
-            $view->with('categories', $categories);
-        });
     }
 }
