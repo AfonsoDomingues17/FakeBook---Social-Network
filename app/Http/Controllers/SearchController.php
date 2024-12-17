@@ -27,11 +27,26 @@ class SearchController extends Controller
         $groups = collect();
 
         if ($type === 'users') {
-            $usersQuery = User::where('name', 'ILIKE', '%' . $query . '%')
-                        ->orWhere('email', 'ILIKE', '%' . $query . '%')
-                        ->orWhere('username', 'ILIKE', '%' . $query . '%')
-                        ->paginate(10, ['*'], 'page', $page);
-            
+            $countries = request()->query('countries');
+
+            if ($countries) {
+                $countries = explode(',', $countries);
+                Log::info('Countries array:', $countries);
+            }
+
+            $usersQuery = User::where(function($q) use ($query) { 
+                $q->where('name', 'ILIKE', '%' . $query . '%')
+                      ->orWhere('email', 'ILIKE', '%' . $query . '%')
+                      ->orWhere('username', 'ILIKE', '%' . $query . '%');
+            });
+
+            if ($countries) {
+                $usersQuery = $usersQuery->whereIn('country_id', $countries);
+                Log::info('Users query with countries: ' . $usersQuery->toSql());
+            }
+
+            $usersQuery = $usersQuery->paginate(10, ['*'], 'page', $page);
+
             $usersWatchlist = $usersQuery->map(function ($user) {
                 $isInWatchlist = false;
                 if (Auth::check() && Auth::user()->isAdmin()) {
@@ -40,45 +55,56 @@ class SearchController extends Controller
                 $user->isInWatchlist = $isInWatchlist;
                 return $user;
             });
-            
+
             $usersFiltered = $usersWatchlist->where('typeu', '!=', 'ADMIN')->where('id', '!=', Auth::id());
 
             $users = $usersFiltered;
         } elseif ($type === 'posts') {
-            $categories = request()->query('categories', 'all'); 
+            $categories = request()->query('categories'); 
             $order = request()->query('order', 'relevance');
-            if ($categories !== 'all') {
+        
+            if ($categories) {
                 $categories = explode(',', $categories);
             }
-
-            $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
-            $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-            if($order !== 'relevance')
-                $postQuery = Post::where(function($query) use ($tsQuery) {
-                    $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                        ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
-                })->orderBy('datecreation', $order)->paginate(10, ['*'], 'page', $page);
-            else
-                $postQuery = Post::where(function($query) use ($tsQuery) {
-                    $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                        ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
-                })->paginate(10, ['*'], 'page', $page);
-            
+        
+            if ($query) {
+                $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
+                $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
+                if ($order !== 'relevance') {
+                    $postQuery = Post::where(function($query) use ($tsQuery) {
+                        $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
+                            ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
+                    })->orderBy('datecreation', $order)->paginate(10, ['*'], 'page', $page);
+                } else {
+                    $postQuery = Post::where(function($query) use ($tsQuery) {
+                        $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
+                            ->orWhereRaw("similarity(description, ?) > 0.3", [$tsQuery]);
+                    })->paginate(10, ['*'], 'page', $page);
+                }
+            } else {
+                // If query is null, return all posts
+                if ($order !== 'relevance') {
+                    $postQuery = Post::orderBy('datecreation', $order)->paginate(10, ['*'], 'page', $page);
+                } else {
+                    $postQuery = Post::paginate(10, ['*'], 'page', $page);
+                }
+            }
+        
             if (Auth::check()) {
                 $blockedUserIds = Auth::user()->blockedUsers()->pluck('target_user_id')->merge(Auth::user()->blockedBy()->pluck('initiator_user_id'));
                 $postQuery->whereNotIn('owner_id', $blockedUserIds)
                          ->where('owner_id', '!=', Auth::id())
                          ->where('is_public', 'true');
             }
-
-            if ($categories !== 'all') {
+        
+            if ($categories) {
                 $postCategorized = collect($postQuery->items())->filter(function ($post) use ($categories) {
                     return PostCategory::where('post_id', $post->id)->whereIn('category_id', $categories)->exists();
                 });
             } else {
                 $postCategorized = $postQuery;
             }
-
+        
             $posts = $postCategorized;
         } elseif ($type === 'groups') {
             Log::info($query);
@@ -113,14 +139,14 @@ class SearchController extends Controller
         $groups = collect();
 
         if ($type === 'users') {
-            $country = $request->input('user-country');
-            $fullname = $request->input('user-fullname');
-            $username = $request->input('user-username');
+            $country = $request->input('user_country');
+            $fullname = $request->input('user_fullname');
+            $username = $request->input('user_username');
 
             $users = User::query();
 
             if ($country) {
-                $users->where('country', 'ILIKE', '%' . $country . '%');
+                $users->where('country_id', $country);
             }
 
             if ($fullname) {
@@ -147,9 +173,9 @@ class SearchController extends Controller
             $users = $usersFiltered;
 
         } elseif ($type === 'posts') {
-            $category = $request->input('post-category');
-            $description = $request->input('post-description');
-            $postType = $request->input('post-type');
+            $category = $request->input('post_category');
+            $description = $request->input('post_description');
+            $postType = $request->input('post_type');
 
             $posts = Post::query();
 
@@ -171,8 +197,8 @@ class SearchController extends Controller
             }
 
         } elseif ($type === 'groups') {
-            $name = $request->input('group-name');
-            $description = $request->input('group-description');
+            $name = $request->input('group_name');
+            $description = $request->input('group_description');
 
             $groups = Group::query();
 

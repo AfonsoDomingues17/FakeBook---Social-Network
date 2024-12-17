@@ -24,10 +24,20 @@
     var searchUrl = '{{ url("search") }}';
     var searchType = @json($type);
     var searchQuery = @json($query ?? '');
+
+    var userFullname = @json(request()->query('user_fullname'));
+    var userUsername = @json(request()->query('user_username'));
+    var userCountry = @json(request()->query('user_country'));
+    var postDescription = @json(request()->query('post_description'));
+    var postCategory = @json(request()->query('post_category'));
+    var postType = @json(request()->query('post_type'));
+    var groupName = @json(request()->query('group_name'));
+    var groupDescription = @json(request()->query('group_description'));
 </script>
 <script type="text/javascript" src={{ url('js/lazyScroll.js') }} defer></script>
 <script type="text/javascript" src={{ url('js/searchType.js') }} defer></script>
 <script type="text/javascript" src={{ url('js/searchFilter.js') }} defer></script>
 <script type="text/javascript" src={{ url('js/searchOrder.js') }} defer></script>
+<script type="text/javascript" src={{ url('js/advancedLazyScroll.js') }} defer></script>
 
 @endsection
