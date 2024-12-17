@@ -17,7 +17,9 @@ function toggleCountryDropdown() {
 // Function to select a country from the dropdown
 function selectCountry(event) {
     const countrySearch = document.getElementById('country-search');
-    countrySearch.value = event.target.value;
+    const countryId = document.getElementById('country-id');
+    countrySearch.value = event.target.options[event.target.selectedIndex].text;
+    countryId.value = parseInt(event.target.value, 10);
 
     // Hide the dropdown after selection
     document.getElementById('country').style.display = 'none';
@@ -57,7 +59,6 @@ function filterCountries() {
             visibleCount++;
         }
     }
-
     // Adjust the dropdown size dynamically based on the number of visible options
     updateDropdownSize(visibleCount);
 }
@@ -67,5 +68,5 @@ function updateDropdownSize(visibleCount) {
     const dropdown = document.getElementById('country');
     const maxSize = 5;
     // Set the dropdown size to the minimum of visibleCount and maxSize
-    dropdown.size = Math.min(visibleCount, maxSize);
+    dropdown.size = Math.max(Math.min(visibleCount, maxSize), 2);
 }

@@ -53,14 +53,15 @@
 
         <!-- Country Search Input and Dropdown -->
         <label for="country">Country</label>
-        <input id="country-search" type="text" class="form-control" placeholder="Start typing your country..." value="{{ old('country', $user->country) }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
-        <select id="country" name="country" size="5" required onchange="selectCountry(event)">
+        <input id="country-search" type="text" class="form-control" placeholder="Start typing your country..." value="{{ old('country', $user->country->name ?? '') }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
+        <input type="hidden" id="country-id" name="country_id" value="{{ old('country_id', $user->country_id ?? '') }}">
+        <select id="country" size="5" required onchange="selectCountry(event)">
             @foreach ($countries as $country)
-                <option value="{{ $country->name }}" {{ old('country', $user->country) == $country->name ? 'selected' : '' }}>{{ $country->name }}</option>
+                <option value="{{ $country->id }}" {{ old('country_id', $user->country_id ?? '') == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
             @endforeach
         </select>
-        @if ($errors->has('country'))
-            <span class="error">{{ $errors->first('country') }}</span>
+        @if ($errors->has('country_id'))
+            <span class="error">{{ $errors->first('country_id') }}</span>
         @endif
 
         <!-- Visibility Radio Buttons -->

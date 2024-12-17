@@ -45,7 +45,7 @@ class SearchController extends Controller
                 Log::info('Users query with countries: ' . $usersQuery->toSql());
             }
 
-            $usersQuery = $usersQuery->paginate(10, ['*'], 'page', $page);
+            $usersQuery = $usersQuery->paginate(15, ['*'], 'page', $page);
 
             $usersWatchlist = $usersQuery->map(function ($user) {
                 $isInWatchlist = false;
@@ -156,7 +156,7 @@ class SearchController extends Controller
             if ($username) {
                 $users->where('username', 'ILIKE', '%' . $username . '%');
             }
-            $users = $users->paginate(10, ['*'], 'page', $page);
+            $users = $users->paginate(15, ['*'], 'page', $page);
             
 
             $usersWatchlist = $users->map(function ($user) {
