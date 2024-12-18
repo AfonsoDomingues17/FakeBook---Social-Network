@@ -13,16 +13,17 @@
             </div>
             <div id="PostContent">
                 @if ($post->typep === 'MEDIA')
-                                    <img id="media-image-{{ $post->id }}"
-                                            src="{{ route('media.show', ['post_id' => $post->id]) }}"
-                                            alt="Media" >
-                                    @if ($post->media->count() > 1)
-                                        <div class="post-media-controls">
-                                            <button id="media-prev-{{ $post->id }}">Previous</button>
-                                            <button id="media-next-{{ $post->id }}">Next</button>
-                                        </div>
-                                    @endif
-                                @endif
+                    @if ($post->media->isNotEmpty())
+                        <img id="media-image-{{ $post->id }}" src="{{ route('media.show', $post->media->first()->id) }}" alt="Media">
+                        @if ($post->media->count() > 1)
+                            <div class="post-media-controls">
+                                <button id="media-prev-{{ $post->id }}">Previous</button>
+                                <button id="media-next-{{ $post->id }}">Next</button>
+                            </div>
+                        @endif
+                    @else
+                        <img id="media-image-{{ $post->id }}" src="{{ route('media.show', 'default') }}" alt="Default Media">
+                @endif
                 <div id="CommentBody">
                     <p id="postdescription">{{ $post->description }}</p>
                     @if ($post->media->count() > 0)
@@ -42,15 +43,13 @@
                                 @include ('partials.comment', ['comment' => $comment])
                             @endforeach
                         </div>
-                        @if(Auth::check())
-                            
+                        @if(Auth::check() && !Auth::user()->isAdmin()) 
                             <form id="comment-form-{{ $post->id }}" action="{{ route('comments.store') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="post_id" value="{{ $post->id }}">
                                 <textarea name="content" class="form-control" placeholder="Write a comment..." ></textarea>
                                 <button type="submit" ><i id="send" class="fa-solid fa-right-to-bracket"></i></button>
-                            </form>
-                        
+                            </form>                       
                         @endif
                     
                 </div>

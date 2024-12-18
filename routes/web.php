@@ -87,6 +87,7 @@ Route::middleware(['admin'])->group(function () {
     Route::post('admin/banlist/add/{user_id}', [UserController::class, 'banUser'])->name('admin.banlist.add');
     Route::post('admin/banlist/remove/{user_id}', [UserController::class, 'unbanUser'])->name('admin.banlist.remove');
     Route::post('admin/unban/request/{id}', [UserController::class, 'acceptUnbanRequest'])->name('admin.unban.request');
+    Route::post('/admin/solveReports', [UserController::class, 'solveReports'])->name('admin.solveReports');
 });
 
 // Reports
