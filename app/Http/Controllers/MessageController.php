@@ -6,6 +6,7 @@ use App\Models\Message;
 use App\Models\DirectChat;
 use App\Models\Group;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreMessageRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;

@@ -22,7 +22,7 @@
                                                 <span id="user"><p>{{$follower->username}}</p></span>
                                                 <span id="nome"><p>{{$follower->name}}</p></span>
                                             </div>
-                                            <button class="add-member-btn-group-participants" data-user-id="{{ $follower->id }}">Add</button>
+                                            <button class="add-member-btn-group-participants btn btn-secondary" data-user-id="{{ $follower->id }}">Add</button>
                                         </section>
                                     </div>
                                 @endif

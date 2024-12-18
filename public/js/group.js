@@ -96,9 +96,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({ [field]: value })
+                body: JSON.stringify({ [field]: value
+                })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        try {
+                            const errorData = JSON.parse(text);
+                            throw new Error(errorData.message || 'Unknown error');
+                        } catch (e) {
+                            throw new Error(text);
+                        }
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
                 if (field === 'group_name') {
                     document.getElementById('gname').querySelector('p').textContent = data.name;
@@ -108,7 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 input.parentElement.style.display = 'none';
                 input.parentElement.previousElementSibling.style.display = 'block';
             })
-            .catch(error => console.error('Error updating group:', error));
+            .catch(error => {
+                console.error('Group name or description update error');
+                
+            });
         }
     });
 

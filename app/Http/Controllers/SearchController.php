@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\SearchRequest;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Group;
@@ -14,7 +15,7 @@ use App\Models\Category;
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
+    public function search(SearchRequest $request)
     {
         // Extract the type and query from the query string
         $query = $request->input('query');
@@ -128,7 +129,7 @@ class SearchController extends Controller
         }
     }
 
-    public function advancedSearch(Request $request)
+    public function advancedSearch(SearchRequest $request)
     {
         $type = $request->input('type');
         $page = $request->input('page', 1);

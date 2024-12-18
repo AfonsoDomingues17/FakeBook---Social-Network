@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Post;
 use App\Models\Media;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Events\PostLike;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -88,18 +90,12 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         // Log the incoming request data
         \Log::info('Incoming request data', $request->all());
 
-        $validatedData = $request->validate([
-            'description' => 'string|max:1000',
-            'is_public' => 'boolean',
-            'media' => 'array|max:5',
-            'media.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-            'category' => 'nullable|exists:category,id'
-        ]);
+        $validatedData = $request->validated();
 
         // Determine the post type based on whether files are uploaded
         $validatedData['typep'] = $request->hasFile('media') ? 'MEDIA' : 'TEXT';
@@ -152,26 +148,23 @@ public function edit($post_id)
     return view('partials.edit_post', compact('post'));
 }
 
-public function update(Request $request, $post_id)
-{
-    // Log the incoming request data
-    \Log::info('Incoming request data', $request->all());
+public function update(UpdatePostRequest $request, $post_id)
+    {
+        // Log the incoming request data
+        \Log::info('Incoming request data', $request->all());
 
-    $post = Post::findOrFail($post_id);
-    $this->authorize('update', $post);
+        $post = Post::findOrFail($post_id);
+        $this->authorize('update', $post);
 
-    $validatedData = $request->validate([
-        'description' => 'string|max:1000',
-        'is_public' => 'boolean'
-    ]);
-    $validatedData['is_edited'] = true;
+        $validatedData = $request->validated();
+        $validatedData['is_edited'] = true;
 
-    // Update the post with the validated data
-    $post->update($validatedData);
+        // Update the post with the validated data
+        $post->update($validatedData);
 
-    // Redirect to the previous page
-    return redirect()->to($request->input('previous_url'))->with('success', 'Post updated successfully.');
-}
+        // Redirect to the previous page
+        return redirect()->to($request->input('previous_url'))->with('success', 'Post updated successfully.');
+    }
 
 public function destroy($post_id)
 {

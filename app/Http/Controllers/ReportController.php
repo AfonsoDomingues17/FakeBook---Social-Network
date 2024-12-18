@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use Illuminate\Http\Request;
+use App\Http\Requests\ReportUserRequest;
+use App\Http\Requests\ReportPostRequest;
+use App\Http\Requests\ReportCommentRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -108,12 +111,10 @@ class ReportController extends Controller
             'commentReports' => $commentReports
         ]);
     }
-    public function reportUser(Request $request, $user_id)
+    public function reportUser(ReportUserRequest $request, $user_id)
     {
         if (Auth::check()) {
-            $validatedData = $request->validate([
-                'content' => 'required|string|max:250',
-            ]);
+            $validatedData = $request->validated();
         
             $report = Report::updateOrCreate(
                 [
@@ -128,12 +129,10 @@ class ReportController extends Controller
         return redirect()->route('profile', ['user_id' => $user_id]);
     }
 
-    public function reportPost(Request $request, $post_id)
+    public function reportPost(ReportPostRequest $request, $post_id)
     {
         if (Auth::check()) {
-            $validatedData = $request->validate([
-                'content' => 'required|string|max:250',
-            ]);
+            $validatedData = $request->validated();
         
             $report = Report::updateOrCreate(
                 [
@@ -164,8 +163,21 @@ class ReportController extends Controller
         $reports = Report::where('comment_id', $comment_id)->get();
         return response()->json($reports);
     }
-    public function reportComment(Request $request, $comment_id)
+    public function reportComment(ReportCommentRequest $request, $comment_id)
     {
+        if (Auth::check()) {
+            $validatedData = $request->validated();
         
+            $report = Report::updateOrCreate(
+                [
+                    'author_id' => Auth::user()->id,
+                    'comment_id' => $comment_id
+                ],
+                [
+                    'content' => $validatedData['content']
+                ]
+            );
+        }
+        return redirect()->to(url('/'));
     }
 }
