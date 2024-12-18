@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="en-EN">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +13,7 @@
 
         <!-- Styles -->
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
-        <script type="text/javascript">
+        <script >
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
@@ -91,10 +91,10 @@
                                                 <button  style="display:none" id="Follow" data-user-id="{{$notification->sender->id}}">Follow</button>
 
                                                 @if ($notification->typen === 'FOLLOW_REQUEST')
-                                                    <div id="notification-actions">
-                                                        <button id="accept" data-user-id="{{ $notification->sender->id }}">Accept</button>
-                                                        <button id="reject" data-user-id="{{ $notification->sender->id }}">Eliminate</button>
-                                                    </div>
+                                                <div id="notification-actions">
+                                                        <button id="accept" data-user-id="{{ $notification->sender->id }}"><p>Accept</p></button>
+                                                        <button id="reject" data-user-id="{{ $notification->sender->id }}"><p>Eliminate</p></button>
+                                                </div>
                                                 @elseif (!Auth::user()->isFollowing($notification->sender->id))
                                                     <button id="Follow" data-user-id="{{$notification->sender->id}}">Follow Back</button>
                                                 @endif

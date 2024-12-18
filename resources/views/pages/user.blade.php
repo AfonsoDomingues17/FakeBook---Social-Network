@@ -61,13 +61,13 @@
                             <form action="{{ route('unblock', ['user_id' => $user->id]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit">Unblock</button>
+                                <button type="submit"><p>Unblock</p></button>
                             </form>
                         @else
                             @if(Auth::user()->isFollowing($user->id))
-                                <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}">Following</button>
+                                <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}"><p>Following</p></button>
                             @elseif(Auth::user()->hasSentFollowRequestTo($user->id))
-                                <button class="pending" id="pending" data-user-id="{{$user->id}}">Pending</button>
+                                <button class="pending" id="pending" data-user-id="{{$user->id}}"><p>Pending</p></button>
                             @else
                                 <button id="Follow" data-user-id="{{$user->id}}"><p>Follow</p></button>
                             @endif
