@@ -204,7 +204,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return channel; // Return the channel so we can unsubscribe later
     }
-
     if (specialContainer) {
         document.addEventListener('click', function(event) {
             const target = event.target.closest('#chat-header');
@@ -216,16 +215,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Close group info if already open
                     specialContainer.innerHTML = '';
                     specialContainer.appendChild(chatContainer);
-                } else {
+                } else if (target.dataset.type === 'group'){
                     fetch(`/groups/${target.dataset.id}/info`)
                         .then(response => response.text())
                         .then(html => {
                             specialContainer.innerHTML = html;
                             attachGroupInfoEventListeners();  
-                        
-                    })
+                        })
                         .catch(error => console.error('Error fetching group info:', error));
-                    
                 }
             }
             else if(close && !event.target.closest('#addMembersModal')){
@@ -242,6 +239,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-    }   
+    }     
 });
 

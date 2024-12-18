@@ -33,7 +33,7 @@ class MessageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMessageRequest $request)
+    public function store(Request $request)
     {
         $user = Auth::user();
         
