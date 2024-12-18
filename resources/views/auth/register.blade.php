@@ -50,13 +50,14 @@
 
     <label for="country">Country</label>
     <input id="country-search" type="text" class="form-control" placeholder="Start typing your country..." oninput="filterCountries()" onclick="toggleCountryDropdown()">
-    <select id="country" name="country" size="5" required onchange="selectCountry(event)">
+    <input type="hidden" id="country-id" name="country_id">
+    <select id="country" size="5" required onchange="selectCountry(event)">
         @foreach ($countries as $country)
-            <option value="{{ $country->name }}">{{ $country->name }}</option>
+            <option value="{{ $country->id }}">{{ $country->name }}</option>
         @endforeach
     </select>
-    @if ($errors->has('country'))
-      <span class="error">{{ $errors->first('country') }}</span>
+    @if ($errors->has('country_id'))
+        <span class="error">{{ $errors->first('country_id') }}</span>
     @endif
 
     <label for="gender">Gender</label>
@@ -89,6 +90,6 @@
     @endif
 </form>
 </div>
-</div>
-<script src="{{ asset('js/register.js') }}"></script>
+
+<script src="{{ asset('js/register.js') }}" defer></script>
 @endsection
