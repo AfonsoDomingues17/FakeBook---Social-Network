@@ -31,6 +31,32 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Error:', error);
                 });
         }
+        if (event.target.matches('.comment-like-form')) {
+            event.preventDefault();
+
+            const form = event.target;
+            const container = form.closest('.like-container');
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                headers: {
+                    'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
+                },
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        updateLikeContainer(container, data.liked, data.likeCount);
+                    } else {
+                        console.error('Error liking comment:', data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
     });
     function updateLikeContainer(container, liked, likeCount) {
         const likeButton = container.querySelector('.like-button');
