@@ -29,6 +29,7 @@
         </div>
     @endif
     <div class="interaction-bar">
+    @if(Auth::check() && !Auth::user()->isAdmin())
         <div class="like-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
             <form class="like-form" action="{{ route('post.like') }}" method="POST">
                 @csrf
@@ -48,6 +49,7 @@
             <i class="fa-regular fa-flag"></i>
         </button>
         @include('partials.report_modal', ['type' => 'post', 'id' => $post->id]) 
+    @endif
     </div>
     <div class="action_buttons">
         @if(Auth::check())

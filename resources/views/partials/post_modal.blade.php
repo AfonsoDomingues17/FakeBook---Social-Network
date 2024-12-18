@@ -37,6 +37,7 @@
                                 </div>
                             @endif
                             <div class="interaction-bar">
+                            @if(Auth::check() && !Auth::user()->isAdmin())
                                 <div class="like-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
                                     <form class="like-form" action="{{ route('post.like') }}" method="POST">
                                         @csrf
@@ -52,11 +53,11 @@
                                     <span class="like-count">{{ $post->getNumberOfLikes() }}</span>
                                 </div>
                                 <p><i class="fa-regular fa-comment"></i> 33</p>
-                                <p><i class="fa-solid fa-share"></i> 10</p>
                                 <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
                                     <i class="fa-regular fa-flag"></i>
                                 </button>
                                 @include('partials.report_modal', ['type' => 'post', 'id' => $post->id])
+                                @endif
                             </div>
                             @if ($post->media->count() > 0)
                                     <script>
@@ -76,7 +77,7 @@
                                 @include ('partials.comment', ['comment' => $comment])
                             @endforeach
                         </div>
-                        @if(Auth::check())
+                        @if(Auth::check() && !Auth::user()->isAdmin())
                             <div class="comment-form" style="margin-top: auto">
                                 <hr>
                                 <form id="comment-form-{{ $post->id }}" action="{{ route('comments.store') }}" method="POST">
