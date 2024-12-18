@@ -7,31 +7,32 @@
                 <span id="nome"><p>{{$user->name}}</p></span>
             </div>
         
-    </a> 
-        @if (Auth::check() && !Auth::user()->isAdmin())
-            @if(Auth::user()->isFollowing($user->id))
-                <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}">Following</button>
-            @elseif(Auth::user()->hasSentFollowRequestTo($user->id))
-                <button class="pending" id="pending" data-user-id="{{$user->id}}">Pending</button>
-            @else
-                <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
-            @endif    
-        @endif
-        @if (Auth::check() && Auth::user()->isAdmin())
-        <div id="watchlist-actions-{{ $user->id }}" data-user-id="{{ $user->id }}">
-                @if ($user->isInWatchlist)
-                    <form id="remove-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.remove', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
-                        @csrf
-                        <button type="submit">Remove from Watchlist</button>
-                    </form>
+    
+            @if (Auth::check() && !Auth::user()->isAdmin())
+                @if(Auth::user()->isFollowing($user->id))
+                    <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}">Following</button>
+                @elseif(Auth::user()->hasSentFollowRequestTo($user->id))
+                    <button class="pending" id="pending" data-user-id="{{$user->id}}">Pending</button>
                 @else
-                    <form id="add-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.add', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
-                        @csrf
-                        <button type="submit">Add to Watchlist</button>
-                    </form>
-                @endif
-        </div>
-        @endif
+                    <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
+                @endif    
+            @endif
+            @if (Auth::check() && Auth::user()->isAdmin())
+            <div class="watchList" id="watchlist-actions-{{ $user->id }}" data-user-id="{{ $user->id }}">
+                    @if ($user->isInWatchlist)
+                        <form id="remove-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.remove', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
+                            @csrf
+                            <button type="submit">Remove from Watchlist</button>
+                        </form>
+                    @else
+                        <form id="add-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.add', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
+                            @csrf
+                            <button type="submit">Add to Watchlist</button>
+                        </form>
+                    @endif
+            </div>
+            @endif
         </section>
+        </a> 
     
 </article>
