@@ -16,6 +16,8 @@ use App\Http\Controllers\GroupParticipantController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\PostLikesController;
+use App\Http\Controllers\CommentLikesController;
 
 
 /*
@@ -57,7 +59,7 @@ Route::get('/posts/{post_id}', [PostController::class, 'show'])->name('posts.sho
 Route::get('/posts/{post_id}/edit', [PostController::class, 'edit'])->name('posts.edit');
 Route::put('/posts/{post_id}/edit', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{post_id}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
-Route::post('/post/like', [PostController::class, 'like'])->name('post.like');
+Route::post('/post/like', [PostLikesController::class, 'like'])->name('post.like');
 
 //Groups
 Route::post('/groups/create', [GroupController::class, 'createGroup'])->name('group.create');
@@ -74,6 +76,7 @@ Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComme
 Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
 Route::put('/comments/{comment_id}', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('/comments/{comment_id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+Route::post('/comment/like', [CommentLikesController::class, 'like'])->name('comment.like');
 
 // Admin
 Route::middleware(['admin'])->group(function () {

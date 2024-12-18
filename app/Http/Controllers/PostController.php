@@ -177,8 +177,14 @@ public function destroy($post_id)
         $media->delete(); // Delete the media record
     }
 
-    // Delete associated comments
-    $post->comments()->delete();
+    // Delete likes on the post
+    $post->likedByUsers()->detach();
+
+    // Delete associated comments and likes
+    foreach ($post->comments as $comment) {
+        $comment->likedByUsers()->detach();
+        $comment->delete();
+    }
 
     // Delete the post
     $post->delete();
@@ -186,15 +192,4 @@ public function destroy($post_id)
     // Redirect to previous page
     return redirect()->back();
 }
-
-
-function like(Request $request) {
-    Log::info('Like post ' . $request->id);
-    $event = event(new PostLike($request->id));
-    Log::info('Event', $event);
-    return response()->json(['success' => true, 'message' => 'Post liked successfully']);
-    
-}
-
-
 }

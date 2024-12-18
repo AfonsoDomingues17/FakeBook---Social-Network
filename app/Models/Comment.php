@@ -29,5 +29,15 @@ class Comment extends Model
     {
         return $this->belongsToMany(User::class, 'commentTag', 'comment_id', 'tagged_user_id');
     }
+
+    public function likedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'commentlikes', 'comment_id', 'user_id');
+    }
+
+    public function getNumberOfLikes()
+    {
+        return $this->likedByUsers()->count();
+    }
 }
 

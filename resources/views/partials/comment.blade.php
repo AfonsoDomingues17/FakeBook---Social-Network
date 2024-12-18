@@ -5,6 +5,22 @@
     </div>
 
     <p>{{ $comment->content }}</p>
+    <div class="interaction-bar">
+        <div class="like-container" data-comment-id="{{ $comment->id }}" style="display: flex; flex-direction: row; gap:10px">
+            <form class="comment-like-form" action="{{ route('comment.like') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $comment->id }}">
+                <button type="submit" class="like-button">
+                    @if (Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists())
+                        <i class="fa-solid fa-heart"></i>
+                    @else
+                        <i class="fa-regular fa-heart"></i>
+                    @endif
+                </button>
+            </form>
+            <span class="like-count">{{ $comment->likedByUsers()->count() }}</span>
+        </div>
+    </div>
     @if (Auth::check() && (Auth::user()->id == $comment->user->id || Auth::user()->isAdmin()))
         <div class="comment-options" style="display: none; justify-content: space-between; margin-top: 5px">
             <button class="edit-link btn btn-link" onclick="toggleEditForm({{ $comment->id }})">Edit</button>

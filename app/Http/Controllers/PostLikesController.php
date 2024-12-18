@@ -2,64 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostLike;
+use App\Models\Post;
 use App\Models\PostLikes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PostLikesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    function like(Request $request) {
+        if(!Auth::check()) {
+            return response()->json(['error' => 'Not authenticated'], 401);
+        }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $postId = $request->id;
+        $userId = Auth::id();
+        $post = Post::findOrFail($postId);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $this->authorize('like', $post);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(PostLikes $postLikes)
-    {
-        //
-    }
+        $existingLike = $post->likedByUsers()->where('user_id', $userId)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PostLikes $postLikes)
-    {
-        //
-    }
+        if ($existingLike) {
+            // Unlike Post
+            $post->likedByUsers()->detach($userId);
+            $liked = false;
+        } else {
+            // Like Post
+            $post->likedByUsers()->attach($userId);
+            $liked = true;
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PostLikes $postLikes)
-    {
-        //
-    }
+            $event = event(new PostLike($request->id));
+            Log::info('Event', $event);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PostLikes $postLikes)
-    {
-        //
+        $likeCount = $post->getNumberOfLikes();
+
+        return response()->json(['success'=> true, 'liked' => $liked, 'likeCount' => $likeCount]);
     }
 }

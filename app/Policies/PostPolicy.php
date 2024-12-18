@@ -45,4 +45,12 @@ class PostPolicy
     {
         return $user->id === $post->owner_id || $user->typeu === 'ADMIN';
     }
+
+    /**
+     * Determine whether the user can like the post.
+     */
+    public function like(User $user)
+    {
+        return $user !== null;
+    }
 }
