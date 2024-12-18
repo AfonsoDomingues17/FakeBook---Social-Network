@@ -21,17 +21,19 @@
                             @else
                                 <p id="postdescription">{{ $post->description }}</p>
                                 <div class="media" style="align-items: center">
-                                    @if ($post->typep === 'MEDIA')
-                                        <img id="media-image-{{ $post->id }}"
-                                             src="{{ route('media.show', ['post_id' => $post->id]) }}"
-                                             alt="Media" style="width: 75%">
+                                @if ($post->typep === 'MEDIA')
+                                    @if ($post->media->isNotEmpty())
+                                        <img id="media-image-{{ $post->id }}" src="{{ route('media.show', $post->media->first()->id) }}" alt="Media">
                                         @if ($post->media->count() > 1)
                                             <div class="post-media-controls">
                                                 <button id="media-prev-{{ $post->id }}">Previous</button>
                                                 <button id="media-next-{{ $post->id }}">Next</button>
                                             </div>
                                         @endif
+                                    @else
+                                        <img id="media-image-{{ $post->id }}" src="{{ route('media.show', 'default') }}" alt="Default Media">
                                     @endif
+                                @endif
                                 </div>
                             @endif
                             <div class="interaction-bar">

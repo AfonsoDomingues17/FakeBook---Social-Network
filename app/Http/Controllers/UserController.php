@@ -207,7 +207,13 @@ class UserController extends Controller
 
                     $isInWatchlist = false;
                     if (Auth::check() && Auth::user()->isAdmin()) {
-                        $isInWatchlist = Auth::user()->watchlistedUsers()->where('user_id', $user_id)->exists();
+                        // Log the query
+                        $query = Auth::user()->watchlistedUsers()->where('user_id', $user_id);
+                        Log::info('Watchlist Query: ' . $query->toSql(), $query->getBindings());
+
+                        // Execute the query and log the result
+                        $isInWatchlist = $query->exists();
+                        Log::info('Is in Watchlist: ' . ($isInWatchlist ? 'Yes' : 'No'));
                     }
 
                     return view('pages.user', [
