@@ -23,6 +23,7 @@
                         @endif
                     @else
                         <img id="media-image-{{ $post->id }}" src="{{ route('media.show', 'default') }}" alt="Default Media">
+                    @endif
                 @endif
                 <div id="CommentBody">
                     <p id="postdescription">{{ $post->description }}</p>
