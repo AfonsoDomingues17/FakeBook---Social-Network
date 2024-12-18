@@ -35,12 +35,10 @@ class UserController extends Controller
         
             $user = User::findOrFail($user_id);
             $this->authorize('update', $user);
-            $countries = Country::all(); 
 
     // Pass the user and countries to the view
         return view('pages.editProfile', [
             'user' => $user,
-            'countries' => $countries
         ]);
     }
 
@@ -164,7 +162,7 @@ class UserController extends Controller
             'is_public' => $request->is_public,
             'photo_url' => $photoUrl,
             'gender' => $request->gender,
-            'country' => $request->country,
+            'country_id' => $request->country_id,
         ]);
         
 
@@ -251,13 +249,13 @@ class UserController extends Controller
     Log::info('Validation successful', $validatedData);
 
     // Update user information
-        $user->name = $request->name;
-        $user->username = $request->username;
-        $user->age = $request->age;
-        $user->bio = $request->bio;
-        $user->is_public = $request->is_public;
-        $user->gender = $request->gender;
-        $user->country = $request->country;
+    $user->name = $request->name;
+    $user->username = $request->username;
+    $user->age = $request->age;
+    $user->bio = $request->bio;
+    $user->is_public = $request->is_public;
+    $user->gender = $request->gender;
+    $user->country_id = $request->country_id;
 
     // Handle profile picture update
     if ($request->hasFile('photo_url')) {
@@ -550,10 +548,11 @@ class UserController extends Controller
         // Followers by Country
         $followersByCountry = DB::table('users')
             ->join('connection', 'users.id', '=', 'connection.initiator_user_id')
+            ->join('countries', 'users.country_id', '=', 'countries.id')
             ->where('connection.target_user_id', $user_id)
             ->whereIn('connection.typer', ['FOLLOW', 'FRIEND'])
-            ->select(DB::raw('users.country as country, count(*) as count'))
-            ->groupBy('users.country')
+            ->select(DB::raw('countries.name as country, count(*) as count'))
+            ->groupBy('countries.name')
             ->orderBy('count', 'desc')
             ->get();
 

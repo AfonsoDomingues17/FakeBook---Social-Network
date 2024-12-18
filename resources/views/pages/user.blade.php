@@ -13,20 +13,20 @@
     @else
     <section id="profile">
 
-        <img src="{{ route('userphoto', ['user_id' => $user->id]) }}" alt="profile picture" width="200" height="200"><br>
+        <img id="p_picture" src="{{ route('userphoto', ['user_id' => $user->id]) }}" alt="profile picture" width="200" height="200">
 
         <div class="info">
             <div class="p1">
                 <span id="username"><p>{{$user->username}}</p></span> 
                 @if(Auth::check())
                     @if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
-                        <a href="{{route('editprofile',['user_id' => $user->id])}}">Edit Profile</a> 
+                        <a href="{{route('editprofile',['user_id' => $user->id])}}"><p>Edit Profile</p></a> 
                     @endif
                     @if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
                         <form action="{{ route('deleteuser', ['user_id' => $user->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this account? This action cannot be undone.');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Delete account</button>
+                            <button type="submit"><p>Delete account</p></button>
                         </form>
                     @endif
                     @if (Auth::user()->isAdmin())
@@ -34,23 +34,23 @@
                             @if ($user->isInWatchlist)
                                 <form id="remove-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.remove', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
                                     @csrf
-                                    <button type="submit">Remove from Watchlist</button>
+                                    <button type="submit"><p>Remove from Watchlist</p></button>
                                 </form>
                             @else
                                 <form id="add-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.add', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
                                     @csrf
-                                    <button type="submit">Add to Watchlist</button>
+                                    <button type="submit"><p>Remove from Watchlist</p></button>
                                 </form>
                             @endif
                         </div>
                         @if($user->isBanned())
                         <form action="{{ route('admin.banlist.remove', ['user_id' => $user->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to unban this account?');">
                             @csrf
-                            <button type="submit">Unban account</button>
+                            <button type="submit"><p>Unban account</p></button>
                         </form>
                         @else
-                        <button id="banUser" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#banUserModal">
-                            Ban user
+                        <button id="banUser" type="button" data-bs-toggle="modal" data-bs-target="#banUserModal">
+                            <p>Ban user</p>
                         </button>
                         @endif
                         @include('partials.ban_user', ['user' => $user])
@@ -69,19 +69,19 @@
                             @elseif(Auth::user()->hasSentFollowRequestTo($user->id))
                                 <button class="pending" id="pending" data-user-id="{{$user->id}}">Pending</button>
                             @else
-                                <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
+                                <button id="Follow" data-user-id="{{$user->id}}"><p>Follow</p></button>
                             @endif
                             <form action="{{ route('direct_chats.store') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="recipient_id" value="{{ $user->id }}">
-                                <button type="submit">Send Message</button>
+                                <button type="submit"><p>Send Message</p></button>
                             </form>
                             <form action="{{ route('block', ['user_id' => $user->id]) }}" method="POST">
                                 @csrf
-                                <button type="submit">Block</button>
+                                <button type="submit"><p>Block</p></button>
                             </form>
                             <button id="reportUser" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportUserModal-{{ $user->id }}">
-                                Report
+                                <p>Report</p>
                             </button>
                             @include('partials.report_modal', ['type' => 'user', 'id' => $user->id])
                         @endif

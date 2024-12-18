@@ -1,20 +1,20 @@
 function toggleCategory() {
-    var searchType = document.getElementById('search-type').value;
-    var userDiv = document.getElementById('user-div');
-    var postDiv = document.getElementById('post-div');
-    var groupDiv = document.getElementById('group-div');
+    const searchType = document.getElementById('search-type').value;
+    const userDiv = document.getElementById('user-div');
+    const postDiv = document.getElementById('post-div');
+    const groupDiv = document.getElementById('group-div');
     if (searchType === 'users') {
-        userDiv.style.display = 'block';
+        userDiv.style.display = 'flex';
         postDiv.style.display = 'none';
         groupDiv.style.display = 'none';
     }
     else if (searchType === 'posts') {
         userDiv.style.display = 'none';
-        postDiv.style.display = 'block';
+        postDiv.style.display = 'flex';
         groupDiv.style.display = 'none';
     } else if (searchType === 'groups') {
         userDiv.style.display = 'none';
         postDiv.style.display = 'none';
-        groupDiv.style.display = 'block';
+        groupDiv.style.display = 'flex';
     }
 }

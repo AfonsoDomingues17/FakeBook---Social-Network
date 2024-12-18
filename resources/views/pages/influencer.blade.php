@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div id="influencer-dashboard">
     <h1>{{ $user->username }}'s Influencer Dashboard</h1>
 
     <div class="btn-group" role="group" aria-label="View Switcher">
