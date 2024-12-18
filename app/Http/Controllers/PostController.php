@@ -184,8 +184,14 @@ public function destroy($post_id)
         $media->delete(); // Delete the media record
     }
 
-    // Delete associated comments
-    $post->comments()->delete();
+    // Delete likes on the post
+    $post->likedByUsers()->detach();
+
+    // Delete associated comments and likes
+    foreach ($post->comments as $comment) {
+        $comment->likedByUsers()->detach();
+        $comment->delete();
+    }
 
     // Delete the post
     $post->delete();

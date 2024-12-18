@@ -88,6 +88,9 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($comment_id);
         $this->authorize('delete', $comment);
 
+        // Delete likes on the comment
+        $comment->likedByUsers()->detach();
+
         $comment->delete();
 
         return response('Successful Delete', 204);
