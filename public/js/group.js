@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextButton = document.getElementById('nextButton');
     const backButton = document.getElementById('backButton');
     const groupCreationModal = document.getElementById('groupCreationModal');
-    const addMemberButtons = document.querySelectorAll('.add-member-btn');
+    const selectedUsersInput = document.getElementById('selected_users');
 
     let selectedUsers = [];
 
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('CreationPage').style.display = 'none';
             nextButton.style.display = 'block';
             selectedUsers = [];
-            addMemberButtons.forEach(button => {
+            document.querySelectorAll('.add-member-btn').forEach(button => {
                 button.classList.remove('btn-success');
                 button.classList.add('btn-secondary');
                 button.textContent = 'Add';
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('pageUsers').style.display = 'none';
             document.getElementById('CreationPage').style.display = 'block';
             nextButton.style.display = 'none';
-            document.getElementById('selected_users').value = selectedUsers.join(',');
+            selectedUsersInput.value = selectedUsers.join(',');
         });
     }
 
@@ -38,25 +38,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    addMemberButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const userId = this.getAttribute('data-user-id');
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('add-member-btn')) {
+            const button = event.target;
+            const userId = button.getAttribute('data-user-id');
             if (selectedUsers.includes(userId)) {
                 selectedUsers = selectedUsers.filter(id => id !== userId);
-                this.classList.remove('btn-success');
-                this.classList.add('btn-secondary');
-                this.textContent = 'Add';
+                button.classList.remove('btn-success');
+                button.classList.add('btn-secondary');
+                button.textContent = 'Add';
             } else {
                 selectedUsers.push(userId);
-                this.classList.remove('btn-secondary');
-                this.classList.add('btn-success');
-                this.textContent = 'Added';
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-success');
+                button.textContent = 'Added';
             }
-        });
-    });
-
-    document.addEventListener('click', (event) => {
-        if (event.target.classList.contains('remove-member-btn')) {
+        } else if (event.target.classList.contains('remove-member-btn')) {
             const groupId = document.querySelector('#group_info').dataset.groupId;
             const userId = event.target.getAttribute('data-user-id');
             fetch(`/groups/${groupId}/remove-member`, {
@@ -96,8 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({ [field]: value
-                })
+                body: JSON.stringify({ [field]: value })
             })
             .then(response => {
                 if (!response.ok) {
@@ -122,8 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 input.parentElement.previousElementSibling.style.display = 'block';
             })
             .catch(error => {
-                console.error('Group name or description update error');
-                
+                console.error('Group name or description update error:', error);
             });
         }
     });

@@ -12,6 +12,7 @@ use App\Models\PostCategory;
 use Illuminate\Support\Facades\Auth;
 use Log;
 use App\Models\Category;
+use App\Models\Connection;
 
 class SearchController extends Controller
 {
@@ -29,6 +30,7 @@ class SearchController extends Controller
 
         if ($type === 'users') {
             $countries = request()->query('countries');
+            $group = request()->query('group');
 
             if ($countries) {
                 $countries = explode(',', $countries);
@@ -51,7 +53,7 @@ class SearchController extends Controller
             $usersWatchlist = $usersQuery->map(function ($user) {
                 $isInWatchlist = false;
                 if (Auth::check() && Auth::user()->isAdmin()) {
-                    $isInWatchlist = Watchlist::where('admin_id', Auth::id())->where('user_id', $user->id)->exists();
+                    $isInWatchlist = Watchlist::where('admin_id', Auth::user()->id)->where('user_id', $user->id)->exists();
                 }
                 $user->isInWatchlist = $isInWatchlist;
                 return $user;
@@ -59,7 +61,15 @@ class SearchController extends Controller
 
             $usersFiltered = $usersWatchlist->where('typeu', '!=', 'ADMIN')->where('id', '!=', Auth::id());
 
-            $users = $usersFiltered;
+            if ($group) {
+                $users = $usersFiltered->filter(function ($user) {
+                    return Connection::where('initiator_user_id', Auth::id())
+                        ->where('target_user_id', $user->id)
+                        ->exists();
+                });
+            } else {
+                $users = $usersFiltered;
+            }
         } elseif ($type === 'posts') {
             $categories = request()->query('categories'); 
             $order = request()->query('order', 'relevance');

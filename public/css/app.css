@@ -553,6 +553,10 @@ ul#real-time-search {
 
 }
 
+#real-time-search-group {
+  padding: 0;
+}
+
 #real-time-search li:hover {
   background-color: #F0F2F5;
 }

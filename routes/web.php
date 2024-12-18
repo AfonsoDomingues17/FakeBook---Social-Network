@@ -105,6 +105,7 @@ Route::get('/media/{post_id}', [MediaController::class, 'show'])->name('media.sh
 // Search
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/advsearch', [SearchController::class, 'advancedSearch'])->name('advancedSearch');
+Route::get('/following', [UserController::class, 'followingUsers'])->name('following');
 
 //Connections
 Route::post('/follow/users/{user_id}', [UserController::class, 'follow'])->name('follow');

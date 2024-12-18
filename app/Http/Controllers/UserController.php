@@ -108,6 +108,17 @@ class UserController extends Controller
 
         return $suggestedUsers;
     }
+
+    public function followingUsers(Request $request)
+    {
+        $user = Auth::user();
+        $page = $request->input('page', 1);
+        $limit = 10;
+
+        $followers = $user->following()->paginate($limit, ['*'], 'page', $page);
+
+        return response()->json($followers);
+    }
           
     public function getNumberPosts($user_id){
         $user = User::findOrFail($user_id);

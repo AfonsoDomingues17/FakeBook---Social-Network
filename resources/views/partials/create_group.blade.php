@@ -1,7 +1,7 @@
 @if(Auth::check())
 <div class="modal fade" id="groupCreationModal" tabindex="-1" aria-labelledby="groupCreationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content" id="groupCreationModalContent">
             <div class="modal-header">
                 <h5 class="modal-title" id="groupCreationModalLabel">Create Group</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -9,23 +9,34 @@
             <div class="modal-body">
                 <section id="pageUsers">
                     <h3>Add members to the group</h3>
-                    <input type="text" id="searchUsers" placeholder="Search for users">
-                    @if (count(Auth::user()->following) == 0)
-                        <p>You don't follow anyone to add to the group</p>
-                    @else
-                    @foreach (Auth::user()->following->take(5) as $follower)
-                        <div class="user">
-                            <section id="info">
-                                <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="70" height="70" alt="user profile picture">
-                                <div class="user-info">
-                                    <span id="user"><p>{{$follower->username}}</p></span>
-                                    <span id="nome"><p>{{$follower->name}}</p></span>
-                                </div>
-                                <button type="button" id="AddMember" class="add-member-btn btn btn-secondary" data-user-id="{{ $follower->id }}">Add</button>
-                            </section>
+                    <form id="search-form" action="{{ route('search') }}" method="GET">
+                        <div>
+                            <input id="searchUsers" type="text" name="query" placeholder="Search for users" value="">
+                            <input type="hidden" name="type" value="users">
+                            <div id="real-time-search-group"></div> <!-- Updated ID for search results -->
                         </div>
-                    @endforeach
-                    @endif
+                    </form>
+                    <div id="initialGroup">
+                        @if (count(Auth::user()->following) == 0)
+                            <p>You don't follow anyone to add to the group</p>
+                        @else
+                             <div id="followingContainer" style="max-height: 350px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
+                                @foreach (Auth::user()->following->take(10) as $follower)
+                                    <div class="user">
+                                        <section id="info">
+                                            <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="70" height="70" alt="user profile picture">
+                                            <div class="user-info">
+                                                <span id="user"><p>{{$follower->username}}</p></span>
+                                                <span id="nome"><p>{{$follower->name}}</p></span>
+                                            </div>
+                                            <button type="button" id="AddMember" class="add-member-btn btn btn-secondary" data-user-id="{{ $follower->id }}">Add</button>
+                                        </section>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div id="loading" style="display: none;">Loading...</div>
+                        @endif
+                    </div>
                 </section>
                 <section id="CreationPage" style="display: none;">
                     <form id="create-group-form" action="{{route('group.create')}}" method="POST" enctype="multipart/form-data">
@@ -66,3 +77,5 @@ function previewGroupPicture(event) {
     reader.readAsDataURL(event.target.files[0]);
 }
 </script>
+<script src="{{ asset('js/searchGroup.js') }}"></script>
+<script src="{{ asset('js/groupLazyScroll.js') }}"></script>
