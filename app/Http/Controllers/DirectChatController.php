@@ -24,7 +24,7 @@ class DirectChatController extends Controller
             $query->where('user_id', $user->id);
         })->get();
 
-        return view('pages.direct_chats', compact('directChats', 'groups'));
+        return view('pages.conversations', compact('directChats', 'groups'));
     }
 
     public function show($id)
