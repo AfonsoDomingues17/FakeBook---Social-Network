@@ -33,9 +33,11 @@
             @endforeach
         </section>
     @else
-        <h1>You are banned!</h1>
-        <p>Write an unban request <a href="/help">here</a></p>
-        <img src="{{ Storage::url('BANNED.png') }}" class="img-fluid" alt="Sad frog" style="width: 25vw;">    
+    <div id="banned_page">
+            <h1>You are banned!</h1>
+            <p>Write an unban request <a href="/help">here</a></p>
+            <img src="{{ Storage::url('BANNED.png') }}"  alt="Sad frog">   
+        </div> 
     @endif
 </section>
 
