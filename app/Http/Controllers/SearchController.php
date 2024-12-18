@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\SearchRequest;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Group;
@@ -14,7 +15,7 @@ use App\Models\Category;
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
+    public function search(SearchRequest $request)
     {
         // Extract the type and query from the query string
         $query = $request->input('query');
@@ -45,7 +46,7 @@ class SearchController extends Controller
                 Log::info('Users query with countries: ' . $usersQuery->toSql());
             }
 
-            $usersQuery = $usersQuery->paginate(10, ['*'], 'page', $page);
+            $usersQuery = $usersQuery->paginate(15, ['*'], 'page', $page);
 
             $usersWatchlist = $usersQuery->map(function ($user) {
                 $isInWatchlist = false;
@@ -128,7 +129,7 @@ class SearchController extends Controller
         }
     }
 
-    public function advancedSearch(Request $request)
+    public function advancedSearch(SearchRequest $request)
     {
         $type = $request->input('type');
         $page = $request->input('page', 1);
@@ -156,7 +157,7 @@ class SearchController extends Controller
             if ($username) {
                 $users->where('username', 'ILIKE', '%' . $username . '%');
             }
-            $users = $users->paginate(10, ['*'], 'page', $page);
+            $users = $users->paginate(15, ['*'], 'page', $page);
             
 
             $usersWatchlist = $users->map(function ($user) {

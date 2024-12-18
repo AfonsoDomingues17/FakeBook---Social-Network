@@ -35,6 +35,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+
+   function attachGroupInfoEventListeners() {
+        const addMemberSpan = document.getElementById('AddMembers');
+
+        if (addMemberSpan) {
+            addMemberSpan.addEventListener('click', function() {
+                console.log('Add members span clicked');
+            });
+        } else {
+            console.log('Add members span not found');
+        }
+    }
+
     function initializePusher(conversationId, conversationType) {
         Pusher.logToConsole = true;
 
@@ -191,45 +204,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return channel; // Return the channel so we can unsubscribe later
     }
-
     if (specialContainer) {
         document.addEventListener('click', function(event) {
             const target = event.target.closest('#chat-header');
             const chat = event.target.closest('#chat');
             const close = event.target.closest('#close');
-            console.log(chat)
             if (target && target.dataset.id) {
                 const groupInfo = document.querySelector('#group_info');
                 if (groupInfo && groupInfo.dataset.groupId == target.dataset.id) {
                     // Close group info if already open
                     specialContainer.innerHTML = '';
                     specialContainer.appendChild(chatContainer);
-                } else {
+                } else if (target.dataset.type === 'group'){
                     fetch(`/groups/${target.dataset.id}/info`)
                         .then(response => response.text())
                         .then(html => {
                             specialContainer.innerHTML = html;
-
-                        
-                    })
+                            attachGroupInfoEventListeners();  
+                        })
                         .catch(error => console.error('Error fetching group info:', error));
                 }
             }
-            else if(close && !event.target.closest('#groupParticipantsModal')){
-                console.log(chatContainer);
+            else if(close && !event.target.closest('#addMembersModal')){
                 specialContainer.innerHTML = '';
                 specialContainer.appendChild(chatContainer);
             }
         });
         // Close group info when clicking outside of it
         document.addEventListener('click', function(event) {
-            if (!event.target.closest('#group_info') && !event.target.closest('#chat-header') && !event.target.closest('#groupParticipantsModal')) {
+            if (!event.target.closest('#group_info') && !event.target.closest('#chat-header') && !event.target.closest('#addMembersModal')) {
                 const close = document.querySelector('#close');
                 if (close) {
                     close.click();
                 }
             }
         });
-    }   
+    }     
 });
 

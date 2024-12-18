@@ -101,7 +101,7 @@
             </ul>
         </div>
         <h2>Contact Form</h2>
-        <div class="form">
+        <div ">
             <form action="{{ route('help.form') }}" method="POST">
                 @csrf
                 <div class="form-group">
@@ -113,9 +113,9 @@
                     <input type="email" name="email" id="email" class="form-control" required>
                 </div>
                 @if (Auth::check() && Auth::user()->isBanned())
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="is_unban" id="unban_request" value="true">
-                    <label class="form-check-label" for="unban_request">I want to request my unban</label>
+                <div class="form-group">
+                    <label for="unban_request">I want to request my unban</label>
+                    <input type="checkbox" name="is_unban" id="unban_request" value="true">
                 </div>
                 @endif
                 <div class="form-group">

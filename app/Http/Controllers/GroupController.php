@@ -8,6 +8,8 @@ use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GroupParticipant;
+use App\Http\Requests\CreateGroupRequest;
+use App\Http\Requests\UpdateGroupRequest;
 
 
 
@@ -32,14 +34,9 @@ class GroupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function createGroup(Request $request)
+    public function createGroup(CreateGroupRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:50',
-            'description' => 'nullable|string|max:255',
-            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'selected_users' => 'nullable|string'
-        ]);
+        $validated = $request->validated();
 
         $photoUrl = null;
         if ($request->hasFile('photo_url')) {
@@ -48,8 +45,8 @@ class GroupController extends Controller
         }
 
         $group = Group::create([
-            'name' => $request->name,
-            'description' => $request->description,
+            'name' => $validated['name'],
+            'description' => $validated['description'],
             'photo_url' => $photoUrl,
             'owner_id' => Auth::id()
         ]);
@@ -102,9 +99,14 @@ class GroupController extends Controller
 
 
     }
-    public function groupInfo($group_id){
-        $group = Group::find($group_id);
-        return view('partials.group_info', ['group' => $group]);
+    public function groupInfo($group_id)
+    {
+        $group = Group::findOrFail($group_id);
+        $followersNotInGroup = Auth::user()->following->filter(function($follower) use ($group) {
+            return !$group->participants->contains($follower->id);
+        });
+
+    return view('partials.group_info', compact('group', 'followersNotInGroup'));
     }
 
     /**
@@ -156,6 +158,11 @@ class GroupController extends Controller
                 $group->owner_id = $new_owner_id;
                 $group->save();
             } else {
+
+                // Delete the group's image if it exists
+                if ($group->photo_url && Storage::disk('private')->exists($group->photo_url)) {
+                    Storage::disk('private')->delete($group->photo_url);
+                }
                 // If no other members, delete the group
                 $group->delete();
                 return redirect()->route('homepage')->with('success', 'Group has been deleted.');
@@ -176,12 +183,17 @@ class GroupController extends Controller
             return redirect()->back()->with('error', 'Only the group owner can delete the group.');
         }
 
+        // Delete the group's image if it exists
+        if ($group->photo_url && Storage::disk('private')->exists($group->photo_url)) {
+            Storage::disk('private')->delete($group->photo_url);
+        }
+
         $group->delete();
 
         return redirect()->route('homepage')->with('success', 'Group has been deleted.');
     }
 
-    public function updateGroup(Request $request, $group_id)
+    public function updateGroup(UpdateGroupRequest $request, $group_id)
     {
         $group = Group::find($group_id);
 
@@ -189,21 +201,35 @@ class GroupController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $request->validate([
-            'group_name' => 'nullable|string|max:50',
-            'group_description' => 'nullable|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         if ($request->has('group_name')) {
-            $group->name = $request->group_name;
+            $group->name = $validated['group_name'];
         }
 
         if ($request->has('group_description')) {
-            $group->description = $request->group_description;
+            $group->description = $validated['group_description'];
         }
 
         $group->save();
 
         return response()->json($group);
-}
+    }
+    public function addMembers(Request $request, $group_id)
+    {
+        $group = Group::findOrFail($group_id);
+        
+        $userIds = $request->input('user_ids', []);
+        foreach ($userIds as $userId) {
+            if (!$group->participants->contains($userId)) {
+                GroupParticipant::create([
+                    'group_id' => $group_id,
+                    'user_id' => $userId,
+                    'date_joined' => now()
+                ]);
+            }
+        }
+
+        return redirect()->route('direct_chats.index')->with('success', 'Members added successfully.');
+    }
 }

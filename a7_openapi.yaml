@@ -11,7 +11,7 @@ servers:
 
 externalDocs:
   description: Find more info here.
-  url: https://web.fe.up.pt/~ssn/wiki/teach/lbaw/medialib/a07
+  url: https://gitlab.up.pt/lbaw/lbaw2425/lbaw24021/-/wikis/home
 
 tags:
   - name: "M01: Authentication and Individual Profile"

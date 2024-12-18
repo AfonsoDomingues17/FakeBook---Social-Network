@@ -6,6 +6,10 @@ use App\Events\FollowRequestDeleted;
 use App\Models\User;
 use App\Models\Watchlist;
 use App\Models\Question;
+use App\Http\Requests\CreateUserByAdminRequest;
+use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\BanUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,12 +35,10 @@ class UserController extends Controller
         
             $user = User::findOrFail($user_id);
             $this->authorize('update', $user);
-            $countries = Country::all(); 
 
     // Pass the user and countries to the view
         return view('pages.editProfile', [
             'user' => $user,
-            'countries' => $countries
         ]);
     }
 
@@ -131,25 +133,14 @@ class UserController extends Controller
         return $n_notifications;
     }
 
-    public function createUserbyAdmin(Request $request)
+    public function createUserbyAdmin(CreateUserByAdminRequest $request)
     {
         
         $request->merge([
             'is_public' => $request->is_public === 'public' ? true : false,
         ]);
         
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:250',
-            'username' => 'required|string|max:250|unique:users',
-            'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed',
-            'age' => 'required|integer|min:13',
-            'bio' => 'nullable|string|max:250',
-            'is_public' => 'required|boolean',
-            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gender' => 'required|string|in:Male,Female,Other',
-            'country' => 'required|string|exists:countries,name',
-        ]);
+        $validatedData = $request->validated();
         Log::info('Validation successful', $validatedData);
 
         
@@ -171,7 +162,7 @@ class UserController extends Controller
             'is_public' => $request->is_public,
             'photo_url' => $photoUrl,
             'gender' => $request->gender,
-            'country' => $request->country,
+            'country_id' => $request->country_id,
         ]);
         
 
@@ -240,7 +231,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function updateProfile(Request $request, $user_id)
+    public function updateProfile(UpdateProfileRequest $request, $user_id)
 {   
     $user = User::findOrFail($user_id);
     $this->authorize('update', $user);
@@ -253,32 +244,18 @@ class UserController extends Controller
     ]);
 
     // Validate input
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:250',
-        'username' => [
-            'required',
-            'string',
-            'max:250',
-            Rule::unique('users')->ignore($user_id),
-        ],
-        'age' => 'required|integer|min:13',
-        'bio' => 'nullable|string|max:250',
-        'is_public' => 'required|boolean',
-        'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'gender' => 'nullable|string|max:50',
-        'country' => 'nullable|string|max:100',
-    ]);
+    $validatedData = $request->validated();
     
     Log::info('Validation successful', $validatedData);
 
     // Update user information
-        $user->name = $request->name;
-        $user->username = $request->username;
-        $user->age = $request->age;
-        $user->bio = $request->bio;
-        $user->is_public = $request->is_public;
-        $user->gender = $request->gender;
-        $user->country = $request->country;
+    $user->name = $request->name;
+    $user->username = $request->username;
+    $user->age = $request->age;
+    $user->bio = $request->bio;
+    $user->is_public = $request->is_public;
+    $user->gender = $request->gender;
+    $user->country_id = $request->country_id;
 
     // Handle profile picture update
     if ($request->hasFile('photo_url')) {
@@ -376,20 +353,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:250',
-            'username' => 'required|string|max:250|unique:users',
-            'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed',
-            'age' => 'required|integer|min:13',
-            'bio' => 'nullable|string|max:250',
-            'is_public' => 'required|boolean',
-            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gender' => 'required|string|in:Male,Female,Other',
-            'country' => 'required|string|exists:countries,name',
-        ]);
+        $validatedData = $request->validated();
 
         $validatedData['password'] = Hash::make($validatedData['password']);
 
@@ -525,15 +491,13 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'User unblocked successfully.');
     }
 
-    public function banUser(Request $request, $user_id)
+    public function banUser(BanUserRequest $request, $user_id)
     {
         if(Auth::check() && Auth::user()->isAdmin())
         {
             if(!Banlist::where('user_id', $user_id)->exists())
             {
-                $validatedData = $request->validate([
-                    'reason' => 'required|string|max:250',
-                ]);
+                $validatedData = $request->validated();
                 $validatedData['user_id'] = $user_id;
                 $ban = Banlist::create($validatedData);
             }
@@ -584,10 +548,11 @@ class UserController extends Controller
         // Followers by Country
         $followersByCountry = DB::table('users')
             ->join('connection', 'users.id', '=', 'connection.initiator_user_id')
+            ->join('countries', 'users.country_id', '=', 'countries.id')
             ->where('connection.target_user_id', $user_id)
             ->whereIn('connection.typer', ['FOLLOW', 'FRIEND'])
-            ->select(DB::raw('users.country as country, count(*) as count'))
-            ->groupBy('users.country')
+            ->select(DB::raw('countries.name as country, count(*) as count'))
+            ->groupBy('countries.name')
             ->orderBy('count', 'desc')
             ->get();
 

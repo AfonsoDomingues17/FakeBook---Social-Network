@@ -21,8 +21,7 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm(): View
     {
-        $countries = Country::orderBy('name', 'asc')->get(); 
-        return view('auth.register', compact('countries'));
+        return view('auth.register');
     }
 
     /**
@@ -35,7 +34,7 @@ class RegisterController extends Controller
         $request->merge([
             'is_public' => $request->is_public === 'public' ? true : false,
         ]);
-        
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:250',
             'username' => 'required|string|max:250|unique:users',
@@ -46,7 +45,7 @@ class RegisterController extends Controller
             'is_public' => 'required|boolean',
             'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'gender' => 'required|string|in:Male,Female,Other',
-            'country' => 'required|string|exists:countries,name',
+            'country_id' => 'nullable|integer|exists:countries,id',
         ]);
         Log::info('Validation successful', $validatedData);
 
@@ -69,7 +68,7 @@ class RegisterController extends Controller
             'is_public' => $request->is_public,
             'photo_url' => $photoUrl,
             'gender' => $request->gender,
-            'country' => $request->country,
+            'country_id' => $request->country_id,
         ]);
 
         $credentials = $request->only('email', 'password');

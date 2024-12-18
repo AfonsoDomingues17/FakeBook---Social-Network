@@ -80,17 +80,17 @@ if (window.location.pathname.includes("/search")) {
         }
     }
 
-  searchResultsContainer.addEventListener("scroll", debounce(loadMoreResults, 200));
+    document.getElementById("search-results").addEventListener("scroll", debounce(loadMoreResults, 200));
 
-  // Add an event listener for the wheel event to detect when the user attempts to scroll
-  searchResultsContainer.addEventListener("wheel", function () {
-      if (
-          document.documentElement.scrollHeight <= window.innerHeight &&
-          !window.noMoreResults
-      ) {
+    // Add an event listener for the wheel event to detect when the user attempts to scroll
+    document.getElementById("search-results").addEventListener("wheel", function () {
+        if (
+            document.documentElement.scrollHeight <= window.innerHeight &&
+            !window.noMoreResults
+        ) {
             loadMoreResults();
         }
-  });
+    });
 
     function debounce(func, wait) {
         let timeout;

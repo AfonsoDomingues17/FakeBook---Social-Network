@@ -33,11 +33,11 @@
     <div id="group-members">
         <h2>Group Members</h2>
         @if($group->owner_id == Auth::user()->id)
-            <span id="AddMember" >
-                <span><i class="fa-solid fa-user-plus"></i></span>
-                <p>Add members</p>
-            </span>
-        @endif
+        <span id="AddMembers" class="add-member-span" data-bs-toggle="modal" data-bs-target="#addMembersModal">
+            <span><i class="fa-solid fa-user-plus"></i></span>
+            <p>Add members</p>
+        </span>
+    @endif
         <ul>
             <div id="owner">
             <img src="{{ route('userphoto', ['user_id' => $group->owner_id]) }}" alt="Owner profile picture" width="60" height="60">
@@ -79,3 +79,31 @@
     </div>
 </div>
 
+<div class="modal fade" id="addMembersModal" tabindex="-1" aria-labelledby="addMembersModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMembersModalLabel">Add Members</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if($followersNotInGroup->isEmpty())
+                    <p>You don't follow anyone who is not already in the group.</p>
+                @else
+                    <form id="add-members-form" action="{{ route('group.addMembers', ['group_id' => $group->id]) }}" method="POST">
+                        @csrf
+                        <h3>Select users to add to the group:</h3>
+                        @foreach ($followersNotInGroup as $follower)
+                            <div class="user">
+                                <input type="checkbox" name="user_ids[]" value="{{ $follower->id }}">
+                                <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="60" height="60" alt="user profile picture">
+                                <span>{{ $follower->name }}</span>
+                            </div>
+                        @endforeach
+                        <button type="submit" class="btn btn-primary">Add Selected Members</button>
+                    </form>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>

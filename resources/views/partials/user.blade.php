@@ -30,7 +30,7 @@
                         <button type="submit">Add to Watchlist</button>
                     </form>
                 @endif
-            </div>
+        </div>
         @endif
         </section>
     

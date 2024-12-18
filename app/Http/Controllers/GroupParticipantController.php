@@ -62,14 +62,7 @@ class GroupParticipantController extends Controller
     {
         //
     }
-    public function addMembers(Request $request, $groupId)
-    {
-        $userIds = $request->input('user_ids');
-        foreach ($userIds as $userId) {
-            GroupParticipant::create(['group_id' => $groupId, 'user_id' => $userId, 'date_joined' => now()]);
-        }
-        return response()->json(['success' => true]);
-    }
+    
 
     public function removeMember(Request $request, $groupId)
     {

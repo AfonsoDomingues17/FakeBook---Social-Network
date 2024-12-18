@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
-use Illuminate\Http\Request;
+use App\Http\Requests\SendHelpFormRequest;
+use App\Http\Requests\SendQuestionResponseRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\QuestionResponseMail;
 use Illuminate\Support\Facades\Log;
@@ -14,40 +15,39 @@ class StaticPageController extends Controller
     {
         return view('pages.help');
     }
-    public function sendHelpForm(Request $request)
+
+    public function sendHelpForm(SendHelpFormRequest $request)
     {
         $request->merge([
             'is_unban' => $request->is_unban === 'true' ? true : false,
         ]);
 
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'message' => 'required|max:500',
-            'is_unban' => 'required|boolean'
-        ]);
+        $validatedData = $request->validated();
 
         Question::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'message' => $request->message,
-            'is_unban' => $request->is_unban
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'message' => $validatedData['message'],
+            'is_unban' => $validatedData['is_unban']
         ]);
+
         return redirect()->back()->with('success', 'Your question has been submitted.');
     }
+
     public function showAboutPage()
     {
         return view('pages.about');
     }
+
     public function showSettingsPage()
     {
         return view('pages.settings');
     }
 
-    public function sendQuestionResponse(Request $request, $id)
+    public function sendQuestionResponse(SendQuestionResponseRequest $request, $id)
     {
         $question = Question::findOrFail($id);
-        $response = $request->response;
+        $response = $request->validated()['response'];
 
         Mail::to($question->email)->send(new QuestionResponseMail($response, $question));
 

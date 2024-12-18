@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'age', 'bio', 'is_public', 'photo_url', 'typeU','country', 'gender'
+        'name', 'username', 'email', 'password', 'age', 'bio', 'is_public', 'photo_url', 'typeU','country_id', 'gender'
     ];
 
     /**
@@ -178,5 +178,10 @@ public function blockedUsers()
     public function isBanned()
     {
         return $this->hasOne(Banlist::class, 'user_id')->exists();
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 }

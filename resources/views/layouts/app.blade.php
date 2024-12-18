@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="en-EN">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +13,7 @@
 
         <!-- Styles -->
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
-        <script type="text/javascript">
+        <script >
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
@@ -35,13 +35,13 @@
     <header>
                 <div class="navbar">
                     <a href="{{ url('/') }}"><img id="logo" src="{{ Storage::url('public/LOGO.png') }}" alt="FakeBook Logo" width="50" height="50"></a>
-                    <h1>
+                    <h2>
                         <a href="{{ url('/') }}">FakeBook!</a>
-                    </h1>
+                    </h2>
                         @if((Auth::check() && !Auth::user()->isBanned()) || !Auth::check())
                         <section id="search-options">
                             <form  action="{{route('search')}}" method="GET">
-                                <div style="position: relative;">
+                                <div>
                                 <input id="search" type="text" name="query" placeholder="search here..." value="">
                                 <input type="hidden" name="type" value="users">
                                 <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
@@ -57,10 +57,10 @@
                         
                             <section id="timeline_options">
                                 <a href="{{ route('homepage', ['type' => 'public']) }}">
-                                    <button class="timeline" id="public">Public Posts</button>
+                                    <button class="timeline" id="public">Public</button>
                                 </a>
                                 <a href="{{ route('homepage', ['type' => 'following']) }}" >
-                                    <button class="timeline" id="following">Following Posts</button>
+                                    <button class="timeline" id="following">Following</button>
                                 </a>
                             </section>
                         @endif
@@ -74,10 +74,6 @@
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-                            <a class="button" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Logout
-                            </a>
                             <div id="notification-container">
                                 <i id="noti" class="fa-solid fa-bell"></i>
                                 @if (Auth::user()->unreadNotifications()->count() > 0)
@@ -96,10 +92,10 @@
                                                 <button  style="display:none" id="Follow" data-user-id="{{$notification->sender->id}}">Follow</button>
 
                                                 @if ($notification->typen === 'FOLLOW_REQUEST')
-                                                    <div id="notification-actions">
-                                                        <button id="accept" data-user-id="{{ $notification->sender->id }}">Accept</button>
-                                                        <button id="reject" data-user-id="{{ $notification->sender->id }}">Eliminate</button>
-                                                    </div>
+                                                <div id="notification-actions">
+                                                        <button id="accept" data-user-id="{{ $notification->sender->id }}"><p>Accept</p></button>
+                                                        <button id="reject" data-user-id="{{ $notification->sender->id }}"><p>Eliminate</p></button>
+                                                </div>
                                                 @elseif (!Auth::user()->isFollowing($notification->sender->id))
                                                     <button id="Follow" data-user-id="{{$notification->sender->id}}">Follow Back</button>
                                                 @endif
@@ -108,17 +104,11 @@
                                     </ul>
                                 </div>
                             </div>
-                            @if (Auth::user()->isAdmin())
-                                <a href="{{ route('admin.page') }}">
-                                        <span id="admin_page"><p>Admin Page</p></span>
-                                </a> 
-                            @else
-                                <a class="auth2" href="{{route('profile',['user_id'=> Auth::user()->id])}}">
-                                    <p>{{Auth::user()->name}}</p>
-                                    <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
-                                </a>
-                            @endif
-                
+                            <a class="button" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Logout
+                            </a>
+                        
                                                
                         @else
                             <a class="button" href="{{ url('/login') }}"> <p>Login</p></a>
@@ -145,6 +135,19 @@
                     </section>
                 </div>
         </header>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         <main>
         <section id="sidebar">
             <div class= "navigators">
@@ -162,23 +165,34 @@
                     @endif
                     <a class="auth" href="{{ Auth::user()->isAdmin() ? route('admin.page') : route('profile', ['user_id' => Auth::user()->id]) }}">
                         <img src="{{ route('userphoto', ['user_id' => Auth::user()->id]) }}" alt="" width="50" height="50">
-                        <p>{{ Auth::user()->name }}</p>
-                    </a>
-                    <a id="buttonLog" class="button" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <p>Logout</p>
+                        @if(Auth::user()->isAdmin())
+                            <p>Admin Page</p>
+                        @else
+                        <p>Profile</p>
+                        @endif
                     </a>
                     @if(Auth::user()->isAdmin())
                         <a class="auth" href="{{url('/register')}}"><i class="fa-solid fa-user-plus"></i><p>Create User</p></a>
                     @endif
+                @endif
+                <a class="auth" href="{{ route('reports') }}"><i class="fa-solid fa-flag"></i><p>Reports</p></a>
+                <div class="dropdown-container">
+                    <a href="#" id="toggleDropdown" class="auth"><i class="fa-solid fa-bars"></i><p>More</p></a>
+                    <div id="DropdownMore" style="display: none;">
+                        <a class="auth" href="{{ route('help') }}"><i class="fa-solid fa-info-circle"></i><p>Help/Contacts</p></a>
+                        <a class="auth" href="{{ route('about') }}"><i class="fa-solid fa-question-circle"></i><p>About Us</p></a>
+                        <a class="auth" href="{{ route('settings') }}"><i class="fa-solid fa-cog"></i><p>Settings</p></a>
+                    </div>
+                </div>
+                @if (Auth::check())
+                <a id="buttonLog" class="button" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <p>Logout</p>
+                </a>
                 @else
                     <a id="buttonLogin" class="button" href="{{ url('/login') }}"> <p>Login</p></a>
                     <a id="buttonRegister" class="button" href="{{ url('/register') }}"> <p>Register</p></a>
                 @endif
-                <a class="auth" href="{{ route('reports') }}"><i class="fa-solid fa-flag"></i><p>Reports</p></a>
-                <a class="auth" href="{{ route('help') }}"><i class="fa-solid fa-info-circle"></i><p>Help/Contacts</p></a>
-                <a class="auth" href="{{ route('about') }}"><i class="fa-solid fa-question-circle"></i><p>About Us</p></a>
-                <a class="auth" href="{{ route('settings') }}"><i class="fa-solid fa-cog"></i><p>Settings</p></a>
             </div>
 
             </section>
