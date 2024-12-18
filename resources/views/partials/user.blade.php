@@ -18,17 +18,19 @@
             @endif    
         @endif
         @if (Auth::check() && Auth::user()->isAdmin())
-            @if ($user->isInWatchlist)
-                <form  action="{{ route('admin.watchlist.remove', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
-                    @csrf
-                    <button type="submit" data-user-id="{{ $user->id }}">Remove from Watchlist</button>
-                </form>
-            @else
-                <form  action="{{ route('admin.watchlist.add', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
-                    @csrf
-                    <button type="submit">Add to Watchlist</button>
-                </form>
-            @endif
+        <div id="watchlist-actions-{{ $user->id }}" data-user-id="{{ $user->id }}">
+                @if ($user->isInWatchlist)
+                    <form id="remove-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.remove', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
+                        @csrf
+                        <button type="submit">Remove from Watchlist</button>
+                    </form>
+                @else
+                    <form id="add-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.add', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
+                        @csrf
+                        <button type="submit">Add to Watchlist</button>
+                    </form>
+                @endif
+        </div>
         @endif
         </section>
     
