@@ -766,8 +766,8 @@ article.post {
       margin: 0.5em;
     }
     button#deletePostBtn {
-      background-color: black;
-      color: red;
+      background-color: red;
+      color: white;
     }
 
   }
@@ -1026,6 +1026,9 @@ button#addPost{
   padding: 1rem 1.5rem;
   overflow-wrap: break-word;
   word-break: break-word;
+  h5 {
+  color: white;
+  }
 }
 
 .modal-title {
@@ -1734,7 +1737,7 @@ div#description{
     outline: 2px solid #007bff;
   }
 }
-#editPostModalContent , #CreatePostModalContent, #AdvancedSearchContent{
+#editPostModalContent , #CreatePostModalContent, #AdvancedSearchContent, #BanModalContent{
   padding: 1.5em;
   padding-bottom: 0;
     form{
@@ -1746,25 +1749,39 @@ div#description{
       margin-bottom: 0.5em;
     } 
 }
+#BanModalContent textarea{
+  margin-bottom: 0.5em;
+}
 #reports-page{
   padding: 1.5em;
   padding-top: 0;
-
 }
 
 #CreatePostModalContent{
-
- 
   form{
     gap: 1em;
     width: 100%;
   }
- 
   div#postCategory{
     margin: 0;
   }
 
 }
+
+#banned_page{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  img{
+    width: 17em;
+    height: 17em;
+    object-fit: cover;
+  }
+}
+
 #AdvancedSearchContent{
   form {
     gap: 1em;
