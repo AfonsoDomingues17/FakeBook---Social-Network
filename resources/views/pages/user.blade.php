@@ -132,9 +132,9 @@
                     <p>This user profile is private!</p>
                     @if (Auth::check())
                         @if(Auth::user()->hasSentFollowRequestTo($user->id))
-                            <button class="pending" id="pending" data-user-id="{{$user->id}}">Pending</button>
+                            <button class="pending" id="pending" data-user-id="{{$user->id}}"><p>Pending</p></button>
                         @else
-                            <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
+                            <button id="Follow" data-user-id="{{$user->id}}"><p>Follow</p></button>
                         @endif
                     @else
                         <p>Login to see more of this user</p>

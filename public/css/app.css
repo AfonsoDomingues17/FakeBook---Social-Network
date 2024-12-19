@@ -210,6 +210,7 @@ section#editprofile{
     color: white;
     cursor: pointer;
     font-size: 1em;
+    background-color: #007bff;
     transition: background-color 0.3s, box-shadow 0.3s;
   }
   button#accept{
@@ -234,7 +235,9 @@ section#editprofile{
   background-color: #f1f1f1;
   border-radius: 5px;
 }
-
+span#sender{
+  font-weight: bold;
+}
 #account-options {
 
   #notification-container {
@@ -337,7 +340,7 @@ section#editprofile{
   align-items: center;
   gap: 0.5em;
   p{
-    font-size: 1.5em;
+    font-size: 1em;
     text-align: center;
   }
   button{
@@ -347,8 +350,7 @@ section#editprofile{
     background-color: #007bff;
     color: white;
     cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
+    font-weight: 500;
     transition: background-color 0.3s, box-shadow 0.3s;
   }
   .unfollow, .pending {

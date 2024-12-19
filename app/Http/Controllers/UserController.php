@@ -293,6 +293,7 @@ class UserController extends Controller
     return redirect()->route('profile', ['user_id' => $user_id]);
 }
 
+
     public function follow($user_id)
     {
         $user = User::findOrFail($user_id);

@@ -12,6 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 use App\Models\Notification;
+use Log;
 
 
 class FollowRequest implements ShouldBroadcast
@@ -30,7 +31,7 @@ class FollowRequest implements ShouldBroadcast
      */
     public function __construct($user_id, $notification_id)
     {
-
+        Log::info('FollowRequest event fired');
         $this->user = User::find($user_id);
         $this->isFollowing = $this->user->isFollowing(Auth::id());
         $this->notification = Notification::find($notification_id);
@@ -45,11 +46,13 @@ class FollowRequest implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
+        Log::info('FollowRequest event broadcasted');
         return ['FakeBook'];
     }
 
     public function broadcastAs(): string
     {
+        Log::info('FollowRequest event broadcasted as notification-followrequest');
         return 'notification-followrequest';
     }
 }

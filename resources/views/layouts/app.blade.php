@@ -89,7 +89,7 @@
                                             <li id="notification" data-notification-id="{{$notification->id}}">
                                                 <a href="{{route('profile', ['user_id' => $notification->sender->id])}}">
                                                 <img src="{{route('userphoto', ['user_id' => $notification->sender->id])}}" alt="profile picture" width="50" height="50">
-                                                <p>{{'@'. $notification->sender->username . ' '}} <span id="noti_content">{{$notification->content}}</span></p>
+                                                <p><span id="sender">{{'@'. $notification->sender->username . ' '}}</span> <span id="noti_content">{{$notification->content}}</span></p>
                                                 </a>
                                                 <button  style="display:none" id="Follow" data-user-id="{{$notification->sender->id}}">Follow</button>
 

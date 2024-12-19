@@ -15,14 +15,16 @@ document.addEventListener('click', (event) => {
         .then(response => response.json())
         .then(data => {
             if(data.success){
-                
-                followButton.innerHTML = 'Following';
+                console.log(followButton.innerHTML);
+                followButton.innerHTML = '<p>Following</p>';
                 followButton.classList.add('unfollow');
                 followButton.setAttribute('id', 'unfollow');
             }
             else{
+                console.log('Pending');
                 document.querySelectorAll(`button[data-user-id="${userId}"]`).forEach(button => {
-                    button.innerHTML = 'Pending';
+                    console.log(button.innerHTML);
+                    button.innerHTML = '<p>Pending</p>';
                     button.classList.add('pending');
                     button.setAttribute('id', 'pending');
                 })
@@ -45,7 +47,7 @@ document.addEventListener('click', (event) => {
         .then(data => {
             if(data.success){
                 console.log(data);
-                unfollowButton.innerHTML = 'Follow';
+                unfollowButton.innerHTML = '<p>Follow</p>';
                 unfollowButton.classList.remove('unfollow');
                 unfollowButton.setAttribute('id', 'Follow');
             }
@@ -68,7 +70,7 @@ document.addEventListener('click', (event) => {
         .then(data => {
             if(data.success){
                 document.querySelectorAll(`button[data-user-id="${userId}"]`).forEach(button => {
-                button.innerHTML = 'Follow';
+                button.innerHTML = '<p>Follow</p>';
                 button.classList.remove('pending');
                 button.setAttribute('id', 'Follow');
                 })
@@ -97,10 +99,8 @@ document.addEventListener('click', function(event) {
             if(data.success){
                 const notibuttons = document.getElementById('notification-actions');
                 const notiContent = document.getElementById('noti_content');
-                const followButton = document.getElementById('Follow');
                 notiContent.innerHTML = 'started following you!';
                 notibuttons.innerHTML = '';
-                if(!data.isFollowing) followButton.style.display = 'inline-block';
                 
             }
         })

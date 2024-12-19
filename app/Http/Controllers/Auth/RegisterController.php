@@ -59,6 +59,7 @@ class RegisterController extends Controller
             'is_public' => $request->is_public,
             'photo_url' => $photoUrl,
             'gender' => $request->gender,
+            'country_id' => $request->country_id,
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -68,4 +69,5 @@ class RegisterController extends Controller
         return redirect()->route('editprofile', ['user_id' => $user->id])
             ->withSuccess('You have successfully registered & logged in! Please complete your profile.');
     }
+
 }
