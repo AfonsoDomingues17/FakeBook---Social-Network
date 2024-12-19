@@ -53,9 +53,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.classList.add('btn-success');
                 button.textContent = 'Added';
             }
-        } else if (event.target.classList.contains('remove-member-btn')) {
+        } else if (event.target.classList.contains('remove-member-btn') || event.target.closest('.remove-member-btn')) {
+            const button = event.target.closest('.remove-member-btn');
             const groupId = document.querySelector('#group_info').dataset.groupId;
-            const userId = event.target.getAttribute('data-user-id');
+            const userId = button.getAttribute('data-user-id');
             fetch(`/groups/${groupId}/remove-member`, {
                 method: 'DELETE',
                 headers: {
@@ -67,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    console.log('Member removed successfully');
                     event.target.closest('#member').remove();
                 }
             })

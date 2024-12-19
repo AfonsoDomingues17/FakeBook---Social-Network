@@ -86,7 +86,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const avoid = [
             '.like-button',
-            '.username-link',
+            '.post_author',
             '.edit-post-btn',
             '.delete-post-btn',
             '.post-media-controls',
@@ -112,6 +112,15 @@
                 element.addEventListener('click', function(event) {
                     event.stopPropagation();
                 });
+            });
+        });
+
+        document.querySelectorAll('.post_author').forEach(authorDiv => {
+            authorDiv.addEventListener('click', function() {
+                const link = authorDiv.querySelector('a');
+                if (link) {
+                    window.location.href = link.href;
+                }
             });
         });
     });

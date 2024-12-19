@@ -28,6 +28,7 @@
             <form action="{{ route('comments.destroy', ['comment_id' => $comment->id]) }}" method="POST" onsubmit="deleteComment(event, {{ $comment->id }});">
                 @csrf
                 @method('DELETE')
+                <input type="hidden" name="post_id" value="{{ $comment->post_id }}">
                 <button id="delete" type="submit" ><p>Delete</p></button>
             </form>
         </div>

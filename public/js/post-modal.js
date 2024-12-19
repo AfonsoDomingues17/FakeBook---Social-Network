@@ -62,10 +62,14 @@ document.querySelectorAll('form[id^="comment-form-"]').forEach((form) => {
             });
 
             if (response.ok) {
-                const html = await response.text();
+                const data = await response.json();
                 const commentsSection = document.getElementById(`comments-section-${postId}`);
-                commentsSection.insertAdjacentHTML('beforeend', html); // Append the new comment
+                commentsSection.insertAdjacentHTML('beforeend', data.comment); // Append the new comment
                 loadScript(form.reset());
+                const commentCountSpan = document.querySelector(`.comment-container[data-post-id="${postId}"] .comment-count`);
+                if (commentCountSpan) {
+                    commentCountSpan.textContent = data.commentCount;
+                }
             }
         } catch (error) {
             console.error('Error during fetch request:', error);

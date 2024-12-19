@@ -31,26 +31,24 @@ class SearchController extends Controller
         if ($type === 'users') {
             $countries = request()->query('countries');
             $group = request()->query('group');
-
+        
             if ($countries) {
                 $countries = explode(',', $countries);
-                Log::info('Countries array:', $countries);
             }
-
+        
             $usersQuery = User::where(function($q) use ($query) { 
                 $q->where('name', 'ILIKE', '%' . $query . '%')
-                      ->orWhere('email', 'ILIKE', '%' . $query . '%')
-                      ->orWhere('username', 'ILIKE', '%' . $query . '%');
+                    ->orWhere('email', 'ILIKE', '%' . $query . '%')
+                    ->orWhere('username', 'ILIKE', '%' . $query . '%');
             });
-
+        
             if ($countries) {
                 $usersQuery = $usersQuery->whereIn('country_id', $countries);
-                Log::info('Users query with countries: ' . $usersQuery->toSql());
             }
-
-            $usersQuery = $usersQuery->paginate(15, ['*'], 'page', $page);
-
-            $usersWatchlist = $usersQuery->map(function ($user) {
+        
+            $usersPaginated = $usersQuery->paginate(15, ['*'], 'page', $page);
+        
+            $usersWatchlist = $usersPaginated->map(function ($user) {
                 $isInWatchlist = false;
                 if (Auth::check() && Auth::user()->isAdmin()) {
                     $isInWatchlist = Watchlist::where('admin_id', Auth::user()->id)->where('user_id', $user->id)->exists();
@@ -58,9 +56,9 @@ class SearchController extends Controller
                 $user->isInWatchlist = $isInWatchlist;
                 return $user;
             });
-
+        
             $usersFiltered = $usersWatchlist->where('typeu', '!=', 'ADMIN')->where('id', '!=', Auth::id());
-
+        
             if ($group) {
                 $users = $usersFiltered->filter(function ($user) {
                     return Connection::where('initiator_user_id', Auth::id())
@@ -115,8 +113,15 @@ class SearchController extends Controller
             } else {
                 $postCategorized = $postQuery;
             }
+
+            $posts = $postCategorized->filter(function ($post) {
+                if ($post->is_public) {
+                    return true;
+                }
+                else 
+                    return ((Auth::check() && $post->owner_id === Auth::id()) || Auth::check() && Auth::user()->isAdmin());
+            });
         
-            $posts = $postCategorized;
         } elseif ($type === 'groups') {
             Log::info($query);
             $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);

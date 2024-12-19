@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log; // Import the Log facade
 use Illuminate\View\View;
 
 use App\Models\User;
+use App\Http\Requests\StoreUserRequest;
 
 class RegisterController extends Controller
 {
@@ -27,7 +28,7 @@ class RegisterController extends Controller
     /**
      * Register a new user.
      */
-    public function register(Request $request)
+    public function register(StoreUserRequest $request)
     {
         Log::info('Incoming request data', $request->all());
 
@@ -35,18 +36,8 @@ class RegisterController extends Controller
             'is_public' => $request->is_public === 'public' ? true : false,
         ]);
 
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:250',
-            'username' => 'required|string|max:250|unique:users',
-            'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed',
-            'age' => 'required|integer|min:13',
-            'bio' => 'nullable|string|max:250',
-            'is_public' => 'required|boolean',
-            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gender' => 'required|string|in:Male,Female,Other',
-            'country_id' => 'nullable|integer|exists:countries,id',
-        ]);
+        $validatedData = $request->validated();
+
         Log::info('Validation successful', $validatedData);
 
         
@@ -75,7 +66,7 @@ class RegisterController extends Controller
         Auth::attempt($credentials);
         $request->session()->regenerate();
         
-        return redirect()->route('profile', ['user_id' => $user->id])
-            ->withSuccess('You have successfully registered & logged in!');
+        return redirect()->route('editprofile', ['user_id' => $user->id])
+            ->withSuccess('You have successfully registered & logged in! Please complete your profile.');
     }
 }

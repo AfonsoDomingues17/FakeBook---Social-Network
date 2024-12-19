@@ -39,11 +39,6 @@
       <span class="error">{{ $errors->first('password-confirm') }}</span>
     @endif
 
-    <label for="bio">Bio</label>
-    <input id="bio" type="text" name="bio" value="{{ old('bio') }}">
-    @if ($errors->has('bio'))
-      <span class="error">{{ $errors->first('bio') }}</span>
-    @endif
 
     <label for="age">Age<em style="color: red;">*</em></label>
     <input id="age" type="number" name="age" value="{{ old('age') }}" required>

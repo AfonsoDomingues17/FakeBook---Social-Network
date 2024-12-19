@@ -2,7 +2,13 @@
 
 @section('content')
 <section id="editprofile">
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="form">
+    
     <form method="POST" action="{{ route('updateprofile', ['user_id' => $user->id]) }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     {{ method_field('PUT') }}
@@ -61,7 +67,7 @@
             <span class="error">{{ $errors->first('country') }}</span>
         @endif
         <input type="hidden" id="country-id" name="country_id" value="{{ old('country_id', $user->country_id ?? '') }}">
-        <select id="country" size="5" required onchange="selectCountry(event)">
+        <select id="country" size="5"  onchange="selectCountry(event)">
             @foreach ($countries as $country)
                 <option value="{{ $country->id }}" {{ old('country_id', $user->country_id ?? '') == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
             @endforeach

@@ -16,7 +16,7 @@ if (window.location.pathname.includes("/search")) {
             console.log("Loading more results...");
             loading = true;
             page++;
-            document.getElementById("loading").style.display = "none";
+            document.getElementById("loading").style.display = "block";
 
             // Retrieve selected filters
             const selectedCountries = document.getElementById('selected_countries')?.value || '';
@@ -30,6 +30,7 @@ if (window.location.pathname.includes("/search")) {
             fetch(fetchUrl)
                 .then((response) => response.text())
                 .then((data) => {
+
                     // Create a temporary DOM element to parse the data
                     const tempDiv = document.createElement("div");
                     tempDiv.innerHTML = data;
@@ -38,13 +39,13 @@ if (window.location.pathname.includes("/search")) {
                     let classToSearch;
                     switch (searchType) {
                         case "users":
-                            classToSearch = ".user";
+                            classToSearch = "article.user";
                             break;
                         case "posts":
-                            classToSearch = ".post";
+                            classToSearch = "article.post";
                             break;
                         case "groups":
-                            classToSearch = ".group";
+                            classToSearch = "article.group";
                             break;
                         default:
                             classToSearch = "";
@@ -68,8 +69,8 @@ if (window.location.pathname.includes("/search")) {
                     document.getElementById("loading").style.display = "none";
                     loading = false;
 
-                  // Trigger scroll event to check if more items need to be loaded
-                  window.dispatchEvent(new Event("scroll"));
+                    // Trigger scroll event to check if more items need to be loaded
+                    window.dispatchEvent(new Event("scroll"));
                 })
                 .catch((error) => {
                     console.error("Error:", error);
