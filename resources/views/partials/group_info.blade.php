@@ -8,12 +8,12 @@
         <span id="gname">
             <p>{{ $group->name }}</p>
             @if($group->owner_id == Auth::user()->id)
-                <i id="pencilEditGname"  class="fa-solid fa-pencil"></i>
+                <i id="pencilEditGname" class="fa-solid fa-pencil" aria-label="Edit group name" role="button" tabindex="0"></i>
             @endif          
         </span>
         <span id="gname_edit" class="gedit" style="display: none;">
-            <input type="text" name="group_name" id="group_name" value="{{ $group->name }}"></input>
-            <i class="fa-solid fa-check"></i>    
+            <input type="text" name="group_name" id="group_name" value="{{ $group->name }}" aria-label="Edit group name"></input>
+            <i class="fa-solid fa-check" aria-label="Submit group name edit" role="button" tabindex="0"></i>    
         </span>
         <p>Group: {{$group->participants->count()}} members</p>
     </div>
@@ -21,12 +21,12 @@
         <span id="gdescription">
             <p>{{ $group->description }}</p>
             @if($group->owner_id == Auth::user()->id)
-                <i id="pencilEditGdescription"  class="fa-solid fa-pencil"></i>
+                <i id="pencilEditGdescription"  class="fa-solid fa-pencil" aria-label="Edit group description" role="button" tabindex="0"></i>
             @endif
         </span>
         <span id="gdescription_edit" class="gedit" style="display: none;">
-            <input type="text" name="group_description" id="group_description" value="{{ $group->description }}"></input>
-            <i class="fa-solid fa-check"></i>    
+            <input type="text" name="group_description" id="group_description" value="{{ $group->description }}" aria-label="Edit group description"></input>
+            <i class="fa-solid fa-check" aria-label="Submit group description edit" role="button" tabindex="0"></i>    
         </span>
         <p>Created by {{$group->owner->name}}, em 23/03/2004</p>
     </div>
@@ -34,7 +34,7 @@
         <h2>Group Members</h2>
         @if($group->owner_id == Auth::user()->id)
         <span id="AddMembers" class="add-member-span" data-bs-toggle="modal" data-bs-target="#addMembersModal">
-            <span><i class="fa-solid fa-user-plus"></i></span>
+            <span><i class="fa-solid fa-user-plus" aria-label="Add user to group" role="button" tabindex="0"></i></span>
             <p>Add members</p>
         </span>
         @endif
@@ -47,10 +47,10 @@
                 @foreach ($group->participants as $groupMember)
                     @if($groupMember->id != $group->owner_id)
                         <div id="member">
-                            <img src="{{ route('userphoto', ['user_id' => $groupMember->id]) }}" alt="group member profile pic" width="60" height="60">
+                            <img src="{{ route('userphoto', ['user_id' => $groupMember->id]) }}" alt="group member profile picture" width="60" height="60">
                             <p>{{ $groupMember->name }}</p>
                             @if($group->owner_id == Auth::user()->id)
-                            <button class="remove-member-btn" data-user-id="{{ $groupMember->id }}"><p>Remove</p></button>
+                            <button data-user-id="{{ $groupMember->id }}" aria-label="Remove group member"><p>Remove</p></button>
                             @endif
                         </div>
                     @endif
@@ -62,7 +62,7 @@
         <form action="{{ route('group.leave', ['group_id' => $group->id]) }}" method="POST">
             @csrf
             <button type="submit" id="leave-group">
-                <span><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+                <span><i class="fa-solid fa-arrow-right-from-bracket" aria-label="Leave Group" role="button" tabindex="0"></i></span>
                 <p>Leave Group</p>
             </button>
         </form>
@@ -71,7 +71,7 @@
                 @csrf
                 @method('DELETE')
                 <button type="submit" id="delete_group">
-                    <span><i class="fa-solid fa-trash"></i></span>
+                    <span><i class="fa-solid fa-trash" aria-label="Delete Group" role="button" tabindex="0"></i></span>
                     <p>Delete Group</p>
                 </button>
             </form>

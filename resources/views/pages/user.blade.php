@@ -17,7 +17,8 @@
 
         <div class="info">
             <div class="p1">
-                <span id="username"><p>{{$user->username}}</p></span> 
+                <span id="username"><p>{{$user->username}}</p></span>
+                <div id="butoes">
                 @if(Auth::check())
                     @if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
                         <a href="{{route('editprofile',['user_id' => $user->id])}}"><p>Edit Profile</p></a> 
@@ -83,6 +84,7 @@
                             <button id="reportUser" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportUserModal-{{ $user->id }}">
                                 <p>Report</p>
                             </button>
+                </div>
                             @include('partials.report_modal', ['type' => 'user', 'id' => $user->id])
                         @endif
                     @endif

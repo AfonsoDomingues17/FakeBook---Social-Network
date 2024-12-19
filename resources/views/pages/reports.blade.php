@@ -43,13 +43,14 @@
                             <div id="collapseUserReport-{{ $group->first()->target_user_id }}" class="accordion-collapse collapse" aria-labelledby="headingUserReport-{{ $group->first()->target_user_id }}" data-bs-parent="#reportsAccordion">
                                 <div class="accordion-body">
                                     <table class="table table-bordered">
+                                        <caption id="reports-table">List of Reports</caption>
                                         <thead>
                                             <tr>
-                                                <th>Content</th>
-                                                <th>Created At</th>
-                                                <th>Solved At</th>
-                                                <th>ID</th>
-                                                <th>Author ID</th>
+                                                <th scope="col">Content</th>
+                                                <th scope="col">Created At</th>
+                                                <th scope="col">Solved At</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Author ID</th>
                                             </tr>
                                         </thead>
                                         <tbody id="details-user-{{ $group->first()->target_user_id }}">
@@ -93,13 +94,14 @@
                             <div id="collapsePostReport-{{ $group->first()->post_id }}" class="accordion-collapse collapse" aria-labelledby="headingPostReport-{{ $group->first()->post_id }}" data-bs-parent="#reportsAccordion">
                                 <div class="accordion-body">
                                     <table class="table table-bordered">
+                                        <caption id="reports-table">List of Reports</caption>
                                         <thead>
                                             <tr>
-                                                <th>Content</th>
-                                                <th>Created At</th>
-                                                <th>Solved At</th>
-                                                <th>ID</th>
-                                                <th>Author ID</th>
+                                                <th scope="col">Content</th>
+                                                <th scope="col">Created At</th>
+                                                <th scope="col">Solved At</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Author ID</th>
                                             </tr>
                                         </thead>
                                         <tbody id="details-post-{{ $group->first()->post_id }}">
@@ -146,13 +148,14 @@
                             <div id="collapseCommentReport-{{ $group->first()->comment_id }}" class="accordion-collapse collapse" aria-labelledby="headingCommentReport-{{ $group->first()->comment_id }}" data-bs-parent="#reportsAccordion">
                                 <div class="accordion-body">
                                     <table class="table table-bordered">
+                                        <caption id="reports-table">List of Reports</caption>
                                         <thead>
                                             <tr>
-                                                <th>Content</th>
-                                                <th>Created At</th>
-                                                <th>Solved At</th>
-                                                <th>ID</th>
-                                                <th>Author ID</th>
+                                                <th scope="col">Content</th>
+                                                <th scope="col">Created At</th>
+                                                <th scope="col">Solved At</th>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Author ID</th>
                                             </tr>
                                         </thead>
                                         <tbody id="details-comment-{{ $group->first()->comment_id }}">
