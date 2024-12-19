@@ -434,8 +434,16 @@ class UserController extends Controller
         // Remove user from all watchlists
         $user->watchlist()->delete(); // As admin
         $user->watchedBy()->detach(); // As watched user
+        $isSelfDeletion = Auth::check() && Auth::id() == $user->id;
+
         // Delete the user
         $user->delete();
+
+        // Log out the user if they deleted their own account
+        if ($isSelfDeletion) {
+            Auth::logout();
+            return redirect()->route('homepage')->with('success', 'Your account has been deleted successfully.');
+        }
 
         return redirect()->route('homepage')->with('success', 'Account deleted successfully.');
     }

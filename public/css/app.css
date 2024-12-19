@@ -2076,3 +2076,8 @@ div#Comments {
   }
 
 }
+
+.required {
+  color: red;
+  margin-left: 2px;
+}

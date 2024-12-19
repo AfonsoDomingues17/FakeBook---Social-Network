@@ -2,7 +2,13 @@
 
 @section('content')
 <section id="editprofile">
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="form">
+    
     <form method="POST" action="{{ route('updateprofile', ['user_id' => $user->id]) }}" enctype="multipart/form-data">
     {{ csrf_field() }}
     {{ method_field('PUT') }}
@@ -12,14 +18,14 @@
         <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewProfilePicture(event)">
         
         <!-- Name Field -->
-        <label for="name">Name</label>
+        <label for="name">Name <span class="required">*</span></label>
         <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" required>
         @if ($errors->has('name'))
             <span class="error">{{ $errors->first('name') }}</span>
         @endif
 
         <!-- Username Field -->
-        <label for="username">Username</label>
+        <label for="username">Username <span class="required">*</span></label>
         <input id="username" type="text" name="username" value="{{ old('username', $user->username) }}" required>
         @if ($errors->has('username'))
             <span class="error">{{ $errors->first('username') }}</span>
@@ -33,7 +39,7 @@
         @endif
 
         <!-- Gender Dropdown -->
-        <label for="gender">Gender</label>
+        <label for="gender">Gender <span class="required">*</span></label>
         <select id="gender" name="gender" required>
             <option value="" disabled selected>Select your gender</option>
             <option value="Male" {{ old('gender', $user->gender) == 'Male' ? 'selected' : '' }}>Male</option>
@@ -45,7 +51,7 @@
         @endif
 
         <!-- Age Field -->
-        <label for="age">Age</label>
+        <label for="age">Age <span class="required">*</span></label>
         <input id="age" type="number" name="age" value="{{ old('age', $user->age) }}" required>
         @if ($errors->has('age'))
             <span class="error">{{ $errors->first('age') }}</span>
@@ -55,7 +61,7 @@
         <label for="country">Country</label>
         <input id="country-search" type="text" class="form-control" placeholder="Start typing your country..." value="{{ old('country', $user->country->name ?? '') }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
         <input type="hidden" id="country-id" name="country_id" value="{{ old('country_id', $user->country_id ?? '') }}">
-        <select id="country" size="5" required onchange="selectCountry(event)">
+        <select id="country" size="5"  onchange="selectCountry(event)">
             @foreach ($countries as $country)
                 <option value="{{ $country->id }}" {{ old('country_id', $user->country_id ?? '') == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
             @endforeach
@@ -66,7 +72,7 @@
 
         <!-- Visibility Radio Buttons -->
         <div class="radio-group">
-            <label for="is_public">Visibility:</label>
+            <label for="is_public">Visibility: <span class="required">*</span></label>
             <div id="radio">
                 <label for="public">Public</label>
                 <input type="radio" id="public" name="is_public" value="public" required {{ old('is_public', $user->is_public ? 'public' : 'private') == 'public' ? 'checked' : '' }}>

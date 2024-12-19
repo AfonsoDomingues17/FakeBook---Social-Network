@@ -71,8 +71,8 @@ Route::delete('/groups/{group_id}/delete', [GroupController::class, 'deleteGroup
 Route::post('/groups/{group_id}/update', [GroupController::class, 'updateGroup'])->name('group.update');
 Route::get('/groups/{group_id}/get-members', [GroupController::class, 'getMembers'])->name('group.getMembers');
 Route::get('/groups/{group_id}/add-member/{user_id}', [GroupController::class, 'addMember'])->name('group.addMember');
-Route::delete('/groups/{group_id}/remove-member', [GroupParticipantController::class, 'removeMember'])->name('group.removeMember');
-// Comments
+Route::delete('/groups/{group_id}/remove-member', [GroupController::class, 'removeMember'])->name('group.removeMember');
+// Comments 
 Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
 Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
 Route::put('/comments/{comment_id}', [CommentController::class, 'update'])->name('comments.update');
