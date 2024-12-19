@@ -124,7 +124,7 @@ function previewSentPicture(event) {
 
 const toggleButton = document.getElementById('toggleDropdown');
   const dropdown = document.getElementById('DropdownMore');
-
+  if(toggleButton && dropdown){
   toggleButton.addEventListener('click', function() {
     if (dropdown.style.display === 'none' || dropdown.style.display === '') {
       dropdown.style.display = 'block';
@@ -139,5 +139,24 @@ const toggleButton = document.getElementById('toggleDropdown');
       dropdown.style.display = 'none';
     }
   });
+  }
+const toggleButton2 = document.getElementById('toggleDropdown2');
+const dropdown2 = document.getElementById('DropdownMore2');
+console.log(toggleButton2);
+if(toggleButton2 && dropdown2){
+toggleButton2.addEventListener('click', function() {
+  if (dropdown2.style.display === 'none' || dropdown2.style.display === '') {
+    dropdown2.style.display = 'block';
+  } else {
+    dropdown2.style.display = 'none';
+  }
+});
 
+// Optional: Close the dropdown if clicked outside
+document.addEventListener('click', function(event) {
+  if (!toggleButton2.contains(event.target) && !dropdown2.contains(event.target)) {
+    dropdown2.style.display = 'none';
+  }
+});
 
+}

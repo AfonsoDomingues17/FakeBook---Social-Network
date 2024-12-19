@@ -8,14 +8,13 @@
             <input type="hidden" name="email" value="{{ $email }}">
             <label for="password">New Password</label>
             <input type="password" id="password" name="password" required>
+            @if ($errors->has('password'))
+                <span class="error">{{ $errors->first('password') }}</span>
             <label for="password_confirmation">Confirm Password</label>
             <input type="password" id="password_confirmation" name="password_confirmation" required>
+            @if ($errors->has('password_confirmation'))
+                <span class="error">{{ $errors->first('password_confirmation') }}</span>
             <button type="submit">Reset Password</button>
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    {{ $error }}
-                @endforeach
-            @endif
         </form>
-    <div/>
+</div>
 @endsection

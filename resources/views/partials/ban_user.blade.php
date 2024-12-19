@@ -11,9 +11,10 @@
                     <div id="description">
                         <label for="reason">Ban reason:</label>
                         <textarea id="reason" name="reason" required></textarea>
-                        @error('reason')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        @if ($errors->has('reason'))
+                        <span class="error">{{ $errors->first('reason') }}</span>
+                        
+                        @endif
                     </div>
                     <div id="modal-footer">
                         <button type="submit" id="ban_user" ><p>Ban user</p></button>

@@ -2,9 +2,11 @@
 
 @section('content')
 <div class="form">
+
+
 <form method="POST" action="{{ route('login') }}">
     {{ csrf_field() }}
-
+    
     <label for="email">E-mail</label>
     <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
     @if ($errors->has('email'))
@@ -30,6 +32,7 @@
             {{ session('success') }}
         </p>
     @endif
+    
 </form>
 </div>
 @endsection

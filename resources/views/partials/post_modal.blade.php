@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="post_author">
-                    <img src="{{route('userphoto', ['user_id' => $post->owner_id])}}" alt="profile picture" width="70" height="70">
+                    <img src="{{route('userphoto', ['user_id' => $post->owner_id])}}" alt="user profile picture" width="70" height="70">
                     @if (!(request()->routeIs('profile') && request()->route('user_id') == $post->owner_id))
                         <p ><a href="{{ route('profile', ['user_id' => $post->owner_id]) }}" style="color:white;">{{ $post->owner->username}}</a></p>
                     @endif
@@ -14,7 +14,7 @@
             <div id="PostContent">
                 @if ($post->typep === 'MEDIA')
                     @if ($post->media->isNotEmpty())
-                        <img id="media-image-{{ $post->id }}" src="{{ route('media.show', $post->media->first()->id) }}" alt="Media">
+                        <img id="media-image-{{ $post->id }}" src="{{ route('media.show', $post->media->first()->id) }}" alt="Post Media">
                         @if ($post->media->count() > 1)
                             <div class="post-media-controls">
                                 <button id="media-prev-{{ $post->id }}">Previous</button>
@@ -22,7 +22,7 @@
                             </div>
                         @endif
                     @else
-                        <img id="media-image-{{ $post->id }}" src="{{ route('media.show', 'default') }}" alt="Default Media">
+                        <img id="media-image-{{ $post->id }}" src="{{ route('media.show', 'default') }}" alt="Default Post Media">
                     @endif
                 @endif
                 <div id="CommentBody">
@@ -49,6 +49,9 @@
                                 @csrf
                                 <input type="hidden" name="post_id" value="{{ $post->id }}">
                                 <textarea name="content" class="form-control" placeholder="Write a comment..." ></textarea>
+                                @if($errors->has('content'))
+                                    <span class="error">{{ $errors->first('content') }}</span>
+                                @endif
                                 <button type="submit" ><i id="send" class="fa-solid fa-right-to-bracket"></i></button>
                             </form>                       
                         @endif

@@ -7,46 +7,53 @@
 @endif
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="width: 100%;">
                 <h5 class="modal-title" id="reportModalLabel-{{ $id }}">Report {{$type}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: #007bff;"></button>
             </div>
-            <div class="modal-body">
+            <div id="ReportModalContent">
                 @if ($type == 'user')
                     <form action="{{ route('report.user', $id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div>
+                        <div id="description">
                             <label for="content-{{ $id }}">Report motive:</label>
                             <textarea id="content-{{ $id }}" name="content" required></textarea>
-                            @error('content')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                            @if ($errors->has('content'))
+                            <span class="error">{{ $errors->first('content') }}</span>
+                            @endif
                         </div>
-                        <button type="submit" id="report_user" class="btn btn-danger">Report user</button>
+                        <div id="modal-footer">
+                            <button type="submit" id="report_user" >Report user</button>
+                        </div>
+ 
                     </form>
                 @elseif ($type == 'post')
                     <form action="{{ route('report.post', $id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div>
+                        <div id="description">
                             <label for="content-{{ $id }}">Report motive:</label>
                             <textarea id="content-{{ $id }}" name="content" required></textarea>
-                            @error('content')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                            @if ($errors->has('content'))
+                            <span class="error">{{ $errors->first('content') }}</span>
+                            @endif
                         </div>
-                        <button type="submit" id="report_post" class="btn btn-danger">Report post</button>
+                        <div id="modal-footer">
+                            <button type="submit" id="report_post" >Report post</button>
+                        </div>
                     </form>
                 @elseif ($type == 'comment')
                     <form action="{{ route('report.comment', $id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div>
+                        <div id="description">
                             <label for="content-{{ $id }}">Report motive:</label>
                             <textarea id="content-{{ $id }}" name="content" required></textarea>
-                            @error('content')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                            @if ($errors->has('content'))
+                            <span class="error">{{ $errors->first('content') }}</span>
+                            @endif
                         </div>
-                        <button type="submit" id="report_comment" class="btn btn-danger">Report comment</button>
+                        <div id="modal-footer">
+                        <button type="submit" id="report_comment" >Report comment</button>
+                        </div>
                     </form>
                 @endif
             </div>

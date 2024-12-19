@@ -10,16 +10,19 @@
         <!-- Profile Picture Preview -->
         <img id="p_picture_review" src="{{ route('userphoto', ['user_id' => $user->id]) }}" alt="profile picture" width="200" height="200">
         <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewProfilePicture(event)">
+        @if ($errors->has('photo_url'))
+            <span class="error">{{ $errors->first('photo_url') }}</span>
+        @endif
         
         <!-- Name Field -->
-        <label for="name">Name</label>
+        <label for="name">Name<em style="color: red;">*</em></label>
         <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" required>
         @if ($errors->has('name'))
             <span class="error">{{ $errors->first('name') }}</span>
         @endif
 
         <!-- Username Field -->
-        <label for="username">Username</label>
+        <label for="username">Username<em style="color: red;">*</em></label>
         <input id="username" type="text" name="username" value="{{ old('username', $user->username) }}" required>
         @if ($errors->has('username'))
             <span class="error">{{ $errors->first('username') }}</span>
@@ -33,7 +36,7 @@
         @endif
 
         <!-- Gender Dropdown -->
-        <label for="gender">Gender</label>
+        <label for="gender">Gender<em style="color: red;">*</em></label>
         <select id="gender" name="gender" required>
             <option value="" disabled selected>Select your gender</option>
             <option value="Male" {{ old('gender', $user->gender) == 'Male' ? 'selected' : '' }}>Male</option>
@@ -45,15 +48,18 @@
         @endif
 
         <!-- Age Field -->
-        <label for="age">Age</label>
+        <label for="age">Age<em style="color: red;">*</em></label>
         <input id="age" type="number" name="age" value="{{ old('age', $user->age) }}" required>
         @if ($errors->has('age'))
             <span class="error">{{ $errors->first('age') }}</span>
         @endif
 
         <!-- Country Search Input and Dropdown -->
-        <label for="country">Country</label>
+        <label for="country-search">Country</label>
         <input id="country-search" type="text" class="form-control" placeholder="Start typing your country..." value="{{ old('country', $user->country->name ?? '') }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
+        @if ($errors->has('country'))
+            <span class="error">{{ $errors->first('country') }}</span>
+        @endif
         <input type="hidden" id="country-id" name="country_id" value="{{ old('country_id', $user->country_id ?? '') }}">
         <select id="country" size="5" required onchange="selectCountry(event)">
             @foreach ($countries as $country)
@@ -66,7 +72,7 @@
 
         <!-- Visibility Radio Buttons -->
         <div class="radio-group">
-            <label for="is_public">Visibility:</label>
+            <label for="public">Visibility:<em style="color: red;">*</em></label>
             <div id="radio">
                 <label for="public">Public</label>
                 <input type="radio" id="public" name="is_public" value="public" required {{ old('is_public', $user->is_public ? 'public' : 'private') == 'public' ? 'checked' : '' }}>
@@ -76,7 +82,10 @@
                 <input type="radio" id="private" name="is_public" value="private" required {{ old('is_public', $user->is_public ? 'public' : 'private') == 'private' ? 'checked' : '' }}>
             </div>
         </div>
-
+        @if ($errors->has('is_public'))
+            <span class="error">{{ $errors->first('is_public') }}</span>
+        @endif
+        <p><em style="color: red;">*</em> Fields are required.</p>
         <!-- Submit Button -->
         <button type="submit">Confirm Changes</button>
 

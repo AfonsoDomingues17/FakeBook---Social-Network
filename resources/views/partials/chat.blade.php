@@ -15,7 +15,7 @@
         <div class="message {{ Auth::id() === $message->author_id ? 'my-message' : 'other-message' }}" data-message-id="{{ $message->id }}">
             <span id="Mymessage"><p>{{ $message->content }}</span>
             @if($message->image_url)
-                <img src="{{ route('messages.show', ['message_id' => $message->id]) }}" alt="Image">
+                <img src="{{ route('messages.show', ['message_id' => $message->id]) }}" alt="Image sent">
             @endif
             @if(Auth::id() === $message->author_id)
                 <button class="delete-message btn btn-danger btn-sm" style="display: none;">Delete</button>
@@ -29,10 +29,17 @@
         <img id="image-preview" src="#" alt="Image Preview" style="display: none;">
         <input type="hidden" name="{{ $type === 'group' ? 'group_id' : 'direct_chat_id' }}" value="{{ $chat->id }}">
         <input type="file" id="image" name="image" accept="image/*" style="display: none;" onchange="previewSentPicture(event)">
-        <label for="image" class="file-input-label">
-            <i class="fa-solid fa-upload"></i>
-        </label>
+        @if($errors->has('image'))
+            <span class="error">{{ $errors->first('image') }}</span>
+        @endif
+        <div class="file-input-label" aria-label="Upload an image">
+            <i class="fa-solid fa-upload" aria-hidden="true"></i>
+            <span class="sr-only">Upload an image</span>
+        </div>
         <textarea id="content" name="content" placeholder="Type your message"></textarea>
+        @if($errors->has('content'))
+            <span class="error">{{ $errors->first('content') }}</span>
+        @endif
         
         <button type="submit">
             <i id="send" class="fa-solid fa-right-to-bracket"></i>

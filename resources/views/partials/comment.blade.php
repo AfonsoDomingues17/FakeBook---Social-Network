@@ -10,11 +10,11 @@
                 <form class="comment-like-form" action="{{ route('comment.like') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id" value="{{ $comment->id }}">
-                    <button type="submit" >
+                    <button type="submit" aria-label="{{ Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists() ? 'Unlike this comment' : 'Like this comment' }}">
                         @if (Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists())
-                            <i class="fa-solid fa-heart"></i>
+                            <i class="fa-solid fa-heart" aria-hidden="true"></i>
                         @else
-                            <i class="fa-regular fa-heart"></i>
+                            <i class="fa-regular fa-heart" aria-hidden="true"></i>
                         @endif
                     </button>
                 </form>
@@ -37,6 +37,9 @@
                 @method('PUT')
                 <input type="hidden" name="comment_id" value="{{ $comment->id }}">
                 <textarea style="min-height: fit-content;" name="content"  rows="3" required >{{ $comment->content }}</textarea>
+                @if($errors->has('content'))
+                    <span class="error">{{ $errors->first('content') }}</span>
+                @endif
                 <button id="update" type="submit" ><p>Update</p></button>
             </form>
         </div>
