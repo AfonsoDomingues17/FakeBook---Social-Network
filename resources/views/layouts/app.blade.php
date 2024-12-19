@@ -18,7 +18,7 @@
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
         <script src="https://js.pusher.com/7.2/pusher.min.js" defer></script>
-        <script type="text/javascript" src={{ url('js/app.js') }} defer>
+        <script src="{{ url('js/app.js') }}" defer>
         </script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -41,37 +41,37 @@
                         <a href="{{ url('/') }}" aria-label="Go to Home Page">FakeBook!</a>
                     </h2>
                         @if((Auth::check() && !Auth::user()->isBanned()) || !Auth::check())
-                        <section id="search-options">
+                        <div id="search-options">
                             <form  action="{{route('search')}}" method="GET">
-                                <div>
+                                
                                 <input id="search" type="text" name="query" placeholder="search here..." value="" aria-label="Search for users">
                                 <input type="hidden" name="type" value="users">
                                 <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
-                                </div>
+                                
                             </form>
                             <button id="advancedSearch" data-bs-toggle="modal" data-bs-target="#advancedSearchModal" aria-label="Advanced search options">
-                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><p>Advanced</p>
+                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>Advanced
                             </button>
                             @include('partials.search_modal')
-                        </section>
+                        </div>
                         @endif
                         @if(Route::currentRouteName() === 'homepage' && Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isBanned())
                         
-                            <section id="timeline_options">
-                                <a href="{{ route('homepage', ['type' => 'public']) }}" aria-label="View public posts">
-                                    <button class="timeline" id="public">Public</button>
+                            <div id="timeline_options">
+                                <a class="timeline" id="public" href="{{ route('homepage', ['type' => 'public']) }}" aria-label="View public posts">
+                                    Public
                                 </a>
-                                <a href="{{ route('homepage', ['type' => 'following']) }}" aria-label="View posts from followed users">
-                                    <button class="timeline" id="following">Following</button>
+                                <a class="timeline" id="following" href="{{ route('homepage', ['type' => 'following']) }}" aria-label="View posts from followed users">
+                                    Following
                                 </a>
-                            </section>
+                            </div>
                         @endif
 
                         @if(Route::currentRouteName() === 'search')
                             @include('partials.search')
                         @endif
 
-                    <section id="account-options">
+                    <div id="account-options">
                         @if (Auth::check())
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
@@ -95,8 +95,8 @@
 
                                                 @if ($notification->typen === 'FOLLOW_REQUEST')
                                                 <div id="notification-actions">
-                                                        <button id="accept" data-user-id="{{ $notification->sender->id }}"><p>Accept</p></button>
-                                                        <button id="reject" data-user-id="{{ $notification->sender->id }}"><p>Eliminate</p></button>
+                                                        <button id="accept" data-user-id="{{ $notification->sender->id }}">Accept</button>
+                                                        <button id="reject" data-user-id="{{ $notification->sender->id }}">Eliminate</button>
                                                 </div>
                                                 @elseif (!Auth::user()->isFollowing($notification->sender->id))
                                                     <button id="Follow" data-user-id="{{$notification->sender->id}}">Follow Back</button>
@@ -133,7 +133,7 @@
                             </div>
                             @include('partials.create_post', ['categories' => $categories])
                             @include('partials.create_group')
-                    </section>
+                </div>
                 </div>
         </header>
         @if ($errors->any())
@@ -150,11 +150,11 @@
             </div>
         @endif
         <main>
-        <section id="sidebar">
+        <div id="sidebar">
             <div class= "navigators">
                 <a class="auth" href="{{ url('/') }}" aria-label="Go to Home Page"><i class="fa-solid fa-house" aria-hidden="true"></i><p>Home</p></a>
                 @if(Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isBanned())
-                    <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#groupCreationModal"aria-label="Create a new group"><i class="fa-solid fa-user-group" aria-hidden="true"></i><p>Create Group</p></a> 
+                    <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#groupCreationModal" aria-label="Create a new group"><i class="fa-solid fa-user-group" aria-hidden="true"></i><p>Create Group</p></a> 
                     @if(Auth::user()->typeu === 'INFLUENCER')
                         <a  class="auth" href="{{ route('influencer.page', Auth::user()->id) }}" aria-label="View influencer statistics"> <i class="fa-solid fa-chart-line" aria-hidden="true"></i> <p>View Statistics </p> </a>
                     @endif
@@ -188,9 +188,9 @@
                         </div>
                     </div>
                 @else
-                    <a class="auth" href="{{ route('help') }}" role="menuitem" aria-label="Go to Help/Contacts"><i class="fa-solid fa-info-circle" aria-hidden="true"></i><p>Help/Contacts</p></a>
-                    <a class="auth" href="{{ route('about') }}" role="menuitem" aria-label="Go to About Us"><i class="fa-solid fa-question-circle" aria-hidden="true"></i><p>About Us</p></a>
-                    <a class="auth" href="{{ route('settings') }}" role="menuitem" aria-label="Go to Settings"><i class="fa-solid fa-cog" aria-hidden="true"></i><p>Settings</p></a>
+                    <a class="auth" href="{{ route('help') }}" aria-label="Go to Help/Contacts"><i class="fa-solid fa-info-circle" aria-hidden="true"></i><p>Help/Contacts</p></a>
+                    <a class="auth" href="{{ route('about') }}" aria-label="Go to About Us"><i class="fa-solid fa-question-circle" aria-hidden="true"></i><p>About Us</p></a>
+                    <a class="auth" href="{{ route('settings') }}" aria-label="Go to Settings"><i class="fa-solid fa-cog" aria-hidden="true"></i><p>Settings</p></a>
                     <div class="dropdown-container">
                         <a href="#" id="toggleDropdown2" class="auth" aria-expanded="false" aria-controls="DropdownMore" aria-label="More options" ><i class="fa-solid fa-bars" aria-hidden="true"></i><p>More</p></a>
                         <div id="DropdownMore2" style="display: none;" role="menu">
@@ -210,7 +210,7 @@
                 @endif
             </div>
 
-            </section>
+        </div>
             <section id="content" >
                 @yield('content')
             </section>
