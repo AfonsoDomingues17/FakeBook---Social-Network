@@ -27,6 +27,10 @@
             <p id="reports-page-ending"><strong>Thank you for helping us maintain a positive environment on FakeBook!</strong></p>
             @else
             <div class="accordion" id="reportsAccordion">
+                @if($userReports->isEmpty() && $postReports->isEmpty() && $commentReports->isEmpty())
+                    <h3 class="text-center">No content to review</h3>
+                    <p class="text-center">There are currently no reports to review. Please check back later.</p>
+                @else
                 @if($userReports->isNotEmpty())
                     <h3>Users needing Review</h3>
                     @foreach($userReports as $group)
@@ -61,6 +65,16 @@
                                         </tbody>
                                     </table>
                                     <button class="btn btn-primary mt-3" onclick="window.location.href='{{ route('profile', ['user_id' => $group->first()->target_user_id]) }}'">Go to User page</button>
+                                    <form action="{{ route('deleteuser', ['user_id' => $group->first()->target_user_id]) }}" method="POST" class="d-inline delete-user-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger mt-3">Delete User</button>
+                                    </form>
+                                    <form action="{{ route('admin.solveReports') }}" method="POST" class="d-inline solve-reports-form">
+                                        @csrf
+                                        <input type="hidden" name="user_id" value="{{ $group->first()->target_user_id }}">
+                                        <button type="submit" class="btn btn-success mt-3">Solve Reports</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -100,7 +114,18 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <button class="btn btn-primary mt-3" onclick="window.location.href='{{ route('profile', ['user_id' => $group->first()->post->owner_id]) }}'">Go to User page</button>
+                                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#postModal-{{ $group->first()->post_id }}">View Post</button>
+                                    @include('partials.post_modal', ['post' => $group->first()->post])
+                                    <form action="{{ route('posts.destroy', ['post_id' => $group->first()->post_id]) }}" method="POST" class="d-inline delete-post-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger mt-3">Delete Post</button>
+                                    </form>
+                                    <form action="{{ route('admin.solveReports') }}" method="POST" class="d-inline solve-reports-form">
+                                        @csrf
+                                        <input type="hidden" name="post_id" value="{{ $group->first()->post_id }}">
+                                        <button type="submit" class="btn btn-success mt-3">Solve Reports</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -108,7 +133,7 @@
                 @endif
 
                 @if($commentReports->isNotEmpty())
-                    <h3>Reported Comments</h3>
+                    <h3>Comments needing Review</h3>
                     @foreach($commentReports as $group)
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingCommentReport-{{ $group->first()->comment_id }}">
@@ -140,7 +165,18 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <button class="btn btn-primary mt-3" onclick="window.location.href='{{ route('profile', ['user_id' => $group->first()->comment->author_id]) }}'">Go to User page</button>
+                                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#postModal-{{ $group->first()->comment->post_id }}">View Comment</button>
+                                    @include('partials.post_modal', ['post' => $group->first()->comment->post])
+                                    <form action="{{ route('comments.destroy', ['comment_id' => $group->first()->comment_id]) }}" method="POST" class="d-inline delete-comment-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger mt-3">Delete Comment</button>
+                                    </form>
+                                    <form action="{{ route('admin.solveReports') }}" method="POST" class="d-inline solve-reports-form">
+                                        @csrf
+                                        <input type="hidden" name="comment_id" value="{{ $group->first()->comment_id }}">
+                                        <button type="submit" class="btn btn-success mt-3">Solve Reports</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -148,6 +184,9 @@
                 @endif
             </div>
             @endif
+            @endif
         </section>
     </section>
 @endsection
+
+<script src="{{ asset('js/reports.js') }}" defer></script>

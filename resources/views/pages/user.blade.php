@@ -31,7 +31,7 @@
                     @endif
                     @if (Auth::user()->isAdmin())
                         <div id="watchlist-actions-{{ $user->id }}" data-user-id="{{ $user->id }}">
-                            @if ($user->isInWatchlist)
+                            @if ($isInWatchlist)
                                 <form id="remove-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.remove', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
                                     @csrf
                                     <button type="submit"><p>Remove from Watchlist</p></button>
@@ -39,7 +39,7 @@
                             @else
                                 <form id="add-watchlist-form-{{ $user->id }}" action="{{ route('admin.watchlist.add', ['user_id' => $user->id]) }}" method="POST" data-user-id="{{ $user->id }}">
                                     @csrf
-                                    <button type="submit"><p>Remove from Watchlist</p></button>
+                                    <button type="submit"><p>Add to Watchlist</p></button>
                                 </form>
                             @endif
                         </div>

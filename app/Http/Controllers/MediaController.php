@@ -37,40 +37,47 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($post_id)
-{
-    Log::info('MediaController@show');
-    $media = Media::where('post_id', $post_id)->first();
+    public function show($media_id)
+    {
+        if ($media_id === 'default') {
+            $defaultPath = storage_path('app/private/post_pictures/DEFAULT_POST.jpg');
+            if (!file_exists($defaultPath)) {
+                abort(404);
+            }
 
-    if (!$media) {
-        $defaultPath = storage_path('app/private/post_pictures/DEFAULT_POST.jpg');
-        if (!file_exists($defaultPath)) {
-            abort(404);
+            $file = file_get_contents($defaultPath);
+            $type = mime_content_type($defaultPath);
+            return response($file, 200)->header("Content-Type", $type);
         }
 
-        $file = file_get_contents($defaultPath);
-        $type = mime_content_type($defaultPath);
-        return response($file, 200)->header("Content-Type", $type);
-    }
-    else {
+        $media = Media::find($media_id);
 
-    // Ensure the user has permission to view the media
-    $this->authorize('view', $media->post);
+        if (!$media) {
+            $defaultPath = storage_path('app/private/post_pictures/DEFAULT_POST.jpg');
+            if (!file_exists($defaultPath)) {
+                abort(404);
+            }
 
-    // Get the file path
-    $filePath = $media->photo_url;
-   
-        $path = storage_path('app/private/' . $filePath);
-        Log::info($path);
+            $file = file_get_contents($defaultPath);
+            $type = mime_content_type($defaultPath);
+            return response($file, 200)->header("Content-Type", $type);
+        } else {
+            // Ensure the user has permission to view the media
+            $this->authorize('view', $media->post);
 
-        if (!Storage::disk('private')->exists($filePath)) {
-            abort(404);
-        }
-        
-        $file = Storage::disk('private')->get($filePath);
-        $type = Storage::disk('private')->mimeType($filePath);
+            // Get the file path
+            $filePath = $media->photo_url;
+            $path = storage_path('app/' . $filePath);
+            Log::info($path);
 
-        return Response::make($file, 200)->header("Content-Type", $type);
+            if (!Storage::exists($filePath)) {
+                abort(404);
+            }
+
+            $file = Storage::get($filePath);
+            $type = Storage::mimeType($filePath);
+
+            return response($file, 200)->header("Content-Type", $type);
         
     }
     

@@ -6,6 +6,7 @@ use App\Events\FollowRequestDeleted;
 use App\Models\User;
 use App\Models\Watchlist;
 use App\Models\Question;
+use App\Models\Report;
 use App\Http\Requests\CreateUserByAdminRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\StoreUserRequest;
@@ -218,7 +219,13 @@ class UserController extends Controller
 
                     $isInWatchlist = false;
                     if (Auth::check() && Auth::user()->isAdmin()) {
-                        $isInWatchlist = Auth::user()->watchlistedUsers()->where('user_id', $user_id)->exists();
+                        // Log the query
+                        $query = Auth::user()->watchlistedUsers()->where('user_id', $user_id);
+                        Log::info('Watchlist Query: ' . $query->toSql(), $query->getBindings());
+
+                        // Execute the query and log the result
+                        $isInWatchlist = $query->exists();
+                        Log::info('Is in Watchlist: ' . ($isInWatchlist ? 'Yes' : 'No'));
                     }
 
                     return view('pages.user', [
@@ -547,6 +554,18 @@ class UserController extends Controller
         return redirect()->route('admin.page');
     }
 
+    public function solveReports(Request $request)
+    {
+        if ($request->has('user_id')) {
+            Report::where('target_user_id', $request->input('user_id'))->delete();
+        } elseif ($request->has('post_id')) {
+            Report::where('post_id', $request->input('post_id'))->delete();
+        } elseif ($request->has('comment_id')) {
+            Report::where('comment_id', $request->input('comment_id'))->delete();
+        }
+
+        return redirect()->back()->with('success', 'Reports solved successfully.');
+    }
 
     public function showInfluencerPage($user_id)
     {

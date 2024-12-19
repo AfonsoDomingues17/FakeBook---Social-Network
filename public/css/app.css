@@ -816,7 +816,9 @@ article.post {
       width: 3em;
       height: 3em;
     }
-
+    .watchList{
+      margin-left: auto;
+    }
 
   }
 
@@ -1566,19 +1568,33 @@ div#group_info{
       }
     }
     ul{
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
       padding-left: 0;
+
     }
     >p{
       font-size: 1.5em;
       margin-bottom: 1em;
     }
-    div#owner{
+    div#owner, div#member{
       display: flex;
       gap:1.5em;
       align-items: center;
       img{border-radius: 50%;}
       p{
         font-size: 1.5em;
+      }
+      button{
+        padding: 0.5em 1em;
+        border-radius: 10px;
+        border: none;
+        background-color: red;
+        color: white;
+        p{
+          font-size: 1em;
+        }
       }
     }
   }
@@ -1927,5 +1943,136 @@ height: 100%;
 padding: 1.5em;
 
 overflow-y: auto;
+
+}
+
+div#PostContent{
+  padding: 1.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  img{
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  p#postdescription{
+    font-size: 1.5em;
+    margin: 0; 
+  }
+  div#CommentBody{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    form{
+      display: flex;
+      align-items: center;
+      gap: 1em;
+    textarea{
+      flex-grow: 1;
+      width: auto;
+      background-color: #f0f2f5;
+      border: none;
+      border-radius: 5px;
+      padding-left: 1em;
+      resize: none;
+      height: 45px;
+      padding-top: 0.5em;
+      
+    }
+    textarea:focus {
+      outline: 2px solid #007bff;
+    }
+    i{
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    button{
+      border: none;
+      background-color: white;
+      
+
+    }
+    
+  }
+  }
+}
+div#Comments {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  .comSec{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+  i{
+    font-size: 0.8em;
+  }
+  a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+  }
+  .comment{
+    display: flex;
+    flex-direction: column;
+    textarea{
+      resize: none;
+      overflow: hidden;
+      height: 150px;
+      background-color: red;
+    }
+    
+  }
+  #commentContent{
+    display: flex;
+    gap: 1em;
+  }
+  .interaction-bar{
+    margin-left: auto;
+    margin-top: 0;
+    
+  }
+  #commentText{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2em;
+  }
+  .like-container{
+    display: flex;
+    gap: 0.5em;
+  }
+
+  .comment-options{
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+
+    button{
+      border: none;
+      background-color: white;
+    }
+    button#edit, button#delete{
+      font-size: 0.8em;
+      padding: 0.3em 1em;
+      border-radius: 10px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+    }
+    button#delete{
+      background-color: red;
+    }
+  }
+  .update{
+    
+      button#update{
+        background-color: #007bff;
+        color: white;
+        border-radius: 10px;
+        padding: 0.3em 0.8em;
+      }
+  }
 
 }

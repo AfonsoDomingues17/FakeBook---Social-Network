@@ -14,19 +14,22 @@
         <p id="postdescription">{{ $post->description }}</p>
         <div class="media">
         @if ($post->typep === 'MEDIA')
-                <img id="media-image-{{ $post->id }}"
-                    src="{{ route('media.show', ['post_id' => $post->id])}}"
-                    alt="Media">
-                @if ($post->media->count() > 1)
-                    <div class="post-media-controls">
-                        <button id="media-prev-{{ $post->id }}">Previous</button>
-                        <button id="media-next-{{ $post->id }}">Next</button>
-                    </div>
+                @if ($post->media->isNotEmpty())
+                    <img id="media-image-{{ $post->id }}" src="{{ route('media.show', $post->media->first()->id) }}" alt="Media">
+                    @if ($post->media->count() > 1)
+                        <div class="post-media-controls">
+                            <button id="media-prev-{{ $post->id }}">Previous</button>
+                            <button id="media-next-{{ $post->id }}">Next</button>
+                        </div>
+                    @endif
+                @else
+                    <img id="media-image-{{ $post->id }}" src="{{ route('media.show', 'default') }}" alt="Default Media">
                 @endif
             @endif
         </div>
     @endif
     <div class="interaction-bar">
+    @if(Auth::check() && !Auth::user()->isAdmin())
         <div class="like-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
             <form class="like-form" action="{{ route('post.like') }}" method="POST">
                 @csrf
@@ -46,6 +49,7 @@
             <i class="fa-regular fa-flag"></i>
         </button>
         @include('partials.report_modal', ['type' => 'post', 'id' => $post->id]) 
+    @endif
     </div>
     <div class="action_buttons">
         @if(Auth::check())
@@ -72,6 +76,7 @@
         initMediaCarousel({{ $post->id }}, mediaUrls{{ $post->id }});
     </script>
     @endif
+
     <button id="view-post-btn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postModal-{{ $post->id }}" style="display: none">View Post</button>
     @include('partials.edit_post', ['post' => $post, 'modalId' => 'editPostModal-' . $post->id])
     @include('partials.post_modal', ['post' => $post])
