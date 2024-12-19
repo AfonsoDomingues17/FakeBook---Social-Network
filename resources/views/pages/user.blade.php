@@ -84,11 +84,12 @@
                             <button id="reportUser" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportUserModal-{{ $user->id }}">
                                 <p>Report</p>
                             </button>
-                </div>
+                
                             @include('partials.report_modal', ['type' => 'user', 'id' => $user->id])
                         @endif
                     @endif
                 @endif
+                </div>
             </div>
             <div class="numbers">
                 <span><p>Publicações {{$n_posts}}</p></span>
@@ -119,9 +120,7 @@
                 <section id="myposts">
                     @if ($n_posts > 0)
                         @foreach ($posts as $post)
-                            @if ($post->is_public || (Auth::check() && Auth::user()->isAdmin()))
-                                @include('partials.post', ['post' => $post])
-                            @endif
+                            @include('partials.post', ['post' => $post])
                         @endforeach
                     @else 
                         <p>This user has no posts!</p>

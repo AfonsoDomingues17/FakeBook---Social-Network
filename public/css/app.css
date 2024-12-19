@@ -947,7 +947,8 @@ article.post {
       @media (max-width: 850px){ 
         div#butoes {
           flex-direction: column;
-          button, form {
+          button, form, a {
+            text-align: center;
             width: 100%;
           }
         }

@@ -46,21 +46,6 @@
       <span class="error">{{ $errors->first('age') }}</span>
     @endif
 
-    <label for="country-search">Country</label>
-    <input id="country-search" type="text"placeholder="Start typing your country..." oninput="filterCountries()" onclick="toggleCountryDropdown()">
-    @if ($errors->has('country-search'))
-                <span class="error">{{ $errors->first('country-search') }}</span>
-            @endif
-    <input type="hidden" id="country-id" name="country_id">
-    <select id="country" size="5" required onchange="selectCountry(event)">
-        @foreach ($countries as $country)
-            <option value="{{ $country->id }}">{{ $country->name }}</option>
-        @endforeach
-    </select>
-    @if ($errors->has('country_id'))
-        <span class="error">{{ $errors->first('country_id') }}</span>
-    @endif
-
     <label for="gender">Gender<em style="color: red;">*</em></label>
     <select id="gender" name="gender" required>
         <option value="" disabled selected>Select your gender</option>

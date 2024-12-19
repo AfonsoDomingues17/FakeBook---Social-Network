@@ -62,7 +62,7 @@
 
         <!-- Country Search Input and Dropdown -->
         <label for="country-search">Country</label>
-        <input id="country-search" type="text" class="form-control" placeholder="Start typing your country..." value="{{ old('country', $user->country->name ?? '') }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
+        <input id="country-search" type="text" placeholder="Start typing your country..." value="{{ old('country', $user->country->name ?? '') }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
         @if ($errors->has('country'))
             <span class="error">{{ $errors->first('country') }}</span>
         @endif
