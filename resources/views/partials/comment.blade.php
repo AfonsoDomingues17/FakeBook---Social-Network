@@ -10,7 +10,7 @@
                 <form class="comment-like-form" action="{{ route('comment.like') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id" value="{{ $comment->id }}">
-                    <button type="submit" >
+                    <button type="submit" class="like-button">
                         @if (Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists())
                             <i class="fa-solid fa-heart"></i>
                         @else
@@ -28,6 +28,7 @@
             <form action="{{ route('comments.destroy', ['comment_id' => $comment->id]) }}" method="POST" onsubmit="deleteComment(event, {{ $comment->id }});">
                 @csrf
                 @method('DELETE')
+                <input type="hidden" name="post_id" value="{{ $comment->post_id }}">
                 <button id="delete" type="submit" ><p>Delete</p></button>
             </form>
         </div>
