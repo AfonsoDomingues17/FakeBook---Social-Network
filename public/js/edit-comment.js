@@ -81,9 +81,14 @@ async function deleteComment(event, commentId) {
                 'X-CSRF-TOKEN': form.querySelector('[name="_token"]').value,
             },
         });
-
-        if(response.status === 204) {
+        if(response.ok) {
+            const data = await response.json();
             document.getElementById(`comment-${commentId}`).remove();
+            const postId = form.querySelector('[name="post_id"]').value;
+            const commentCountSpan = document.querySelector(`.comment-container[data-post-id="${postId}"] .comment-count`);
+            if (commentCountSpan) {
+                commentCountSpan.textContent = data.commentCount;
+            }
         } else {
             console.error('Failed to delete comment:', response.status, response.statusText);
         }
