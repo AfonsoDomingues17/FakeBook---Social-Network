@@ -50,7 +50,7 @@
                             <img src="{{ route('userphoto', ['user_id' => $groupMember->id]) }}" alt="group member profile pic" width="60" height="60">
                             <p>{{ $groupMember->name }}</p>
                             @if($group->owner_id == Auth::user()->id)
-                            <button data-user-id="{{ $groupMember->id }}"><p>Remove</p></button>
+                            <button class="remove-member-btn" data-user-id="{{ $groupMember->id }}"><p>Remove</p></button>
                             @endif
                         </div>
                     @endif

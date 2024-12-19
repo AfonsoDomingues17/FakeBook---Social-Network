@@ -64,10 +64,5 @@ class GroupParticipantController extends Controller
     }
     
 
-    public function removeMember(Request $request, $groupId)
-    {
-        $userId = $request->input('user_id');
-        GroupParticipant::where(['group_id' => $groupId, 'user_id' => $userId])->delete();
-        return response()->json(['success' => true]);
-    }
+    
 }
