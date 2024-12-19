@@ -59,7 +59,6 @@ class RegisterController extends Controller
             'is_public' => $request->is_public,
             'photo_url' => $photoUrl,
             'gender' => $request->gender,
-            'country_id' => $request->country_id,
         ]);
 
         $credentials = $request->only('email', 'password');
