@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (followersContainer) {
-        console.log('followersContainer exists');
         followersContainer.addEventListener('scroll', () => {
             console.log('scroll event triggered');
             if (followersContainer.scrollTop + followersContainer.clientHeight >= followersContainer.scrollHeight - 100 && !noMoreFollowers && !fetchingFollowers) {
@@ -34,8 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadMoreFollowers();
             }
         });
-    } else {
-        console.log('followersContainer does not exist');
     }
 
     if (addToGroupContainer) {
@@ -50,8 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadMoreAddToGroup();
             }
         });
-    } else {
-        console.log('addToGroupContainer does not exist');
     }
 
     function loadMoreFollowers() {

@@ -117,7 +117,9 @@
                 <section id="myposts">
                     @if ($n_posts > 0)
                         @foreach ($posts as $post)
-                            @include('partials.post', ['post' => $post])
+                            @if ($post->is_public || (Auth::check() && Auth::user()->isAdmin()))
+                                @include('partials.post', ['post' => $post])
+                            @endif
                         @endforeach
                     @else 
                         <p>This user has no posts!</p>
