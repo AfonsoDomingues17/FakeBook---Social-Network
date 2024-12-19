@@ -51,7 +51,7 @@
     <label for="country">Country</label>
     <input id="country-search" type="text" class="form-control" placeholder="Start typing your country..." oninput="filterCountries()" onclick="toggleCountryDropdown()">
     <input type="hidden" id="country-id" name="country_id">
-    <select id="country" size="5" required onchange="selectCountry(event)">
+    <select id="country" size="5"  onchange="selectCountry(event)">
         @foreach ($countries as $country)
             <option value="{{ $country->id }}">{{ $country->name }}</option>
         @endforeach
