@@ -34,7 +34,7 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <div id="loading" style="display: none;">Loading...</div>
+                            <div id="loadingFollowers" style="display: none;">Loading...</div>
                         @endif
                     </div>
                 </section>
@@ -78,4 +78,3 @@ function previewGroupPicture(event) {
 }
 </script>
 <script src="{{ asset('js/searchGroup.js') }}"></script>
-<script src="{{ asset('js/groupLazyScroll.js') }}"></script>

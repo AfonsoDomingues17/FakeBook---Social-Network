@@ -35,8 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
-   function attachGroupInfoEventListeners() {
+    function attachGroupInfoEventListeners() {
         const addMemberSpan = document.getElementById('AddMembers');
 
         if (addMemberSpan) {
@@ -45,6 +44,107 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } else {
             console.log('Add members span not found');
+        }
+    }
+
+    function initializeGroupLazyScroll() {
+        const limit = 10;
+
+        const loadingAddToGroup = document.getElementById('loadingAddToGroup');
+        let noMoreAddToGroup = false; // Flag to indicate no more followers
+        let fetchingAddToGroup = false; // Flag to prevent multiple requests
+        let pageAddToGroup = 2; // Start from the second page since the first page is already loaded
+        const addToGroupContainer = document.getElementById('addToGroupContainer');
+        let groupId = null;
+        if (addToGroupContainer) {
+            groupId = addToGroupContainer.getAttribute('data-group-id');
+        }
+
+        if (addToGroupContainer) {
+            addToGroupContainer.addEventListener('scroll', () => {
+                if (addToGroupContainer.scrollTop + addToGroupContainer.clientHeight >= addToGroupContainer.scrollHeight - 100 && !noMoreAddToGroup && !fetchingAddToGroup) {
+                    loadMoreAddToGroup();
+                }
+            });
+
+            addToGroupContainer.addEventListener("wheel", function () {
+                if (document.documentElement.scrollHeight <= window.innerHeight && !noMoreAddToGroup && !fetchingAddToGroup) {
+                    loadMoreAddToGroup();
+                }
+            });
+        }
+
+        function loadMoreAddToGroup() {
+            loadingAddToGroup.style.display = 'block';
+            fetchingAddToGroup = true;
+            fetch(`/groups/${groupId}/get-members?page=${pageAddToGroup}`)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => { throw new Error(text); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.length === 0) {
+                        noMoreAddToGroup = true; // Set flag if no more followers
+                    } else {
+                        console.log('Data received:', data); // Log the received data
+                        data.forEach(follower => { // Access the data array from the paginated response
+                            const userDiv = document.createElement('div');
+                            userDiv.classList.add('user');
+                            userDiv.innerHTML = `
+                                <section id="info">
+                                    <img src="/users/${follower.id}/photo" width="70" height="70" alt="user profile picture">
+                                    <div class="user-info">
+                                        <span id="user"><p>${follower.username}</p></span>
+                                        <span id="nome"><p>${follower.name}</p></span>
+                                    </div>
+                                    <button type="button" id="AddMember" class="add-member-btn btn btn-secondary" data-user-id="${follower.id}">Add</button>
+                                </section>
+                            `;
+                            addToGroupContainer.appendChild(userDiv);
+                        });
+                        pageAddToGroup += 1;
+                    }
+                    loadingAddToGroup.style.display = 'none';
+                    fetchingAddToGroup = false;
+                })
+                .catch(error => {
+                    console.error('Error loading more followers:', error);
+                    loadingAddToGroup.style.display = 'none';
+                });
+        }
+    }
+
+    function initializeAddToGroupButtons(containerSelector) {
+        const container = document.querySelector(containerSelector);
+        if (container) {
+            const addToGroupButtons = container.querySelectorAll('.add-member-btn');
+            addToGroupButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const userId = this.dataset.userId;
+                    const groupId = document.getElementById('group_info').getAttribute('data-group-id');
+                    fetch(`/groups/${groupId}/add-member/${userId}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.text().then(text => { throw new Error(text); });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Member added:', data);
+                        this.closest('.user').remove();
+                    })
+                    .catch(error => {
+                        console.error('Error adding member:', error);
+                    });
+                });
+            });
         }
     }
 
@@ -204,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return channel; // Return the channel so we can unsubscribe later
     }
+
     if (specialContainer) {
         document.addEventListener('click', function(event) {
             const target = event.target.closest('#chat-header');
@@ -220,7 +321,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         .then(response => response.text())
                         .then(html => {
                             specialContainer.innerHTML = html;
-                            attachGroupInfoEventListeners();  
+                            attachGroupInfoEventListeners();
+                            initializeGroupLazyScroll(); // Reattach listeners for group info
+                            initializeAddToGroupButtons('#addToGroupContainer');
                         })
                         .catch(error => console.error('Error fetching group info:', error));
                 }
@@ -230,6 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 specialContainer.appendChild(chatContainer);
             }
         });
+
         // Close group info when clicking outside of it
         document.addEventListener('click', function(event) {
             if (!event.target.closest('#group_info') && !event.target.closest('#chat-header') && !event.target.closest('#addMembersModal')) {
@@ -241,4 +345,3 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }     
 });
-

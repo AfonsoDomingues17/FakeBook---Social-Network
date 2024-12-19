@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\GroupParticipant;
 use App\Http\Requests\CreateGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
+use App\Models\User;
 
 
 
@@ -215,21 +216,30 @@ class GroupController extends Controller
 
         return response()->json($group);
     }
-    public function addMembers(Request $request, $group_id)
+    public function getMembers(Request $request, $group_id)
+    {
+        $user = Auth::user();        
+        $group = Group::findOrFail($group_id);
+        $page = $request->input('page', 1);
+        $limit = 10;
+
+        $followersNotInGroup = $user->following->filter(function($follower) use ($group) {
+            return !$group->participants->contains($follower->id);
+        });
+
+        $followersNotInGroup = $followersNotInGroup->forPage($page, $limit)->values();
+
+        return response()->json($followersNotInGroup);
+    }
+
+    public function addMember(Request $request, $group_id, $user_id)
     {
         $group = Group::findOrFail($group_id);
-        
-        $userIds = $request->input('user_ids', []);
-        foreach ($userIds as $userId) {
-            if (!$group->participants->contains($userId)) {
-                GroupParticipant::create([
-                    'group_id' => $group_id,
-                    'user_id' => $userId,
-                    'date_joined' => now()
-                ]);
-            }
-        }
+        $user = User::findOrFail($user_id);
 
-        return redirect()->route('direct_chats.index')->with('success', 'Members added successfully.');
+        // Add the user to the group
+        $group->participants()->attach($user);
+
+        return response()->json(['message' => 'Member added successfully']);
     }
 }

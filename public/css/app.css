@@ -1320,7 +1320,7 @@ button#addPost{
       margin: 0 auto;
     }
   }
-  button#AddMember{
+  button#AddMember, button#AddToGroup{
     border-radius: 0;
     font-size: 1.2em;
     font-weight: normal;
@@ -1333,7 +1333,7 @@ button#addPost{
     background-color: white;
     border: 2px solid #007bff;
   }
-  button#AddMember:hover{
+  button#AddMember:hover, button#AddToGroup:hover{
     background-color: #007bff;
     color: white;
   }
