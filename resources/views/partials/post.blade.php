@@ -29,27 +29,32 @@
         </div>
     @endif
     <div class="interaction-bar">
-    @if(Auth::check() && !Auth::user()->isAdmin())
-        <div class="like-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
-            <form class="like-form" action="{{ route('post.like') }}" method="POST">
-                @csrf
-                <input type="hidden" name="id" value="{{ $post->id }}">
-                <button type="submit" class="like-button">
-                    @if (Auth::check() && $post->likedByUsers()->where('user_id', Auth::user()->id)->exists())
-                        <i class="fa-solid fa-heart"></i>
-                    @else
-                        <i class="fa-regular fa-heart"></i>
-                    @endif
-                </button>
-            </form>
-            <span class="like-count">{{ $post->getNumberOfLikes() }}</span>
-        </div>
-        <p><i class="fa-regular fa-comment"></i> 33</p>
-        <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
-            <i class="fa-regular fa-flag"></i>
-        </button>
-        @include('partials.report_modal', ['type' => 'post', 'id' => $post->id]) 
-    @endif
+        @if(Auth::check() && !Auth::user()->isAdmin())
+            <div class="like-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
+                <form class="like-form" action="{{ route('post.like') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $post->id }}">
+                    <button type="submit" class="like-button">
+                        @if (Auth::check() && $post->likedByUsers()->where('user_id', Auth::user()->id)->exists())
+                            <i class="fa-solid fa-heart"></i>
+                        @else
+                            <i class="fa-regular fa-heart"></i>
+                        @endif
+                    </button>
+                </form>
+                <span class="like-count">{{ $post->getNumberOfLikes() }}</span>
+            </div>
+            <div class="comment-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
+                    <button type="button" class="comment-button">
+                        <i class="fa-regular fa-comment"></i>
+                    </button>
+                <span class="comment-count">{{ $post->getNumberOfComments() }}</span>
+            </div>
+            <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
+                <i class="fa-regular fa-flag"></i>
+            </button>
+            @include('partials.report_modal', ['type' => 'post', 'id' => $post->id])
+        @endif
     </div>
     <div class="action_buttons">
         @if(Auth::check())
@@ -86,7 +91,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const avoid = [
             '.like-button',
-            '.username-link',
+            '.post_author',
             '.edit-post-btn',
             '.delete-post-btn',
             '.post-media-controls',
@@ -112,6 +117,15 @@
                 element.addEventListener('click', function(event) {
                     event.stopPropagation();
                 });
+            });
+        });
+
+        document.querySelectorAll('.post_author').forEach(authorDiv => {
+            authorDiv.addEventListener('click', function() {
+                const link = authorDiv.querySelector('a');
+                if (link) {
+                    window.location.href = link.href;
+                }
             });
         });
     });

@@ -739,7 +739,7 @@ article.post {
   .interaction-bar{
     display: flex;
     gap: 0.5em;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-top: 1.5em;
     form{

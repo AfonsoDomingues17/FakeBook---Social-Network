@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -43,7 +44,12 @@ class CommentController extends Controller
 
         $comment = Comment::create($validatedData);
 
-        return view('partials.comment', ['comment' => $comment])->render();
+        $commentCount = Comment::where('post_id', $comment->post_id)->count();
+
+        return response()->json([
+            'comment' => view('partials.comment', ['comment' => $comment])->render(),
+            'commentCount' => $commentCount,
+        ]);
     }
 
     /**
@@ -87,12 +93,12 @@ class CommentController extends Controller
     {
         $comment = Comment::findOrFail($comment_id);
         $this->authorize('delete', $comment);
-
+        $postId = $comment->post_id;
         // Delete likes on the comment
         $comment->likedByUsers()->detach();
 
         $comment->delete();
-
-        return response('Successful Delete', 204);
+        $commentCount = Comment::where('post_id', $postId)->count();
+        return response()->json(['commentCount' => $commentCount, 'status' => 204]);
     }
 }
