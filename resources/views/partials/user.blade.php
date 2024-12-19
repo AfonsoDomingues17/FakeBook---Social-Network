@@ -6,8 +6,7 @@
                 <span id="user"><p>{{$user->username}}</p></span>
                 <span id="nome"><p>{{$user->name}}</p></span>
             </div>
-        
-    
+        </a> 
             @if (Auth::check() && !Auth::user()->isAdmin())
                 @if(Auth::user()->isFollowing($user->id))
                     <button class="unfollow" id="unfollow" data-user-id="{{$user->id}}">Following</button>
@@ -33,6 +32,4 @@
             </div>
             @endif
         </section>
-        </a> 
-    
 </article>

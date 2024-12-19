@@ -115,7 +115,9 @@
                                         </tbody>
                                     </table>
                                     <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#postModal-{{ $group->first()->post_id }}">View Post</button>
-                                    @include('partials.post_modal', ['post' => $group->first()->post])
+                                    <article class="post">
+                                        @include('partials.post_modal', ['post' => $group->first()->post])
+                                    </article>
                                     <form action="{{ route('posts.destroy', ['post_id' => $group->first()->post_id]) }}" method="POST" class="d-inline delete-post-form">
                                         @csrf
                                         @method('DELETE')
@@ -166,7 +168,9 @@
                                         </tbody>
                                     </table>
                                     <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#postModal-{{ $group->first()->comment->post_id }}">View Comment</button>
-                                    @include('partials.post_modal', ['post' => $group->first()->comment->post])
+                                    <article class="post">
+                                        @include('partials.post_modal', ['post' => $group->first()->comment->post])
+                                    </article>
                                     <form action="{{ route('comments.destroy', ['comment_id' => $group->first()->comment_id]) }}" method="POST" class="d-inline delete-comment-form">
                                         @csrf
                                         @method('DELETE')

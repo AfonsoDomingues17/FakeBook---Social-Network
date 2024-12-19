@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         <span id="user"><p>${follower.username}</p></span>
                                         <span id="nome"><p>${follower.name}</p></span>
                                     </div>
-                                    <button type="button" id="AddMember" class="add-member-btn btn btn-secondary" data-user-id="${follower.id}">Add</button>
+                                    <button type="button" id="AddToGroup" class="add-member-btn btn btn-secondary" data-user-id="${follower.id} data-group-id="${$group.id}">Add</button>
                                 </section>
                             `;
                             addToGroupContainer.appendChild(userDiv);
