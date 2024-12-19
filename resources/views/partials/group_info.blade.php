@@ -37,7 +37,7 @@
             <span><i class="fa-solid fa-user-plus"></i></span>
             <p>Add members</p>
         </span>
-    @endif
+        @endif
         <ul>
             <div id="owner">
             <img src="{{ route('userphoto', ['user_id' => $group->owner_id]) }}" alt="Owner profile picture" width="60" height="60">
@@ -90,20 +90,25 @@
                 @if($followersNotInGroup->isEmpty())
                     <p>You don't follow anyone who is not already in the group.</p>
                 @else
-                    <form id="add-members-form" action="{{ route('group.addMembers', ['group_id' => $group->id]) }}" method="POST">
-                        @csrf
-                        <h3>Select users to add to the group:</h3>
-                        @foreach ($followersNotInGroup as $follower)
+                    <h3>Select users to add to the group:</h3>
+                    <div id="addToGroupContainer" data-group-id="{{ $group->id }}" style="max-height: 350px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
+                        @foreach ($followersNotInGroup->take(10) as $follower)
                             <div class="user">
-                                <input type="checkbox" name="user_ids[]" value="{{ $follower->id }}">
-                                <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="60" height="60" alt="user profile picture">
-                                <span>{{ $follower->name }}</span>
+                                <section id="info">
+                                    <img src="{{ route('userphoto', ['user_id' => $follower->id]) }}" width="70" height="70" alt="user profile picture">
+                                    <div class="user-info">
+                                        <span id="user"><p>{{$follower->username}}</p></span>
+                                        <span id="nome"><p>{{$follower->name}}</p></span>
+                                    </div>
+                                    <button type="button" id="AddToGroup" class="add-member-btn btn btn-secondary" data-user-id="{{ $follower->id }}" data-group-id="{{ $group->id }}">Add</button>
+                                </section>
                             </div>
                         @endforeach
-                        <button type="submit" class="btn btn-primary">Add Selected Members</button>
-                    </form>
+                    </div>
+                    <div id="loadingAddToGroup" style="display: none;">Loading...</div>
                 @endif
             </div>
         </div>
     </div>
 </div>
+

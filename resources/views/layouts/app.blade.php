@@ -30,6 +30,7 @@
         <script src="{{asset('js/watchlist.js')}}" defer></script>
         <script src="{{asset('js/group.js')}}" defer></script>
         <script src="{{asset('js/reactions.js')}}" defer></script>
+        <script src="{{ asset('js/groupLazyScroll.js') }}"></script>
     </head>
     <body class="@yield('body-class')">
     <header>

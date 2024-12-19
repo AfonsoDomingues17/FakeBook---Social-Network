@@ -52,7 +52,7 @@
                                 <button type="submit" ><i id="send" class="fa-solid fa-right-to-bracket"></i></button>
                             </form>                       
                         @endif
-                    
+                    </div>
                 </div>
             </div>
         </div>

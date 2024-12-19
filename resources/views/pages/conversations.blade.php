@@ -4,7 +4,7 @@
 
 @section('content')
     <div id="Conversas">
-        <h1>Conversas</h1>
+        <h1>Conversations</h1>
         <input type="text" id="searchUsers" placeholder="Search for conversations">
         <ul>
             @foreach(Auth::user()->groups() as $group)

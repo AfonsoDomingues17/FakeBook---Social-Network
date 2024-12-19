@@ -69,7 +69,8 @@ Route::get('/groups/{group_id}/info', [GroupController::class, 'groupInfo'])->na
 Route::post('/groups/{group_id}/leave', [GroupController::class, 'leaveGroup'])->name('group.leave');
 Route::delete('/groups/{group_id}/delete', [GroupController::class, 'deleteGroup'])->name('group.delete');
 Route::post('/groups/{group_id}/update', [GroupController::class, 'updateGroup'])->name('group.update');
-Route::post('/groups/{group_id}/add-members', [GroupController::class, 'addMembers'])->name('group.addMembers');
+Route::get('/groups/{group_id}/get-members', [GroupController::class, 'getMembers'])->name('group.getMembers');
+Route::get('/groups/{group_id}/add-member/{user_id}', [GroupController::class, 'addMember'])->name('group.addMember');
 Route::delete('/groups/{group_id}/remove-member', [GroupParticipantController::class, 'removeMember'])->name('group.removeMember');
 // Comments
 Route::get('/posts/{post_id}/comments', [CommentController::class, 'getPostComments'])->name('comments.fetch');
@@ -106,6 +107,7 @@ Route::get('/media/{post_id}', [MediaController::class, 'show'])->name('media.sh
 // Search
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/advsearch', [SearchController::class, 'advancedSearch'])->name('advancedSearch');
+Route::get('/following', [UserController::class, 'followingUsers'])->name('following');
 
 //Connections
 Route::post('/follow/users/{user_id}', [UserController::class, 'follow'])->name('follow');
