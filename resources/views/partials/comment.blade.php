@@ -2,15 +2,14 @@
     <div id="commentContent">
         <img src="{{ route('userphoto', ['user_id' => $comment->user->id]) }}" alt="profile picture" width="30" height="30" >
         <div id="commentText">
-            <a href="{{ route('profile', ['user_id' => $comment->user->id]) }}">{{ $comment->user->name . ' '}} </a>
-            <p id="CCcontent">{{ $comment->content }}</p>
+            <a href="{{ $comment->user->name === 'Anonymous' ? route('reset.not.found') : route('profile', ['user_id' => $comment->user->id]) }}">{{ $comment->user->name . ' '}} </a>            <p id="CCcontent">{{ $comment->content }}</p>
         </div>
         <div class="interaction-bar">
             <div class="like-container" data-comment-id="{{ $comment->id }}" >
                 <form class="comment-like-form" action="{{ route('comment.like') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id" value="{{ $comment->id }}">
-                    <button type="submit" aria-label="{{ Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists() ? 'Unlike this comment' : 'Like this comment' }}">
+                    <button type="submit" aria-label="{{ Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists() ? 'Unlike this comment' : 'Like this comment' }}" class="like-button">
                         @if (Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists())
                             <i class="fa-solid fa-heart" aria-hidden="true"></i>
                         @else
@@ -20,6 +19,10 @@
                 </form>
                 <span class="like-count">{{ $comment->likedByUsers()->count() }}</span>
             </div>
+            <button id="reportComment" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportCommentModal-{{ $comment->id }}">
+                <i class="fa-regular fa-flag" aria-label="report comment" role="button" tabindex="0"></i>
+            </button>
+            @include('partials.report_modal', ['type' => 'comment', 'id' => $comment->id])
         </div>  
     </div>
     @if (Auth::check() && (Auth::user()->id == $comment->user->id || Auth::user()->isAdmin()))

@@ -63,9 +63,6 @@
         <!-- Country Search Input and Dropdown -->
         <label for="country-search">Country</label>
         <input id="country-search" type="text" placeholder="Start typing your country..." value="{{ old('country', $user->country->name ?? '') }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
-        @if ($errors->has('country'))
-            <span class="error">{{ $errors->first('country') }}</span>
-        @endif
         <input type="hidden" id="country-id" name="country_id" value="{{ old('country_id', $user->country_id ?? '') }}">
         <select id="country" size="5"  onchange="selectCountry(event)">
             @foreach ($countries as $country)

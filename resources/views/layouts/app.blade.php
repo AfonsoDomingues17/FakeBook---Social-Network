@@ -51,7 +51,7 @@
                             </form>
                             @if(Route::currentRouteName() !== 'search')
                                 <button id="advancedSearch" data-bs-toggle="modal" data-bs-target="#advancedSearchModal" aria-label="Advanced search options">
-                                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><p>Advanced</p>
+                                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>Advanced
                                 </button>
                             @endif
                             @include('partials.search_modal')
@@ -83,7 +83,7 @@
                                 @if (Auth::user()->unreadNotifications()->count() > 0)
                                     <span id="number_noti" aria-live="assertive">{{ Auth::user()->unreadNotifications()->count() }}</span>
                                 @else
-                                    <span id="number_noti" style="display: none;" aria-live="assertive">0</span>
+                                    <span id="number_noti_empty" style="display: none;" aria-live="assertive">0</span>
                                 @endif
                                 <div id="notification-dropdown">
                                     <ul>
@@ -206,9 +206,9 @@
             </div>
 
         </div>
-            <section id="content" >
+            <div id="content" >
                 @yield('content')
-            </section>
+            </div>
             
         </main>
         <footer>

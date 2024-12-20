@@ -121,7 +121,9 @@ header{
       padding: 1em;
       padding-bottom: 0.5em;
       font-size: 1em;
+      cursor: pointer;
     }
+    
     
   }
  
@@ -258,7 +260,7 @@ span#sender{
       font-size: 1.5em;
   }
 
-  #number_noti {
+  #number_noti, #number_noti_empty {
       position: absolute;
       top: 0;
       right: 0;
@@ -2092,9 +2094,6 @@ div#Comments {
     flex-direction: column;
     gap: 1em;
   }
-  i{
-    font-size: 0.8em;
-  }
   a{
     text-decoration: none;
     color: black;
@@ -2199,4 +2198,7 @@ div#Comments {
 }
 form{
   margin-bottom: 0;
+}
+.error{
+  color: red;
 }
