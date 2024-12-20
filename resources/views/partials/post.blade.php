@@ -52,10 +52,10 @@
             </div>
 
             <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
-                <i class="fa-regular fa-flag" aria-label="report comment" role="button" tabindex="0"></i>
-            </button>
-            @include('partials.report_modal', ['type' => 'post', 'id' => $post->id])
-        @endif
+            <i class="fa-regular fa-flag" aria-label="report post" role="button" tabindex="0"></i>
+        </button>
+        @include('partials.report_modal', ['type' => 'post', 'id' => $post->id]) 
+    @endif
     </div>
     <div class="action_buttons">
         @if(Auth::check())
