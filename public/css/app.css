@@ -2094,9 +2094,6 @@ div#Comments {
     flex-direction: column;
     gap: 1em;
   }
-  i{
-    font-size: 0.8em;
-  }
   a{
     text-decoration: none;
     color: black;

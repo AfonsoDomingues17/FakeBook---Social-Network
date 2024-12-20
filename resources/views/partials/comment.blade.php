@@ -20,6 +20,10 @@
                 </form>
                 <span class="like-count">{{ $comment->likedByUsers()->count() }}</span>
             </div>
+            <button id="reportComment" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportCommentModal-{{ $comment->id }}">
+                <i class="fa-regular fa-flag" aria-label="report comment" role="button" tabindex="0"></i>
+            </button>
+            @include('partials.report_modal', ['type' => 'comment', 'id' => $comment->id])
         </div>  
     </div>
     @if (Auth::check() && (Auth::user()->id == $comment->user->id || Auth::user()->isAdmin()))
