@@ -8,7 +8,6 @@ const pusher = new Pusher(pusherAppKey, {
 
 const channel = pusher.subscribe('FakeBook');
 
-
 channel.bind('notification-followrequest-deleted', function(data) {
     const notification = document.querySelector(`li[data-notification-id="${data.notification_id}"]`);
     const number_noti = document.getElementById('number_noti');

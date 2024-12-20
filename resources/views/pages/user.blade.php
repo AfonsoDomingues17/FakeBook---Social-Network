@@ -17,7 +17,8 @@
 
         <div class="info">
             <div class="p1">
-                <span id="username"><p>{{$user->username}}</p></span> 
+                <span id="username"><p>{{$user->username}}</p></span>
+                <div id="butoes">
                 @if(Auth::check())
                     @if (Auth::user()->isAdmin() || $user->id == Auth::user()->id)
                         <a href="{{route('editprofile',['user_id' => $user->id])}}"><p>Edit Profile</p></a> 
@@ -83,10 +84,12 @@
                             <button id="reportUser" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportUserModal-{{ $user->id }}">
                                 <p>Report</p>
                             </button>
+                
                             @include('partials.report_modal', ['type' => 'user', 'id' => $user->id])
                         @endif
                     @endif
                 @endif
+                </div>
             </div>
             <div class="numbers">
                 <span><p>Publicações {{$n_posts}}</p></span>
@@ -117,9 +120,7 @@
                 <section id="myposts">
                     @if ($n_posts > 0)
                         @foreach ($posts as $post)
-                            @if ($post->is_public || (Auth::check() && Auth::user()->isAdmin()))
-                                @include('partials.post', ['post' => $post])
-                            @endif
+                            @include('partials.post', ['post' => $post])
                         @endforeach
                     @else 
                         <p>This user has no posts!</p>
@@ -131,9 +132,9 @@
                     <p>This user profile is private!</p>
                     @if (Auth::check())
                         @if(Auth::user()->hasSentFollowRequestTo($user->id))
-                            <button class="pending" id="pending" data-user-id="{{$user->id}}">Pending</button>
+                            <button class="pending" id="pending" data-user-id="{{$user->id}}"><p>Pending</p></button>
                         @else
-                            <button id="Follow" data-user-id="{{$user->id}}">Follow</button>
+                            <button id="Follow" data-user-id="{{$user->id}}"><p>Follow</p></button>
                         @endif
                     @else
                         <p>Login to see more of this user</p>

@@ -13,17 +13,18 @@
                     <div id="description">
                         <label for="description-{{ $post->id }}">Description:</label>
                         <textarea id="description-{{ $post->id }}" name="description">{{ $post->description }}</textarea>
-                        @error('description')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        @if($errors->has('description'))
+                        <span class="error">{{ $errors->first('description') }}</span>
+                        @endif
+
                     </div>
                     <div id="Type">
                         <label for="is_public-{{ $post->id }}">Public:</label>
                         <input type="hidden" name="is_public" value="0">
                         <input type="checkbox" id="is_public-{{ $post->id }}" name="is_public" value="1" {{ $post->is_public ? 'checked' : '' }}>
-                        @error('is_public')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        @if($errors->has('is_public'))
+                        <span class="error">{{ $errors->first('is_public') }}</span>
+                        @endif
                     </div>
                     
                     <div id="modal-footer">

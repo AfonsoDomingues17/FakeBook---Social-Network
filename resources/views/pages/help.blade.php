@@ -101,30 +101,42 @@
             </ul>
         </div>
         <h2>Contact Form</h2>
-        <div ">
-            <form action="{{ route('help.form') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" name="name" id="name" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" id="email" class="form-control" required>
-                </div>
-                @if (Auth::check() && Auth::user()->isBanned())
+        <form action="{{ route('help.form') }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="name">Name:<em style="color: red;">*</em></label>
+                <input type="text" name="name" id="name" class="form-control" required>
+                @if ($errors->has('name'))
+                    <span class="error">{{ $errors->first('name') }}</span>
+                @endif
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:<em style="color: red;">*</em></label>
+                <input type="email" name="email" id="email" class="form-control" required>
+                @if ($errors->has('email'))
+                    <span class="error">{{ $errors->first('email') }}</span>
+                @endif    
+            </div>
+            @if (Auth::check() && Auth::user()->isBanned())
                 <div class="form-group">
                     <label for="unban_request">I want to request my unban</label>
                     <input type="checkbox" name="is_unban" id="unban_request" value="true">
+                    @if($errors->has('is_unban'))
+                    <span class="error">{{ $errors->first('is_unban') }}</span> 
+                    @endif
                 </div>
+            @endif
+            <div class="form-group">
+                <label for="message">Message:<em style="color: red;">*</em></label>
+                <textarea name="message" id="message" class="form-control" required></textarea>
+                @if ($errors->has('message'))
+                    <span class="error">{{ $errors->first('message') }}</span>
                 @endif
-                <div class="form-group">
-                    <label for="message">Message:</label>
-                    <textarea name="message" id="message" class="form-control" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
+            </div>
+            <p><em style="color: red;">*</em> Fields are required.</p>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}

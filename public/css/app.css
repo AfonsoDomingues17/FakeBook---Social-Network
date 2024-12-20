@@ -4,6 +4,7 @@ body, html{
   display: flex;
   flex-direction: column;
   height: 100vh;
+  line-height: 1.4;
 }
 header{
   flex: 0 1 auto;
@@ -109,7 +110,7 @@ header{
 
   #timeline_options, #search_options{
     display: flex;
-    gap: 1em;
+    gap: 0.5em;
     flex: 1;
     button:not(#filter-category):not(#filter-country):not(#feed-order) {
       border: none;
@@ -126,7 +127,13 @@ header{
  
 
 }
-
+#reports-page{
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+  margin-top: 1em;
+}
 
 section#editprofile{
   height: 100%;
@@ -203,6 +210,7 @@ section#editprofile{
     color: white;
     cursor: pointer;
     font-size: 1em;
+    background-color: #007bff;
     transition: background-color 0.3s, box-shadow 0.3s;
   }
   button#accept{
@@ -227,7 +235,9 @@ section#editprofile{
   background-color: #f1f1f1;
   border-radius: 5px;
 }
-
+span#sender{
+  font-weight: bold;
+}
 #account-options {
 
   #notification-container {
@@ -239,6 +249,9 @@ section#editprofile{
     cursor: pointer;
    
 
+  }
+  #notification-container:hover, #notification-container:focus {
+    border: 1px solid #007bff;
   }
 
   #noti {
@@ -327,7 +340,7 @@ section#editprofile{
   align-items: center;
   gap: 0.5em;
   p{
-    font-size: 1.5em;
+    font-size: 1em;
     text-align: center;
   }
   button{
@@ -337,8 +350,7 @@ section#editprofile{
     background-color: #007bff;
     color: white;
     cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
+    font-weight: 500;
     transition: background-color 0.3s, box-shadow 0.3s;
   }
   .unfollow, .pending {
@@ -651,8 +663,8 @@ ul#real-time-search {
   }
  
   #sidebar{
-    width: 26%;
-    min-width: 26%;
+    width: 24%;
+    min-width: 24%;
   }
   .homepage-layout{
     #posts{
@@ -925,6 +937,11 @@ article.post {
           font-size: 1em;
           transition: background-color 0.3s, box-shadow 0.3s;
         }
+        div#butoes{
+          display: flex;
+          align-items: center;
+          gap: 1em;
+        }
         button {
           padding: 0.5em 1em;
           border-radius: 10px;
@@ -946,8 +963,18 @@ article.post {
         }
       }
       @media (max-width: 850px){ 
+        div#butoes {
+          flex-direction: column;
+          button, form, a {
+            text-align: center;
+            width: 100%;
+          }
+        }
+      }
+      @media (max-width: 1016px){ 
         .p1 {
           flex-direction: column;
+          align-items: flex-start;
         }
       }
       .numbers{
@@ -1793,7 +1820,7 @@ div#description{
     outline: 2px solid #007bff;
   }
 }
-#editPostModalContent , #CreatePostModalContent, #AdvancedSearchContent, #BanModalContent{
+#editPostModalContent , #CreatePostModalContent, #AdvancedSearchContent, #BanModalContent, #ReportModalContent {
   padding: 1.5em;
   padding-bottom: 0;
     form{
@@ -1803,15 +1830,30 @@ div#description{
     }
     label, input{
       margin-bottom: 0.5em;
-    } 
+    }
+    div#modal-footer button{
+      padding: 0.5em 1em;
+      border-radius: 10px;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+      background-color: #007bff;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      font-weight: 500; 
+    }
+
 }
-#BanModalContent textarea{
+#BanModalContent textarea, #ReportModalContent textarea{
   margin-bottom: 0.5em;
+
 }
+
 #reports-page{
   padding: 1.5em;
   padding-top: 0;
 }
+
 
 #CreatePostModalContent{
   form{
@@ -1867,6 +1909,12 @@ select:focus {
   outline: 2px solid #007bff;
 }
 
+#DropdownMore .button, #DropdownMore2 .button{
+  display: none;
+}
+#toggleDropdown2{
+  display: none;
+}
 @media (max-width: 740px) {
 
   #sidebar{
@@ -1881,6 +1929,7 @@ select:focus {
   }
   #account-options i {
     display: block;
+
   }
   h2 {
     display: none;
@@ -1889,20 +1938,41 @@ select:focus {
   a.auth2, .button, #buttonLog, #buttonRegister, #buttonLogin {
     display: none;
   }
+  #toggleDropdown2{
+    display: block;
+  }
+  #DropdownMore, #DropdownMore2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    i{
+      width: 100%;
+      text-align: center;
+    }
+  .button{
+    display: block;
+    padding: 1em;
+    
+  }
+  .button:hover{
+    background-color: #F0F2F5;
+  }
+  a{
+    font-weight: bold;
+  }
+  }
 
   #dropdown-toggle {
     display: block;
     cursor: pointer;
   }
-  section#posts{
-    grid-column: 2;
-  }
+
   input#search {
     margin-left: 0;
   }
 }
 
-#DropdownMore {
+#DropdownMore, #DropdownMore2 {
   position: absolute;
   left: 100%;
   bottom: 0;
@@ -1914,7 +1984,7 @@ select:focus {
   display: none; /* Initially hidden */
 }
 
-#DropdownMore a.auth {
+#DropdownMore a.auth, #DropdownMore2 a.auth {
   display: flex;
   align-items: center;
   padding: 1em;
@@ -1923,7 +1993,7 @@ select:focus {
   transition: background-color 0.3s;
 }
 
-#DropdownMore a.auth:hover {
+#DropdownMore a.auth:hover, #DropdownMore2 a.auth:hover {
   background-color: #f0f2f5;
 }
 .dropdown-container {
@@ -2093,7 +2163,37 @@ div#Comments {
 
 }
 
-.required {
-  color: red;
-  margin-left: 2px;
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  background-color: white; 
+  padding: 10px;
+  z-index: 1000;
+  border: 1px solid #007bff;
+  font-size: 1em;
+  text-decoration: none;
+  color: black;
+}
+
+.skip-link {    
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  clip: auto;
+  width: auto;
+  height: auto;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+  z-index: 1000;
 }

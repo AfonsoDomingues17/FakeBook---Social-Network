@@ -69,4 +69,5 @@ class RegisterController extends Controller
         return redirect()->route('editprofile', ['user_id' => $user->id])
             ->withSuccess('You have successfully registered & logged in! Please complete your profile.');
     }
+
 }
