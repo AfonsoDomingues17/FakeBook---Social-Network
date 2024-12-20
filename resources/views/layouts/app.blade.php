@@ -138,17 +138,10 @@
                 </div>
                 </div>
         </header>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach
-            </div>
-        @endif
-
+    
         @if(session('error'))
             <div class="alert alert-danger">
-                {{ session('error') }}
+                {{ session('error') }} <i class="fa-solid fa-circle-exclamation"></i>
             </div>
         @endif
         <main>

@@ -11,7 +11,7 @@
     <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
     @if ($errors->has('email'))
         <span class="error">
-          {{ $errors->first('email') }}
+          {{ $errors->first('email') }} <i class="fa-solid fa-circle-exclamation"></i>
         </span>
     @endif
 
@@ -19,7 +19,7 @@
     <input id="password" type="password" name="password" required>
     @if ($errors->has('password'))
         <span class="error">
-            {{ $errors->first('password') }}
+            {{ $errors->first('password') }} <i class="fa-solid fa-circle-exclamation"></i>
         </span>
     @endif
 
@@ -32,7 +32,10 @@
             {{ session('success') }}
         </p>
     @endif
-    
+    <hr>
+        <button type="button" onclick="window.location='{{ route('auth.google') }}'">
+            {{ __('Login with Google') }}
+        </button>
 </form>
 </div>
 @endsection

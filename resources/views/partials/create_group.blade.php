@@ -45,21 +45,21 @@
                             <img id="g_picture_review" src="{{Storage::url('public/DEFAULT_GROUP.png')}}" alt="preview of group picture" width="200" height="200" style="border-radius: 50%; object-fit: cover;">
                             <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewGroupPicture(event)" class="form-control">
                             @if($errors->has('photo_url'))
-                                <span class="error">{{ $errors->first('photo_url') }}</span>
+                                <span class="error">{{ $errors->first('photo_url') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                             @endif
                         </div>
                         <div id="form-group">
                             <label for="name">Name<em style="color: red;">*</em></label>
                             <input id="name" type="text" name="name" value="{{old('name')}}" placeholder="Name for the group" required class="form-control">
                             @if($errors->has('name'))
-                                <span class="error">{{ $errors->first('name') }}</span>
+                                <span class="error">{{ $errors->first('name') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                             @endif
                         </div>
                         <div id="form-group">
                             <label for="description">Description</label>
                             <textarea name="description" id="group_description" placeholder="Group description" class="form-control">{{old('description')}}</textarea>
                             @if($errors->has('description'))
-                                <span class="error">{{ $errors->first('description') }}</span>
+                                <span class="error">{{ $errors->first('description') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                             @endif
                         </div>
                         <p><em style="color: red;">*</em> Fields are required.</p>

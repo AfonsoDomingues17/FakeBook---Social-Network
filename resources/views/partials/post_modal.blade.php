@@ -50,7 +50,7 @@
                                 <input type="hidden" name="post_id" value="{{ $post->id }}">
                                 <textarea name="content" class="form-control" placeholder="Write a comment..." ></textarea>
                                 @if($errors->has('content'))
-                                    <span class="error">{{ $errors->first('content') }}</span>
+                                    <span class="error">{{ $errors->first('content') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                                 @endif
                                 <button type="submit" ><i id="send" class="fa-solid fa-right-to-bracket"></i></button>
                             </form>                       

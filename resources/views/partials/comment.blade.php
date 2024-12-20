@@ -2,8 +2,7 @@
     <div id="commentContent">
         <img src="{{ route('userphoto', ['user_id' => $comment->user->id]) }}" alt="profile picture" width="30" height="30" >
         <div id="commentText">
-            <a href="{{ route('profile', ['user_id' => $comment->user->id]) }}">{{ $comment->user->name . ' '}} </a>
-            <p id="CCcontent">{{ $comment->content }}</p>
+            <a href="{{ $comment->user->name === 'Anonymous' ? route('reset.not.found') : route('profile', ['user_id' => $comment->user->id]) }}">{{ $comment->user->name . ' '}} </a>            <p id="CCcontent">{{ $comment->content }}</p>
         </div>
         <div class="interaction-bar">
             <div class="like-container" data-comment-id="{{ $comment->id }}" >
@@ -43,7 +42,7 @@
                 <input type="hidden" name="comment_id" value="{{ $comment->id }}">
                 <textarea style="min-height: fit-content;" name="content"  rows="3" required >{{ $comment->content }}</textarea>
                 @if($errors->has('content'))
-                    <span class="error">{{ $errors->first('content') }}</span>
+                    <span class="error">{{ $errors->first('content') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                 @endif
                 <button id="update" type="submit" ><p>Update</p></button>
             </form>

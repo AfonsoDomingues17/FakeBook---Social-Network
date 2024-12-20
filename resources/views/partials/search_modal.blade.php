@@ -15,7 +15,7 @@
                             <option value="posts">Post</option>
                         </select>
                         @if($errors->has('type'))
-                            <span class="error">{{ $errors->first('type') }}</span>
+                            <span class="error">{{ $errors->first('type') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif
                     </div>
                     <div id="user-div" style="display: none">
@@ -27,19 +27,19 @@
                             @endforeach
                         </select>
                         @if($errors->has('user_country'))
-                            <span class="error">{{ $errors->first('user_country') }}</span>
+                            <span class="error">{{ $errors->first('user_country') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif
                         </label>
                         <label for="search-user-fullname">Full name
                         <input id="search-user-fullname" type="text" name="user_fullname" placeholder="search here...">
                         @if($errors->has('user_fullname'))
-                            <span class="error">{{ $errors->first('user_fullname') }}</span>
+                            <span class="error">{{ $errors->first('user_fullname') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif
                         </label>
                         <label for="search-user-username">Username
                         <input id="search-user-username" type="text" name="user_username" placeholder="search here...">
                         @if($errors->has('user_username'))
-                            <span class="error">{{ $errors->first('user_username') }}</span>
+                            <span class="error">{{ $errors->first('user_username') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif
                         </label>
                     </div>
@@ -52,14 +52,14 @@
                             @endforeach
                         </select>
                         @if($errors->has('post_category'))
-                            <span class="error">{{ $errors->first('post_category') }}</span>
+                            <span class="error">{{ $errors->first('post_category') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif
                         </label>
                         
                         <label for="search-post-description">Post description
                         <input id="search-post-description" type="text" name="post_description" placeholder="search here...">
                         @if($errors->has('post_description'))
-                            <span class="error">{{ $errors->first('post_description') }}</span>
+                            <span class="error">{{ $errors->first('post_description') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif
                        </label>
                         <label for="search-post-type">Post type

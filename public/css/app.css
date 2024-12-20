@@ -2222,3 +2222,6 @@ div#Comments {
 form{
   margin-bottom: 0;
 }
+.error{
+  color: red;
+}
