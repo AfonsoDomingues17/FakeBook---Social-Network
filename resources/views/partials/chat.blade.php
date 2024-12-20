@@ -1,6 +1,6 @@
 <div id="chat-header" data-id="{{ $chat->id }}" data-type="{{ $type }}">
     @if($type === 'group')
-        <img src="{{ route('groupPhoto', ['group_id' => $chat->id]) }}" width="60" height="60" alt="group profile picture">
+        <img src="{{ route('groupPhoto', ['group_id' => $chat->id]) }}" width="60" height="60" alt="group profile picture" style=" object-fit: cover;">
         <div>
             <span id="ChatName"><p>{{ $chat->name }}</p></span>
             <p id="details">Click here to see more details</p>

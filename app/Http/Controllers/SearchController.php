@@ -122,17 +122,6 @@ class SearchController extends Controller
                     return ((Auth::check() && $post->owner_id === Auth::id()) || Auth::check() && Auth::user()->isAdmin());
             });
         
-        } elseif ($type === 'groups') {
-            if($query) {
-                $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
-                $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-                $groups = Group::where(function($query) use ($tsQuery) {
-                    $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                        ->orWhereRaw("similarity(name, ?) > 0.3", [$tsQuery]);
-                })->paginate(10, ['*'], 'page', $page);
-            } else {
-                $groups = Group::paginate(10, ['*'], 'page', $page);
-            }
         }
         if ($request->ajax()) {
             if ($type === 'users') {
@@ -215,21 +204,6 @@ class SearchController extends Controller
                 $posts = $postCategorized;
             }
 
-        } elseif ($type === 'groups') {
-            $name = $request->input('group_name');
-            $description = $request->input('group_description');
-
-            $groups = Group::query();
-
-            if ($name) {
-                $groups->where('name', 'ILIKE', '%' . $name . '%');
-            }
-
-            if ($description) {
-                $groups->where('description', 'ILIKE', '%' . $description . '%');
-            }
-
-            $groups = $groups->paginate(10, ['*'], 'page', $page);
         }
         if ($request->ajax()) {
             if ($type === 'users') {

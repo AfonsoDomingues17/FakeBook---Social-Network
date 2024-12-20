@@ -71,7 +71,7 @@ class GroupController extends Controller
             }
         }
 
-        return redirect()->route('homepage');
+        return redirect()->route('direct_chats.index');
     }
     public function getPhoto($group_id){
         $group = Group::find($group_id);
