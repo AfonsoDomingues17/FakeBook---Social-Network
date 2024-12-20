@@ -44,8 +44,14 @@
             </form>
             <span class="like-count">{{ $post->getNumberOfLikes() }}</span>
         </div>
-        <p><i class="fa-regular fa-comment" aria-label="Like Comment" role="button" tabindex="0"></i> 33</p>
-        <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
+            <div class="comment-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
+                <button type="button" class="comment-button">
+                    <i class="fa-regular fa-comment"></i>
+                </button>
+                <span class="comment-count">{{ $post->getNumberOfComments() }}</span>
+            </div>
+
+            <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
             <i class="fa-regular fa-flag" aria-label="report post" role="button" tabindex="0"></i>
         </button>
         @include('partials.report_modal', ['type' => 'post', 'id' => $post->id]) 
