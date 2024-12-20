@@ -12,38 +12,38 @@
     <label for="name">Name<em style="color: red;">*</em></label>
     <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
     @if ($errors->has('name'))
-      <span class="error">{{ $errors->first('name') }}</span>
+      <span class="error">{{ $errors->first('name') }} <i class="fa-solid fa-circle-exclamation"></i></span>
     @endif
 
     <label for="username">Username<em style="color: red;">*</em></label>
     <input id="username" type="text" name="username" value="{{ old('username') }}" required>
     @if ($errors->has('username'))
-      <span class="error">{{ $errors->first('username') }}</span>
+      <span class="error">{{ $errors->first('username') }} <i class="fa-solid fa-circle-exclamation"></i></span>
     @endif
 
     <label for="email">E-Mail Address<em style="color: red;">*</em></label>
     <input id="email" type="email" name="email" value="{{ old('email') }}" required>
     @if ($errors->has('email'))
-      <span class="error">{{ $errors->first('email') }}</span>
+      <span class="error">{{ $errors->first('email') }} <i class="fa-solid fa-circle-exclamation"></i></span>
     @endif
 
     <label for="password">Password<em style="color: red;">*</em></label>
     <input id="password" type="password" name="password" required>
     @if ($errors->has('password'))
-      <span class="error">{{ $errors->first('password') }}</span>
+      <span class="error">{{ $errors->first('password') }} <i class="fa-solid fa-circle-exclamation"></i></span>
     @endif
 
     <label for="password-confirm">Confirm Password<em style="color: red;">*</em></label>
     <input id="password-confirm" type="password" name="password_confirmation" required>
     @if ($errors->has('password-confirm'))
-      <span class="error">{{ $errors->first('password-confirm') }}</span>
+      <span class="error">{{ $errors->first('password-confirm') }} <i class="fa-solid fa-circle-exclamation"></i></span>
     @endif
 
 
     <label for="age">Age<em style="color: red;">*</em></label>
     <input id="age" type="number" name="age" value="{{ old('age') }}" required>
     @if ($errors->has('age'))
-      <span class="error">{{ $errors->first('age') }}</span>
+      <span class="error">{{ $errors->first('age') }} <i class="fa-solid fa-circle-exclamation"></i></span>
     @endif
 
     <label for="gender">Gender<em style="color: red;">*</em></label>
@@ -54,7 +54,7 @@
         <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
     </select>
     @if ($errors->has('gender'))
-      <span class="error">{{ $errors->first('gender') }}</span>
+      <span class="error">{{ $errors->first('gender') }} <i class="fa-solid fa-circle-exclamation"></i></span>
     @endif
 
     <div class="radio-group">

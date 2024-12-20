@@ -51,23 +51,14 @@
             <div class="form-check">
                 <input class="form-check-input" type="radio" id="order-1" checked>
                 <label class="form-check-label" for="order-1">Most relevant</label>
-                @if($errors->has('order-1'))
-                    <span class="error">{{ $errors->first('order-1') }}</span>
-                @endif
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="radio" id="order-2">
                 <label class="form-check-label" for="order-2">Latest</label>
-                @if($errors->has('order-2'))
-                    <span class="error">{{ $errors->first('order-2') }}</span>
-                @endif
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="radio" id="order-3">
                 <label class="form-check-label" for="order-3">Oldest</label>
-                @if($errors->has('order-3'))
-                    <span class="error">{{ $errors->first('order-3') }}</span>
-                @endif
             </div>
             <button type="submit" id="feed-order" class="btn btn-primary">Apply order</button>
         </form>

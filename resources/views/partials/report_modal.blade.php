@@ -19,7 +19,7 @@
                             <label for="content-{{ $id }}">Report motive:</label>
                             <textarea id="content-{{ $id }}" name="content" required></textarea>
                             @if ($errors->has('content'))
-                            <span class="error">{{ $errors->first('content') }}</span>
+                            <span class="error">{{ $errors->first('content') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                             @endif
                         </div>
                         <div id="modal-footer">
@@ -34,7 +34,7 @@
                             <label for="content-{{ $id }}">Report motive:</label>
                             <textarea id="content-{{ $id }}" name="content" required></textarea>
                             @if ($errors->has('content'))
-                            <span class="error">{{ $errors->first('content') }}</span>
+                            <span class="error">{{ $errors->first('content') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                             @endif
                         </div>
                         <div id="modal-footer">
@@ -48,7 +48,7 @@
                             <label for="content-{{ $id }}">Report motive:</label>
                             <textarea id="content-{{ $id }}" name="content" required></textarea>
                             @if ($errors->has('content'))
-                            <span class="error">{{ $errors->first('content') }}</span>
+                            <span class="error">{{ $errors->first('content') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                             @endif
                         </div>
                         <div id="modal-footer">
