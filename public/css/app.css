@@ -112,7 +112,7 @@ header{
     display: flex;
     gap: 0.5em;
     flex: 1;
-    button:not(#filter-category):not(#filter-country):not(#feed-order) {
+    a {
       border: none;
       background-color: white;
       border-radius: 10px;
@@ -123,6 +123,8 @@ header{
       font-size: 1em;
       cursor: pointer;
     }
+    
+    
   }
  
 
@@ -258,7 +260,7 @@ span#sender{
       font-size: 1.5em;
   }
 
-  #number_noti {
+  #number_noti, #number_noti_empty {
       position: absolute;
       top: 0;
       right: 0;
@@ -572,6 +574,10 @@ ul#real-time-search {
 #real-time-search li:hover {
   background-color: #F0F2F5;
 }
+.max-vh-50{
+  max-height: 50vh;
+  overflow-y: auto;
+}
 .homepage-layout{
   height: 100%;
   width: 100%;
@@ -584,6 +590,18 @@ ul#real-time-search {
     h3{
       text-align: center;
       padding-top: 1em;
+    }
+  }
+  #loading {
+    width: 5rem;
+    height: 5rem;
+  }
+  #search-results-container {
+    width: 50%;
+    > *{
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
   #posts, #search-results {
@@ -2076,9 +2094,6 @@ div#Comments {
     flex-direction: column;
     gap: 1em;
   }
-  i{
-    font-size: 0.8em;
-  }
   a{
     text-decoration: none;
     color: black;
@@ -2180,4 +2195,10 @@ div#Comments {
   color: white;
   border: 1px solid #007bff;
   z-index: 1000;
+}
+form{
+  margin-bottom: 0;
+}
+.error{
+  color: red;
 }

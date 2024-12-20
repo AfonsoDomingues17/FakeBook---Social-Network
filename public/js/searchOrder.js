@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             switch (selectedOrder) {
                 case 'order-1':
-                    orderValue = '';
+                    orderValue = undefined;
                     break;
                 case 'order-2':
                     orderValue = 'DESC';
@@ -40,7 +40,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateSearchResults(type, query, order) {
         document.getElementById('loading').style.display = 'block';
-        fetch(`${searchUrl}?type=${type}&query=${query}&order=${order}`)
+        document.getElementById('search-results-container').style.display = 'none';
+        var url = `${searchUrl}?type=${type}&query=${query}`;
+        if (order) url += `&order=${order}`;
+        fetch(url)
             .then(response => response.text())
             .then(data => {
                 const parser = new DOMParser();
@@ -49,13 +52,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 let classToSearch; 
                 switch (type) {
                     case 'users':
-                        classToSearch = '.user';
+                        classToSearch = 'article.user';
                         break;
                     case 'posts':
-                        classToSearch = '.post';
+                        classToSearch = 'article.post';
                         break;
                     case 'groups':
-                        classToSearch = '.group';
+                        classToSearch = 'article.group';
                         break;
                     default:
                         classToSearch = '';
@@ -72,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 document.querySelector('#search-results h2').innerHTML = `Search results (${type}) for "${query}"`;
                 document.getElementById('loading').style.display = 'none';
+                document.getElementById('search-results-container').style.display = 'block';
             })
             .catch(error => {
                 console.error('Error fetching search results:', error);

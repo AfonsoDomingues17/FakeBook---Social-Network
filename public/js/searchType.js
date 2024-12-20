@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateSearchResults(type, query) {
         document.getElementById('loading').style.display = 'block';
+        document.getElementById('search-results-container').style.display = 'none';
         fetch(`${searchUrl}?type=${type}&query=${query}`)
             .then(response => response.text())
             .then(data => {
@@ -76,13 +77,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 let classToSearch; 
                 switch (type) {
                     case 'users':
-                        classToSearch = '.user';
+                        classToSearch = 'article.user';
                         break;
                     case 'posts':
-                        classToSearch = '.post';
+                        classToSearch = 'article.post';
                         break;
                     case 'groups':
-                        classToSearch = '.group';
+                        classToSearch = 'article.group';
                         break;
                     default:
                         classToSearch = '';
@@ -106,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.searchType = type;    
 
                 document.getElementById('loading').style.display = 'none';
+                document.getElementById('search-results-container').style.display = 'block';
 
                 // Reattach event listeners for the filter dropdown
                 window.reattachFilterEventListeners();
