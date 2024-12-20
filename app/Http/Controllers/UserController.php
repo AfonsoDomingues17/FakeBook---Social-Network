@@ -417,6 +417,10 @@ class UserController extends Controller
         $user = User::findOrFail($user_id);
         $this->authorize('delete', $user);
 
+        // Remove google_id
+        $user->google_id = null;
+        $user->save();
+
         // Delete associated posts and their media files
         foreach ($user->posts as $post) {
             foreach ($post->media as $media) {

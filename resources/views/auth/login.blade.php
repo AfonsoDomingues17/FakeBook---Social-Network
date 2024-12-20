@@ -32,7 +32,10 @@
             {{ session('success') }}
         </p>
     @endif
-    
+    <hr>
+        <button type="button" onclick="window.location='{{ route('auth.google') }}'">
+            {{ __('Login with Google') }}
+        </button>
 </form>
 </div>
 @endsection
