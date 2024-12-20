@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('users', searchQuery);
             window.searchType = 'users'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
-            document.getElementById('filter-dropdown').style.display = 'block';
+            document.getElementById('filter-dropdown').style.display = 'flex';
             document.getElementById('order-dropdown').style.display = 'none';
             uncheckAllCheckboxes();
         });
@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('posts', searchQuery);
             window.searchType = 'posts'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
-            document.getElementById('filter-dropdown').style.display = 'block';
-            document.getElementById('order-dropdown').style.display = 'block';
+            document.getElementById('filter-dropdown').style.display = 'flex';
+            document.getElementById('order-dropdown').style.display = 'flex';
         });
     }
 

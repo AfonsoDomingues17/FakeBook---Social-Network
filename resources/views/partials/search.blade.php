@@ -1,11 +1,8 @@
 <section id="search_options">
     <a id="search-users">Users</a>
     <a id="search-posts">Posts</a>
-    @if ($type !== 'groups')
-    <div class="dropdown" id="filter-dropdown" style="display: block">
-    @else
-    <div class="dropdown" id="filter-dropdown" style="display: none">
-    @endif
+    <div class="dropdown" id="filter-dropdown" style="display: flex">
+    
         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
             Filter by
         </button>

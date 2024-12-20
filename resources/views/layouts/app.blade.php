@@ -171,7 +171,7 @@
                     @endif
                 @endif
                 <a class="auth" href="{{ route('reports') }}" aria-label="Go to Reports"><i class="fa-solid fa-flag" aria-hidden="true"></i><p>Reports</p></a>
-                @if(Auth::check() )
+                @if(Auth::check())
                     <div class="dropdown-container">
                         <a href="#" id="toggleDropdown" class="auth" aria-expanded="false" aria-controls="DropdownMore" aria-label="More options"><i class="fa-solid fa-bars" aria-hidden="true"></i><p>More</p></a>
                         <div id="DropdownMore" style="display: none;" role="menu">

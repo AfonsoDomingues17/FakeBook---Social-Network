@@ -138,7 +138,6 @@ const toggleButton = document.getElementById('toggleDropdown');
   }
 const toggleButton2 = document.getElementById('toggleDropdown2');
 const dropdown2 = document.getElementById('DropdownMore2');
-console.log(toggleButton2);
 if(toggleButton2 && dropdown2){
 toggleButton2.addEventListener('click', function() {
   if (dropdown2.style.display === 'none' || dropdown2.style.display === '') {

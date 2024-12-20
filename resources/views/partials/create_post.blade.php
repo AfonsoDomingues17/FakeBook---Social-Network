@@ -9,8 +9,8 @@
                 <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div id="description">
-                        <label for="description">Description:<em style="color: red;">*</em></label>
-                        <textarea id="description" name="description" required></textarea>
+                        <label for="descriptions">Description:<em style="color: red;">*</em></label>
+                        <textarea id="descriptions" name="description" required></textarea>
                         @if($errors->has('description'))
                         <span class="error">{{ $errors->first('description') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif

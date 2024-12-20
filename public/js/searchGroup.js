@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     newButton.id = 'AddMember';
     newButton.classList.add('add-member-btn', 'btn', 'btn-secondary');
     newButton.textContent = 'Add';
-
+    if(searchInput) {
     searchInput.addEventListener('input', function() {
         const query = searchInput.value;
         if (query.length > 0) {
@@ -51,7 +51,8 @@ document.addEventListener('DOMContentLoaded', function() {
             initialGroup.style.display = 'block';
         }
     });
-
+}
+    if(searchForm) {
     // Prevent form submission on 'ENTER' key press
     searchForm.addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
     searchForm.addEventListener('submit', function(event) {
         event.preventDefault();
     });
+}
 
     // Hide the dropdown when clicking outside the search input
     document.addEventListener('click', function(event) {
