@@ -112,7 +112,7 @@ header{
     display: flex;
     gap: 0.5em;
     flex: 1;
-    button:not(#filter-category):not(#filter-country):not(#feed-order) {
+    a {
       border: none;
       background-color: white;
       border-radius: 10px;
@@ -121,8 +121,8 @@ header{
       padding: 1em;
       padding-bottom: 0.5em;
       font-size: 1em;
-      cursor: pointer;
     }
+    
   }
  
 
@@ -2180,4 +2180,7 @@ div#Comments {
   color: white;
   border: 1px solid #007bff;
   z-index: 1000;
+}
+form{
+  margin-bottom: 0;
 }
