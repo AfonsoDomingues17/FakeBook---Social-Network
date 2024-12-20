@@ -28,7 +28,7 @@
             <input type="text" name="group_description" id="group_description" value="{{ $group->description }}" aria-label="Edit group description"></input>
             <i class="fa-solid fa-check" aria-label="Submit group description edit" role="button" tabindex="0"></i>    
         </span>
-        <p>Created by {{$group->owner->name}}, em 23/03/2004</p>
+        <p>Created by {{$group->owner->name}}, in {{ \Carbon\Carbon::parse($group->created_at)->format('d/m/Y') }}</p>
     </div>
     <div id="group-members">
         <h2>Group Members</h2>

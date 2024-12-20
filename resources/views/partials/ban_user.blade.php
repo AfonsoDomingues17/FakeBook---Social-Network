@@ -12,7 +12,7 @@
                         <label for="reason">Ban reason:</label>
                         <textarea id="reason" name="reason" required></textarea>
                         @if ($errors->has('reason'))
-                        <span class="error">{{ $errors->first('reason') }}</span>
+                        <span class="error">{{ $errors->first('reason') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         
                         @endif
                     </div>

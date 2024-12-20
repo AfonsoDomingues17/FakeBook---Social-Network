@@ -42,7 +42,7 @@
                 <input type="hidden" name="comment_id" value="{{ $comment->id }}">
                 <textarea style="min-height: fit-content;" name="content"  rows="3" required >{{ $comment->content }}</textarea>
                 @if($errors->has('content'))
-                    <span class="error">{{ $errors->first('content') }}</span>
+                    <span class="error">{{ $errors->first('content') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                 @endif
                 <button id="update" type="submit" ><p>Update</p></button>
             </form>

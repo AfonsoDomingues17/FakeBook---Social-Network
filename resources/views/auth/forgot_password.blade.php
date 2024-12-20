@@ -8,12 +8,12 @@
             <input id="email" type="email" name="email" required autofocus>
 
             @if ($errors->has('email'))
-                <span class="error">{{ $errors->first('email') }}</span>
+                <span class="error">{{ $errors->first('email') }} <i class="fa-solid fa-circle-exclamation"></i></span>
             @endif
 
             <button type="submit">Send Reset Link</button>
             @if (session('status'))
-                <p class="success">{{ session('status') }}</p>
+                <p class="success">{{ session('status') }} </p>
             @endif
         </form>
     </div>

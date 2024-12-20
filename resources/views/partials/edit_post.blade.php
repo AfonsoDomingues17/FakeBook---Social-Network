@@ -14,7 +14,7 @@
                         <label for="description-{{ $post->id }}">Description:</label>
                         <textarea id="description-{{ $post->id }}" name="description">{{ $post->description }}</textarea>
                         @if($errors->has('description'))
-                        <span class="error">{{ $errors->first('description') }}</span>
+                        <span class="error">{{ $errors->first('description') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif
 
                     </div>
@@ -23,7 +23,7 @@
                         <input type="hidden" name="is_public" value="0">
                         <input type="checkbox" id="is_public-{{ $post->id }}" name="is_public" value="1" {{ $post->is_public ? 'checked' : '' }}>
                         @if($errors->has('is_public'))
-                        <span class="error">{{ $errors->first('is_public') }}</span>
+                        <span class="error">{{ $errors->first('is_public') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif
                     </div>
                     
