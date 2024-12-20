@@ -28,7 +28,7 @@ class StaticPageController extends Controller
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'message' => $validatedData['message'],
-            'is_unban' => $validatedData['is_unban']
+            'is_unban' => $validatedData['is_unban'] ?? false
         ]);
 
         return redirect()->back()->with('success', 'Your question has been submitted.');

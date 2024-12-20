@@ -4,7 +4,7 @@
         <i id="close" class="fa-solid fa-xmark"></i>
         <p>Group Details</p>
         </div>
-        <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" alt="group profile picture" width="250" height="250">
+        <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" alt="group profile picture" width="250" height="250" style="border-radius: 50%; object-fit: cover;">
         <span id="gname">
             <p>{{ $group->name }}</p>
             @if($group->owner_id == Auth::user()->id)

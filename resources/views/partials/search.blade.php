@@ -1,7 +1,6 @@
 <section id="search_options">
     <a id="search-users">Users</a>
     <a id="search-posts">Posts</a>
-    <a id="search-groups">Groups</a>
     @if ($type !== 'groups')
     <div class="dropdown" id="filter-dropdown" style="display: block">
     @else

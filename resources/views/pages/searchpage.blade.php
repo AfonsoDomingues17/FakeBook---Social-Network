@@ -5,16 +5,18 @@
 <section class="homepage-layout d-flex justify-content-center align-items-center">
     <section id="search-results">
         <h2>
-            Search results (<?=$type?>)
+            @if(count($users) === 0 && count($posts) === 0)
+                No results found
+            @else
+                Search results (<?=$type?>)
+            @endif
         </h2>
         <section id="search-results-container">
             @if($type === 'users')
                 @each('partials.user', $users, 'user')
             @elseif($type === 'posts')
                 @each('partials.post', $posts, 'post')
-            @elseif($type === 'groups')
-                @each('partials.group', $groups, 'group')
-            @endif
+            @endif  
         </section>
         <div id="loading" style="display: none;" class="spinner-border" role="status"></div>
     </section>
@@ -31,8 +33,6 @@
     var postDescription = @json(request()->query('post_description'));
     var postCategory = @json(request()->query('post_category'));
     var postType = @json(request()->query('post_type'));
-    var groupName = @json(request()->query('group_name'));
-    var groupDescription = @json(request()->query('group_description'));
 </script>
 <script type="text/javascript" src={{ url('js/lazyScroll.js') }} defer></script>
 <script type="text/javascript" src={{ url('js/searchType.js') }} defer></script>

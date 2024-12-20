@@ -34,8 +34,6 @@ class SearchRequest extends FormRequest
             'post_category' => 'nullable|integer|exists:category,id',
             'post_description' => 'nullable|string|max:1000',
             'post_type' => 'nullable|string|in:TEXT,MEDIA',
-            'group_name' => 'nullable|string|max:255',
-            'group_description' => 'nullable|string|max:1000',
         ];
     }
 
@@ -69,10 +67,6 @@ class SearchRequest extends FormRequest
             'post_description.max' => 'The post description may not be greater than 1000 characters.',
             'post_type.string' => 'The post type must be a string.',
             'post_type.in' => 'The post type must be one of the following: TEXT, MEDIA.',
-            'group_name.string' => 'The group name must be a string.',
-            'group_name.max' => 'The group name may not be greater than 255 characters.',
-            'group_description.string' => 'The group description must be a string.',
-            'group_description.max' => 'The group description may not be greater than 1000 characters.',
         ];
     }
 }
