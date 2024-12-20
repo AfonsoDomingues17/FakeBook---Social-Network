@@ -42,6 +42,6 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return $user->id === $comment->author_id || $user->typeu === 'ADMIN';
+        return $user->id === $comment->author_id || $user->typeu === 'ADMIN' || $user->id === $comment->post->author_id;
     }
 }
