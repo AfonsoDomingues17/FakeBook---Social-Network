@@ -69,13 +69,13 @@ function updateSearchResults(type, query, countries, categories) {
             let classToSearch; 
             switch (type) {
                 case 'users':
-                    classToSearch = '.user';
+                    classToSearch = 'article.user';
                     break;
                 case 'posts':
-                    classToSearch = '.post';
+                    classToSearch = 'article.post';
                     break;
                 case 'groups':
-                    classToSearch = '.group';
+                    classToSearch = 'article.group';
                     break;
                 default:
                     classToSearch = '';
