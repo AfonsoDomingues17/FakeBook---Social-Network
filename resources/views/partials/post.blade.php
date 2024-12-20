@@ -46,7 +46,7 @@
         </div>
         <p><i class="fa-regular fa-comment" aria-label="Like Comment" role="button" tabindex="0"></i> 33</p>
         <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
-            <i class="fa-regular fa-flag" aria-label="report comment" role="button" tabindex="0"></i>
+            <i class="fa-regular fa-flag" aria-label="report post" role="button" tabindex="0"></i>
         </button>
         @include('partials.report_modal', ['type' => 'post', 'id' => $post->id]) 
     @endif
