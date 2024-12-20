@@ -2,8 +2,7 @@
     <div id="commentContent">
         <img src="{{ route('userphoto', ['user_id' => $comment->user->id]) }}" alt="profile picture" width="30" height="30" >
         <div id="commentText">
-            <a href="{{ route('profile', ['user_id' => $comment->user->id]) }}">{{ $comment->user->name . ' '}} </a>
-            <p id="CCcontent">{{ $comment->content }}</p>
+            <a href="{{ $comment->user->name === 'Anonymous' ? route('reset.not.found') : route('profile', ['user_id' => $comment->user->id]) }}">{{ $comment->user->name . ' '}} </a>            <p id="CCcontent">{{ $comment->content }}</p>
         </div>
         <div class="interaction-bar">
             <div class="like-container" data-comment-id="{{ $comment->id }}" >
