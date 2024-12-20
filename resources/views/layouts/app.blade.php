@@ -49,9 +49,11 @@
                                 <ul  id="real-time-search"></ul> <!-- Add this element to display search results -->
                                 
                             </form>
-                            <button id="advancedSearch" data-bs-toggle="modal" data-bs-target="#advancedSearchModal" aria-label="Advanced search options">
-                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>Advanced
-                            </button>
+                            @if(Route::currentRouteName() !== 'search')
+                                <button id="advancedSearch" data-bs-toggle="modal" data-bs-target="#advancedSearchModal" aria-label="Advanced search options">
+                                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><p>Advanced</p>
+                                </button>
+                            @endif
                             @include('partials.search_modal')
                         </div>
                         @endif

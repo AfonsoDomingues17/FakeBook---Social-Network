@@ -123,13 +123,16 @@ class SearchController extends Controller
             });
         
         } elseif ($type === 'groups') {
-            Log::info($query);
-            $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
-            $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
-            $groups = Group::where(function($query) use ($tsQuery) {
-                $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
-                    ->orWhereRaw("similarity(name, ?) > 0.3", [$tsQuery]);
-            })->paginate(10, ['*'], 'page', $page);
+            if($query) {
+                $sanitizedQuery = preg_replace('/[^\w\s]/', ' ', $query);
+                $tsQuery = str_replace(' ', ' OR ', $sanitizedQuery);
+                $groups = Group::where(function($query) use ($tsQuery) {
+                    $query->whereRaw("tsvectors @@ websearch_to_tsquery('english', ?)", [$tsQuery])
+                        ->orWhereRaw("similarity(name, ?) > 0.3", [$tsQuery]);
+                })->paginate(10, ['*'], 'page', $page);
+            } else {
+                $groups = Group::paginate(10, ['*'], 'page', $page);
+            }
         }
         if ($request->ajax()) {
             if ($type === 'users') {
@@ -237,7 +240,7 @@ class SearchController extends Controller
                 return view('partials.group', compact('groups'))->render();
             }
         } else {
-            return view('pages.searchpage', compact('users', 'posts', 'groups', 'type'));
+            return view('pages.advancedsearchpage', compact('users', 'posts', 'groups', 'type'));
         }
     }
 }

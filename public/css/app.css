@@ -572,6 +572,10 @@ ul#real-time-search {
 #real-time-search li:hover {
   background-color: #F0F2F5;
 }
+.max-vh-50{
+  max-height: 50vh;
+  overflow-y: auto;
+}
 .homepage-layout{
   height: 100%;
   width: 100%;
@@ -584,6 +588,18 @@ ul#real-time-search {
     h3{
       text-align: center;
       padding-top: 1em;
+    }
+  }
+  #loading {
+    width: 5rem;
+    height: 5rem;
+  }
+  #search-results-container {
+    width: 50%;
+    > *{
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
   #posts, #search-results {
