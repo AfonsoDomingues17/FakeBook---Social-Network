@@ -121,7 +121,9 @@ header{
       padding: 1em;
       padding-bottom: 0.5em;
       font-size: 1em;
+      cursor: pointer;
     }
+    
     
   }
  
@@ -258,7 +260,7 @@ span#sender{
       font-size: 1.5em;
   }
 
-  #number_noti {
+  #number_noti, #number_noti_empty {
       position: absolute;
       top: 0;
       right: 0;
