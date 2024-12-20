@@ -9,11 +9,11 @@
             <label for="password">New Password</label>
             <input type="password" id="password" name="password" required>
             @if ($errors->has('password'))
-                <span class="error">{{ $errors->first('password') }}</span>
+                <span class="error">{{ $errors->first('password') }} <i class="fa-solid fa-circle-exclamation"></i></span>
             <label for="password_confirmation">Confirm Password</label>
             <input type="password" id="password_confirmation" name="password_confirmation" required>
             @if ($errors->has('password_confirmation'))
-                <span class="error">{{ $errors->first('password_confirmation') }}</span>
+                <span class="error">{{ $errors->first('password_confirmation') }} <i class="fa-solid fa-circle-exclamation"></i></span>
             <button type="submit">Reset Password</button>
         </form>
 </div>

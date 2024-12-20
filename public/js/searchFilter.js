@@ -74,9 +74,6 @@ function updateSearchResults(type, query, countries, categories) {
                 case 'posts':
                     classToSearch = 'article.post';
                     break;
-                case 'groups':
-                    classToSearch = 'article.group';
-                    break;
                 default:
                     classToSearch = '';
                     break;

@@ -1,6 +1,6 @@
 <div id="chat-header" data-id="{{ $chat->id }}" data-type="{{ $type }}">
     @if($type === 'group')
-        <img src="{{ route('groupPhoto', ['group_id' => $chat->id]) }}" width="60" height="60" alt="group profile picture">
+        <img src="{{ route('groupPhoto', ['group_id' => $chat->id]) }}" width="60" height="60" alt="group profile picture" style=" object-fit: cover;">
         <div>
             <span id="ChatName"><p>{{ $chat->name }}</p></span>
             <p id="details">Click here to see more details</p>
@@ -30,7 +30,7 @@
         <input type="hidden" name="{{ $type === 'group' ? 'group_id' : 'direct_chat_id' }}" value="{{ $chat->id }}">
         <input type="file" id="image" name="image" accept="image/*" style="display: none;" onchange="previewSentPicture(event)">
         @if($errors->has('image'))
-            <span class="error">{{ $errors->first('image') }}</span>
+            <span class="error">{{ $errors->first('image') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
         <label for="image" class="file-input-label" aria-label="Upload an image">
             <i class="fa-solid fa-upload" aria-hidden="true"></i>
@@ -38,7 +38,7 @@
         </label>
         <textarea id="content" name="content" placeholder="Type your message"></textarea>
         @if($errors->has('content'))
-            <span class="error">{{ $errors->first('content') }}</span>
+            <span class="error">{{ $errors->first('content') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
         
         <button type="submit">

@@ -107,7 +107,7 @@
                 <label for="name">Name:<em style="color: red;">*</em></label>
                 <input type="text" name="name" id="name" class="form-control" required>
                 @if ($errors->has('name'))
-                    <span class="error">{{ $errors->first('name') }}</span>
+                    <span class="error">{{ $errors->first('name') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                 @endif
             </div>
 
@@ -115,7 +115,7 @@
                 <label for="email">Email:<em style="color: red;">*</em></label>
                 <input type="email" name="email" id="email" class="form-control" required>
                 @if ($errors->has('email'))
-                    <span class="error">{{ $errors->first('email') }}</span>
+                    <span class="error">{{ $errors->first('email') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                 @endif    
             </div>
             @if (Auth::check() && Auth::user()->isBanned())
@@ -123,7 +123,7 @@
                     <label for="unban_request">I want to request my unban</label>
                     <input type="checkbox" name="is_unban" id="unban_request" value="true">
                     @if($errors->has('is_unban'))
-                    <span class="error">{{ $errors->first('is_unban') }}</span> 
+                    <span class="error">{{ $errors->first('is_unban') }} <i class="fa-solid fa-circle-exclamation"></i></span> 
                     @endif
                 </div>
             @endif
@@ -131,7 +131,7 @@
                 <label for="message">Message:<em style="color: red;">*</em></label>
                 <textarea name="message" id="message" class="form-control" required></textarea>
                 @if ($errors->has('message'))
-                    <span class="error">{{ $errors->first('message') }}</span>
+                    <span class="error">{{ $errors->first('message') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                 @endif
             </div>
             <p><em style="color: red;">*</em> Fields are required.</p>

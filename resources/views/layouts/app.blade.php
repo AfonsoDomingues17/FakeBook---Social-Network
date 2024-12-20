@@ -138,10 +138,10 @@
                 </div>
                 </div>
         </header>
-
+    
         @if(session('error'))
             <div class="alert alert-danger">
-                {{ session('error') }}
+                {{ session('error') }} <i class="fa-solid fa-circle-exclamation"></i>
             </div>
         @endif
         <main>
@@ -149,7 +149,6 @@
             <div class= "navigators">
                 <a class="auth" href="{{ url('/') }}" aria-label="Go to Home Page"><i class="fa-solid fa-house" aria-hidden="true"></i><p>Home</p></a>
                 @if(Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isBanned())
-                    <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#groupCreationModal" aria-label="Create a new group"><i class="fa-solid fa-user-group" aria-hidden="true"></i><p>Create Group</p></a> 
                     @if(Auth::user()->typeu === 'INFLUENCER')
                         <a  class="auth" href="{{ route('influencer.page', Auth::user()->id) }}" aria-label="View influencer statistics"> <i class="fa-solid fa-chart-line" aria-hidden="true"></i> <p>View Statistics </p> </a>
                     @endif

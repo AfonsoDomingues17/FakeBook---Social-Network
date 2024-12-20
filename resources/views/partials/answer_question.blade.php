@@ -13,7 +13,7 @@
                         <label for="response" class="form-label">Your Response</label>
                         <textarea class="form-control" id="response" name="response" rows="4" required></textarea>
                         @if($errors->has('response'))
-                            <span class="error">{{ $errors->first('response') }}</span>
+                            <span class="error">{{ $errors->first('response') }} <i class="fa-solid fa-circle-exclamation"></i></span>
                         @endif
                     </div>
                     <button type="submit" class="btn btn-primary">Send Response</button>
