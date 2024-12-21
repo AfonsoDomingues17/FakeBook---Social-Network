@@ -144,6 +144,11 @@
                 {{ session('error') }} <i class="fa-solid fa-circle-exclamation"></i>
             </div>
         @endif
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }} <i class="fa-solid fa-circle-check"></i>
+            </div>
+        @endif
         <main>
         <div id="sidebar">
             <div class= "navigators">
@@ -186,7 +191,7 @@
                     <a class="auth" href="{{ route('about') }}" aria-label="Go to About Us"><i class="fa-solid fa-question-circle" aria-hidden="true"></i><p>About Us</p></a>
                     <a class="auth" href="{{ route('settings') }}" aria-label="Go to Settings"><i class="fa-solid fa-cog" aria-hidden="true"></i><p>Settings</p></a>
                     <div class="dropdown-container">
-                        <a href="#" id="toggleDropdown2" class="auth" aria-expanded="false" aria-controls="DropdownMore" aria-label="More options" ><i class="fa-solid fa-bars" aria-hidden="true"></i><p>More</p></a>
+                        <a href="#" id="toggleDropdown2" class="auth" aria-expanded="false" aria-controls="DropdownMore" aria-label="More options"><i class="fa-solid fa-bars" aria-hidden="true"></i><p>More</p></a>
                         <div id="DropdownMore2" style="display: none;" role="menu">
                         <a class="button" href="{{ url('/login') }}" aria-label="Login">Login</a>
                         <a class="button" href="{{ url('/register') }}" aria-label="Register">Register</a>

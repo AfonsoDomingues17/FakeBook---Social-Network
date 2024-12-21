@@ -77,5 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 realTime.style.display = 'block';
             }
         }
+        }
     });
 });

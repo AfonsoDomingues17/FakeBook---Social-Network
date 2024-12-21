@@ -28,7 +28,7 @@
         </div>  
     </div>
     @if (Auth::check() && (Auth::user()->id == $comment->user->id || Auth::user()->isAdmin() || Auth::user()->id == $post->owner_id))
-        <div class="comment-options" >
+        <div class="comment-options" style="margin-top: 0.5em;">
             <button  id="edit" onclick="toggleEditForm({{ $comment->id }})"><p>Edit</p></button>
             <form action="{{ route('comments.destroy', ['comment_id' => $comment->id]) }}" method="POST" onsubmit="deleteComment(event, {{ $comment->id }});">
                 @csrf
