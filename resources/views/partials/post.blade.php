@@ -55,7 +55,7 @@
                 </button>
                 <span class="comment-count">{{ $post->getNumberOfComments() }}</span>
             </div>
-            @if (!Auth::check() || Auth::user->isAdmin())
+            @if (!Auth::check() || Auth::user()->isAdmin())
                 <button id="reportPost" type="button" class="report-button" onclick="window.location.href='{{ route('login') }}'">
             @else
                 <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">

@@ -6,7 +6,7 @@
         </div>
         <div class="interaction-bar">
             <div class="like-container" data-comment-id="{{ $comment->id }}" >
-                @if (!Auth::check() || Auth::user->isAdmin())
+                @if (!Auth::check() || Auth::user()->isAdmin())
                     <button id="likeComment" type="button" class="like-button" onclick="window.location.href='{{ route('login') }}'">
                         <i class="fa-regular fa-heart" aria-label="Liked Comment" role="button" tabindex="0"></i>
                     </button>
