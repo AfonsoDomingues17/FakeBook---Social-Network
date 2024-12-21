@@ -116,10 +116,10 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#postModal-{{ $group->first()->post_id }}">View Post</button>
-                                    <article class="post">
+                                    <article class="post" style="padding: 0; margin: 0;">
                                         @include('partials.post_modal', ['post' => $group->first()->post])
                                     </article>
+                                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#postModal-{{ $group->first()->post_id }}">View Post</button>
                                     <form action="{{ route('posts.destroy', ['post_id' => $group->first()->post_id]) }}" method="POST" class="d-inline delete-post-form">
                                         @csrf
                                         @method('DELETE')
