@@ -30,7 +30,7 @@
     @endif
     <div class="interaction-bar">
             <div class="like-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
-                @if (!Auth::check() || Auth::user->isAdmin())
+                @if (!Auth::check() || Auth::user()->isAdmin())
                     <button id="likePost" type="button" class="like-button" onclick="window.location.href='{{ route('login') }}'">
                         <i class="fa-regular fa-heart" aria-label="Liked Post" role="button" tabindex="0"></i>
                     </button>
