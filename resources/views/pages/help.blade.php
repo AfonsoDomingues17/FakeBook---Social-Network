@@ -20,6 +20,10 @@
                         <br>
                         <strong>How do I edit my account details?</strong>
                         <p>Click on the <em>Edit Profile</em> button on your profile page and edit your account details by filling the form</p>
+                        <br>
+                        <strong>How can I delete my account?</strong>
+                        <p>Click on the <em>Delete account</em> button on your profile page. All your data will be deleted along with your account.</p>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -37,8 +41,6 @@
                         <strong>What type of content can I share?</strong>
                         <p>You can share text or multimedia posts, but ensure your content adheres to our community guidelines.</p>
                         <br>
-                        <strong>How can I tag someone in a post or comment?</strong>
-                        <p>Use the "@" symbol followed by the username of the user you want to tag when creating a post or comment.</p>
                     </div>
                 </div>
             </div>
@@ -56,6 +58,9 @@
                         <strong>How can I leave a group?</strong>
                         <p>On the group page, click the <em>Leave Group</em> button.</p>
                         <br>
+                        <strong>How can I add people to my group?</strong>
+                        <p>When you create a group, you can add people you already follow to the group. You can also add people later on by clicking on the <em>Add members</em> button.</p>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -68,7 +73,7 @@
                 <div id="flush-collapseNotifications" class="accordion-collapse collapse" aria-labelledby="flush-headingNotifications">
                     <div class="accordion-body">
                         <strong>What type of notifications will I receive?</strong>
-                        <p>You will receive notifications for likes, comments, follow requests, group requests, messages and tags.</p>
+                        <p>You will receive notifications whenever someone requests to follow your account.</p>
                         <br>
                     </div>
                 </div>
@@ -81,8 +86,8 @@
                 </h2>
                 <div id="flush-collapseSupport" class="accordion-collapse collapse" aria-labelledby="flush-headingSupport">
                     <div class="accordion-body">
-                        <strong>How can report inappropriate content?</strong>
-                        <p>Click the<em>Report</em> button and fill a form with the reason for the report. Our admin team will proceed to review that content.</p>
+                        <strong>How can report inappropriate content/profiles?</strong>
+                        <p>Click the <em>Report</em> button on the post/profile and fill a form with the reason for the report. Our admin team will proceed to review that content.</p>
                         <br>
                         <strong>How can I contact support?</strong>
                         <p>You can either contact through one of the methods below or fill the <em>Contact Form</em> at the end of the page to ask a question to which our team will be more than happy to answer.</p>
