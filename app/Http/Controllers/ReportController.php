@@ -116,7 +116,7 @@ class ReportController extends Controller
                 ]
             );
         }
-        return redirect()->route('profile', ['user_id' => $user_id]);
+        return redirect()->route('profile', ['user_id' => $user_id])->with('success', 'User reported successfully');
     }
 
     public function reportPost(ReportPostRequest $request, $post_id)
@@ -134,7 +134,7 @@ class ReportController extends Controller
                 ]
             );
         }
-        return redirect()->to(url('/'));
+        return redirect()->to(url('/'))->with('success', 'Post reported successfully');
     }
 
         public function getUserReports($user_id)

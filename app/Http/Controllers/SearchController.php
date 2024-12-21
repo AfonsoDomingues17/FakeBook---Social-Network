@@ -40,7 +40,8 @@ class SearchController extends Controller
                 $q->where('name', 'ILIKE', '%' . $query . '%')
                     ->orWhere('email', 'ILIKE', '%' . $query . '%')
                     ->orWhere('username', 'ILIKE', '%' . $query . '%');
-            });
+            })
+            ->where('name', '!=', 'Anonymous');
         
             if ($countries) {
                 $usersQuery = $usersQuery->whereIn('country_id', $countries);
@@ -164,6 +165,7 @@ class SearchController extends Controller
             if ($username) {
                 $users->where('username', 'ILIKE', '%' . $username . '%');
             }
+            $users = $users->where('name', '!=', 'Anonymous');
             $users = $users->paginate(15, ['*'], 'page', $page);
             
 

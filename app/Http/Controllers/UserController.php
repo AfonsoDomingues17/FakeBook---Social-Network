@@ -193,7 +193,7 @@ class UserController extends Controller
             // Proceed with the valid user_id
             $user = User::find($user_id);
 
-            if (!$user) {
+            if (!$user || $user->name === 'Anonymous') {
                 // If the user was not found in the database, set an error message
                 $error_message = 'User not found.';
             } else {

@@ -25,7 +25,6 @@ class SendHelpFormRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'message' => 'required|string|max:500',
-            'is_unban' => 'boolean'
         ];
     }
 
@@ -46,7 +45,6 @@ class SendHelpFormRequest extends FormRequest
             'message.required' => 'The message field is required.',
             'message.string' => 'The message must be a string.',
             'message.max' => 'The message may not be greater than 500 characters.',
-            'is_unban.boolean' => 'The is_unban field must be true or false.',
         ];
     }
 }

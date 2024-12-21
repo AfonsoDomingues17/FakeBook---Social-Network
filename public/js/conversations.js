@@ -223,14 +223,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     var message = data.message;
                     if (!document.querySelector('.message[data-message-id="' + message.id + '"]')) {
                         var messageElement = `
-                            <div class="message" data-message-id="${message.id}" style="position: relative;">
-                                <strong>${message.author.name}:</strong>
-                                <p>${message.content || ''}</p>
-                                ${message.image_url ? `<img src="/messages/image/${message.id}" alt="Image">` : ''}
-                                ${message.author_id === parseInt(currentUserId) 
-                                    ? '<button class="delete-message btn btn-danger btn-sm" style="position: absolute; top: 0; right: 0; display: none;">Delete</button>' 
-                                    : ''}
-                            </div>`;
+                            <div class="message ${message.author_id === parseInt(currentUserId) ? 'my-message' : ''}" data-message-id="${message.id}">
+                        <span id="Mymessage"><p>${message.content || ''}</p></span>
+                        ${message.image_url ? `<img src="/messages/image/${message.id}" alt="Image">` : ''}
+                        ${message.author_id === parseInt(currentUserId) 
+                            ? '<button class="delete-message btn btn-danger btn-sm" style="display: none;">Delete</button>' 
+                            : ''}
+                    </div>`;
                         document.getElementById('messages').insertAdjacentHTML('beforeend', messageElement);
                         scrollToBottom();
                     }

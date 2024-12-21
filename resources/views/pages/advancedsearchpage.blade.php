@@ -12,6 +12,7 @@
                 @each('partials.user', $users, 'user')
             @elseif($type === 'posts')
                 @each('partials.post', $posts, 'post')
+            @endif
         </section>
         <div id="loading" style="display: none;" class="spinner-border" role="status"></div>
     </section>
