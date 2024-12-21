@@ -68,12 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Hide the dropdown when clicking outside the search input
     document.addEventListener('click', function(event) {
-        if (!searchInput.contains(event.target) && !realTime.contains(event.target)) {
-            realTime.classList.remove('show');
-            realTime.style.display = 'none';
-        }
-        else {
-            realTime.style.display = 'block';
+        if(searchInput && realTime) {
+            if (!searchInput.contains(event.target) && !realTime.contains(event.target)) {
+                realTime.classList.remove('show');
+                realTime.style.display = 'none';
+            }
+            else {
+                realTime.style.display = 'block';
+            }
         }
     });
 });

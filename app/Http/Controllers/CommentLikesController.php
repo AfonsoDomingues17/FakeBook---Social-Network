@@ -10,9 +10,6 @@ class CommentLikesController extends Controller
 {
     public function like(Request $request)
     {
-        if (!Auth::check()) {
-            return response()->json(['error' => 'Not authenticated'], 401);
-        }
 
         $commentId = $request->id;
         $userId = Auth::id();
