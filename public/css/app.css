@@ -121,10 +121,19 @@ header{
       padding: 1em;
       padding-bottom: 0.5em;
       font-size: 1em;
+      cursor: pointer;
     }
     
+    
   }
- 
+  @media (max-width: 656px) {
+    #search_options{
+      display: none;
+    }
+    #search-results-container{
+      width: 100%;
+    }
+  }
 
 }
 #reports-page{
@@ -258,7 +267,7 @@ span#sender{
       font-size: 1.5em;
   }
 
-  #number_noti {
+  #number_noti, #number_noti_empty {
       position: absolute;
       top: 0;
       right: 0;
@@ -597,9 +606,15 @@ ul#real-time-search {
   #search-results-container {
     width: 50%;
     > *{
-      width: 100%;
+      width: 80%;
       margin-left: 0;
       margin-right: 0;
+    }
+  }
+  
+  @media (max-width: 656px) {
+    #search-results-container{
+      width: 100%;
     }
   }
   #posts, #search-results {
@@ -615,6 +630,12 @@ ul#real-time-search {
     h2{
       text-align: center;
       margin-top: 1em;
+    }
+  }
+  @media (max-width: 624px){
+    #search-results{
+      margin: 0.2em;
+      width: 100%;
     }
   }
   #posts::-webkit-scrollbar {
@@ -639,7 +660,10 @@ ul#real-time-search {
   
 }
 
-@media (max-width: 1030px){
+@media (max-width: 1085px){
+  #search-results-container{
+    width: 100%;
+  }
   .button{
     display: none;
   }
@@ -664,7 +688,15 @@ ul#real-time-search {
  
   #sidebar{
     width: 24%;
-    min-width: 24%;
+  }
+  .direct-chats-page{
+    #sidebar a#buttonLog{
+      display: none;
+    }
+    #sidebar #toggleDropdown .button{
+      display: block;
+    }
+    
   }
   .homepage-layout{
     #posts{
@@ -912,6 +944,12 @@ article.post {
     width: 10em;
     height: 10em;
   }
+  @media (max-width: 624px){
+    img#p_picture {
+      width: 7em;
+      height: 7em;
+    }
+  }
 
   section#profile{
     display: flex;
@@ -988,6 +1026,7 @@ article.post {
         .numbers {
           display: none;
         }
+
       }
       span#username p {
         font-size: 1.5em;
@@ -1005,6 +1044,11 @@ article.post {
       }
     }
    
+  }
+  @media (max-width: 624px){
+    section#profile{
+      gap: 0.5em;
+    }
   }
   a {
     padding: 0.5em 1em;
@@ -1029,6 +1073,7 @@ article.post {
   
 
 }
+
 #Type{
   display: flex;
   gap: 1em;
@@ -1052,10 +1097,12 @@ section#myposts {
       object-fit: cover;
     }
   }
+  
   @media (max-width: 1030px){ 
     .post {
       width: 45%;
     }
+    
   }
   @media (max-width: 850px){ 
     .post {
@@ -1429,6 +1476,29 @@ div#Conversas {
   section#info:hover {
     background-color: #F0F2F5;
     
+  }
+  a.auth{
+    display: flex;
+    gap: 1em;
+    padding: 0.8em;
+    font-size: 1.2em;
+    font-weight: 500;
+    align-items: center;
+    border-bottom: 2px solid #F0F2F5;
+    i{
+      font-size: 1.5em;
+    }
+    
+    
+  }
+  #icons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: #F0F2F5;
+    border-radius: 50%;
   }
 
   section#info{
@@ -1915,7 +1985,8 @@ select:focus {
 #toggleDropdown2{
   display: none;
 }
-@media (max-width: 740px) {
+
+@media (max-width: 806px) {
 
   #sidebar{
     width: 10%;
@@ -2092,9 +2163,6 @@ div#Comments {
     flex-direction: column;
     gap: 1em;
   }
-  i{
-    font-size: 0.8em;
-  }
   a{
     text-decoration: none;
     color: black;
@@ -2199,4 +2267,7 @@ div#Comments {
 }
 form{
   margin-bottom: 0;
+}
+.error{
+  color: red;
 }

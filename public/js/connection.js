@@ -1,8 +1,8 @@
 document.addEventListener('click', (event) => {
     
-    if (event.target && event.target.id === 'Follow') {
+    if (event.target && (event.target.id === 'Follow' || event.target.parentElement.id === 'Follow')) {
         console.log('Follow button clicked');
-        const followButton = event.target;
+        const followButton = event.target.id === 'Follow' ? event.target : event.target.parentElement;
         const userId = followButton.dataset.userId;
         
         fetch(`/follow/users/${userId}`, {
@@ -33,8 +33,8 @@ document.addEventListener('click', (event) => {
         .catch(error => {
             console.error('Error following user:', error);
         });
-    } else if (event.target && event.target.id === 'unfollow') {
-        const unfollowButton = event.target;
+    } else if (event.target && (event.target.id === 'unfollow' || event.target.parentElement.id === 'unfollow')) {
+        const unfollowButton = event.target.id === 'unfollow' ? event.target : event.target.parentElement;
         const userId = unfollowButton.dataset.userId;
         fetch(`/unfollow/users/${userId}`, {
             method: 'DELETE',

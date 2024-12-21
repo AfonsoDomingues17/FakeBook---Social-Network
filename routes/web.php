@@ -15,6 +15,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\GroupParticipantController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\PostLikesController;
 use App\Http\Controllers\CommentLikesController;
@@ -147,6 +148,9 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
+// Authentication
+Route::get('auth/google', [GoogleController::class, 'redirect'])->name('auth.google');
+Route::get('auth/google/call-back', [GoogleController::class, 'googleCallback'])->name('auth.google.callback');
 
 // Password recovery related routes
 Route::get('/forgot-password', [PasswordResetController::class, 'showRequestForm'])->name('password.request');

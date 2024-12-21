@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('users', searchQuery);
             window.searchType = 'users'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
-            document.getElementById('filter-dropdown').style.display = 'block';
+            document.getElementById('filter-dropdown').style.display = 'flex';
             document.getElementById('order-dropdown').style.display = 'none';
             uncheckAllCheckboxes();
         });
@@ -44,22 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUrl('posts', searchQuery);
             window.searchType = 'posts'; // Update global searchType
             window.noMoreResults = false; // Reset noMoreResults
-            document.getElementById('filter-dropdown').style.display = 'block';
-            document.getElementById('order-dropdown').style.display = 'block';
-        });
-    }
-    
-    if (searchGroupsButton) {
-        searchGroupsButton.addEventListener('click', function() {
-            var searchQuery = queryInput ? queryInput.value : '';
-            updateSearchResults('groups', searchQuery);
-            changeButton('groups');
-            updateUrl('groups', searchQuery);
-            window.searchType = 'groups'; // Update global searchType
-            window.noMoreResults = false; // Reset noMoreResults
-            document.getElementById('filter-dropdown').style.display = 'none';
-            document.getElementById('order-dropdown').style.display = 'none';
-            uncheckAllCheckboxes();
+            document.getElementById('filter-dropdown').style.display = 'flex';
+            document.getElementById('order-dropdown').style.display = 'flex';
         });
     }
 
@@ -82,9 +68,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     case 'posts':
                         classToSearch = 'article.post';
                         break;
-                    case 'groups':
-                        classToSearch = 'article.group';
-                        break;
                     default:
                         classToSearch = '';
                         break;
@@ -101,7 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
     
                 // Update the heading text
-                document.querySelector('#search-results h2').innerHTML = `Search results (${type})`;
+                if(elements.length === 0) {
+                    document.querySelector('#search-results h2').innerHTML = `No results found for "${query}"`;
+                } else {
+                    document.querySelector('#search-results h2').innerHTML = `Search results (${type})`;
+                }
     
                 // Update the global searchType variable
                 window.searchType = type;    

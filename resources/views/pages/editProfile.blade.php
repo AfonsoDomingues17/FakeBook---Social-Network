@@ -17,28 +17,28 @@
         <img id="p_picture_review" src="{{ route('userphoto', ['user_id' => $user->id]) }}" alt="profile picture" width="200" height="200">
         <input id="photo_url" type="file" name="photo_url" accept="image/*" onchange="previewProfilePicture(event)">
         @if ($errors->has('photo_url'))
-            <span class="error">{{ $errors->first('photo_url') }}</span>
+            <span class="error">{{ $errors->first('photo_url') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
         
         <!-- Name Field -->
         <label for="name">Name<em style="color: red;">*</em></label>
         <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" required>
         @if ($errors->has('name'))
-            <span class="error">{{ $errors->first('name') }}</span>
+            <span class="error">{{ $errors->first('name') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
 
         <!-- Username Field -->
         <label for="username">Username<em style="color: red;">*</em></label>
         <input id="username" type="text" name="username" value="{{ old('username', $user->username) }}" required>
         @if ($errors->has('username'))
-            <span class="error">{{ $errors->first('username') }}</span>
+            <span class="error">{{ $errors->first('username') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
 
         <!-- Bio Field -->
         <label for="bio">Bio</label>
         <input id="bio" type="text" name="bio" value="{{ old('bio', $user->bio) }}">
         @if ($errors->has('bio'))
-            <span class="error">{{ $errors->first('bio') }}</span>
+            <span class="error">{{ $errors->first('bio') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
 
         <!-- Gender Dropdown -->
@@ -50,22 +50,19 @@
             <option value="Other" {{ old('gender', $user->gender) == 'Other' ? 'selected' : '' }}>Other</option>
         </select>
         @if ($errors->has('gender'))
-            <span class="error">{{ $errors->first('gender') }}</span>
+            <span class="error">{{ $errors->first('gender') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
 
         <!-- Age Field -->
         <label for="age">Age<em style="color: red;">*</em></label>
         <input id="age" type="number" name="age" value="{{ old('age', $user->age) }}" required>
         @if ($errors->has('age'))
-            <span class="error">{{ $errors->first('age') }}</span>
+            <span class="error">{{ $errors->first('age') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
 
         <!-- Country Search Input and Dropdown -->
         <label for="country-search">Country</label>
         <input id="country-search" type="text" placeholder="Start typing your country..." value="{{ old('country', $user->country->name ?? '') }}" oninput="filterCountries()" onclick="toggleCountryDropdown()">
-        @if ($errors->has('country'))
-            <span class="error">{{ $errors->first('country') }}</span>
-        @endif
         <input type="hidden" id="country-id" name="country_id" value="{{ old('country_id', $user->country_id ?? '') }}">
         <select id="country" size="5"  onchange="selectCountry(event)">
             @foreach ($countries as $country)
@@ -73,7 +70,7 @@
             @endforeach
         </select>
         @if ($errors->has('country_id'))
-            <span class="error">{{ $errors->first('country_id') }}</span>
+            <span class="error">{{ $errors->first('country_id') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
 
         <!-- Visibility Radio Buttons -->
@@ -89,7 +86,7 @@
             </div>
         </div>
         @if ($errors->has('is_public'))
-            <span class="error">{{ $errors->first('is_public') }}</span>
+            <span class="error">{{ $errors->first('is_public') }} <i class="fa-solid fa-circle-exclamation"></i></span>
         @endif
         <p><em style="color: red;">*</em> Fields are required.</p>
         <!-- Submit Button -->

@@ -38,13 +38,11 @@ const type2 = getQueryParam('type') || 'users';
 
 const usersButton = document.getElementById('search-users');
 const postsButton = document.getElementById('search-posts');
-const groupsButton = document.getElementById('search-groups');
 
 function highlightButton(button) {
   if(button){
   usersButton.style.borderBottom = "none";
   postsButton.style.borderBottom = "none";
-  groupsButton.style.borderBottom = "none";
   button.style.borderBottom = "5px solid #007bff";
   }
 }
@@ -53,8 +51,6 @@ if (type2 === 'users') {
   highlightButton(usersButton);
 } else if (type2 === 'posts') {
   highlightButton(postsButton);
-} else if (type2 === 'groups') {
-  highlightButton(groupsButton);
 }
 
 document.querySelectorAll('#search_options [id^="search-"]').forEach(button => {
@@ -142,7 +138,6 @@ const toggleButton = document.getElementById('toggleDropdown');
   }
 const toggleButton2 = document.getElementById('toggleDropdown2');
 const dropdown2 = document.getElementById('DropdownMore2');
-console.log(toggleButton2);
 if(toggleButton2 && dropdown2){
 toggleButton2.addEventListener('click', function() {
   if (dropdown2.style.display === 'none' || dropdown2.style.display === '') {

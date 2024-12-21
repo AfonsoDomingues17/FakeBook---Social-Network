@@ -51,7 +51,7 @@
                             </form>
                             @if(Route::currentRouteName() !== 'search')
                                 <button id="advancedSearch" data-bs-toggle="modal" data-bs-target="#advancedSearchModal" aria-label="Advanced search options">
-                                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><p>Advanced</p>
+                                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>Advanced
                                 </button>
                             @endif
                             @include('partials.search_modal')
@@ -83,7 +83,7 @@
                                 @if (Auth::user()->unreadNotifications()->count() > 0)
                                     <span id="number_noti" aria-live="assertive">{{ Auth::user()->unreadNotifications()->count() }}</span>
                                 @else
-                                    <span id="number_noti" style="display: none;" aria-live="assertive">0</span>
+                                    <span id="number_noti_empty" style="display: none;" aria-live="assertive">0</span>
                                 @endif
                                 <div id="notification-dropdown">
                                     <ul>
@@ -138,17 +138,10 @@
                 </div>
                 </div>
         </header>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach
-            </div>
-        @endif
-
+    
         @if(session('error'))
             <div class="alert alert-danger">
-                {{ session('error') }}
+                {{ session('error') }} <i class="fa-solid fa-circle-exclamation"></i>
             </div>
         @endif
         <main>
@@ -156,7 +149,6 @@
             <div class= "navigators">
                 <a class="auth" href="{{ url('/') }}" aria-label="Go to Home Page"><i class="fa-solid fa-house" aria-hidden="true"></i><p>Home</p></a>
                 @if(Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isBanned())
-                    <a class="auth" href="#" data-bs-toggle="modal" data-bs-target="#groupCreationModal" aria-label="Create a new group"><i class="fa-solid fa-user-group" aria-hidden="true"></i><p>Create Group</p></a> 
                     @if(Auth::user()->typeu === 'INFLUENCER')
                         <a  class="auth" href="{{ route('influencer.page', Auth::user()->id) }}" aria-label="View influencer statistics"> <i class="fa-solid fa-chart-line" aria-hidden="true"></i> <p>View Statistics </p> </a>
                     @endif
@@ -179,7 +171,7 @@
                     @endif
                 @endif
                 <a class="auth" href="{{ route('reports') }}" aria-label="Go to Reports"><i class="fa-solid fa-flag" aria-hidden="true"></i><p>Reports</p></a>
-                @if(Auth::check() )
+                @if(Auth::check())
                     <div class="dropdown-container">
                         <a href="#" id="toggleDropdown" class="auth" aria-expanded="false" aria-controls="DropdownMore" aria-label="More options"><i class="fa-solid fa-bars" aria-hidden="true"></i><p>More</p></a>
                         <div id="DropdownMore" style="display: none;" role="menu">
@@ -213,9 +205,9 @@
             </div>
 
         </div>
-            <section id="content" >
+            <div id="content" >
                 @yield('content')
-            </section>
+            </div>
             
         </main>
         <footer>

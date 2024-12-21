@@ -4,7 +4,7 @@
         <i id="close" class="fa-solid fa-xmark"></i>
         <p>Group Details</p>
         </div>
-        <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" alt="group profile picture" width="250" height="250">
+        <img src="{{route('groupPhoto', ['group_id' => $group->id])}}" alt="group profile picture" width="250" height="250" style="border-radius: 50%; object-fit: cover;">
         <span id="gname">
             <p>{{ $group->name }}</p>
             @if($group->owner_id == Auth::user()->id)
@@ -28,7 +28,7 @@
             <input type="text" name="group_description" id="group_description" value="{{ $group->description }}" aria-label="Edit group description"></input>
             <i class="fa-solid fa-check" aria-label="Submit group description edit" role="button" tabindex="0"></i>    
         </span>
-        <p>Created by {{$group->owner->name}}, em 23/03/2004</p>
+        <p>Created by {{$group->owner->name}}, in {{ \Carbon\Carbon::parse($group->created_at)->format('d/m/Y') }}</p>
     </div>
     <div id="group-members">
         <h2>Group Members</h2>
