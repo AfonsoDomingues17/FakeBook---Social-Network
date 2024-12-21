@@ -51,7 +51,14 @@ Route::get('/users/{user_id}/photo', [UserController::class, 'getPhoto'])->name(
 Route::delete('/users/{user_id}/delete', [UserController::class, 'destroy'])->name('deleteuser');
 Route::post('/block/users/{user_id}', [UserController::class, 'blockUser'])->name('block');
 Route::delete('/unblock/users/{user_id}', [UserController::class, 'unblockUser'])->name('unblock');
-Route::get('/influencer/{user_id}', [UserController::class, 'showInfluencerPage'])->name('influencer.page');
+
+
+Route::middleware(['influencer'])->group(function () {
+    Route::get('/influencer/{user_id}', [UserController::class, 'showInfluencerPage'])->name('influencer.page');
+    // Add other influencer-specific routes here
+});
+
+
 // Posts
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
