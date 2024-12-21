@@ -75,8 +75,6 @@ class ReportController extends Controller
                 $report->type = 'user';
             } elseif ($report->post_id) {
                 $report->type = 'post';
-            } elseif ($report->comment_id) {
-                $report->type = 'comment';
             } else {
                 $report->type = 'unknown';
             }
@@ -95,20 +93,12 @@ class ReportController extends Controller
             return count($group);
         });
 
-        $commentReports = $reports->where('type', 'comment')->groupBy('comment_id')->filter(function ($group) {
-            return count($group) >= 5;
-        })->sortByDesc(function ($group) {
-            return count($group);
-        });
-
         Log::info('User Reports: ', $userReports->toArray());
         Log::info('Post Reports: ', $postReports->toArray());
-        Log::info('Comment Reports: ', $commentReports->toArray());
 
         return view('pages.reports', [
             'userReports' => $userReports,
-            'postReports' => $postReports,
-            'commentReports' => $commentReports
+            'postReports' => $postReports
         ]);
     }
     public function reportUser(ReportUserRequest $request, $user_id)
@@ -157,27 +147,5 @@ class ReportController extends Controller
     {
         $reports = Report::where('post_id', $post_id)->get();
         return response()->json($reports);
-    }
-        public function getCommentReports($comment_id)
-    {
-        $reports = Report::where('comment_id', $comment_id)->get();
-        return response()->json($reports);
-    }
-    public function reportComment(ReportCommentRequest $request, $comment_id)
-    {
-        if (Auth::check()) {
-            $validatedData = $request->validated();
-        
-            $report = Report::updateOrCreate(
-                [
-                    'author_id' => Auth::user()->id,
-                    'comment_id' => $comment_id
-                ],
-                [
-                    'content' => $validatedData['content']
-                ]
-            );
-        }
-        return redirect()->to(url('/'));
     }
 }
