@@ -29,19 +29,24 @@
         </div>
     @endif
     <div class="interaction-bar">
-        @if(Auth::check() && !Auth::user()->isAdmin())
             <div class="like-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
-                <form class="like-form" action="{{ route('post.like') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="id" value="{{ $post->id }}">
-                    <button type="submit" class="like-button">
-                        @if (Auth::check() && $post->likedByUsers()->where('user_id', Auth::user()->id)->exists())
-                            <i class="fa-solid fa-heart" aria-label="Like Post" role="button" tabindex="0"></i>
-                        @else
-                            <i class="fa-regular fa-heart" aria-label="Liked Post" role="button" tabindex="0"></i>
-                        @endif
+                @if (!Auth::check() || Auth::user->isAdmin())
+                    <button id="likePost" type="button" class="like-button" onclick="window.location.href='{{ route('login') }}'">
+                        <i class="fa-regular fa-heart" aria-label="Liked Post" role="button" tabindex="0"></i>
                     </button>
-                </form>
+                @else
+                    <form class="like-form" action="{{ route('post.like') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $post->id }}">
+                        <button type="submit" class="like-button">
+                            @if (Auth::check() && $post->likedByUsers()->where('user_id', Auth::user()->id)->exists())
+                                <i class="fa-solid fa-heart" aria-label="Like Post" role="button" tabindex="0"></i>
+                            @else
+                                <i class="fa-regular fa-heart" aria-label="Liked Post" role="button" tabindex="0"></i>
+                            @endif
+                        </button>
+                    </form>
+                @endif
                 <span class="like-count">{{ $post->getNumberOfLikes() }}</span>
             </div>
             <div id="view-post-btn" data-bs-toggle="modal" data-bs-target="#postModal-{{ $post->id }}" class="comment-container" data-post-id="{{ $post->id }}" style="display: flex; flex-direction: row; gap:10px">
@@ -50,12 +55,14 @@
                 </button>
                 <span class="comment-count">{{ $post->getNumberOfComments() }}</span>
             </div>
-
-            <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
-            <i class="fa-regular fa-flag" aria-label="report post" role="button" tabindex="0"></i>
-        </button>
-        @include('partials.report_modal', ['type' => 'post', 'id' => $post->id]) 
-    @endif
+            @if (!Auth::check() || Auth::user->isAdmin())
+                <button id="reportPost" type="button" class="report-button" onclick="window.location.href='{{ route('login') }}'">
+            @else
+                <button id="reportPost" type="button" class="report-button" data-bs-toggle="modal" data-bs-target="#reportPostModal-{{ $post->id }}">
+            @endif
+                <i class="fa-regular fa-flag" aria-label="report post" role="button" tabindex="0"></i>
+            </button>
+            @include('partials.report_modal', ['type' => 'post', 'id' => $post->id]) 
     </div>
     <div class="action_buttons">
         @if(Auth::check())

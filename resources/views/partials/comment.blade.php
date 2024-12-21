@@ -6,17 +6,23 @@
         </div>
         <div class="interaction-bar">
             <div class="like-container" data-comment-id="{{ $comment->id }}" >
-                <form class="comment-like-form" action="{{ route('comment.like') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="id" value="{{ $comment->id }}">
-                    <button type="submit" aria-label="{{ Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists() ? 'Unlike this comment' : 'Like this comment' }}" class="like-button">
-                        @if (Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists())
-                            <i class="fa-solid fa-heart" aria-hidden="true"></i>
-                        @else
-                            <i class="fa-regular fa-heart" aria-hidden="true"></i>
-                        @endif
+                @if (!Auth::check() || Auth::user->isAdmin())
+                    <button id="likeComment" type="button" class="like-button" onclick="window.location.href='{{ route('login') }}'">
+                        <i class="fa-regular fa-heart" aria-label="Liked Comment" role="button" tabindex="0"></i>
                     </button>
-                </form>
+                @else
+                    <form class="comment-like-form" action="{{ route('comment.like') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $comment->id }}">
+                        <button type="submit" aria-label="{{ Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists() ? 'Unlike this comment' : 'Like this comment' }}" class="like-button">
+                            @if (Auth::check() && $comment->likedByUsers()->where('user_id', Auth::user()->id)->exists())
+                                <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                            @else
+                                <i class="fa-regular fa-heart" aria-hidden="true"></i>
+                            @endif
+                        </button>
+                    </form>
+                @endif
                 <span class="like-count">{{ $comment->likedByUsers()->count() }}</span>
             </div>
         </div>  

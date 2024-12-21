@@ -100,7 +100,7 @@
             <span id="bio"><p>{{$user->bio}}</p></span><br>
         </div>
     </section>
-    @if (!$isBlocked && (Auth::check() && !Auth::user()->isBanned()))
+    @if (!Auth::check() || (Auth::check() && !$isBlocked && !Auth::user()->isBanned()))
     <section id="user_posts">
         @if (Auth::check() && $user->id == Auth::user()->id) <!-- If the user is logged in and is the owner of the profile -->
             <section id="myposts">

@@ -12,9 +12,6 @@ use Illuminate\Support\Facades\Log;
 class PostLikesController extends Controller
 {
     function like(Request $request) {
-        if(!Auth::check()) {
-            return response()->json(['error' => 'Not authenticated'], 401);
-        }
 
         $postId = $request->id;
         $userId = Auth::id();
