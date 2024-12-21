@@ -2,8 +2,6 @@
 <div class="modal fade" id="reportUserModal-{{ $id }}" tabindex="-1" aria-labelledby="reportUserModalLabel-{{ $id }}" aria-hidden="true" style="display: none">
 @elseif($type == 'post')
 <div class="modal fade" id="reportPostModal-{{ $id }}" tabindex="-1" aria-labelledby="reportPostModalLabel-{{ $id }}" aria-hidden="true" style="display: none">
-@elseif($type == 'comment')
-<div class="modal fade" id="reportCommentModal-{{ $id }}" tabindex="-1" aria-labelledby="reportCommentModalLabel-{{ $id }}" aria-hidden="true" style="display: none">
 @endif
     <div class="modal-dialog">
         <div class="modal-content">
@@ -41,20 +39,7 @@
                             <button type="submit" id="report_post" >Report post</button>
                         </div>
                     </form>
-                @elseif ($type == 'comment')
-                    <form action="{{ route('report.comment', $id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div id="description">
-                            <label for="content-{{ $id }}">Report motive:</label>
-                            <textarea id="content-{{ $id }}" name="content" required></textarea>
-                            @if ($errors->has('content'))
-                            <span class="error">{{ $errors->first('content') }} <i class="fa-solid fa-circle-exclamation"></i></span>
-                            @endif
-                        </div>
-                        <div id="modal-footer">
-                        <button type="submit" id="report_comment" >Report comment</button>
-                        </div>
-                    </form>
+
                 @endif
             </div>
         </div>

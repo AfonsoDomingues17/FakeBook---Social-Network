@@ -136,59 +136,6 @@
                     @endforeach
                 @endif
 
-                @if($commentReports->isNotEmpty())
-                    <h3>Comments needing Review</h3>
-                    @foreach($commentReports as $group)
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingCommentReport-{{ $group->first()->comment_id }}">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCommentReport-{{ $group->first()->comment_id }}" aria-expanded="false" aria-controls="collapseCommentReport-{{ $group->first()->comment_id }}">
-                                    Reported Comment: {{ $group->first()->comment_id }}
-                                </button>
-                            </h2>
-                            <div id="collapseCommentReport-{{ $group->first()->comment_id }}" class="accordion-collapse collapse" aria-labelledby="headingCommentReport-{{ $group->first()->comment_id }}" data-bs-parent="#reportsAccordion">
-                                <div class="accordion-body">
-                                    <table class="table table-bordered">
-                                        <caption id="reports-table">List of Reports</caption>
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Content</th>
-                                                <th scope="col">Created At</th>
-                                                <th scope="col">Solved At</th>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Author ID</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="details-comment-{{ $group->first()->comment_id }}">
-                                            @foreach($group as $report)
-                                                <tr>
-                                                    <td>{{ $report->content }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($report->createdAt)->format('d/m/Y H:i') }}</td>
-                                                    <td>{{ $report->solvedAt ? \Carbon\Carbon::parse($report->solvedAt)->format('d/m/Y H:i') : 'N/A' }}</td>
-                                                    <td>{{ $report->id }}</td>
-                                                    <td>{{ $report->author_id }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#postModal-{{ $group->first()->comment->post_id }}">View Comment</button>
-                                    <article class="post">
-                                        @include('partials.post_modal', ['post' => $group->first()->comment->post])
-                                    </article>
-                                    <form action="{{ route('comments.destroy', ['comment_id' => $group->first()->comment_id]) }}" method="POST" class="d-inline delete-comment-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger mt-3">Delete Comment</button>
-                                    </form>
-                                    <form action="{{ route('admin.solveReports') }}" method="POST" class="d-inline solve-reports-form">
-                                        @csrf
-                                        <input type="hidden" name="comment_id" value="{{ $group->first()->comment_id }}">
-                                        <button type="submit" class="btn btn-success mt-3">Solve Reports</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
             </div>
             @endif
             @endif

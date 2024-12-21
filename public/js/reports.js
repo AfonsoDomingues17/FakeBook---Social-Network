@@ -1,25 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Handle delete comment form submission
-    document.querySelectorAll('.delete-comment-form').forEach(form => {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            if (confirm('Are you sure you want to delete this comment?')) {
-                fetch(this.action, {
-                    method: 'POST',
-                    body: new FormData(this),
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                }).then(response => {
-                    if (response.ok) {
-                        location.reload();
-                    } else {
-                        alert('Failed to delete comment.');
-                    }
-                });
-            }
-        });
-    });
 
     // Handle delete user form submission
     document.querySelectorAll('.delete-user-form').forEach(form => {

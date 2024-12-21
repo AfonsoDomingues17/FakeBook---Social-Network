@@ -2,7 +2,6 @@
     <a id="search-users">Users</a>
     <a id="search-posts">Posts</a>
     <div class="dropdown" id="filter-dropdown" style="display: flex">
-    
         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
             Filter by
         </button>
@@ -36,27 +35,27 @@
         @endif
     </div>
     @if ($type === 'posts')
-    <div class="dropdown" id="order-dropdown" style="display: block">
+    <div class="dropdown" id="order-dropdown" style="display: flex">
     @else
     <div class="dropdown" id="order-dropdown" style="display: none">
     @endif
         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
             Order by
         </button>
-        <form class="dropdown-menu p-4" id="order-posts">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="order-1" checked>
-                <label class="form-check-label" for="order-1">Most relevant</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="order-2">
-                <label class="form-check-label" for="order-2">Latest</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" id="order-3">
-                <label class="form-check-label" for="order-3">Oldest</label>
-            </div>
-            <button type="submit" id="feed-order" class="btn btn-primary">Apply order</button>
-        </form>
+            <form class="dropdown-menu p-4" id="order-posts">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="order-1" checked>
+                    <label class="form-check-label" for="order-1">Most relevant</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="order-2">
+                    <label class="form-check-label" for="order-2">Latest</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="order-3">
+                    <label class="form-check-label" for="order-3">Oldest</label>
+                </div>
+                <button type="submit" id="feed-order" class="btn btn-primary">Apply order</button>
+            </form>
     </div>
 </section>
