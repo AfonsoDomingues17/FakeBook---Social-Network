@@ -485,6 +485,7 @@ footer{
       display: block; 
       margin: 0 auto;
       margin-bottom: 0.5em;
+      object-fit: cover;
     }
     display: flex;
     flex-direction: column;
@@ -2390,4 +2391,8 @@ form{
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
   background-color: #303030;
   opacity: 8%;
+}
+
+.comment #commentContent img {
+  border-radius: 50%;
 }
