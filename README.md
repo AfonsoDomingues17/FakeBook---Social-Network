@@ -26,6 +26,7 @@ Main Page
 
 - Set up server database on pgAdmin 
 
+        cp .env.fakebook .env
         php artisan db:seed
         php artisan migrate
         php artisan storage:link
