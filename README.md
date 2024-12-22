@@ -34,6 +34,29 @@ Main Page
 
 ## Usage
 
+### Credentials 
+
+#### Administration Credentials
+
+> Administration URL: [http://localhost:8001/admin](http://localhost:8001/admin)
+
+| Email | Password |
+|-------|----------|
+| admin@gmail.com | 1234 |
+
+#### User Credentials
+
+| Type | Email | Password |
+|------|-------|----------|
+| Basic account | userexample@gmail.com | 1234 |
+| Influencer account | influencer@gmail.com | 1234 |
+
+#### Mailtrap Credentials
+
+| Email | Password |
+|-------|----------|
+| lbaw2421@gmail.com | 2421LBAW! |
+
 ### Example 1: Creating a New Post
 
 To create a new post, navigate to the main page and click on the "Create Post" button. Fill in the post content and click "Create".
